@@ -1,0 +1,65 @@
+source_path,dest_path,reason
+# ===== CORE TRADING SYSTEM =====
+Multi-Agent_System/agents/*,01_trading_system/agents/,consolidate agents
+Bot_Strategies/DEE-BOT/*,01_trading_system/bots/dee_bot/,normalize bot name
+Bot_Strategies/SHORGAN-BOT/*,01_trading_system/bots/shorgan_bot/,normalize bot name
+04_Bot_Strategies/DEE_BOT/*,01_trading_system/bots/dee_bot/,consolidate duplicate
+04_Bot_Strategies/SHORGAN_BOT/*,01_trading_system/bots/shorgan_bot/,consolidate duplicate
+Core_Trading/*,01_trading_system/core/,consolidate core trading
+01_Trading_Scripts/*.py,01_trading_system/core/,consolidate scripts
+main_enhanced.py,01_trading_system/core/,move variant
+
+# ===== DATA ORGANIZATION =====
+02_Portfolio_Data/*,02_data/portfolio/,existing canonical
+Portfolio Data/*,02_data/portfolio/,normalize name
+Performance_Tracking/*,02_data/portfolio/performance/,consolidate performance
+Market_Data/*,02_data/market/,consolidate market data
+05_Data_Providers/*.py,02_data/market/,consolidate providers
+data/*.py,02_data/market/,consolidate data scripts
+deep_research_indexes/*,02_data/research/,consolidate research
+03_Research_Reports/Daily/*.json,02_data/research/daily/,data not docs
+data/research_reports/*,02_data/research/reports/,research data
+data/trade_log.csv,02_data/misc/,misc data files
+data/*.json,02_data/misc/,misc data files
+
+# ===== CONFIGURATION =====
+08_Configuration/*,03_config/,existing canonical
+Configuration/*,03_config/,consolidate duplicate
+config/*,03_config/,consolidate duplicate
+
+# ===== RISK MANAGEMENT =====
+06_Risk_Management/*,04_risk/,existing canonical
+risk_management/*,04_risk/,consolidate duplicate
+
+# ===== BACKTESTING =====
+09_Backtesting/*,05_backtesting/,existing canonical
+Backtesting/*,05_backtesting/,consolidate duplicate
+
+# ===== UTILITIES =====
+10_Utils/Tests/*,06_utils/tests/,existing canonical
+10_Utils/Scripts/*,06_utils/scripts/,existing canonical
+tools/*,06_utils/tools/,consolidate tools
+
+# ===== DOCUMENTATION =====
+07_Documentation/*,07_docs/,existing canonical
+Documentation/*,07_docs/,consolidate duplicate
+docs/*,07_docs/guides/,consolidate docs
+
+# ===== FRONTEND =====
+frontend/*,08_frontend/,existing location
+
+# ===== LOGS =====
+logs/*,09_logs/system/,consolidate logs
+
+# ===== RESEARCH REPORTS (as data) =====
+Research_Reports/*,02_data/research/reports/,research data
+03_Research_Reports/*,02_data/research/reports/,research data
+Trading Reports/*,02_data/research/reports/,research data
+
+# ===== ARCHIVE LEGACY STRUCTURE =====
+shared/*,_archive/legacy_structure/shared/,non-canonical
+archive/*,_archive/legacy_structure/archive/,existing archive
+C:Usersshorgai-stock-trading-botbrokers/*,_archive/legacy_structure/_corrupted/,malformed path
+migrate_all_files.py,_archive/deprecated/,migration script
+move_files.py,_archive/deprecated/,migration script
+REORGANIZE_REPOSITORY.py,_archive/deprecated/,migration script
