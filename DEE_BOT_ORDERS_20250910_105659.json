@@ -1,0 +1,25 @@
+{
+  "execution_time": "2025-09-10T10:56:59.062803",
+  "bot": "DEE-BOT",
+  "mode": "PAPER",
+  "orders": [
+    {
+      "timestamp": "2025-09-10T10:56:59.062754",
+      "bot": "DEE-BOT",
+      "ticker": "NVDA",
+      "action": "BUY",
+      "shares": 100,
+      "limit_price": 175.84566999999996,
+      "status": "PAPER_SUBMITTED",
+      "order_id": "PAPER_NVDA_20250910105659",
+      "message": "Order submitted to paper trading system",
+      "stop_loss": 170.39989999999997,
+      "take_profit": 184.4535
+    }
+  ],
+  "summary": {
+    "total_orders": 1,
+    "total_shares": 100,
+    "total_value": 17584.566999999995
+  }
+}

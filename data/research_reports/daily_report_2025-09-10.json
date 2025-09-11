@@ -1,0 +1,64 @@
+{
+  "report_date": "2025-09-10",
+  "report_time": "08:20:21",
+  "market_overview": {
+    "timestamp": "2025-09-10T08:20:21.739546",
+    "major_indices": {},
+    "sector_performance": {},
+    "top_movers": {
+      "gainers": [],
+      "losers": []
+    }
+  },
+  "watchlist_analysis": {
+    "AAPL": {
+      "price": 232.78,
+      "change": 0.0,
+      "change_percent": 0.0,
+      "volume": 528414,
+      "market_cap": 3530231973200.0,
+      "signal": "HOLD"
+    },
+    "MSFT": {
+      "price": 506.48,
+      "change": 0.0,
+      "change_percent": 0.0,
+      "volume": 375973,
+      "market_cap": 3703203490017.8,
+      "signal": "HOLD"
+    },
+    "GOOGL": {
+      "price": 239.8,
+      "change": 0.0,
+      "change_percent": 0.0,
+      "volume": 290641,
+      "market_cap": 2830479760000.0,
+      "signal": "HOLD"
+    },
+    "NVDA": {
+      "price": 175.67,
+      "change": 5.09,
+      "change_percent": 2.98,
+      "volume": 5039202,
+      "market_cap": 4097843570000.0,
+      "signal": "BUY"
+    },
+    "TSLA": {
+      "price": 349.08,
+      "change": 0.0,
+      "change_percent": 0.0,
+      "volume": 612522,
+      "market_cap": 1117295495149.5999,
+      "signal": "HOLD"
+    }
+  },
+  "recommendations": [
+    {
+      "ticker": "NVDA",
+      "action": "BUY",
+      "reason": "Positive momentum: 2.98%",
+      "target_allocation": 5.0
+    }
+  ],
+  "risk_alerts": []
+}

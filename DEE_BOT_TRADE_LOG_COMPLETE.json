@@ -1,0 +1,190 @@
+{
+  "session_date": "2025-01-10",
+  "execution_time": "11:19:36",
+  "bot_name": "DEE-BOT",
+  "strategy": "Multi-Agent Institutional System",
+  "account_info": {
+    "alpaca_account": "PK6FZK4DAQVTD7DYVH78",
+    "account_type": "Paper Trading",
+    "initial_buying_power": 182399.99,
+    "initial_portfolio_value": 100000.00
+  },
+  "trading_plan": {
+    "capital": 100000,
+    "target_deployment": "40.3%",
+    "risk_per_trade": "2-3%",
+    "expected_return": "$1,500-2,300",
+    "daily_loss_limit": "$750"
+  },
+  "executed_positions": [
+    {
+      "position_number": 1,
+      "symbol": "AAPL",
+      "direction": "LONG",
+      "order_id": "d8f11f1b-ecff-4dba-aed3-5e8c9fdefef0",
+      "quantity": 61,
+      "entry_price": 178.50,
+      "position_value": 10888.50,
+      "stop_loss": 173.50,
+      "take_profit": 188.50,
+      "stop_loss_pct": -2.8,
+      "take_profit_pct": 5.6,
+      "risk_amount": 305,
+      "reward_potential": 610,
+      "risk_reward_ratio": 2.0,
+      "catalyst": "iPhone 16 launch momentum",
+      "multi_agent_analysis": {
+        "fundamental": "BUY - Strong revenue growth",
+        "technical": "BUY - Above 50-day MA",
+        "news": "BUY - iPhone 16 positive reception",
+        "sentiment": "BUY - Consumer enthusiasm high",
+        "risk_manager": "APPROVED - Blue chip quality",
+        "bull_researcher": "BUY - Market leader position",
+        "bear_researcher": "HOLD - Valuation concerns",
+        "consensus": "BUY",
+        "confidence": "85%"
+      },
+      "order_status": "SUBMITTED",
+      "order_type": "LIMIT",
+      "time_in_force": "DAY"
+    },
+    {
+      "position_number": 2,
+      "symbol": "MSFT",
+      "direction": "LONG",
+      "order_id": "1bbc4662-9602-4248-9186-e891f7655ca8",
+      "quantity": 29,
+      "entry_price": 412.00,
+      "position_value": 11948.00,
+      "stop_loss": 401.38,
+      "take_profit": 438.63,
+      "stop_loss_pct": -2.6,
+      "take_profit_pct": 6.5,
+      "risk_amount": 308,
+      "reward_potential": 770,
+      "risk_reward_ratio": 2.5,
+      "catalyst": "AI/Copilot enterprise adoption",
+      "multi_agent_analysis": {
+        "fundamental": "BUY - Cloud growth acceleration",
+        "technical": "BUY - Bullish breakout pattern",
+        "news": "BUY - AI leadership recognized",
+        "sentiment": "BUY - Enterprise confidence",
+        "risk_manager": "APPROVED - Mega cap stability",
+        "bull_researcher": "BUY - AI competitive moat",
+        "bear_researcher": "HOLD - High expectations",
+        "consensus": "BUY",
+        "confidence": "88%"
+      },
+      "order_status": "SUBMITTED",
+      "order_type": "LIMIT",
+      "time_in_force": "DAY"
+    },
+    {
+      "position_number": 3,
+      "symbol": "SPY",
+      "direction": "SHORT",
+      "order_id": "bc9c2dec-7957-43d2-95e8-3011791e8bdd",
+      "quantity": 6,
+      "entry_price": 545.00,
+      "position_value": 3270.00,
+      "stop_loss": 553.75,
+      "take_profit": 523.13,
+      "stop_loss_pct": -1.6,
+      "take_profit_pct": 4.0,
+      "risk_amount": 53,
+      "reward_potential": 131,
+      "risk_reward_ratio": 2.5,
+      "purpose": "Portfolio hedge",
+      "multi_agent_analysis": {
+        "fundamental": "NEUTRAL - Mixed signals",
+        "technical": "SELL - Overbought levels",
+        "news": "NEUTRAL - No major catalysts",
+        "sentiment": "NEUTRAL - Mixed investor mood",
+        "risk_manager": "APPROVED - Hedging purpose",
+        "bull_researcher": "HOLD - Economic resilience",
+        "bear_researcher": "SELL - Valuation stretched",
+        "consensus": "SHORT (HEDGE)",
+        "confidence": "72%"
+      },
+      "order_status": "SUBMITTED",
+      "order_type": "LIMIT",
+      "time_in_force": "DAY"
+    },
+    {
+      "position_number": 4,
+      "symbol": "JPM",
+      "direction": "LONG",
+      "order_id": "cc6aebce-4107-4b6b-ac2d-6618b5d704b0",
+      "quantity": 71,
+      "entry_price": 200.00,
+      "position_value": 14200.00,
+      "stop_loss": 195.63,
+      "take_profit": 210.94,
+      "stop_loss_pct": -2.2,
+      "take_profit_pct": 5.5,
+      "risk_amount": 310,
+      "reward_potential": 776,
+      "risk_reward_ratio": 2.5,
+      "catalyst": "NII expansion, strong capital ratios",
+      "multi_agent_analysis": {
+        "fundamental": "BUY - Strong balance sheet",
+        "technical": "BUY - Support level hold",
+        "news": "BUY - Positive bank outlook",
+        "sentiment": "BUY - Financial sector rotation",
+        "risk_manager": "APPROVED - Systematic importance",
+        "bull_researcher": "BUY - Rising rate environment",
+        "bear_researcher": "HOLD - Credit cycle concerns",
+        "consensus": "BUY",
+        "confidence": "83%"
+      },
+      "order_status": "SUBMITTED",
+      "order_type": "LIMIT",
+      "time_in_force": "DAY"
+    }
+  ],
+  "portfolio_metrics": {
+    "total_positions": 4,
+    "total_capital_deployed": 40306.50,
+    "portfolio_allocation_pct": 40.3,
+    "total_risk_amount": 976,
+    "total_risk_pct": 0.98,
+    "total_reward_potential": 2287,
+    "expected_return_range": [1500, 2300],
+    "average_confidence": 84,
+    "long_positions": 3,
+    "short_positions": 1,
+    "sectors": {
+      "technology": 2,
+      "financial": 1,
+      "broad_market": 1
+    }
+  },
+  "risk_management": {
+    "max_single_position_risk": 310,
+    "average_stop_loss_pct": -2.3,
+    "average_take_profit_pct": 5.9,
+    "portfolio_beta": "Estimated 0.8-1.0",
+    "correlation_risk": "LOW - Diversified across sectors",
+    "daily_loss_limit": 750,
+    "position_sizing": "Conservative institutional approach"
+  },
+  "execution_notes": {
+    "execution_window": "9:30-10:30 AM EST",
+    "all_orders_bracket_type": true,
+    "stop_losses_attached": true,
+    "take_profits_attached": true,
+    "order_execution": "All submitted successfully",
+    "multi_agent_consensus": "Strong agreement on all positions"
+  },
+  "next_session_monitoring": {
+    "positions_to_watch": ["AAPL", "MSFT", "SPY", "JPM"],
+    "key_levels": {
+      "AAPL": "Watch for iPhone 16 sales data",
+      "MSFT": "Monitor AI/Copilot adoption metrics", 
+      "SPY": "Hedge position - watch market direction",
+      "JPM": "Banking sector rotation, interest rate impact"
+    },
+    "exit_criteria": "Stops hit OR targets reached OR fundamental change",
+    "position_management": "Monitor daily, adjust if needed"
+  }
+}

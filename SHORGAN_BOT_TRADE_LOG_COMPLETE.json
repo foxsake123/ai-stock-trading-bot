@@ -1,0 +1,222 @@
+{
+  "session_date": "2025-01-10",
+  "execution_time": "11:18:01",
+  "bot_name": "SHORGAN-BOT",
+  "strategy": "Small/Mid-Cap Catalyst System",
+  "account_info": {
+    "alpaca_account": "PKJRLSB2MFEJUSK6UK2E",
+    "account_type": "Paper Trading",
+    "initial_buying_power": 118257.88,
+    "initial_portfolio_value": 104189.08
+  },
+  "trading_plan": {
+    "capital": 100000,
+    "focus": "<$20B Market Cap Companies",
+    "style": "Aggressive Catalyst-Driven",
+    "target_deployment": "26.5%",
+    "expected_return": "$2,000-4,000",
+    "daily_loss_limit": "$3,000"
+  },
+  "executed_positions": [
+    {
+      "position_number": 1,
+      "symbol": "PLTR",
+      "direction": "LONG",
+      "order_id": "73f60f65-2ea3-4aa6-aee4-24924bd11089",
+      "quantity": 520,
+      "entry_price": 14.50,
+      "position_value": 7540.00,
+      "stop_loss": 13.30,
+      "take_profit": 16.00,
+      "stop_loss_pct": -8.3,
+      "take_profit_pct": 10.3,
+      "risk_amount": 624,
+      "reward_potential": 780,
+      "risk_reward_ratio": 1.25,
+      "catalyst": "AI contract rumors",
+      "market_cap": "~$15B",
+      "sector": "Technology/AI",
+      "volatility": "HIGH",
+      "order_status": "SUBMITTED",
+      "order_type": "LIMIT",
+      "time_in_force": "DAY"
+    },
+    {
+      "position_number": 2,
+      "symbol": "CVNA",
+      "direction": "SHORT",
+      "order_id": "b291d76c-9c22-4e12-aeae-d5b17c62a6ae",
+      "quantity": 100,
+      "entry_price": 48.00,
+      "position_value": 4800.00,
+      "stop_loss": 51.50,
+      "take_profit": 42.00,
+      "stop_loss_pct": -7.3,
+      "take_profit_pct": 12.5,
+      "risk_amount": 350,
+      "reward_potential": 600,
+      "risk_reward_ratio": 1.71,
+      "catalyst": "Parabolic exhaustion pattern",
+      "market_cap": "~$4B",
+      "sector": "Consumer Discretionary",
+      "volatility": "VERY HIGH",
+      "order_status": "SUBMITTED",
+      "order_type": "LIMIT",
+      "time_in_force": "DAY"
+    },
+    {
+      "position_number": 3,
+      "symbol": "CRWD",
+      "direction": "LONG",
+      "order_id": "72611c8f-f847-4add-8f5b-8edae7e37522",
+      "quantity": 36,
+      "entry_price": 210.00,
+      "position_value": 7560.00,
+      "stop_loss": 199.50,
+      "take_profit": 225.00,
+      "stop_loss_pct": -5.0,
+      "take_profit_pct": 7.1,
+      "risk_amount": 378,
+      "reward_potential": 540,
+      "risk_reward_ratio": 1.43,
+      "catalyst": "Cybersecurity demand surge",
+      "market_cap": "~$18B",
+      "sector": "Cybersecurity",
+      "volatility": "HIGH",
+      "order_status": "SUBMITTED",
+      "order_type": "LIMIT",
+      "time_in_force": "DAY"
+    },
+    {
+      "position_number": 4,
+      "symbol": "UPST",
+      "direction": "SHORT",
+      "order_id": "e3da904c-fc8e-4126-87d8-03d29498306c",
+      "quantity": 100,
+      "entry_price": 30.00,
+      "position_value": 3000.00,
+      "stop_loss": 31.50,
+      "take_profit": 27.00,
+      "stop_loss_pct": -5.0,
+      "take_profit_pct": 10.0,
+      "risk_amount": 150,
+      "reward_potential": 300,
+      "risk_reward_ratio": 2.0,
+      "catalyst": "Breaking key support level",
+      "market_cap": "~$3B",
+      "sector": "FinTech",
+      "volatility": "EXTREME",
+      "order_status": "SUBMITTED",
+      "order_type": "LIMIT",
+      "time_in_force": "DAY"
+    }
+  ],
+  "options_positions_manual": [
+    {
+      "position_number": 5,
+      "symbol": "DDOG",
+      "strategy": "ATM Straddle",
+      "strike": 110.00,
+      "contracts": 3,
+      "estimated_cost": 2400,
+      "catalyst": "Earnings announcement tomorrow",
+      "market_cap": "~$14B",
+      "execution": "MANUAL_REQUIRED",
+      "note": "Alpaca paper trading limited options support"
+    },
+    {
+      "position_number": 6,
+      "symbol": "ROKU",
+      "strategy": "Call Options",
+      "strike": 65.00,
+      "contracts": 3,
+      "estimated_cost": 1050,
+      "catalyst": "Streaming rebound expectations",
+      "market_cap": "~$8B",
+      "execution": "MANUAL_REQUIRED",
+      "note": "Alpaca paper trading limited options support"
+    }
+  ],
+  "portfolio_metrics": {
+    "total_stock_positions": 4,
+    "total_options_positions": 2,
+    "stock_capital_deployed": 22900.00,
+    "options_capital_estimated": 3450.00,
+    "total_capital_planned": 26350.00,
+    "portfolio_allocation_pct": 26.4,
+    "total_stock_risk": 1502,
+    "total_risk_pct": 1.5,
+    "expected_return_range": [2000, 4000],
+    "long_positions": 2,
+    "short_positions": 2,
+    "high_volatility_exposure": "100%"
+  },
+  "risk_management": {
+    "position_sizing": "Aggressive (3-7.5% per position)",
+    "stop_loss_range": "-5.0% to -8.3%",
+    "take_profit_range": "+7.1% to +12.5%",
+    "daily_loss_limit": 3000,
+    "catalyst_dependency": "HIGH - All positions catalyst-driven",
+    "correlation_risk": "MEDIUM - Diverse sectors",
+    "volatility_profile": "HIGH - Small/mid-cap focus"
+  },
+  "catalyst_monitoring": {
+    "PLTR": {
+      "catalyst": "AI contract announcement rumors",
+      "timeline": "Next 1-2 weeks",
+      "risk": "Rumor may not materialize"
+    },
+    "CVNA": {
+      "catalyst": "Technical breakdown from parabolic run",
+      "timeline": "Immediate",
+      "risk": "Short squeeze potential"
+    },
+    "CRWD": {
+      "catalyst": "Cybersecurity sector demand surge",
+      "timeline": "Ongoing trend",
+      "risk": "Sector rotation away from growth"
+    },
+    "UPST": {
+      "catalyst": "Breaking key technical support",
+      "timeline": "Immediate",
+      "risk": "Support may hold, bounce"
+    },
+    "DDOG": {
+      "catalyst": "Earnings announcement",
+      "timeline": "Tomorrow after market close",
+      "risk": "High volatility both directions"
+    },
+    "ROKU": {
+      "catalyst": "Streaming sector recovery",
+      "timeline": "Medium term",
+      "risk": "Continued cord-cutting headwinds"
+    }
+  },
+  "execution_notes": {
+    "execution_window": "9:30-11:00 AM EST",
+    "all_stock_orders_bracket": true,
+    "stop_losses_attached": true,
+    "take_profits_attached": true,
+    "options_execution": "MANUAL_REQUIRED",
+    "order_execution": "4/4 stock orders submitted successfully"
+  },
+  "next_session_priorities": {
+    "immediate_monitoring": [
+      "DDOG earnings reaction (tomorrow)",
+      "PLTR AI contract news flow",
+      "CVNA technical breakdown continuation",
+      "UPST support level test"
+    ],
+    "position_management": {
+      "active_stops": "Monitor all stop levels closely",
+      "catalyst_updates": "Track news flow for all catalysts",
+      "volatility_management": "High vol environment requires close monitoring",
+      "options_execution": "Place DDOG straddle and ROKU calls manually if desired"
+    },
+    "risk_monitoring": {
+      "daily_loss_limit": "Stop all trading if $3,000 loss reached",
+      "correlation_watch": "Monitor if positions move together",
+      "sector_rotation": "Watch for growth vs value rotation"
+    }
+  }
+}

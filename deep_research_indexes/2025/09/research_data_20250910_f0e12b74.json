@@ -1,0 +1,16 @@
+{
+  "report_id": "f0e12b74",
+  "report_date": "2025-09-10T08:24:15.101553",
+  "market_condition": {
+    "trend": "neutral",
+    "volatility": "medium",
+    "breadth": 0.5,
+    "sentiment": "neutral",
+    "regime": "mixed"
+  },
+  "index_performance": {},
+  "technical_signals": [],
+  "ai_recommendations": [],
+  "sector_performance": {},
+  "risk_alerts": []
+}

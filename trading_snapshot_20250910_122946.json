@@ -1,0 +1,132 @@
+{
+  "timestamp": "2025-09-10T12:29:46.897513",
+  "dee_bot": {
+    "bot_name": "DEE-BOT",
+    "portfolio_value": 100157.4,
+    "buying_power": 132986.51,
+    "total_pnl": 157.265,
+    "positions": [
+      {
+        "symbol": "JPM",
+        "qty": 71,
+        "side": "LONG",
+        "avg_price": 299.23,
+        "market_value": 21358.93,
+        "pnl": 113.6,
+        "pnl_pct": 0.53470574474485
+      },
+      {
+        "symbol": "AAPL",
+        "qty": 61,
+        "side": "LONG",
+        "avg_price": 226.479344,
+        "market_value": 13891.53,
+        "pnl": 76.29,
+        "pnl_pct": 0.5522162481433499
+      },
+      {
+        "symbol": "MSFT",
+        "qty": 29,
+        "side": "LONG",
+        "avg_price": 500.36,
+        "market_value": 14477.815,
+        "pnl": -32.625,
+        "pnl_pct": -0.22483811655608002
+      }
+    ],
+    "position_count": 3,
+    "pending_orders": 0
+  },
+  "shorgan_bot": {
+    "bot_name": "SHORGAN-BOT",
+    "portfolio_value": 103805.63,
+    "buying_power": 117809.43,
+    "total_pnl": 4390.803,
+    "positions": [
+      {
+        "symbol": "ORCL",
+        "qty": 42,
+        "side": "LONG",
+        "avg_price": 239.04,
+        "market_value": 14220.78,
+        "pnl": 4181.1,
+        "pnl_pct": 41.64574966532798
+      },
+      {
+        "symbol": "BTBT",
+        "qty": 570,
+        "side": "LONG",
+        "avg_price": 2.66,
+        "market_value": 1715.643,
+        "pnl": 199.443,
+        "pnl_pct": 13.15413533834586
+      },
+      {
+        "symbol": "RGTI",
+        "qty": 130,
+        "side": "LONG",
+        "avg_price": 15.350692,
+        "market_value": 2110.55,
+        "pnl": 114.96,
+        "pnl_pct": 5.76070234867884
+      },
+      {
+        "symbol": "SPY",
+        "qty": 18,
+        "side": "LONG",
+        "avg_price": 649.101667,
+        "market_value": 11748.69,
+        "pnl": 64.86,
+        "pnl_pct": 0.55512618721772
+      },
+      {
+        "symbol": "BYND",
+        "qty": 398,
+        "side": "LONG",
+        "avg_price": 2.518819,
+        "market_value": 996.99,
+        "pnl": -5.5,
+        "pnl_pct": -0.54863390158505
+      },
+      {
+        "symbol": "SAVA",
+        "qty": 200,
+        "side": "LONG",
+        "avg_price": 2.17,
+        "market_value": 427.0,
+        "pnl": -7.0,
+        "pnl_pct": -1.6129032258064497
+      },
+      {
+        "symbol": "EMBC",
+        "qty": 68,
+        "side": "LONG",
+        "avg_price": 15.23,
+        "market_value": 1022.04,
+        "pnl": -13.6,
+        "pnl_pct": -1.31319763624425
+      },
+      {
+        "symbol": "KSS",
+        "qty": 90,
+        "side": "LONG",
+        "avg_price": 16.496,
+        "market_value": 1424.25,
+        "pnl": -60.39,
+        "pnl_pct": -4.0676527643065
+      },
+      {
+        "symbol": "GPK",
+        "qty": 142,
+        "side": "LONG",
+        "avg_price": 21.07,
+        "market_value": 2908.87,
+        "pnl": -83.07,
+        "pnl_pct": -2.77645942097769
+      }
+    ],
+    "position_count": 9,
+    "pending_orders": 0
+  },
+  "combined_pnl": 4548.068
+}

@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-09-10T11:14:06.341206",
+  "bot": "SHORGAN-BOT",
+  "strategy": "Production Trading",
+  "broker": "Alpaca Paper Trading",
+  "orders": [
+    {
+      "ticker": "NVDA",
+      "order_id": "6ef18d41-43fe-40cc-b73c-138db0bf642c",
+      "qty": 150,
+      "limit_price": 176.0,
+      "stop_loss": 169.0,
+      "take_profit": 189.0
+    }
+  ],
+  "estimated_capital": 38000.0,
+  "notes": "Larger positions with tighter risk management"
+}

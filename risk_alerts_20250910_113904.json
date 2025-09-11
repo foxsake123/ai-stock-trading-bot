@@ -1,0 +1,23 @@
+[
+  {
+    "timestamp": "2025-09-10T11:39:04.442462",
+    "level": "INFO",
+    "bot": "DEE-BOT",
+    "message": "Portfolio profitable: +$30.45",
+    "position": null
+  },
+  {
+    "timestamp": "2025-09-10T11:39:04.626936",
+    "level": "INFO",
+    "bot": "SHORGAN-BOT",
+    "message": "ORCL up 42.8% - consider taking profits",
+    "position": "ORCL"
+  },
+  {
+    "timestamp": "2025-09-10T11:39:04.626981",
+    "level": "INFO",
+    "bot": "SHORGAN-BOT",
+    "message": "Portfolio profitable: +$4570.18",
+    "position": null
+  }
+]
