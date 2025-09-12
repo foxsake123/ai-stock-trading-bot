@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-09-12T11:45:37.684819",
+  "date": "2025-09-12",
+  "market_open": true,
+  "combined_value": 205480.99,
+  "combined_daily_pl": 1385.550000000003,
+  "combined_daily_return_pct": 0.6788735701297407,
+  "dee_bot": {
+    "value": 0,
+    "daily_pl": 0
+  },
+  "rating": "EXCELLENT"
+}

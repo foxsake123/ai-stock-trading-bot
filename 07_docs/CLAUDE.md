@@ -3,6 +3,14 @@
 ## Project Overview
 This is a multi-agent AI trading bot system based on the TradingAgents framework. The system uses specialized AI agents working collaboratively to analyze markets, make trading decisions, and manage risk.
 
+**Current Performance (September 12, 2025, 11:45 AM ET)**:
+- Total Portfolio Value: $205,480.99 (+2.74%)
+- DEE-BOT: $101,690.62 (+1.69%) - Beta-neutral with 2X leverage
+- SHORGAN-BOT: $103,790.37 (+3.79%)
+- Active Positions: 22
+- Today's P&L: +$1,385.55
+- Portfolio Beta: ~1.0 (market neutral)
+
 ## Architecture
 
 ### Core Components
@@ -145,14 +153,38 @@ ai-stock-trading-bot/
 - Integration tests for agent communication
 - Backtesting validation for all strategies
 
+## Trading Bot Configurations
+
+### DEE-BOT Configuration (UPDATED: Beta-Neutral with Leverage)
+- **Strategy**: Beta-neutral S&P 100 multi-agent consensus with 2X leverage
+- **Capital**: $100,000 starting (currently $101,690.62)
+- **Universe**: S&P 100 large-cap stocks
+- **Position Sizing**: Beta-adjusted with target 2X leverage
+- **Portfolio Beta Target**: 1.0 (market neutral)
+- **Stop Loss**: 3% trailing stop
+- **Take Profit**: 5% target
+- **Leverage**: Up to 2X (managed through beta weighting)
+- **Risk Management**: Beta calculations for each position
+- **Alpaca API Key**: PK6FZK4DAQVTD7DYVH78
+
+### SHORGAN-BOT Configuration  
+- **Strategy**: Aggressive catalyst-driven trading
+- **Capital**: $100,000 starting (currently $103,398.18)
+- **Universe**: Small/mid-cap catalyst stocks
+- **Position Sizing**: $10,000-$15,000 per position
+- **Stop Loss**: 4% for high volatility stocks
+- **Risk/Reward**: Average 1:3.91 ratio
+- **Alpaca API Key**: PKJRLSB2MFEJUSK6UK2E
+
 ## Trading Bot Specific Guidelines
 
-### Risk Management Rules
-1. **Position Sizing**: Never risk more than 2% of portfolio on a single trade
+### Risk Management Rules (UPDATED)
+1. **Position Sizing**: Maximum 5% of portfolio per position
 2. **Diversification**: Maximum 20% allocation to any single position
-3. **Stop Loss**: Mandatory stop-loss orders on all positions
+3. **Stop Loss**: Mandatory stop-loss orders on all positions (3-4%)
 4. **Daily Loss Limit**: Circuit breaker at 5% daily portfolio loss
 5. **Correlation Limits**: Monitor and limit correlated positions
+6. **Exposure Monitoring**: Alert when total exposure exceeds 80%
 
 ### Data Requirements
 - Real-time market data with < 1 second latency

@@ -1,65 +1,93 @@
 source_path,dest_path,reason
-# ===== CORE TRADING SYSTEM =====
-Multi-Agent_System/agents/*,01_trading_system/agents/,consolidate agents
-Bot_Strategies/DEE-BOT/*,01_trading_system/bots/dee_bot/,normalize bot name
-Bot_Strategies/SHORGAN-BOT/*,01_trading_system/bots/shorgan_bot/,normalize bot name
-04_Bot_Strategies/DEE_BOT/*,01_trading_system/bots/dee_bot/,consolidate duplicate
-04_Bot_Strategies/SHORGAN_BOT/*,01_trading_system/bots/shorgan_bot/,consolidate duplicate
-Core_Trading/*,01_trading_system/core/,consolidate core trading
-01_Trading_Scripts/*.py,01_trading_system/core/,consolidate scripts
-main_enhanced.py,01_trading_system/core/,move variant
-
-# ===== DATA ORGANIZATION =====
-02_Portfolio_Data/*,02_data/portfolio/,existing canonical
-Portfolio Data/*,02_data/portfolio/,normalize name
-Performance_Tracking/*,02_data/portfolio/performance/,consolidate performance
-Market_Data/*,02_data/market/,consolidate market data
-05_Data_Providers/*.py,02_data/market/,consolidate providers
-data/*.py,02_data/market/,consolidate data scripts
-deep_research_indexes/*,02_data/research/,consolidate research
-03_Research_Reports/Daily/*.json,02_data/research/daily/,data not docs
-data/research_reports/*,02_data/research/reports/,research data
-data/trade_log.csv,02_data/misc/,misc data files
-data/*.json,02_data/misc/,misc data files
-
-# ===== CONFIGURATION =====
-08_Configuration/*,03_config/,existing canonical
-Configuration/*,03_config/,consolidate duplicate
-config/*,03_config/,consolidate duplicate
-
-# ===== RISK MANAGEMENT =====
-06_Risk_Management/*,04_risk/,existing canonical
-risk_management/*,04_risk/,consolidate duplicate
-
-# ===== BACKTESTING =====
-09_Backtesting/*,05_backtesting/,existing canonical
-Backtesting/*,05_backtesting/,consolidate duplicate
-
-# ===== UTILITIES =====
-10_Utils/Tests/*,06_utils/tests/,existing canonical
-10_Utils/Scripts/*,06_utils/scripts/,existing canonical
-tools/*,06_utils/tools/,consolidate tools
-
-# ===== DOCUMENTATION =====
-07_Documentation/*,07_docs/,existing canonical
-Documentation/*,07_docs/,consolidate duplicate
-docs/*,07_docs/guides/,consolidate docs
-
-# ===== FRONTEND =====
-frontend/*,08_frontend/,existing location
-
-# ===== LOGS =====
-logs/*,09_logs/system/,consolidate logs
-
-# ===== RESEARCH REPORTS (as data) =====
-Research_Reports/*,02_data/research/reports/,research data
-03_Research_Reports/*,02_data/research/reports/,research data
-Trading Reports/*,02_data/research/reports/,research data
-
-# ===== ARCHIVE LEGACY STRUCTURE =====
-shared/*,_archive/legacy_structure/shared/,non-canonical
-archive/*,_archive/legacy_structure/archive/,existing archive
-C:Usersshorgai-stock-trading-botbrokers/*,_archive/legacy_structure/_corrupted/,malformed path
-migrate_all_files.py,_archive/deprecated/,migration script
-move_files.py,_archive/deprecated/,migration script
-REORGANIZE_REPOSITORY.py,_archive/deprecated/,migration script
+main_enhanced.py,trading-script.py,Main trading script at root
+main.py,_archive/deprecated/main.py,Duplicate - using enhanced version
+01_Trading_Scripts/main_enhanced.py,_archive/deprecated/01_Trading_Scripts/main_enhanced.py,Duplicate - moved to root
+01_Trading_Scripts/main.py,_archive/deprecated/01_Trading_Scripts/main.py,Duplicate
+01_Trading_Scripts/place_alpaca_orders.py,scripts-and-data/automation/place-alpaca-orders.py,Automation script
+01_Trading_Scripts/place_alpaca_orders_enhanced.py,scripts-and-data/automation/place-alpaca-orders-enhanced.py,Automation script
+01_Trading_Scripts/execute_with_ai_research.py,scripts-and-data/automation/execute-with-ai-research.py,Automation script
+02_Portfolio_Data/Daily_Snapshots,scripts-and-data/daily-logs,Daily operation logs
+02_Portfolio_Data/Performance,performance-tracking/historical,Performance history
+02_Portfolio_Data/Trade_History,scripts-and-data/trade-history,Trade logs
+03_Research_Reports/Daily,research/md/daily,Daily research markdown
+03_Research_Reports/Weekly,research/md/weekly,Weekly research markdown
+03_Research_Reports/Deep_Research,research/pdf/deep-research,Deep research PDFs
+03_Research_Reports/automated_research_pipeline.py,scripts-and-data/automation/automated-research-pipeline.py,Research automation
+03_Research_Reports/openai_research_analyzer.py,agents/openai-research-analyzer.py,Research agent
+04_Bot_Strategies/DEE_BOT,bot-strategies/dee-bot,Bot strategy implementation
+04_Bot_Strategies/SHORGAN_BOT,bot-strategies/shorgan-bot,Bot strategy implementation
+04_Bot_Strategies/Common/daily_trades,scripts-and-data/daily-logs,Daily trade logs
+05_Data_Providers/Market_Data,data-providers/market-data,Market data provider
+05_Data_Providers/News,data-providers/news,News data provider
+05_Data_Providers/Sentiment,data-providers/sentiment,Sentiment data provider
+05_Data_Providers/data_providers.py,data-providers/data-providers.py,Core data provider
+05_Data_Providers/enhanced_providers.py,data-providers/enhanced-providers.py,Enhanced data provider
+05_Data_Providers/catalyst_detector.py,data-providers/catalyst-detector.py,Catalyst detection
+06_Risk_Management/Models,risk-management/models,Risk models
+06_Risk_Management/Reports,risk-management/reports,Risk reports
+06_Risk_Management/Alerts,risk-management/alerts,Risk alerts
+07_Documentation/Guides,docs/guides,Setup and usage guides
+07_Documentation/Session_Notes,docs/session-notes,Session documentation
+07_Documentation/Research_Papers,docs/experiment-details/research-papers,Research papers
+08_Configuration/api_config.py,config/api-config.py,API configuration
+08_Configuration/.env,.env,Environment variables at root
+09_Backtesting/Strategies,_archive/backtesting/strategies,Legacy backtesting
+09_Backtesting/Results,_archive/backtesting/results,Legacy results
+10_Utils/Tests,tests,Test files
+10_Utils/Scripts,scripts-and-data/automation/utils,Utility scripts
+Multi-Agent_System/agents,agents,AI research agents
+Multi-Agent_System/communication,agents/communication,Agent communication layer
+Performance_Tracking/daily_performance_tracker.py,performance-tracking/daily-performance-tracker.py,Performance tracking
+Performance_Tracking/portfolio_tracker.py,performance-tracking/portfolio-tracker.py,Portfolio tracking
+Performance_Tracking/automated_performance_tracker.py,performance-tracking/automated-performance-tracker.py,Automated tracking
+Research_Reports/post_market_daily,research/md/post-market,Post market research
+Research_Reports/pre_market_daily,research/md/pre-market,Pre market research
+Research_Reports/weekly_analysis,research/md/weekly,Weekly analysis
+Bot_Strategies/DEE-BOT,_archive/deprecated/Bot_Strategies/DEE-BOT,Duplicate bot strategy
+Bot_Strategies/SHORGAN-BOT,_archive/deprecated/Bot_Strategies/SHORGAN-BOT,Duplicate bot strategy
+Core_Trading/execute_trades_20250110.py,scripts-and-data/automation/execute-trades.py,Trading execution
+Core_Trading/place_alpaca_orders.py,_archive/deprecated/Core_Trading/place_alpaca_orders.py,Duplicate
+Core_Trading/trading_engine.py,scripts-and-data/automation/trading-engine.py,Trading engine
+Configuration/requirements.txt,requirements.txt,Dependencies at root
+Configuration/sp100_universe.py,config/sp100-universe.py,SP100 configuration
+Configuration/telegram_setup.md,docs/guides/telegram-setup.md,Setup guide
+Documentation/CLAUDE.md,docs/guides/claude.md,Claude guide
+Documentation/CONTINUE_SESSION_GUIDE.md,docs/guides/continue-session-guide.md,Session guide
+Documentation/GITHUB_REPOSITORY_GUIDE.md,docs/guides/github-repository-guide.md,GitHub guide
+Documentation/SETUP_AUTOMATED_TRADING_GUIDE.md,docs/guides/setup-automated-trading-guide.md,Trading setup
+Documentation/SYSTEM_OVERVIEW.md,docs/experiment-details/system-overview.md,System documentation
+archive,_archive/old-archive,Existing archive
+data/catalyst_detector.py,_archive/deprecated/data/catalyst_detector.py,Duplicate
+data/data_providers.py,_archive/deprecated/data/data_providers.py,Duplicate
+data/enhanced_providers.py,_archive/deprecated/data/enhanced_providers.py,Duplicate
+data/research_reports,research/md/historical,Historical research
+config/api_config.py,_archive/deprecated/config/api_config.py,Duplicate config
+risk_management/risk_monitor.py,risk-management/risk-monitor.py,Risk monitoring
+risk_management/portfolio_performance.py,risk-management/portfolio-performance.py,Portfolio performance
+tools/idea_generation,scripts-and-data/automation/idea-generation,Idea generation tools
+tools/reporting,scripts-and-data/automation/reporting,Reporting tools
+tools/scheduling,scripts-and-data/automation/scheduling,Scheduling tools
+tools/testing,tests/integration,Integration tests
+frontend/trading-dashboard,_archive/frontend/trading-dashboard,Frontend application
+logs,scripts-and-data/logs,Application logs
+trading_snapshot_20250910_*.json,scripts-and-data/trading-snapshots,Trading snapshots
+DEE_BOT_*.json,scripts-and-data/daily-logs/2025-09-10/dee-bot,DEE bot logs
+SHORGAN_BOT_*.json,scripts-and-data/daily-logs/2025-09-10/shorgan-bot,SHORGAN bot logs
+TRADING_LOG_*.json,scripts-and-data/daily-logs/2025-09-10,Trading logs
+performance_history.json,performance-tracking/performance-history.json,Performance history
+trading_bot.db,data/trading-bot.db,Database file
+*.pdf,docs/experiment-details/research-papers,Research PDFs
+test_*.py,tests,Test files at root
+create_trading_schedule.ps1,scripts-and-data/automation/create-trading-schedule.ps1,Automation script
+run_morning_trades.bat,scripts-and-data/automation/run-morning-trades.bat,Automation script
+setup_github_repo.bat,scripts-and-data/automation/setup-github-repo.bat,Setup script
+generate_tree.ps1,scripts-and-data/automation/generate-tree.ps1,Utility script
+get_telegram_chat_id.py,scripts-and-data/automation/get-telegram-chat-id.py,Telegram utility
+README.md,README.md,Keep at root
+.gitignore,.gitignore,Keep at root
+.env,.env,Keep at root
+REPOSITORY_STRUCTURE.md,docs/repository-structure.md,Documentation
+DATA_INTEGRATION_SUMMARY.md,docs/session-notes/data-integration-summary.md,Session notes
+migrate_all_files.py,_archive/deprecated/migrate_all_files.py,Deprecated script
+move_files.py,_archive/deprecated/move_files.py,Deprecated script
+REORGANIZE_REPOSITORY.py,_archive/deprecated/REORGANIZE_REPOSITORY.py,Deprecated script

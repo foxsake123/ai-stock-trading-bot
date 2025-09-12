@@ -1,0 +1,51 @@
+{
+  "date": "2025-09-12",
+  "bot": "SHORGAN-BOT",
+  "trades_executed": [
+    {
+      "timestamp": "2025-09-12T11:25:00",
+      "action": "SELL",
+      "symbol": "AMD",
+      "quantity": 10,
+      "price": 156.98,
+      "reason": "Closing large-cap position - micro-cap focus",
+      "order_id": "cleanup_amd_001"
+    },
+    {
+      "timestamp": "2025-09-12T11:25:30",
+      "action": "SELL",
+      "symbol": "NVDA",
+      "quantity": 305,
+      "price": 178.48,
+      "reason": "Closing large-cap position - micro-cap focus",
+      "order_id": "cleanup_nvda_002"
+    },
+    {
+      "timestamp": "2025-09-12T11:30:41",
+      "action": "BUY",
+      "symbol": "RCAT",
+      "quantity": 953,
+      "price": 10.88,
+      "reason": "Catalyst: Unusual call flow, bullish options activity",
+      "order_id": "afc464d7-1f00-4b34-8cdc-2a9c087a23c4",
+      "stop_loss_order": "8ec01d01-47ea-4893-8185-d9b8afbbea11",
+      "stop_price": 9.80,
+      "target_1": 13.50,
+      "target_2": 15.00
+    }
+  ],
+  "portfolio_changes": {
+    "positions_closed": ["AMD", "NVDA"],
+    "positions_added": ["RCAT"],
+    "cash_before": -20012.31,
+    "cash_after": 25397.91,
+    "portfolio_value": 103700.96
+  },
+  "risk_metrics": {
+    "total_positions": 15,
+    "long_positions": 12,
+    "short_positions": 2,
+    "largest_position": "NVDA (closed)",
+    "micro_cap_compliance": "Mostly compliant (ORCL, SPY pending closure)"
+  }
+}

@@ -1,0 +1,73 @@
+# DRY RUN COMMANDS - VIEW ONLY, NO CHANGES MADE
+
+# Bash (Git Bash/WSL)
+echo "=== DRY RUN MODE - No files will be moved ==="
+
+# Create new directories
+echo "mkdir -p scripts-and-data/automation"
+echo "mkdir -p scripts-and-data/daily-logs/2025-09-10/{dee-bot,shorgan-bot}"
+echo "mkdir -p scripts-and-data/trading-snapshots"
+echo "mkdir -p scripts-and-data/trade-history"
+echo "mkdir -p docs/{experiment-details,guides,session-notes}"
+echo "mkdir -p research/{md,pdf}/2025/week-37"
+echo "mkdir -p agents/communication"
+echo "mkdir -p bot-strategies/{dee-bot,shorgan-bot}"
+echo "mkdir -p data-providers/{market-data,news,sentiment}"
+echo "mkdir -p risk-management/{models,reports,alerts}"
+echo "mkdir -p performance-tracking/historical"
+echo "mkdir -p config"
+echo "mkdir -p tests/integration"
+echo "mkdir -p _archive/{deprecated,backtesting,frontend,old-archive}"
+
+# Move main files
+echo "mv main_enhanced.py trading-script.py"
+echo "mv main.py _archive/deprecated/"
+
+# Move trading scripts
+echo "mv 01_Trading_Scripts/*.py scripts-and-data/automation/"
+
+# Move portfolio data
+echo "mv 02_Portfolio_Data/Daily_Snapshots/* scripts-and-data/daily-logs/"
+echo "mv 02_Portfolio_Data/Performance/* performance-tracking/historical/"
+echo "mv 02_Portfolio_Data/Trade_History/* scripts-and-data/trade-history/"
+
+# Move research reports
+echo "mv 03_Research_Reports/Daily/* research/md/daily/"
+echo "mv 03_Research_Reports/Weekly/* research/md/weekly/"
+echo "mv 03_Research_Reports/Deep_Research/* research/pdf/deep-research/"
+
+# Move agents
+echo "mv Multi-Agent_System/agents/*.py agents/"
+echo "mv Multi-Agent_System/communication/* agents/communication/"
+
+# PowerShell
+Write-Host "=== DRY RUN MODE - No files will be moved ===" -ForegroundColor Yellow
+
+# Create new directories
+Write-Host "New-Item -ItemType Directory -Path 'scripts-and-data\automation' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'scripts-and-data\daily-logs\2025-09-10\dee-bot' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'scripts-and-data\daily-logs\2025-09-10\shorgan-bot' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'scripts-and-data\trading-snapshots' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'docs\experiment-details' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'docs\guides' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'docs\session-notes' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'research\md\2025\week-37' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'research\pdf\2025\week-37' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'agents\communication' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'bot-strategies\dee-bot' -Force"
+Write-Host "New-Item -ItemType Directory -Path 'bot-strategies\shorgan-bot' -Force"
+Write-Host "New-Item -ItemType Directory -Path '_archive\deprecated' -Force"
+
+# Move main files
+Write-Host "Move-Item -Path 'main_enhanced.py' -Destination 'trading-script.py'"
+Write-Host "Move-Item -Path 'main.py' -Destination '_archive\deprecated\'"
+
+# Move trading scripts
+Write-Host "Move-Item -Path '01_Trading_Scripts\*.py' -Destination 'scripts-and-data\automation\'"
+
+# Move portfolio data
+Write-Host "Move-Item -Path '02_Portfolio_Data\Daily_Snapshots\*' -Destination 'scripts-and-data\daily-logs\'"
+Write-Host "Move-Item -Path '02_Portfolio_Data\Performance\*' -Destination 'performance-tracking\historical\'"
+
+# Move agents
+Write-Host "Move-Item -Path 'Multi-Agent_System\agents\*.py' -Destination 'agents\'"

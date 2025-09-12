@@ -117,17 +117,17 @@ def main():
     
     print("Sending DEE-BOT report...")
     if send_telegram_message(BOT_TOKEN, CHAT_ID, deebot_report):
-        print("✓ DEE-BOT report sent!")
+        print("[SUCCESS] DEE-BOT report sent!")
     else:
-        print("✗ Failed to send DEE-BOT report")
+        print("[FAILED] Failed to send DEE-BOT report")
     
     time.sleep(3)
     
     print("Sending Shorgan-Bot report...")
     if send_telegram_message(BOT_TOKEN, CHAT_ID, shorgan_report):
-        print("✓ Shorgan-Bot report sent!")
+        print("[SUCCESS] Shorgan-Bot report sent!")
     else:
-        print("✗ Failed to send Shorgan-Bot report")
+        print("[FAILED] Failed to send Shorgan-Bot report")
     
     print("Done!")
 

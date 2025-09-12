@@ -1,0 +1,299 @@
+{
+  "timestamp": "2025-09-11T09:48:34.620016",
+  "date": "2025-09-11",
+  "portfolios": {
+    "DEE-BOT": {
+      "portfolio_value": 100697.26,
+      "cash": 2496.38,
+      "buying_power": 103193.64,
+      "positions": [
+        {
+          "symbol": "AAPL",
+          "quantity": 93,
+          "avg_entry": 226.872151,
+          "current_price": 228.17,
+          "market_value": 21219.81,
+          "unrealized_pl": 120.7,
+          "unrealized_plpc": 0.5720620443232,
+          "side": "long"
+        },
+        {
+          "symbol": "CVX",
+          "quantity": 31,
+          "avg_entry": 157.87,
+          "current_price": 158.03,
+          "market_value": 4898.93,
+          "unrealized_pl": 4.96,
+          "unrealized_plpc": 0.10134921137644999,
+          "side": "long"
+        },
+        {
+          "symbol": "GOOGL",
+          "quantity": 24,
+          "avg_entry": 237.862083,
+          "current_price": 238.03,
+          "market_value": 5712.72,
+          "unrealized_pl": 4.03,
+          "unrealized_plpc": 0.07059412930112,
+          "side": "long"
+        },
+        {
+          "symbol": "HD",
+          "quantity": 12,
+          "avg_entry": 416.53,
+          "current_price": 418.085,
+          "market_value": 5017.02,
+          "unrealized_pl": 18.66,
+          "unrealized_plpc": 0.37332244976351997,
+          "side": "long"
+        },
+        {
+          "symbol": "JPM",
+          "quantity": 71,
+          "avg_entry": 299.23,
+          "current_price": 304.54,
+          "market_value": 21622.34,
+          "unrealized_pl": 377.01,
+          "unrealized_plpc": 1.77455469037195,
+          "side": "long"
+        },
+        {
+          "symbol": "MSFT",
+          "quantity": 34,
+          "avg_entry": 500.622059,
+          "current_price": 499.13,
+          "market_value": 16970.42,
+          "unrealized_pl": -50.73,
+          "unrealized_plpc": -0.29804096667969,
+          "side": "long"
+        },
+        {
+          "symbol": "NVDA",
+          "quantity": 100,
+          "avg_entry": 175.99,
+          "current_price": 178.18,
+          "market_value": 17818.0,
+          "unrealized_pl": 219.0,
+          "unrealized_plpc": 1.24438888573214,
+          "side": "long"
+        },
+        {
+          "symbol": "XOM",
+          "quantity": 44,
+          "avg_entry": 112.23,
+          "current_price": 112.3099,
+          "market_value": 4941.6356,
+          "unrealized_pl": 3.5156,
+          "unrealized_plpc": 0.07119308562773,
+          "side": "long"
+        }
+      ],
+      "risk_metrics": {
+        "total_positions": 8,
+        "total_exposure": 98200.8756,
+        "largest_position": 21622.34,
+        "portfolio_concentration": 21.472620009720224,
+        "total_unrealized_pl": 697.1456,
+        "avg_position_return": 0.4886779412270525,
+        "exposure_ratio": 97.52090136315526
+      }
+    },
+    "SHORGAN-BOT": {
+      "portfolio_value": 103398.18,
+      "cash": -9525.51,
+      "buying_power": 52010.31,
+      "positions": [
+        {
+          "symbol": "AMD",
+          "quantity": 10,
+          "avg_entry": 159.562,
+          "current_price": 157.245,
+          "market_value": 1572.45,
+          "unrealized_pl": -23.17,
+          "unrealized_plpc": -1.4521001240897,
+          "side": "long"
+        },
+        {
+          "symbol": "AXSM",
+          "quantity": 84,
+          "avg_entry": 123.2,
+          "current_price": 122.865,
+          "market_value": 10320.66,
+          "unrealized_pl": -28.14,
+          "unrealized_plpc": -0.27191558441558,
+          "side": "long"
+        },
+        {
+          "symbol": "BTBT",
+          "quantity": 570,
+          "avg_entry": 2.66,
+          "current_price": 3.005,
+          "market_value": 1712.85,
+          "unrealized_pl": 196.65,
+          "unrealized_plpc": 12.96992481203008,
+          "side": "long"
+        },
+        {
+          "symbol": "BYND",
+          "quantity": 398,
+          "avg_entry": 2.518819,
+          "current_price": 2.505,
+          "market_value": 996.99,
+          "unrealized_pl": -5.5,
+          "unrealized_plpc": -0.54863390158505,
+          "side": "long"
+        },
+        {
+          "symbol": "CHWY",
+          "quantity": 432,
+          "avg_entry": 35.95,
+          "current_price": 35.7399,
+          "market_value": 15439.6368,
+          "unrealized_pl": -90.7632,
+          "unrealized_plpc": -0.5844228094575801,
+          "side": "long"
+        },
+        {
+          "symbol": "DAKT",
+          "quantity": 743,
+          "avg_entry": 20.97,
+          "current_price": 20.945,
+          "market_value": 15562.135,
+          "unrealized_pl": -18.575,
+          "unrealized_plpc": -0.11921793037673,
+          "side": "long"
+        },
+        {
+          "symbol": "EMBC",
+          "quantity": 68,
+          "avg_entry": 15.23,
+          "current_price": 14.88,
+          "market_value": 1011.84,
+          "unrealized_pl": -23.8,
+          "unrealized_plpc": -2.29809586342745,
+          "side": "long"
+        },
+        {
+          "symbol": "GPK",
+          "quantity": 142,
+          "avg_entry": 21.07,
+          "current_price": 20.695,
+          "market_value": 2938.69,
+          "unrealized_pl": -53.25,
+          "unrealized_plpc": -1.7797816801139101,
+          "side": "long"
+        },
+        {
+          "symbol": "KSS",
+          "quantity": 90,
+          "avg_entry": 16.496,
+          "current_price": 15.98,
+          "market_value": 1438.2,
+          "unrealized_pl": -46.44,
+          "unrealized_plpc": -3.12803103782735,
+          "side": "long"
+        },
+        {
+          "symbol": "NCNO",
+          "quantity": -348,
+          "avg_entry": 29.72,
+          "current_price": 29.785,
+          "market_value": -10365.18,
+          "unrealized_pl": -22.62,
+          "unrealized_plpc": -0.21870794078062,
+          "side": "short"
+        },
+        {
+          "symbol": "NVDA",
+          "quantity": 305,
+          "avg_entry": 176.045541,
+          "current_price": 178.18,
+          "market_value": 54344.9,
+          "unrealized_pl": 651.01,
+          "unrealized_plpc": 1.2124470773117801,
+          "side": "long"
+        },
+        {
+          "symbol": "ORCL",
+          "quantity": 42,
+          "avg_entry": 239.04,
+          "current_price": 316.32,
+          "market_value": 13285.44,
+          "unrealized_pl": 3245.76,
+          "unrealized_plpc": 32.329317269076306,
+          "side": "long"
+        },
+        {
+          "symbol": "RGTI",
+          "quantity": 130,
+          "avg_entry": 15.350692,
+          "current_price": 16.1499,
+          "market_value": 2099.487,
+          "unrealized_pl": 103.897,
+          "unrealized_plpc": 5.2063299575564095,
+          "side": "long"
+        },
+        {
+          "symbol": "SAVA",
+          "quantity": 200,
+          "avg_entry": 2.17,
+          "current_price": 2.17,
+          "market_value": 434.0,
+          "unrealized_pl": 0.0,
+          "unrealized_plpc": 0.0,
+          "side": "long"
+        },
+        {
+          "symbol": "SHC",
+          "quantity": -655,
+          "avg_entry": 15.8,
+          "current_price": 15.8,
+          "market_value": -10349.0,
+          "unrealized_pl": 0.0,
+          "unrealized_plpc": 0.0,
+          "side": "short"
+        },
+        {
+          "symbol": "SPY",
+          "quantity": 18,
+          "avg_entry": 649.101667,
+          "current_price": 654.48,
+          "market_value": 11780.64,
+          "unrealized_pl": 96.81,
+          "unrealized_plpc": 0.8285810389230199,
+          "side": "long"
+        },
+        {
+          "symbol": "TSLA",
+          "quantity": 2,
+          "avg_entry": 349.12,
+          "current_price": 350.065,
+          "market_value": 700.13,
+          "unrealized_pl": 1.89,
+          "unrealized_plpc": 0.27068056828598,
+          "side": "long"
+        }
+      ],
+      "risk_metrics": {
+        "total_positions": 17,
+        "total_exposure": 154352.2288,
+        "largest_position": 54344.9,
+        "portfolio_concentration": 52.55885548469036,
+        "total_unrealized_pl": 3983.7588,
+        "avg_position_return": 2.4950808147711534,
+        "exposure_ratio": 149.2794445704944
+      }
+    }
+  },
+  "combined_metrics": {
+    "total_value": 204095.44,
+    "total_positions": 25,
+    "total_exposure": 252553.1044,
+    "total_unrealized_pl": 4680.9044
+  },
+  "warnings": [
+    "HIGH EXPOSURE: Over 80% of capital deployed",
+    "DEE-BOT: Position concentration >20%",
+    "SHORGAN-BOT: Position concentration >20%"
+  ]
+}

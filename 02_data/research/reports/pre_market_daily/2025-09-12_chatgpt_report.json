@@ -1,0 +1,62 @@
+{
+  "date": "2025-09-12",
+  "source": "ChatGPT TradingAgents",
+  "market_context": {
+    "macro_notes": "U.S. equities cautious ahead of Fed rate cut (25 bps expected)",
+    "seasonal_effects": "September historically underperforms",
+    "implied_volatility": "Elevated in small/mid-cap names",
+    "key_catalyst": "U. Michigan Consumer Sentiment at 10:00 ET",
+    "sentiment": "Cautiously risk-on after softer CPI"
+  },
+  "trades": [
+    {
+      "symbol": "RCAT",
+      "name": "Red Cat Holdings",
+      "action": "long",
+      "market_cap": "micro-cap",
+      "catalyst": "Unusual call flow; elevated bullish options activity Sep-12",
+      "entry_min": 11.30,
+      "entry_max": 11.50,
+      "stop": 9.80,
+      "target": 13.50,
+      "target2": 15.00,
+      "size_pct": 10,
+      "risk_reward_ratio": 2.5,
+      "options": {
+        "strategy": "bull_call_spread",
+        "buy_strike": 10.00,
+        "sell_strike": 12.50,
+        "expiry": "2025-09-19",
+        "max_premium_risk": 0.5
+      }
+    },
+    {
+      "symbol": "DKS",
+      "name": "Dick's Sporting Goods",
+      "action": "long",
+      "market_cap": "mid-cap (~$20B)",
+      "catalyst": "Foot Locker acquisition closing Sep-8, raised guidance",
+      "entry_min": 220.00,
+      "entry_max": 225.00,
+      "stop": 210.00,
+      "target": 260.00,
+      "target2": 280.00,
+      "size_pct": 15,
+      "risk_reward_ratio": 3.0,
+      "options": {
+        "strategy": "long_call_or_vertical",
+        "buy_strike": 225.00,
+        "sell_strike": 260.00,
+        "expiry": "2025-11-25",
+        "max_premium_risk": 1.0
+      }
+    }
+  ],
+  "risk_management": {
+    "max_risk_per_trade": 2.0,
+    "max_options_premium": 1.0,
+    "diversification": "Max 2 simultaneous directional bets",
+    "stop_loss_rules": "Hard stops on equity, 50% premium loss on options",
+    "profit_taking": "50-70% at first target, trail remainder"
+  }
+}
