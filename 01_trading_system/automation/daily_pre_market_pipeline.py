@@ -97,42 +97,59 @@ class DailyPreMarketPipeline:
     
     def retrieve_openai_research(self) -> Dict:
         """
-        Retrieve pre-market research from OpenAI API
+        Retrieve pre-market research - prioritizes ChatGPT reports over OpenAI API
+        
+        Priority Order:
+        1. Today's ChatGPT report (manually saved)
+        2. OpenAI API generation (fallback)
+        3. Most recent local file (emergency fallback)
         """
         try:
-            # First try to fetch from OpenAI API
+            today = datetime.now().strftime('%Y-%m-%d')
+            
+            # PRIORITY 1: Check for manually saved ChatGPT report first
+            chatgpt_file = f"{self.research_dir}/{today}_chatgpt_report.json"
+            if os.path.exists(chatgpt_file):
+                with open(chatgpt_file, 'r') as f:
+                    research = json.load(f)
+                logging.info(f"[SUCCESS] Using ChatGPT report from {chatgpt_file}")
+                logging.info(f"Found {len(research.get('trades', []))} trades from ChatGPT")
+                return research
+            
+            logging.info("No ChatGPT report found for today, checking for OpenAI reports...")
+            
+            # PRIORITY 2: Check for existing OpenAI report
+            openai_file = f"{self.research_dir}/{today}_openai_research.json"
+            if os.path.exists(openai_file):
+                with open(openai_file, 'r') as f:
+                    research = json.load(f)
+                logging.info(f"Using existing OpenAI report from {openai_file}")
+                return research
+            
+            # PRIORITY 3: Generate new report via OpenAI API
+            logging.info("No existing reports found. Generating new report via OpenAI API...")
             from openai_research_fetcher import OpenAIResearchFetcher
             
-            logging.info("Fetching research from OpenAI API...")
             fetcher = OpenAIResearchFetcher()
             research = fetcher.run()
             
             if research and 'trades' in research:
-                logging.info(f"Retrieved {len(research['trades'])} trades from OpenAI")
+                logging.info(f"Generated {len(research['trades'])} trades from OpenAI")
                 return research
             
-            # Fallback to local files if API fails
-            logging.info("Falling back to local research files...")
-            today = datetime.now().strftime('%Y-%m-%d')
+            # EMERGENCY FALLBACK: Use most recent report
+            logging.warning("All methods failed. Looking for most recent report...")
+            files = sorted([f for f in os.listdir(self.research_dir) 
+                          if f.endswith('_report.json') or f.endswith('_research.json')])
             
-            # Check for JSON file first
-            json_file = f"{self.research_dir}/{today}_openai_research.json"
-            if os.path.exists(json_file):
-                with open(json_file, 'r') as f:
-                    research = json.load(f)
-                logging.info(f"Retrieved research from {json_file}")
-                return research
-            
-            # Check for most recent JSON file
-            files = sorted([f for f in os.listdir(self.research_dir) if f.endswith('_research.json')])
             if files:
                 latest_file = f"{self.research_dir}/{files[-1]}"
                 with open(latest_file, 'r') as f:
                     research = json.load(f)
-                logging.info(f"Using latest research from {files[-1]}")
+                logging.warning(f"[FALLBACK] Using old report from {files[-1]}")
                 return research
             else:
-                logging.warning("No research files found")
+                logging.error("No research files found at all!")
                 return {}
                     
         except Exception as e:

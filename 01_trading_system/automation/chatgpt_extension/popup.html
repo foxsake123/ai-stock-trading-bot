@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            width: 300px;
+            padding: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        h2 {
+            margin-top: 0;
+            color: #10a37f;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            background: #10a37f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #0d8c6c;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .settings {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 12px;
+            color: #666;
+        }
+        input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        .auto-mode {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .auto-mode input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>ChatGPT Report Extractor</h2>
+    
+    <button id="extractBtn">Extract Current Report</button>
+    <button id="testServerBtn">Test Server Connection</button>
+    
+    <div id="status"></div>
+    
+    <div class="settings">
+        <h3>Settings</h3>
+        
+        <div class="auto-mode">
+            <input type="checkbox" id="autoMode">
+            <label for="autoMode">Auto-detect reports</label>
+        </div>
+        
+        <label for="serverUrl">Server URL:</label>
+        <input type="text" id="serverUrl" value="http://localhost:8888">
+        
+        <button id="saveSettings">Save Settings</button>
+    </div>
+    
+    <div class="info" style="margin-top: 15px;">
+        <strong>How to use:</strong><br>
+        1. Open ChatGPT with your trading report<br>
+        2. Click "Extract Current Report"<br>
+        3. Report saves automatically!
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
