@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import Dashboard from './components/Dashboard'
+import DashboardStatic from './components/DashboardStatic'
 import './App.css'
 
 function App() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <Dashboard />
+      <DashboardStatic />
     </div>
   )
 }

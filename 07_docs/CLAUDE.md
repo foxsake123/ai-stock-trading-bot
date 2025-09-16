@@ -182,24 +182,29 @@ ai-stock-trading-bot/
 ### Pre-Market Pipeline (7:00 AM ET)
 1. **Research Generation** (6:30-7:00 AM)
    - SHORGAN: ChatGPT TradingAgents reports captured
-   - DEE: Automated S&P 100 analysis generated
+   - DEE: Automated S&P 100 beta-neutral analysis generated
 
 2. **Multi-Agent Analysis** (7:00-7:15 AM)
    - Each agent analyzes recommendations in parallel
+   - Beta calculations performed for portfolio balancing
    - Scores generated on 0-10 scale
 
 3. **Consensus Building** (7:15-7:20 AM)
    - Weighted scores aggregated
-   - Risk Manager final review
+   - Beta-neutral portfolio construction
+   - Risk Manager final review with leverage controls
 
 4. **Trade Execution** (7:20-7:30 AM)
-   - Approved trades submitted via Alpaca
-   - Stop losses automatically set
+   - Beta-neutral trades submitted via Alpaca
+   - Long positions + hedge positions for neutrality
+   - Dynamic stop losses automatically set (2% for leverage)
+   - 2X leverage applied with margin monitoring
 
-5. **Reporting** (7:30-7:45 AM)
+5. **Reporting & Monitoring** (7:30-7:45 AM)
+   - Portfolio beta tracking initiated
+   - Risk dashboard activated
    - PDF reports generated
-   - Telegram notifications sent
-   - Portfolio CSVs updated
+   - Real-time monitoring commenced
 
 ## Trading Bot Configurations
 
