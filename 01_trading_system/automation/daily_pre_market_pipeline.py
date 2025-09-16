@@ -16,19 +16,20 @@ import pandas as pd
 import alpaca_trade_api as tradeapi
 from dotenv import load_dotenv
 import requests
+from telegram_pdf_reporter import TelegramPDFReporter
 
 # Add parent directories to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Import multi-agent system
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from agents.fundamental_analyst import FundamentalAnalyst
-from agents.technical_analyst import TechnicalAnalyst
-from agents.news_analyst import NewsAnalyst
-from agents.sentiment_analyst import SentimentAnalyst
-from agents.bull_researcher import BullResearcher
-from agents.bear_researcher import BearResearcher
-from agents.risk_manager import RiskManager
+from agents.fundamental_analyst import FundamentalAnalystAgent
+from agents.technical_analyst import TechnicalAnalystAgent
+from agents.news_analyst import NewsAnalystAgent
+from agents.sentiment_analyst import SentimentAnalystAgent
+from agents.bull_researcher import BullResearcherAgent
+from agents.bear_researcher import BearResearcherAgent
+from agents.risk_manager import RiskManagerAgent
 
 load_dotenv()
 
@@ -47,24 +48,36 @@ logging.basicConfig(
 class DailyPreMarketPipeline:
     """Orchestrates daily pre-market analysis and trading"""
     
-    def __init__(self):
-        # Initialize Alpaca API
-        self.api = tradeapi.REST(
+    def __init__(self, bot_type='SHORGAN'):
+        self.bot_type = bot_type  # 'SHORGAN' or 'DEE'
+        
+        # Initialize Alpaca APIs for both bots
+        self.shorgan_api = tradeapi.REST(
             os.getenv('ALPACA_API_KEY_SHORGAN'),
             os.getenv('ALPACA_SECRET_KEY_SHORGAN'),
             'https://paper-api.alpaca.markets',
             api_version='v2'
         )
         
+        self.dee_api = tradeapi.REST(
+            os.getenv('ALPACA_API_KEY_DEE'),
+            os.getenv('ALPACA_SECRET_KEY_DEE'),
+            'https://paper-api.alpaca.markets',
+            api_version='v2'
+        )
+        
+        # Select API based on bot type
+        self.api = self.shorgan_api if bot_type == 'SHORGAN' else self.dee_api
+        
         # Initialize agents
         self.agents = {
-            'fundamental': FundamentalAnalyst(),
-            'technical': TechnicalAnalyst(),
-            'news': NewsAnalyst(),
-            'sentiment': SentimentAnalyst(),
-            'bull': BullResearcher(),
-            'bear': BearResearcher(),
-            'risk': RiskManager()
+            'fundamental': FundamentalAnalystAgent(),
+            'technical': TechnicalAnalystAgent(),
+            'news': NewsAnalystAgent(),
+            'sentiment': SentimentAnalystAgent(),
+            'bull': BullResearcherAgent(),
+            'bear': BearResearcherAgent(),
+            'risk': RiskManagerAgent()
         }
         
         # Telegram settings
@@ -72,8 +85,12 @@ class DailyPreMarketPipeline:
         self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID', '-4524457329')
         
         # Portfolio tracking
-        self.portfolio_csv = '02_data/portfolio/positions/shorgan_bot_positions.csv'
-        self.research_dir = '02_data/research/reports/pre_market_daily'
+        if bot_type == 'SHORGAN':
+            self.portfolio_csv = '02_data/portfolio/positions/shorgan_bot_positions.csv'
+            self.research_dir = '02_data/research/reports/pre_market_daily'
+        else:
+            self.portfolio_csv = '02_data/portfolio/positions/dee_bot_positions.csv'
+            self.research_dir = '02_data/research/reports/dee_bot'
         
     def load_portfolio(self) -> pd.DataFrame:
         """Load yesterday's portfolio from CSV"""
@@ -95,19 +112,38 @@ class DailyPreMarketPipeline:
             logging.error(f"Error loading portfolio: {e}")
             return pd.DataFrame()
     
-    def retrieve_openai_research(self) -> Dict:
+    def retrieve_research(self) -> Dict:
         """
-        Retrieve pre-market research - prioritizes ChatGPT reports over OpenAI API
+        Retrieve pre-market research based on bot type
         
-        Priority Order:
+        SHORGAN-BOT Priority:
         1. Today's ChatGPT report (manually saved)
         2. OpenAI API generation (fallback)
         3. Most recent local file (emergency fallback)
+        
+        DEE-BOT:
+        1. Generate new research report using Alpaca data
         """
         try:
             today = datetime.now().strftime('%Y-%m-%d')
             
-            # PRIORITY 1: Check for manually saved ChatGPT report first
+            # DEE-BOT: Generate research report
+            if self.bot_type == 'DEE':
+                logging.info("Generating DEE-BOT research report...")
+                # Import and run the generator
+                sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                from automation.dee_bot_research_generator import DeeBotResearchGenerator
+                
+                generator = DeeBotResearchGenerator()
+                research = generator.run()
+                if research:
+                    logging.info(f"Generated DEE-BOT report with {len(research.get('trades', []))} trades")
+                    return research
+                else:
+                    logging.error("Failed to generate DEE-BOT research")
+                    return {}
+            
+            # SHORGAN-BOT: Check for ChatGPT report first
             chatgpt_file = f"{self.research_dir}/{today}_chatgpt_report.json"
             if os.path.exists(chatgpt_file):
                 with open(chatgpt_file, 'r') as f:
@@ -348,64 +384,94 @@ class DailyPreMarketPipeline:
             logging.error(f"Error updating portfolio CSV: {e}")
     
     def send_telegram_report(self, recommendations: Dict, executed_trades: List[Dict]):
-        """Send recommendation report via Telegram"""
+        """Send comprehensive PDF report via Telegram with agent reasoning"""
         try:
             account = self.api.get_account()
             portfolio_value = float(account.portfolio_value)
             
-            message = f"""🤖 SHORGAN-BOT Pre-Market Analysis
-            
-📅 {datetime.now().strftime('%Y-%m-%d %H:%M ET')}
-💰 Portfolio: ${portfolio_value:,.2f}
-
-📊 MULTI-AGENT RECOMMENDATIONS:
-"""
-            
-            # Add recommendations
-            for symbol, rec in recommendations.items():
-                risk = rec['risk_decision']
-                execute = "✅ EXECUTE" if rec['execute'] else "❌ SKIP"
-                
-                message += f"\n{symbol}: {execute}"
-                if rec['execute']:
-                    message += f"\n  Size: {risk.get('position_size', 0)} shares"
-                    message += f"\n  Risk Score: {risk.get('risk_score', 0):.1f}/10"
-                message += f"\n  Bull: {rec['bull_case'].get('score', 0):.1f}/10"
-                message += f"\n  Bear: {rec['bear_case'].get('score', 0):.1f}/10"
-            
-            # Add executed trades
-            if executed_trades:
-                message += f"\n\n✅ TRADES EXECUTED: {len(executed_trades)}"
-                for trade in executed_trades:
-                    message += f"\n• {trade['symbol']}: {trade['side'].upper()} {trade['qty']} shares"
-            else:
-                message += "\n\n⚠️ No trades executed this session"
-            
-            # Risk metrics
-            message += f"""
-
-📈 RISK METRICS:
-• Portfolio VAR (95%): ${portfolio_value * 0.03:,.2f}
-• Max Position Size: 15%
-• Stop Loss: All positions protected
-"""
-            
-            # Send message
-            url = f"https://api.telegram.org/bot{self.telegram_token}/sendMessage"
-            payload = {
-                'chat_id': self.telegram_chat_id,
-                'text': message,
-                'parse_mode': 'HTML'
+            # Prepare data for PDF reporter
+            bot_data = {
+                'portfolio_value': portfolio_value,
+                'positions': len(self.api.list_positions()),
+                'trades': [],
+                'var_95': portfolio_value * 0.03
             }
             
-            response = requests.post(url, data=payload)
-            if response.status_code == 200:
-                logging.info("Telegram report sent successfully")
-            else:
-                logging.error(f"Telegram send failed: {response.text}")
+            # Add trade recommendations
+            for symbol, rec in recommendations.items():
+                trade_info = rec['trade']
+                trade_info['symbol'] = symbol
+                bot_data['trades'].append(trade_info)
+            
+            # Prepare agent analyses
+            agent_analyses = {}
+            for symbol, rec in recommendations.items():
+                agent_analyses[symbol] = {
+                    'fundamental': {
+                        'score': rec['analyses'].get('fundamental', {}).get('score', 0),
+                        'factors': rec['analyses'].get('fundamental', {}).get('factors', 'N/A'),
+                        'recommendation': rec['analyses'].get('fundamental', {}).get('recommendation', 'N/A')
+                    },
+                    'technical': {
+                        'score': rec['analyses'].get('technical', {}).get('score', 0),
+                        'factors': rec['analyses'].get('technical', {}).get('factors', 'N/A'),
+                        'recommendation': rec['analyses'].get('technical', {}).get('recommendation', 'N/A')
+                    },
+                    'news': {
+                        'score': rec['analyses'].get('news', {}).get('score', 0),
+                        'factors': rec['analyses'].get('news', {}).get('factors', 'N/A'),
+                        'recommendation': rec['analyses'].get('news', {}).get('recommendation', 'N/A')
+                    },
+                    'sentiment': {
+                        'score': rec['analyses'].get('sentiment', {}).get('score', 0),
+                        'factors': rec['analyses'].get('sentiment', {}).get('factors', 'N/A'),
+                        'recommendation': rec['analyses'].get('sentiment', {}).get('recommendation', 'N/A')
+                    },
+                    'bull': {
+                        'score': rec['bull_case'].get('score', 0),
+                        'factors': rec['bull_case'].get('factors', 'N/A')
+                    },
+                    'bear': {
+                        'score': rec['bear_case'].get('score', 0),
+                        'factors': rec['bear_case'].get('factors', 'N/A')
+                    },
+                    'risk': {
+                        'score': rec['risk_decision'].get('risk_score', 0),
+                        'decision': 'APPROVED' if rec['execute'] else 'REJECTED',
+                        'position_size': rec['risk_decision'].get('position_size', 0)
+                    },
+                    'consensus_score': rec.get('consensus_score', 0),
+                    'final_decision': 'BUY' if rec['execute'] else 'SKIP'
+                }
+            
+            # Add bot type to executed trades
+            for trade in executed_trades:
+                trade['bot'] = self.bot_type
+            
+            # If DEE-BOT, prepare DEE-specific data
+            if self.bot_type == 'DEE':
+                bot_data['portfolio_beta'] = 0.98  # Would calculate from actual positions
+                bot_data['leverage'] = 1.85
+            
+            # Create reporter and send comprehensive report
+            reporter = TelegramPDFReporter()
+            
+            # Prepare both bot data (using current bot's data for both if running single bot)
+            shorgan_data = bot_data if self.bot_type == 'SHORGAN' else {'portfolio_value': 0, 'trades': [], 'positions': 0}
+            dee_data = bot_data if self.bot_type == 'DEE' else {'portfolio_value': 0, 'trades': [], 'positions': 0}
+            
+            # Generate and send report
+            reporter.generate_and_send_report(
+                shorgan_data=shorgan_data,
+                dee_data=dee_data,
+                agent_analyses=agent_analyses,
+                executed_trades=executed_trades
+            )
+            
+            logging.info("Enhanced Telegram PDF report sent successfully")
                 
         except Exception as e:
-            logging.error(f"Error sending Telegram report: {e}")
+            logging.error(f"Error sending enhanced Telegram report: {e}")
     
     def run(self):
         """Main pipeline execution"""
@@ -418,8 +484,8 @@ class DailyPreMarketPipeline:
             # Step 1: Load portfolio
             portfolio = self.load_portfolio()
             
-            # Step 2: Retrieve OpenAI research
-            research = self.retrieve_openai_research()
+            # Step 2: Retrieve research (ChatGPT for SHORGAN, Generated for DEE)
+            research = self.retrieve_research()
             if not research or not research.get('trades'):
                 logging.warning("No trade recommendations found in research")
                 return
@@ -455,7 +521,8 @@ class DailyPreMarketPipeline:
     def send_error_notification(self, error_msg: str):
         """Send error notification via Telegram"""
         try:
-            message = f"⚠️ SHORGAN-BOT Pipeline Error\n\n{error_msg}"
+            bot_name = 'SHORGAN-BOT' if self.bot_type == 'SHORGAN' else 'DEE-BOT'
+            message = f"⚠️ {bot_name} Pipeline Error\n\n{error_msg}"
             url = f"https://api.telegram.org/bot{self.telegram_token}/sendMessage"
             payload = {'chat_id': self.telegram_chat_id, 'text': message}
             requests.post(url, data=payload)
@@ -463,5 +530,24 @@ class DailyPreMarketPipeline:
             pass
 
 if __name__ == "__main__":
-    pipeline = DailyPreMarketPipeline()
-    pipeline.run()
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Run daily pre-market pipeline')
+    parser.add_argument('--bot', type=str, choices=['SHORGAN', 'DEE', 'BOTH'], 
+                        default='BOTH', help='Which bot to run')
+    args = parser.parse_args()
+    
+    if args.bot == 'BOTH':
+        # Run both pipelines
+        logging.info("Running SHORGAN-BOT pipeline...")
+        shorgan_pipeline = DailyPreMarketPipeline('SHORGAN')
+        shorgan_pipeline.run()
+        
+        logging.info("\n" + "="*60)
+        logging.info("Running DEE-BOT pipeline...")
+        dee_pipeline = DailyPreMarketPipeline('DEE')
+        dee_pipeline.run()
+    else:
+        # Run single pipeline
+        pipeline = DailyPreMarketPipeline(args.bot)
+        pipeline.run()

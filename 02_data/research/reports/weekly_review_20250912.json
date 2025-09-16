@@ -1,0 +1,96 @@
+{
+  "date": "2025-09-12",
+  "period": "Sep 8-12, 2025",
+  "source": "TradingAgents Weekly Review",
+  "performance": {
+    "portfolio_return_pct": 3.7,
+    "benchmark_russell2000_pct": 1.9,
+    "total_pnl_dollars": 14220,
+    "pnl_pct": 6.4,
+    "win_rate_pct": 58,
+    "wins": 7,
+    "losses": 5,
+    "sharpe_ratio_weekly": 1.6,
+    "avg_r_multiple": 0.82,
+    "max_drawdown_pct": -3.1
+  },
+  "best_trades": [
+    {
+      "symbol": "LUMN",
+      "type": "equity_long",
+      "catalyst": "Debt restructuring + asset sales",
+      "pnl_dollars": 6450,
+      "r_multiple": 2.3,
+      "entry": 1.72,
+      "executed": 1.73
+    },
+    {
+      "symbol": "ASTS", 
+      "type": "equity_long",
+      "catalyst": "FCC license speculation",
+      "pnl_dollars": 2110,
+      "r_multiple": 0.9,
+      "entry": 4.80,
+      "executed": 4.92,
+      "note": "Over-sized risk"
+    },
+    {
+      "symbol": "ENVX",
+      "type": "options_calls",
+      "catalyst": "EV battery patent approval",
+      "pnl_dollars": 2000,
+      "r_multiple": 1.0
+    }
+  ],
+  "worst_trades": [
+    {
+      "symbol": "RIOT",
+      "type": "equity_long",
+      "catalyst": "BTC >60K breakout",
+      "pnl_dollars": -3020,
+      "r_multiple": -1.5,
+      "note": "BTC retraced, stopped out"
+    },
+    {
+      "symbol": "CENN",
+      "type": "equity_long", 
+      "catalyst": "EV sales rumor",
+      "pnl_dollars": -1000,
+      "r_multiple": -0.7,
+      "note": "Catalyst faded fast"
+    }
+  ],
+  "all_trades": [
+    {"symbol": "LUMN", "pnl": 6450, "r_multiple": 2.3},
+    {"symbol": "ASTS", "pnl": 2110, "r_multiple": 0.9},
+    {"symbol": "IONQ", "pnl": 1780, "r_multiple": 0.7},
+    {"symbol": "RIOT", "pnl": -3020, "r_multiple": -1.5},
+    {"symbol": "PLUG", "pnl": 1230, "r_multiple": 0.6},
+    {"symbol": "OPRA", "pnl": 1670, "r_multiple": 1.1},
+    {"symbol": "ENVX", "pnl": 2000, "r_multiple": 1.0},
+    {"symbol": "CENN", "pnl": -1000, "r_multiple": -0.7},
+    {"symbol": "RGTI", "pnl": -1000, "r_multiple": -0.5},
+    {"symbol": "BBI", "pnl": 1000, "r_multiple": 0.9}
+  ],
+  "key_lessons": [
+    "Catalyst > macro noise: Stick to micro-cap catalysts",
+    "Tighter profit-taking: Enforce trailing stops once gains exceed 15%",
+    "Options sizing: Keep naked call exposure ≤5% of portfolio",
+    "Add hedge discipline: Ensure at least 20% of high-beta exposure is hedged"
+  ],
+  "rule_updates": [
+    "Cap position sizing at 1.5% account risk per trade",
+    "Require hard stop orders in Alpaca for all entries",
+    "Introduce options overlays only if IV < 80th percentile"
+  ],
+  "execution_errors": [
+    "ASTS: doubled intended size (2x risk)",
+    "IONQ options: IV rank too high, leading to slippage",
+    "Some stops manually honored instead of systematic"
+  ],
+  "next_week_focus": [
+    "Biotech + small-cap tech catalysts",
+    "Risk agents empowered to auto-hedge macro events",
+    "Systematic stop-loss order placement at entry"
+  ]
+}

@@ -5,8 +5,7 @@
   "description": "Automatically extracts and saves trading reports from ChatGPT",
   "permissions": [
     "activeTab",
-    "storage",
-    "scripting"
+    "storage"
   ],
   "host_permissions": [
     "https://chatgpt.com/*",

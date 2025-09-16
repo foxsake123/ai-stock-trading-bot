@@ -1,0 +1,68 @@
+{
+  "date": "2025-09-16",
+  "time": "12:50:00",
+  "source": "ChatGPT TradingAgents",
+  "market_context": "U.S. equity markets at inflection point. Small/mid-caps outperforming. Russell 2000 up 7% in August. Fed rate cut expected Sept 16-17 FOMC. Favors catalyst-driven micro-to-mid cap trades.",
+  "trades": [
+    {
+      "symbol": "SRRK",
+      "action": "long",
+      "catalyst": "FDA PDUFA Sept 22 - apitegromab approval",
+      "entry": "market",
+      "stop_pct": 15,
+      "target": 45,
+      "size_pct": 3,
+      "confidence": "medium",
+      "risk": "high"
+    },
+    {
+      "symbol": "INCY",
+      "action": "long",
+      "catalyst": "FDA PDUFA Sept 19 - Opzelura pediatric expansion",
+      "entry": "market",
+      "stop_pct": 4,
+      "target": 92,
+      "size_pct": 5,
+      "confidence": "medium-high",
+      "risk": "medium"
+    },
+    {
+      "symbol": "CBRL",
+      "action": "long",
+      "catalyst": "Q4 Earnings Sept 17 AMC - short squeeze setup (34% SI)",
+      "entry": "market",
+      "stop_pct": 8,
+      "target": 60,
+      "size_pct": 4,
+      "confidence": "medium",
+      "risk": "high"
+    },
+    {
+      "symbol": "PASG",
+      "action": "long",
+      "catalyst": "Insider buying + Q4 clinical data FTD gene therapy",
+      "entry": "market",
+      "stop_pct": 20,
+      "target": 10,
+      "size_pct": 2,
+      "confidence": "low-medium",
+      "risk": "very high"
+    },
+    {
+      "symbol": "RIVN",
+      "action": "long",
+      "catalyst": "Q3 deliveries early October - peak quarter expected",
+      "entry": "market",
+      "stop_pct": 12.5,
+      "target": 15,
+      "size_pct": 5,
+      "confidence": "medium-high",
+      "risk": "medium"
+    }
+  ],
+  "risk_management": {
+    "max_position_size_pct": 5,
+    "stop_loss_mandatory": true,
+    "portfolio_hedge": "SPY/IWM puts"
+  }
+}

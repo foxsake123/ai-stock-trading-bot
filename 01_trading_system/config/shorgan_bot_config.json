@@ -49,6 +49,7 @@
     }
   },
   "current_positions": [
+    {"symbol": "MFIC", "shares": 770, "entry": 12.16, "stop": 11.07, "added": "2025-09-16"},
     {"symbol": "RCAT", "shares": 953, "entry": 10.88, "stop": 9.80},
     {"symbol": "DAKT", "shares": 743, "entry": 20.97, "stop": 19.50},
     {"symbol": "CHWY", "shares": 432, "entry": 35.95, "stop": 35.00},

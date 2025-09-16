@@ -1,137 +1,49 @@
 {
   "bot_name": "DEE-BOT",
-  "version": "2.0",
-  "description": "Beta-Neutral Multi-Agent Trading System with 2X Leverage",
-  
-  "trading_strategy": {
-    "type": "beta_neutral",
-    "enabled": true,
-    "target_beta": 0.0,
-    "beta_tolerance": 0.1,
-    "rebalance_threshold": 0.2
-  },
-  
-  "leverage": {
-    "enabled": true,
-    "multiplier": 2.0,
-    "max_leverage": 2.0,
-    "margin_buffer": 0.25,
-    "auto_deleverage": true,
-    "deleverage_threshold": 0.03,
-    "force_close_threshold": 0.07
-  },
-  
-  "risk_management": {
-    "max_portfolio_risk": 0.10,
-    "max_position_risk": 0.02,
-    "max_daily_loss": 0.05,
-    "max_position_size": 0.15,
-    "portfolio_heat": 0.80,
-    "stop_loss_multiplier": 1.5,
-    "take_profit_multiplier": 2.5,
-    "use_trailing_stops": false,
-    "max_correlation": 0.7,
-    "max_sector_concentration": 3
-  },
-  
-  "position_sizing": {
-    "method": "kelly_criterion",
-    "kelly_fraction": 0.25,
-    "min_position_value": 1000,
-    "max_position_value": 50000,
-    "round_shares": true
-  },
-  
-  "portfolio_allocation": {
-    "long_allocation": 0.60,
-    "hedge_allocation": 0.40,
-    "cash_reserve": 0.20,
-    "max_positions": 10,
-    "max_long_positions": 6,
-    "max_hedge_positions": 4
-  },
-  
-  "hedge_instruments": {
-    "use_inverse_etfs": true,
-    "preferred_hedges": ["SH", "PSQ", "DOG", "SDS", "QID"],
-    "use_options": false,
-    "use_futures": false
-  },
-  
-  "execution": {
-    "auto_execute": false,
-    "order_type": "market",
-    "time_in_force": "day",
-    "extended_hours": false,
-    "batch_orders": true,
-    "rate_limit_delay": 0.5,
-    "retry_failed_orders": true,
-    "max_retries": 2
-  },
-  
-  "monitoring": {
-    "real_time_monitoring": true,
-    "monitor_interval_seconds": 60,
-    "alert_on_drawdown": true,
-    "alert_threshold": 0.03,
-    "send_notifications": false
-  },
-  
-  "data_sources": {
-    "primary": "alpaca",
-    "backup": "yfinance",
-    "use_real_time_data": true,
-    "beta_calculation_period": 252,
-    "volatility_lookback": 20
-  },
-  
-  "agents": {
-    "total_agents": 7,
-    "consensus_threshold": 4,
-    "risk_manager_veto": true,
-    "agent_types": [
-      "fundamental_analyst",
-      "technical_analyst",
-      "news_analyst",
-      "sentiment_analyst",
-      "bull_researcher",
-      "bear_researcher",
-      "risk_manager"
-    ]
-  },
-  
-  "backtesting": {
-    "enabled": false,
-    "period_days": 252,
-    "initial_capital": 100000,
-    "commission": 0.0,
-    "slippage": 0.001
-  },
-  
-  "logging": {
-    "log_trades": true,
-    "log_risk_reports": true,
-    "log_agent_decisions": true,
-    "log_directory": "C:/Users/shorg/ai-stock-trading-bot/09_logs/trading",
-    "archive_old_logs": true,
-    "retention_days": 30
-  },
-  
-  "api_keys": {
-    "alpaca": {
-      "key_id": "PK6FZK4DAQVTD7DYVH78",
-      "secret_key": "JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt",
-      "base_url": "https://paper-api.alpaca.markets",
-      "api_version": "v2"
+  "strategy": "Beta-Neutral S&P 100 with 2X Leverage",
+  "last_updated": "2025-09-16T10:30:00",
+  "configuration": {
+    "api_keys": {
+      "alpaca_key": "ALPACA_API_KEY_DEE",
+      "alpaca_secret": "ALPACA_SECRET_KEY_DEE",
+      "openai_key": "OPENAI_API_KEY"
+    },
+    "trading_parameters": {
+      "portfolio_value": 101796.08,
+      "target_leverage": 2.0,
+      "target_beta": 1.0,
+      "max_positions": 20,
+      "position_size_min": 0.03,
+      "position_size_max": 0.08,
+      "stop_loss_default": 0.03,
+      "take_profit_default": 0.05
+    },
+    "universe": {
+      "index": "S&P 100",
+      "market_cap_min": 10000000000,
+      "exclude_sectors": [],
+      "focus": "Large-cap quality stocks with beta diversification"
+    },
+    "risk_management": {
+      "portfolio_beta_target": 1.0,
+      "max_sector_exposure": 0.25,
+      "correlation_limit": 0.7,
+      "var_confidence": 0.95,
+      "trailing_stop_pct": 3,
+      "rebalance_frequency": "weekly"
+    },
+    "research_sources": {
+      "primary": "Multi-agent consensus system",
+      "secondary": "Fundamental + Technical analysis",
+      "schedule": "Daily 7:00 AM ET"
     }
   },
-  
-  "schedule": {
-    "generate_recommendations": "09:00",
-    "execute_trades": "09:30",
-    "monitor_positions": "continuous",
-    "rebalance_check": "14:00",
-    "end_of_day_report": "16:00",
-    "timezone": "America/New_York"
-  }
+  "current_positions": 8,
+  "beta_weighted_exposure": 0.98,
+  "leverage_used": 1.85,
+  "pending_actions": [
+    "Rebalance to maintain beta neutrality",
+    "Review correlation matrix",
+    "Adjust leverage if VIX > 25"
+  ]
 }

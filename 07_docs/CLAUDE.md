@@ -3,15 +3,31 @@
 ## Project Overview
 This is a multi-agent AI trading bot system based on the TradingAgents framework. The system uses specialized AI agents working collaboratively to analyze markets, make trading decisions, and manage risk.
 
-**Current Performance (September 12, 2025, 11:45 AM ET)**:
-- Total Portfolio Value: $205,480.99 (+2.74%)
-- DEE-BOT: $101,690.62 (+1.69%) - Beta-neutral with 2X leverage
-- SHORGAN-BOT: $103,790.37 (+3.79%)
-- Active Positions: 22
-- Today's P&L: +$1,385.55
-- Portfolio Beta: ~1.0 (market neutral)
+**Current Performance (September 16, 2025, 1:00 PM ET)**:
+- Total Portfolio Value: $206,243.48 (+3.12%)
+- DEE-BOT: $102,690.85 (+2.69%) - Beta-neutral with 2X leverage
+- SHORGAN-BOT: $103,552.63 (+3.55%)
+- Active Positions: 25 (17 SHORGAN + 8 DEE)
+- Today's Trades: MFIC, INCY, CBRL, RIVN executed
+- Portfolio Beta: ~0.98 (near market neutral)
 
 ## Architecture
+
+### Multi-Agent Workflow Overview
+
+The system implements a sophisticated multi-agent collaborative framework where 7 specialized AI agents work together to analyze markets and make trading decisions. Each agent has a specific role and contributes to a weighted consensus system.
+
+**Agent Consensus Formula**:
+```
+Consensus Score = 
+  Fundamental (20%) + Technical (20%) + News (15%) + 
+  Sentiment (10%) + Bull (15%) + Bear (15%) + Risk (5%)
+```
+
+**Trade Execution Criteria**:
+- Consensus Score > 6.5
+- Risk Manager Approval = TRUE
+- Portfolio Risk Check = PASS
 
 ### Core Components
 
@@ -55,6 +71,13 @@ The system implements 7 specialized agents, each with distinct responsibilities:
 
 ### Communication Protocol
 
+#### Agent Decision Flow
+```
+Research Input → 7 Parallel Agent Analyses → 
+Coordinator Aggregation → Risk Manager Review → 
+Trade Decision → Execution/Rejection
+```
+
 #### Structured Report Format
 All agents communicate using a standardized JSON report format:
 
@@ -84,9 +107,10 @@ All agents communicate using a standardized JSON report format:
 
 #### Decision Aggregation
 - Central coordinator (`communication/coordinator.py`) collects all agent reports
-- Weighted voting system based on agent confidence and historical accuracy
-- Risk Manager has veto power for high-risk trades
-- Final decisions require consensus threshold (configurable)
+- Weighted voting system: Fundamental (20%), Technical (20%), News (15%), Sentiment (10%), Bull (15%), Bear (15%), Risk (5%)
+- Risk Manager has **VETO POWER** for high-risk trades
+- Final decisions require consensus threshold > 6.5
+- All trades must pass portfolio risk checks
 
 ## Code Style and Conventions
 
@@ -153,27 +177,72 @@ ai-stock-trading-bot/
 - Integration tests for agent communication
 - Backtesting validation for all strategies
 
+## Daily Trading Workflow
+
+### Pre-Market Pipeline (7:00 AM ET)
+1. **Research Generation** (6:30-7:00 AM)
+   - SHORGAN: ChatGPT TradingAgents reports captured
+   - DEE: Automated S&P 100 analysis generated
+
+2. **Multi-Agent Analysis** (7:00-7:15 AM)
+   - Each agent analyzes recommendations in parallel
+   - Scores generated on 0-10 scale
+
+3. **Consensus Building** (7:15-7:20 AM)
+   - Weighted scores aggregated
+   - Risk Manager final review
+
+4. **Trade Execution** (7:20-7:30 AM)
+   - Approved trades submitted via Alpaca
+   - Stop losses automatically set
+
+5. **Reporting** (7:30-7:45 AM)
+   - PDF reports generated
+   - Telegram notifications sent
+   - Portfolio CSVs updated
+
 ## Trading Bot Configurations
 
-### DEE-BOT Configuration (UPDATED: Beta-Neutral with Leverage)
+### DEE-BOT Configuration (LATEST: Beta-Neutral with 2X Leverage System)
 - **Strategy**: Beta-neutral S&P 100 multi-agent consensus with 2X leverage
-- **Capital**: $100,000 starting (currently $101,690.62)
-- **Universe**: S&P 100 large-cap stocks
-- **Position Sizing**: Beta-adjusted with target 2X leverage
-- **Portfolio Beta Target**: 1.0 (market neutral)
-- **Stop Loss**: 3% trailing stop
-- **Take Profit**: 5% target
-- **Leverage**: Up to 2X (managed through beta weighting)
-- **Risk Management**: Beta calculations for each position
+- **Capital**: $100,000 starting (currently $101,796.08)
+- **Universe**: S&P 100 large-cap stocks with beta diversification
+- **Position Sizing**: 3-8% per position with Kelly Criterion optimization (25% Kelly fraction)
+- **Portfolio Beta Target**: 0.0 (market neutral, tolerance ±0.1)
+- **Current Beta**: 0.98 (managed through hedge positions)
+- **Leverage**: 2.0x maximum (currently using 1.85x)
+- **Allocation**: 60% long positions, 40% hedge positions
+- **Stop Loss**: Dynamic 2% (leveraged adjusted)
+- **Take Profit**: 5% target (2.5x volatility multiplier)
+- **Risk Management**: 
+  - Automatic deleveraging at 3% daily loss
+  - Force close all at 7% daily loss
+  - Margin buffer 25% minimum
+  - Sector concentration max 3 positions
+- **Hedge Instruments**: Inverse ETFs (SH, PSQ, SDS, QID)
+- **Positions**: 8 current, target 10 maximum
+- **Research**: Automated daily 7-agent consensus system
+- **Files**:
+  - Main: `execute_dee_bot_beta_neutral.py`
+  - Config: `config/dee_bot_config.json`
+  - Monitor: `monitor_dee_bot.py`
+  - Master: `run_dee_bot.py`
 - **Alpaca API Key**: PK6FZK4DAQVTD7DYVH78
 
 ### SHORGAN-BOT Configuration  
-- **Strategy**: Aggressive catalyst-driven trading
-- **Capital**: $100,000 starting (currently $103,398.18)
-- **Universe**: Small/mid-cap catalyst stocks
-- **Position Sizing**: $10,000-$15,000 per position
-- **Stop Loss**: 4% for high volatility stocks
-- **Risk/Reward**: Average 1:3.91 ratio
+- **Strategy**: Aggressive micro-cap catalyst-driven trading
+- **Capital**: $100,000 starting (currently $103,552.63)
+- **Universe**: Micro/small/mid-cap catalyst stocks (<$20B market cap)
+- **Position Sizing**: 5-10% per position (2-5% for binary events)
+- **Stop Loss**: 8-10% for catalyst trades
+- **Risk/Reward**: Target 1:3+ ratio
+- **Current Positions**: 17 (MFIC, INCY, CBRL, RIVN added 9/16)
+- **Latest Trades (9/16)**: 
+  - MFIC: 770 @ $12.16 (insider buying)
+  - INCY: 61 @ $83.97 (FDA 9/19)
+  - CBRL: 81 @ $51.00 (earnings 9/17)
+  - RIVN: 357 @ $14.50 (Q3 deliveries)
+- **Research**: ChatGPT TradingAgents daily reports
 - **Alpaca API Key**: PKJRLSB2MFEJUSK6UK2E
 
 ## Trading Bot Specific Guidelines
@@ -203,6 +272,32 @@ ai-stock-trading-bot/
 - Comply with PDT (Pattern Day Trading) rules
 - Implement pre-trade compliance checks
 - Maintain audit trail of all trading decisions
+
+## Automation & Scheduling
+
+### Daily Automation
+```batch
+# Run both bots' pipelines
+run_daily_pipelines.bat
+
+# Or run individually
+python 01_trading_system/automation/daily_pre_market_pipeline.py --bot SHORGAN
+python 01_trading_system/automation/daily_pre_market_pipeline.py --bot DEE
+```
+
+### Report Generation
+```python
+# Generate combined HTML/PDF reports
+python 01_trading_system/automation/dual_bot_report_generator.py
+
+# Generate weekly summary
+python 01_trading_system/automation/weekly_report_generator.py
+```
+
+### Windows Task Scheduler
+- Task: "Daily Trading Pipeline"
+- Trigger: 7:00 AM ET weekdays
+- Action: Run `run_daily_pipelines.bat`
 
 ## Development Workflow
 

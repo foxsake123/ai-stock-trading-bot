@@ -1,15 +1,15 @@
 # AI Stock Trading Bot System
 
-## 📊 Live Performance (as of September 12, 2025, 11:45 AM ET)
+## 📊 Live Performance (as of September 16, 2025, 1:15 PM ET)
 
 | Metric | Value | Status |
 |--------|-------|--------|
-| **Total Portfolio Value** | **$205,480.99** | 🟢 +2.74% |
-| **Today's P&L** | +$1,385.55 | 🟢 Excellent |
-| **Unrealized P&L** | +$5,480.99 | 🟢 Strong |
-| **Active Positions** | 22 | ⚡ Active |
-| **Win Rate** | 68% | 🎯 Above Target |
-| **Leverage Used** | ~2X | 📊 Beta-Neutral |
+| **Total Portfolio Value** | **$206,243.48** | 🟢 +3.12% |
+| **Today's Trades** | 4 Executed | ✅ MFIC, INCY, CBRL, RIVN |
+| **Unrealized P&L** | +$6,243.48 | 🟢 Strong |
+| **Active Positions** | 25 | ⚡ Active |
+| **Win Rate** | 62% | 🎯 On Target |
+| **Portfolio Beta** | 0.98 | 📊 Market Neutral |
 
 ## Overview
 
@@ -18,6 +18,12 @@ Professional multi-agent AI trading system featuring two specialized bots:
 - **SHORGAN-BOT**: Aggressive catalyst-driven opportunity trading
 
 Built on a sophisticated 7-agent consensus framework with real-time risk management and automated trade execution via Alpaca Paper Trading API.
+
+### Recent Activity (Sept 16, 2025)
+- Processed 5 ChatGPT trade recommendations
+- Executed 3 trades: INCY (FDA), CBRL (earnings), RIVN (deliveries)
+- All positions protected with stop losses
+- Multi-agent consensus averaging 7.43/10
 
 ## 🏗️ System Architecture
 
@@ -45,9 +51,10 @@ ai-stock-trading-bot/
 ## 🤖 Trading Bots
 
 ### DEE-BOT (Beta-Neutral Strategy with 2X Leverage)
-- **Current Value**: $101,690.62 (+1.69%)
+- **Current Value**: $102,690.85 (+2.69%)
 - **Strategy**: Beta-neutral S&P 100 multi-agent consensus
 - **Risk Profile**: Conservative with leverage (3% stop-loss)
+- **Positions**: 8 (target 15-20)
 - **Leverage**: 2X target (beta-adjusted positions)
 - **Portfolio Beta**: ~1.0 (market neutral)
 - **Best Position**: AAPL (+3.14%)

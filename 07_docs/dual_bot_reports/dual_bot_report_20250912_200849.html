@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dual Bot Trading Report - 2025-09-12</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .bot-section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .bot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin: 0;
+        }
+        .bot-badge {
+            background: #3498db;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .shorgan-badge { background: #e74c3c; }
+        .dee-badge { background: #27ae60; }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .metric-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+        .positive { color: #27ae60; }
+        .negative { color: #e74c3c; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th {
+            background: #34495e;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .summary-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .comparison-table {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 36px; color: #2c3e50;">Dual Bot Trading Report</h1>
+            <p style="color: #7f8c8d;">September 12, 2025 - 20:08 ET</p>
+        </div>
+
+        <div class="comparison-table">
+            <h2 style="text-align: center;">Portfolio Comparison</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>SHORGAN-BOT</th>
+                        <th>DEE-BOT</th>
+                        <th>Combined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Portfolio Value</strong></td>
+                        <td>$104,086.58</td>
+                        <td>$101,796.08</td>
+                        <td><strong>$205,882.66</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Today's Change</strong></td>
+                        <td class="positive">$+0.14</td>
+                        <td class="positive">$+0.03</td>
+                        <td class="positive"><strong>$+0.17</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Unrealized P&L</strong></td>
+                        <td class="positive">$+5,051.47</td>
+                        <td class="positive">$+1,795.98</td>
+                        <td class="positive"><strong>$+6,847.45</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Positions</strong></td>
+                        <td>13</td>
+                        <td>8</td>
+                        <td><strong>21</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Win Rate</strong></td>
+                        <td>61.5%</td>
+                        <td>75.0%</td>
+                        <td><strong>68.3%</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SHORGAN-BOT Section -->
+        <div class="bot-section">
+            <div class="bot-header">
+                <h1>SHORGAN-BOT</h1>
+                <div>
+                    <span class="bot-badge shorgan-badge">Micro-Cap Catalyst Trading</span>
+                </div>
+            </div>
+            
+            <!-- Account Overview -->
+            <h2>Account Overview</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">$104,086.58</div>
+                    <div class="metric-label">Portfolio Value</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value positive">$+0.14</div>
+                    <div class="metric-label">Today's Change</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value positive">$+5,051.47</div>
+                    <div class="metric-label">Unrealized P&L</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$50,546.07</div>
+                    <div class="metric-label">Cash Balance</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">13</div>
+                    <div class="metric-label">Open Positions</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">61.5%</div>
+                    <div class="metric-label">Win Rate</div>
+                </div>
+            </div>
+            
+            <!-- Positions Table -->
+            <h2>Current Positions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Qty</th>
+                        <th>Side</th>
+                        <th>Entry</th>
+                        <th>Current</th>
+                        <th>Market Value</th>
+                        <th>Unrealized P&L</th>
+                        <th>P&L %</th>
+                        <th>Today</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td><strong>RGTI</strong></td>
+                        <td>130</td>
+                        <td>LONG</td>
+                        <td>$15.35</td>
+                        <td>$18.87</td>
+                        <td>$2,453.10</td>
+                        <td class="positive">$457.51</td>
+                        <td class="positive">+22.93%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>ORCL</strong></td>
+                        <td>42</td>
+                        <td>LONG</td>
+                        <td>$239.04</td>
+                        <td>$291.55</td>
+                        <td>$12,245.10</td>
+                        <td class="positive">$2,205.42</td>
+                        <td class="positive">+21.97%</td>
+                        <td class="negative">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>DAKT</strong></td>
+                        <td>743</td>
+                        <td>LONG</td>
+                        <td>$20.97</td>
+                        <td>$23.87</td>
+                        <td>$17,737.94</td>
+                        <td class="positive">$2,157.23</td>
+                        <td class="positive">+13.85%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>TSLA</strong></td>
+                        <td>2</td>
+                        <td>LONG</td>
+                        <td>$349.12</td>
+                        <td>$395.55</td>
+                        <td>$791.10</td>
+                        <td class="positive">$92.86</td>
+                        <td class="positive">+13.30%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>BTBT</strong></td>
+                        <td>570</td>
+                        <td>LONG</td>
+                        <td>$2.66</td>
+                        <td>$2.95</td>
+                        <td>$1,681.50</td>
+                        <td class="positive">$165.30</td>
+                        <td class="positive">+10.90%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>BYND</strong></td>
+                        <td>398</td>
+                        <td>LONG</td>
+                        <td>$2.52</td>
+                        <td>$2.69</td>
+                        <td>$1,070.62</td>
+                        <td class="positive">$68.13</td>
+                        <td class="positive">+6.80%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>SPY</strong></td>
+                        <td>18</td>
+                        <td>LONG</td>
+                        <td>$649.10</td>
+                        <td>$657.41</td>
+                        <td>$11,833.38</td>
+                        <td class="positive">$149.55</td>
+                        <td class="positive">+1.28%</td>
+                        <td class="negative">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>RCAT</strong></td>
+                        <td>953</td>
+                        <td>LONG</td>
+                        <td>$10.88</td>
+                        <td>$10.95</td>
+                        <td>$10,435.35</td>
+                        <td class="positive">$66.71</td>
+                        <td class="positive">+0.64%</td>
+                        <td class="negative">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>NCNO</strong></td>
+                        <td>-348</td>
+                        <td>SHORT</td>
+                        <td>$29.72</td>
+                        <td>$30.09</td>
+                        <td>$-10,471.32</td>
+                        <td class="negative">$-128.76</td>
+                        <td class="negative">-1.24%</td>
+                        <td class="negative">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>EMBC</strong></td>
+                        <td>68</td>
+                        <td>LONG</td>
+                        <td>$15.23</td>
+                        <td>$15.01</td>
+                        <td>$1,020.68</td>
+                        <td class="negative">$-14.96</td>
+                        <td class="negative">-1.44%</td>
+                        <td class="negative">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>GPK</strong></td>
+                        <td>142</td>
+                        <td>LONG</td>
+                        <td>$21.07</td>
+                        <td>$20.72</td>
+                        <td>$2,942.24</td>
+                        <td class="negative">$-49.70</td>
+                        <td class="negative">-1.66%</td>
+                        <td class="negative">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>SAVA</strong></td>
+                        <td>200</td>
+                        <td>LONG</td>
+                        <td>$2.17</td>
+                        <td>$2.12</td>
+                        <td>$423.82</td>
+                        <td class="negative">$-10.18</td>
+                        <td class="negative">-2.35%</td>
+                        <td class="negative">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>KSS</strong></td>
+                        <td>90</td>
+                        <td>LONG</td>
+                        <td>$16.50</td>
+                        <td>$15.30</td>
+                        <td>$1,377.00</td>
+                        <td class="negative">$-107.64</td>
+                        <td class="negative">-7.25%</td>
+                        <td class="negative">+0.00%</td>
+                    </tr>
+
+                </tbody>
+            </table>
+            
+            <!-- Trading Activity -->
+            <h2>Recent Trading Activity (30 Days)</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">36</div>
+                    <div class="metric-label">Total Orders</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">26</div>
+                    <div class="metric-label">Buy Orders</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">10</div>
+                    <div class="metric-label">Sell Orders</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">8</div>
+                    <div class="metric-label">Winning Positions</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Losing Positions</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEE-BOT Section -->
+        <div class="bot-section">
+            <div class="bot-header">
+                <h1>DEE-BOT</h1>
+                <div>
+                    <span class="bot-badge dee-badge">Beta-Neutral S&P 100</span>
+                </div>
+            </div>
+            
+            <!-- Account Overview -->
+            <h2>Account Overview</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">$101,796.08</div>
+                    <div class="metric-label">Portfolio Value</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value positive">$+0.03</div>
+                    <div class="metric-label">Today's Change</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value positive">$+1,795.98</div>
+                    <div class="metric-label">Unrealized P&L</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$2,496.37</div>
+                    <div class="metric-label">Cash Balance</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">8</div>
+                    <div class="metric-label">Open Positions</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">75.0%</div>
+                    <div class="metric-label">Win Rate</div>
+                </div>
+            </div>
+            
+            <!-- Positions Table -->
+            <h2>Current Positions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Qty</th>
+                        <th>Side</th>
+                        <th>Entry</th>
+                        <th>Current</th>
+                        <th>Market Value</th>
+                        <th>Unrealized P&L</th>
+                        <th>P&L %</th>
+                        <th>Today</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td><strong>AAPL</strong></td>
+                        <td>93</td>
+                        <td>LONG</td>
+                        <td>$226.87</td>
+                        <td>$233.99</td>
+                        <td>$21,761.07</td>
+                        <td class="positive">$661.96</td>
+                        <td class="positive">+3.14%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>JPM</strong></td>
+                        <td>71</td>
+                        <td>LONG</td>
+                        <td>$299.23</td>
+                        <td>$306.91</td>
+                        <td>$21,790.61</td>
+                        <td class="positive">$545.28</td>
+                        <td class="positive">+2.57%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>MSFT</strong></td>
+                        <td>34</td>
+                        <td>LONG</td>
+                        <td>$500.62</td>
+                        <td>$509.93</td>
+                        <td>$17,337.62</td>
+                        <td class="positive">$316.47</td>
+                        <td class="positive">+1.86%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>HD</strong></td>
+                        <td>12</td>
+                        <td>LONG</td>
+                        <td>$416.53</td>
+                        <td>$423.00</td>
+                        <td>$5,076.00</td>
+                        <td class="positive">$77.64</td>
+                        <td class="positive">+1.55%</td>
+                        <td class="negative">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>GOOGL</strong></td>
+                        <td>24</td>
+                        <td>LONG</td>
+                        <td>$237.86</td>
+                        <td>$240.40</td>
+                        <td>$5,769.60</td>
+                        <td class="positive">$60.91</td>
+                        <td class="positive">+1.07%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>NVDA</strong></td>
+                        <td>100</td>
+                        <td>LONG</td>
+                        <td>$175.99</td>
+                        <td>$177.53</td>
+                        <td>$17,753.00</td>
+                        <td class="positive">$154.00</td>
+                        <td class="positive">+0.88%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>XOM</strong></td>
+                        <td>44</td>
+                        <td>LONG</td>
+                        <td>$112.23</td>
+                        <td>$112.15</td>
+                        <td>$4,934.60</td>
+                        <td class="negative">$-3.52</td>
+                        <td class="negative">-0.07%</td>
+                        <td class="positive">+0.00%</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>CVX</strong></td>
+                        <td>31</td>
+                        <td>LONG</td>
+                        <td>$157.87</td>
+                        <td>$157.33</td>
+                        <td>$4,877.21</td>
+                        <td class="negative">$-16.76</td>
+                        <td class="negative">-0.34%</td>
+                        <td class="negative">+0.00%</td>
+                    </tr>
+
+                </tbody>
+            </table>
+            
+            <!-- Trading Activity -->
+            <h2>Recent Trading Activity (30 Days)</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">14</div>
+                    <div class="metric-label">Total Orders</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">13</div>
+                    <div class="metric-label">Buy Orders</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">1</div>
+                    <div class="metric-label">Sell Orders</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">6</div>
+                    <div class="metric-label">Winning Positions</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">2</div>
+                    <div class="metric-label">Losing Positions</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 50px; padding: 20px; background: #ecf0f1; border-radius: 8px; text-align: center;">
+            <p style="color: #7f8c8d; margin: 0;">
+                Dual Bot Trading System | Report Generated: 2025-09-12 20:08:49 ET
+            </p>
+        </div>
+    </div>
+</body>
+</html>
