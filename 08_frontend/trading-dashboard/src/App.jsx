@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react'
-import DashboardStatic from './components/DashboardStatic'
+import DashboardEnhanced from './components/DashboardEnhanced'
 import './App.css'
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <DashboardStatic />
-    </div>
+    <DashboardEnhanced />
   )
 }
 
