@@ -278,16 +278,58 @@ ai-stock-trading-bot/
 - Implement pre-trade compliance checks
 - Maintain audit trail of all trading decisions
 
+## Beta-Neutral Strategy Implementation (DEE-BOT)
+
+### Core Beta-Neutral System
+- **Objective**: Generate alpha returns independent of market direction
+- **Method**: Maintain portfolio beta near 0.0 through hedged positions
+- **Implementation**: Long high-conviction picks + inverse ETF hedges
+
+### Beta Calculation & Management
+```python
+# Portfolio Beta = Σ(Position Weight × Stock Beta)
+portfolio_beta = sum(weight_i * beta_i for all positions)
+
+# Target: -0.1 ≤ portfolio_beta ≤ 0.1
+# Rebalance when |portfolio_beta| > 0.2
+```
+
+### Leverage Implementation
+- **2X Leverage**: Doubles effective buying power
+- **Margin Requirements**: 50% initial, 25% maintenance
+- **Safety Buffer**: 25% margin cushion required
+- **Position Sizing**: Kelly Criterion with 25% fraction
+
+### Risk Controls for Leverage
+1. **Daily Loss Limits**:
+   - 3% loss → Automatic deleveraging
+   - 7% loss → Force close all positions
+2. **Position Limits**:
+   - Maximum 2% risk per position (with leverage)
+   - Maximum 10% portfolio risk total
+3. **Dynamic Stops**:
+   - 1.5x volatility for stop loss
+   - 2.5x volatility for take profit
+
+### Hedge Instruments
+- **Primary**: Inverse ETFs (SH, PSQ, SDS, QID)
+- **Secondary**: Low-beta defensive stocks
+- **Allocation**: 40% of portfolio for hedging
+
 ## Automation & Scheduling
 
-### Daily Automation
+### Daily Automation (UPDATED)
 ```batch
-# Run both bots' pipelines
-run_daily_pipelines.bat
+# Run DEE-BOT beta-neutral system
+python 01_trading_system/run_dee_bot.py
 
-# Or run individually
+# Or run components individually
+python 01_trading_system/generate_dee_bot_recommendations.py
+python 01_trading_system/execute_dee_bot_beta_neutral.py
+python 01_trading_system/monitor_dee_bot.py
+
+# Run SHORGAN-BOT
 python 01_trading_system/automation/daily_pre_market_pipeline.py --bot SHORGAN
-python 01_trading_system/automation/daily_pre_market_pipeline.py --bot DEE
 ```
 
 ### Report Generation
