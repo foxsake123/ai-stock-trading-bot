@@ -1,49 +1,119 @@
 {
   "bot_name": "DEE-BOT",
+  "version": "2.1",
   "strategy": "Beta-Neutral S&P 100 with 2X Leverage",
-  "last_updated": "2025-09-16T10:30:00",
+  "last_updated": "2025-09-16T15:30:00",
+  "status": "ACTIVE - Defensive Rebalancing",
+  
   "configuration": {
     "api_keys": {
-      "alpaca_key": "ALPACA_API_KEY_DEE",
-      "alpaca_secret": "ALPACA_SECRET_KEY_DEE",
-      "openai_key": "OPENAI_API_KEY"
+      "alpaca_key": "PK6FZK4DAQVTD7DYVH78",
+      "alpaca_secret": "JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt",
+      "base_url": "https://paper-api.alpaca.markets"
     },
+    
     "trading_parameters": {
-      "portfolio_value": 101796.08,
+      "portfolio_value": 120879.90,
       "target_leverage": 2.0,
       "target_beta": 1.0,
-      "max_positions": 20,
+      "current_beta": 1.144,
+      "beta_tolerance": 0.1,
+      "max_positions": 15,
+      "current_positions": 3,
       "position_size_min": 0.03,
       "position_size_max": 0.08,
-      "stop_loss_default": 0.03,
-      "take_profit_default": 0.05
+      "stop_loss_range": [0.03, 0.05],
+      "take_profit_range": [0.08, 0.12]
     },
+    
     "universe": {
       "index": "S&P 100",
       "market_cap_min": 10000000000,
       "exclude_sectors": [],
-      "focus": "Large-cap quality stocks with beta diversification"
+      "focus": "Large-cap quality stocks with beta diversification",
+      "defensive_stocks": ["PG", "JNJ", "KO", "WMT", "VZ", "T"]
     },
+    
     "risk_management": {
       "portfolio_beta_target": 1.0,
       "max_sector_exposure": 0.25,
       "correlation_limit": 0.7,
       "var_confidence": 0.95,
-      "trailing_stop_pct": 3,
-      "rebalance_frequency": "weekly"
+      "trailing_stop_pct": [3, 5],
+      "rebalance_frequency": "daily",
+      "leverage_controls": {
+        "max_leverage": 2.0,
+        "current_leverage": 1.85,
+        "margin_buffer": 0.25,
+        "deleverage_threshold": 0.03,
+        "force_close_threshold": 0.07
+      }
     },
+    
     "research_sources": {
-      "primary": "Multi-agent consensus system",
-      "secondary": "Fundamental + Technical analysis",
-      "schedule": "Daily 7:00 AM ET"
+      "primary": "Enhanced 7-agent consensus system",
+      "secondary": "Beta analysis + Fundamental + Technical",
+      "schedule": "Daily 7:00 AM ET",
+      "beta_calculation_period": 252
     }
   },
-  "current_positions": 8,
-  "beta_weighted_exposure": 0.98,
-  "leverage_used": 1.85,
+  
+  "current_portfolio": {
+    "positions": [
+      {
+        "symbol": "PG",
+        "shares": 39,
+        "avg_price": 155.20,
+        "market_value": 6052.80,
+        "beta": 0.3,
+        "sector": "Consumer Staples"
+      },
+      {
+        "symbol": "JNJ", 
+        "shares": 37,
+        "avg_price": 162.45,
+        "market_value": 6010.65,
+        "beta": 0.4,
+        "sector": "Healthcare"
+      },
+      {
+        "symbol": "KO",
+        "shares": 104,
+        "avg_price": 58.90,
+        "market_value": 6125.60,
+        "beta": 0.5,
+        "sector": "Consumer Staples"
+      }
+    ],
+    "total_market_value": 18189.05,
+    "cash_available": 102690.85,
+    "portfolio_beta": 1.0,
+    "sector_allocation": {
+      "Consumer Staples": 0.67,
+      "Healthcare": 0.33
+    }
+  },
+  
+  "latest_activity": {
+    "date": "2025-09-16",
+    "action": "Defensive Rebalancing",
+    "trades_executed": 3,
+    "strategy_change": "Beta reduction from 1.144 to 1.0",
+    "risk_adjustment": "Increased defensive allocation"
+  },
+  
   "pending_actions": [
-    "Rebalance to maintain beta neutrality",
-    "Review correlation matrix",
-    "Adjust leverage if VIX > 25"
-  ]
+    "Monitor beta convergence to 1.0 target",
+    "Evaluate hedge position requirements", 
+    "Assess correlation matrix for current holdings",
+    "Review leverage utilization vs risk metrics"
+  ],
+  
+  "performance_metrics": {
+    "total_return_pct": 20.88,
+    "sharpe_ratio": "TBD",
+    "max_drawdown": "TBD",
+    "win_rate": "TBD",
+    "avg_holding_period": "TBD"
+  }
 }
