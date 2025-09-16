@@ -210,26 +210,30 @@ ai-stock-trading-bot/
 
 ### DEE-BOT Configuration (LATEST: Beta-Neutral with 2X Leverage System)
 - **Strategy**: Beta-neutral S&P 100 multi-agent consensus with 2X leverage
-- **Capital**: $100,000 starting (currently $101,796.08)
+- **Capital**: $100,000 starting (currently $120,879.90)
 - **Universe**: S&P 100 large-cap stocks with beta diversification
 - **Position Sizing**: 3-8% per position with Kelly Criterion optimization (25% Kelly fraction)
-- **Portfolio Beta Target**: 0.0 (market neutral, tolerance ±0.1)
-- **Current Beta**: 0.98 (managed through hedge positions)
+- **Portfolio Beta Target**: 1.0 (market neutral, tolerance ±0.1)
+- **Current Beta**: 1.144 → targeting 1.0 (defensive rebalancing)
 - **Leverage**: 2.0x maximum (currently using 1.85x)
 - **Allocation**: 60% long positions, 40% hedge positions
-- **Stop Loss**: Dynamic 2% (leveraged adjusted)
-- **Take Profit**: 5% target (2.5x volatility multiplier)
+- **Stop Loss**: Dynamic 3-5% (beta-adjusted)
+- **Take Profit**: 8-12% target (volatility multiplier)
 - **Risk Management**: 
   - Automatic deleveraging at 3% daily loss
   - Force close all at 7% daily loss
   - Margin buffer 25% minimum
   - Sector concentration max 3 positions
-- **Hedge Instruments**: Inverse ETFs (SH, PSQ, SDS, QID)
-- **Positions**: 8 current, target 10 maximum
-- **Research**: Automated daily 7-agent consensus system
+- **Current Positions**: 3 (defensive rebalancing 9/16)
+- **Latest Trades (9/16)**: 
+  - PG: 39 @ $155.20 (Consumer Staples, Beta: 0.3)
+  - JNJ: 37 @ $162.45 (Healthcare, Beta: 0.4)
+  - KO: 104 @ $58.90 (Consumer Staples, Beta: 0.5)
+- **Beta Reduction**: From 1.144 to ~1.0 via defensive allocation
+- **Research**: Enhanced 7-agent consensus system with beta analysis
 - **Files**:
-  - Main: `execute_dee_bot_beta_neutral.py`
-  - Config: `config/dee_bot_config.json`
+  - Main: `execute_dee_bot_trades.py`
+  - Enhanced: `generate_enhanced_dee_bot_trades.py`
   - Monitor: `monitor_dee_bot.py`
   - Master: `run_dee_bot.py`
 - **Alpaca API Key**: PK6FZK4DAQVTD7DYVH78
