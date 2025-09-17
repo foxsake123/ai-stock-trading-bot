@@ -1,15 +1,15 @@
 # AI Trading Bot - Session Continuity Documentation
-## Last Updated: September 17, 2025, 1:00 PM ET - READY FOR CBRL EARNINGS
+## Last Updated: September 17, 2025, 5:10 PM ET - POST-EARNINGS STRATEGY READY
 
 ---
 
 ## 🎯 CRITICAL: Next Session Priority Tasks
 
-### IMMEDIATE ACTIONS (Sept 17, 2025 Afternoon)
-1. **CBRL Earnings at 4 PM** - Strategy ready, 81 shares @ $51.00
-2. **Stop-losses documented** - All 20 positions have defined stops
-3. **ChatGPT extension fixed** - Enhanced with better error handling
-4. **Post-market report at 4:30 PM** - Automated via Task Scheduler
+### IMMEDIATE ACTIONS (Sept 18, 2025 Morning)
+1. **9:30 AM: Execute CBRL strategy** - Check gap, act based on price
+2. **9:30 AM: Sell 50% RGTI** - 65 shares at market (~$1,224)
+3. **9:31 AM: Sell 50% ORCL** - 21 shares at market (~$6,120)
+4. **Monitor KSS** - Exit if below $15.18 (currently -7.4%)
 
 ### MONITORING SCHEDULE
 - **Sept 17**: CBRL earnings after close (potential short squeeze)
@@ -141,17 +141,20 @@ python scripts-and-data/automation/generate_enhanced_dee_bot_trades.py
 
 ## 🎯 TODO LIST CURRENT STATE
 
-### Active Tasks
-1. **[TODAY 4PM]** CBRL earnings - Strategy ready with 4 scenarios
-2. **[Sept 19]** INCY FDA decision - 61 shares positioned
-3. **[4:30 PM]** Automated post-market report scheduled
+### Tomorrow's Execution Plan (Sept 18)
+1. **[9:30 AM]** CBRL action based on gap
+2. **[9:30 AM]** Sell 65 shares RGTI (50% position)
+3. **[9:31 AM]** Sell 21 shares ORCL (50% position)
+4. **[All Day]** Monitor KSS stop at $15.18
+5. **[Sept 19]** INCY FDA - Sell 30 shares, keep 31
 
-### Completed Today
-- **[COMPLETED]** Fixed ChatGPT extension with enhanced error handling
-- **[COMPLETED]** Created CBRL earnings strategy playbook
-- **[COMPLETED]** Documented stop-losses for all 20 positions
-- **[COMPLETED]** Attempted trades (blocked by wash rules)
-- **[COMPLETED]** GitHub repository updated
+### Completed Today (Sept 17)
+- **[COMPLETED]** CBRL earnings released at 4 PM - strategy ready
+- **[COMPLETED]** Created profit-taking orders for RGTI/ORCL
+- **[COMPLETED]** INCY FDA strategy documented (50% reduction)
+- **[COMPLETED]** Stop-loss analysis - KSS near trigger
+- **[COMPLETED]** Post-market report sent via Telegram
+- **[COMPLETED]** Orders documented for Sept 18 execution
 
 ---
 
@@ -201,14 +204,18 @@ weights = {
 - Wash trade blocks need complex order implementation
 - Could use more sophisticated ML models
 
-### Session Handoff
-CRITICAL for next session:
-1. **CHECK CBRL EARNINGS RESULT** - Execute strategy based on reaction
-2. Review after-hours movement and volume
-3. Execute appropriate CBRL exit (see strategy doc)
-4. Monitor INCY for Sept 19 FDA decision
-5. Review stop-loss triggers overnight
-6. Check 4:30 PM automated report in Telegram
+### Session Handoff - CRITICAL ACTIONS
+**September 18, 2025 Morning Execution:**
+1. **9:00 AM**: Check CBRL pre-market price
+2. **9:30 AM**: Execute orders in this sequence:
+   - CBRL: Exit if <$50, else set trailing stop
+   - RGTI: Sell 65 shares at market
+   - ORCL: Sell 21 shares at market
+   - KSS: Check vs $15.18 stop
+3. **9:35 AM**: Set all trailing stops per list
+4. **10:00 AM**: Confirm INCY plan for Thursday
+5. **Expected cash generation**: ~$7,344
+6. **Profit to lock**: ~$1,327
 
 ---
 
