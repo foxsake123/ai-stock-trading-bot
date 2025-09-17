@@ -3,13 +3,14 @@
 ## Project Overview
 This is a multi-agent AI trading bot system based on the TradingAgents framework. The system uses specialized AI agents working collaboratively to analyze markets, make trading decisions, and manage risk.
 
-**Current Performance (September 16, 2025, 1:00 PM ET)**:
-- Total Portfolio Value: $206,243.48 (+3.12%)
-- DEE-BOT: $102,690.85 (+2.69%) - Beta-neutral with 2X leverage
-- SHORGAN-BOT: $103,552.63 (+3.55%)
-- Active Positions: 25 (17 SHORGAN + 8 DEE)
-- Today's Trades: MFIC, INCY, CBRL, RIVN executed
-- Portfolio Beta: ~0.98 (near market neutral)
+**Current Performance (September 16, 2025, 9:00 PM ET)**:
+- Total Portfolio Value: $205,338.41 (+2.67%)
+- DEE-BOT: $100,000.00 (18,189.05 positions + 81,810.95 cash)
+- SHORGAN-BOT: $105,338.41 (98,305.44 positions + 7,032.97 cash)
+- Active Positions: 20 (17 SHORGAN + 3 DEE)
+- Today's Trades: PG, JNJ, KO (DEE-BOT defensive rebalancing)
+- Portfolio Beta: ~1.0 (target achieved through defensive positions)
+- Unrealized P&L: +$5,080.89 (+2.54% return)
 
 ## Architecture
 
