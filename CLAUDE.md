@@ -1,178 +1,105 @@
-# AI Trading Bot - Session Continuity Documentation
-## Last Updated: September 17, 2025, 5:10 PM ET - POST-EARNINGS STRATEGY READY
+# CLAUDE.md
 
----
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 🎯 CRITICAL: Next Session Priority Tasks
+## Core Architecture
 
-### IMMEDIATE ACTIONS (Sept 18, 2025 Morning)
-1. **9:30 AM: Execute CBRL strategy** - Check gap, act based on price
-2. **9:30 AM: Sell 50% RGTI** - 65 shares at market (~$1,224)
-3. **9:31 AM: Sell 50% ORCL** - 21 shares at market (~$6,120)
-4. **Monitor KSS** - Exit if below $15.18 (currently -7.4%)
+### System Overview
+This is a multi-agent AI trading bot system with two primary trading strategies:
+- **SHORGAN-BOT**: Catalyst-driven micro-cap trading (17 positions, $105k portfolio)
+- **DEE-BOT**: Beta-neutral S&P 100 defensive strategy (3 positions, $100k portfolio)
 
-### MONITORING SCHEDULE
-- **Sept 17**: CBRL earnings after close (potential short squeeze)
-- **Sept 19**: INCY FDA decision (binary event)
+The system uses 9 specialized agents coordinated through an async message bus to make consensus-based trading decisions.
 
----
-
-## 📊 CURRENT PORTFOLIO STATE
-
-### Overall Performance
+### Agent Architecture
 ```
-Total Portfolio Value: $205,338.41
-Total Return: +2.54% ($5,080.89)
-Capital Deployed: 58.2% ($116,494.49)
-Active Positions: 20
+Main.py → Coordinator → Message Bus → 9 Specialized Agents:
+- FundamentalAnalystAgent (agents/fundamental_analyst.py)
+- TechnicalAnalystAgent (agents/technical_analyst.py)
+- NewsAnalystAgent (agents/news_analyst.py)
+- SentimentAnalystAgent (agents/sentiment_analyst.py)
+- BullResearcherAgent (agents/bull_researcher.py)
+- BearResearcherAgent (agents/bear_researcher.py)
+- RiskManagerAgent (agents/risk_manager.py)
+- ShorganCatalystAgent (agents/shorgan_catalyst_agent.py)
+- OptionsStrategyAgent (agents/options_strategy_agent.py)
 ```
 
-### DEE-BOT Status
+Each agent inherits from `BaseAgent` and implements an `analyze()` method returning:
+- `recommendation`: BUY/HOLD/SELL
+- `confidence`: 0.0-1.0
+- `reasoning`: Explanation
+- `data`: Supporting metrics
+
+### Directory Structure (Post-Reorganization)
 ```
-Strategy: Beta-Neutral S&P 100
-Portfolio Value: $100,000.00
-Positions: 3 (PG, JNJ, KO)
-Cash Available: $81,810.95
-Beta Target: 1.0 (achieved)
+/agents/                    # Multi-agent trading system
+/communication/             # Message bus and coordinator
+/scripts-and-data/
+  /automation/             # Trading execution scripts
+  /daily-csv/             # Position tracking (dee-bot-positions.csv, shorgan-bot-positions.csv)
+  /daily-json/            # Trade execution logs
+/docs/                     # Reports and documentation
+/01_trading_system/        # Legacy structure (still contains some active components)
+/02_data/                  # Legacy data storage
 ```
 
-### SHORGAN-BOT Status
-```
-Strategy: Catalyst Event Trading
-Portfolio Value: $105,338.41
-Positions: 17 active
-Unrealized P&L: +$5,080.89
-Best: RGTI (+22.73%)
-Worst: KSS (-7.37%)
-```
+## Critical Services & Commands
 
----
-
-## 🔧 SYSTEM SERVICES
-
-### Background Services Running
+### ChatGPT Report Server
 ```bash
-# ChatGPT Report Server (ACTIVE)
+# Start the ChatGPT report capture server (REQUIRED for browser extension)
 cd 01_trading_system/automation && python chatgpt_report_server.py
-# Running on http://localhost:8888
-# Status: ✅ Server running and ready for extension connection
+# Runs on http://localhost:8888
 ```
 
-### Automated Reports
-- **Post-Market Report**: 4:30 PM ET daily via Telegram
-- **Command**: `python scripts-and-data/automation/generate-post-market-report.py`
-- **Scheduled**: Windows Task Scheduler "AI Trading Bot - Post Market 4_30PM"
-
-### Key Commands
+### Daily Automated Reports
 ```bash
-# Generate post-market report manually
+# Generate post-market report (4:30 PM ET daily)
 python scripts-and-data/automation/generate-post-market-report.py
 
-# Send daily report via Telegram
-python scripts-and-data/automation/send_daily_report.py
-
-# Process new trades
+# Process new trades through multi-agent system
 python scripts-and-data/automation/process-trades.py
 
-# Generate DEE-BOT trades
+# Generate DEE-BOT beta-neutral trades
 python scripts-and-data/automation/generate_enhanced_dee_bot_trades.py
 ```
 
----
-
-## 📁 CRITICAL FILES
-
 ### Trading Execution
-- `scripts-and-data/automation/process-trades.py` - Multi-agent trade processor
-- `scripts-and-data/automation/execute_dee_bot_trades.py` - DEE-BOT execution
-- `scripts-and-data/automation/generate_enhanced_dee_bot_trades.py` - Beta analysis
+```bash
+# Execute SHORGAN-BOT trades
+python 01_trading_system/bots/execute_shorgan_trades.py
 
-### Reporting
-- `scripts-and-data/automation/generate-post-market-report.py` - Main post-market report
-- `scripts-and-data/automation/send_daily_report.py` - Daily Telegram report
+# Execute DEE-BOT trades
+python 01_trading_system/execute_dee_bot_trades.py
 
-### Position Tracking
-- `scripts-and-data/daily-csv/dee-bot-positions.csv`
-- `scripts-and-data/daily-csv/shorgan-bot-positions.csv`
+# Place Alpaca orders
+python 01_trading_system/core/place_alpaca_orders.py
+```
 
-### Configuration
-- Telegram Bot Token: 8093845586:AAEqytNDQ_dVzVp6ZbDyveMTx7MZMtG6N0c
-- Telegram Chat ID: 7870288896
-- Alpaca API Key: PK6FZK4DAQVTD7DYVH78
+## API Configurations
 
----
+### Alpaca Paper Trading
+- API Key: `PK6FZK4DAQVTD7DYVH78`
+- Secret: `iXfKe0M7chQ5aYNy9bz4YARnGtiufJFq8nMqJlfa`
+- Base URL: `https://paper-api.alpaca.markets`
 
-## ⚠️ KNOWN ISSUES & WORKAROUNDS
+### Telegram Bot
+- Token: `8093845586:AAEqytNDQ_dVzVp6ZbDyveMTx7MZMtG6N0c`
+- Chat ID: `7870288896`
 
-### ChatGPT Extension
-- **Issue**: Float parsing errors ("could not convert string to float: '.'")
-- **Workaround**: Use manual save tool `scripts-and-data/automation/save_chatgpt_report.py`
+## Trading Rules & Risk Management
 
-### Yahoo Finance API
-- **Issue**: Rate limiting (429 errors)
-- **Workaround**: Using Alpaca API fallback in DEE-BOT generator
+### Position Sizing
+- SHORGAN-BOT: Max 10% per position, 30% sector concentration
+- DEE-BOT: Max 8% per position, beta target 1.0 ± 0.1
 
-### Wash Trade Blocks
-- **Issue**: Some trades blocked by Alpaca (SRRK, INCY, CBRL, RIVN)
-- **Solution**: Need to implement complex orders
+### Stop Losses
+- Catalyst trades: -8% trailing stop
+- Defensive positions: -3% fixed stop
+- Portfolio daily limit: -3% (deleveraging), -7% (force close)
 
----
-
-## 📈 RECENT ACCOMPLISHMENTS
-
-### September 16-17, 2025
-- ✅ **MAJOR**: Complete repository reorganization to clean structure
-- ✅ Fixed post-market report calculations ($205,338.41 accurate)
-- ✅ Executed DEE-BOT defensive trades (PG, JNJ, KO)
-- ✅ Achieved beta-neutral target (1.144 → 1.0)
-- ✅ Enhanced reporting with accurate portfolio values
-- ✅ Set up automated Telegram notifications
-- ✅ Migrated from numbered folders to meaningful names
-- ✅ Updated all hardcoded paths in automation scripts
-
-### System Enhancements
-- Dual-bot architecture fully operational
-- 7-agent consensus system active
-- Comprehensive risk management
-- Real-time position monitoring
-- Automated reporting pipeline
-
----
-
-## 🎯 TODO LIST CURRENT STATE
-
-### Tomorrow's Execution Plan (Sept 18)
-1. **[9:30 AM]** CBRL action based on gap
-2. **[9:30 AM]** Sell 65 shares RGTI (50% position)
-3. **[9:31 AM]** Sell 21 shares ORCL (50% position)
-4. **[All Day]** Monitor KSS stop at $15.18
-5. **[Sept 19]** INCY FDA - Sell 30 shares, keep 31
-
-### Completed Today (Sept 17)
-- **[COMPLETED]** CBRL earnings released at 4 PM - strategy ready
-- **[COMPLETED]** Created profit-taking orders for RGTI/ORCL
-- **[COMPLETED]** INCY FDA strategy documented (50% reduction)
-- **[COMPLETED]** Stop-loss analysis - KSS near trigger
-- **[COMPLETED]** Post-market report sent via Telegram
-- **[COMPLETED]** Orders documented for Sept 18 execution
-
----
-
-## 💡 QUICK REFERENCE
-
-### Position Exit Criteria
-- Stop loss triggered (-8% catalyst, -3% defensive)
-- Target reached (+15% catalyst, +8% defensive)
-- Catalyst event completed
-- Fundamental thesis broken
-
-### Risk Limits
-- Max position size: 10% (SHORGAN), 8% (DEE)
-- Max sector concentration: 30%
-- Daily loss limit: 3% (deleveraging)
-- Force close: 7% daily loss
-
-### Multi-Agent Weights
+### Multi-Agent Consensus
 ```python
 weights = {
     "fundamental": 0.20,
@@ -183,86 +110,76 @@ weights = {
     "bear": 0.15,
     "risk": 0.05
 }
+# BUY if consensus > 0.65, SELL if < 0.35, else HOLD
 ```
 
----
+## Current Portfolio State
 
-## 📝 NOTES FOR CONTINUITY
+### Active Positions (as of Sept 17, 2025)
+- Total Value: $205,338.41 (+2.54%)
+- 20 positions: 17 SHORGAN-BOT, 3 DEE-BOT
+- Key holdings: RGTI (+22.7%), ORCL (+21.9%), KSS (-7.4% near stop)
+- Critical events: CBRL earnings (Sept 17), INCY FDA (Sept 19)
 
-### What's Working Well
-- ChatGPT extension fixed with visual indicators
-- CBRL earnings strategy ready with clear actions
-- Stop-losses documented: Max risk $7,651 (3.7%)
-- Post-market reports automated at 4:30 PM
-- Clean repository structure fully operational
-- Portfolio performing: +$5,081 unrealized gains
-- Risk management system active
+### Position Tracking Files
+- `scripts-and-data/daily-csv/shorgan-bot-positions.csv`
+- `scripts-and-data/daily-csv/dee-bot-positions.csv`
 
-### Areas for Improvement
-- ChatGPT integration needs browser extension fix
-- Need database migration from CSV to PostgreSQL
-- Wash trade blocks need complex order implementation
-- Could use more sophisticated ML models
+## Windows Task Scheduler Jobs
+- **Post-Market Report**: "AI Trading Bot - Post Market 4_30PM"
+- Runs: `python scripts-and-data/automation/generate-post-market-report.py`
 
-### Session Handoff - CRITICAL ACTIONS
-**September 18, 2025 Morning Execution:**
-1. **9:00 AM**: Check CBRL pre-market price
-2. **9:30 AM**: Execute orders in this sequence:
-   - CBRL: Exit if <$50, else set trailing stop
-   - RGTI: Sell 65 shares at market
-   - ORCL: Sell 21 shares at market
-   - KSS: Check vs $15.18 stop
-3. **9:35 AM**: Set all trailing stops per list
-4. **10:00 AM**: Confirm INCY plan for Thursday
-5. **Expected cash generation**: ~$7,344
-6. **Profit to lock**: ~$1,327
+## Common Development Tasks
 
----
+### Adding a New Agent
+1. Create agent file in `/agents/` inheriting from `BaseAgent`
+2. Implement `analyze(ticker)` method
+3. Register in `main.py` initialization
+4. Add weight in consensus calculation
 
-## 🏗️ REPOSITORY REORGANIZATION (Sept 17, 2025)
+### Testing Trade Execution
+```bash
+# Test Alpaca connection
+python 01_trading_system/core/test_alpaca_connection.py
 
-### Structure Migration Completed
-**Before**: Numbered folders (01_, 02_, 03_, etc.)
-**After**: Clean, meaningful directory structure
-
-```
-ai-stock-trading-bot/
-├── agents/                    # Multi-agent trading system
-├── communication/             # Agent coordination
-├── docs/                     # Documentation and reports
-├── scripts-and-data/         # Automation and data
-│   ├── automation/           # Trading scripts
-│   ├── daily-csv/           # Portfolio positions
-│   └── daily-json/          # Execution data
-├── web-dashboard/            # Trading dashboard
-└── main.py                   # Primary entry point
+# Simulate trades without execution
+python 01_trading_system/core/simulate_trading.py
 ```
 
-### Files Updated
-- ✅ All import statements in main.py
-- ✅ Hardcoded paths in automation scripts
-- ✅ Portfolio CSV file paths
-- ✅ Report generation paths
-- ✅ Task scheduler commands
+### Debugging Failed Trades
+1. Check wash trade rules (Alpaca blocks day trading same symbol)
+2. Verify market hours (9:30 AM - 4:00 PM ET)
+3. Check position CSV files for current holdings
+4. Review logs in `01_trading_system/automation/02_data/research/reports/`
 
-### Benefits Achieved
-- Professional repository structure
-- Easier navigation and maintenance
-- Cleaner file organization
-- Better alignment with industry standards
-- Preserved all functionality while improving organization
+## Known Issues & Workarounds
 
----
+### ChatGPT Extension Float Parsing
+- Issue: "could not convert string to float: '.'"
+- Workaround: Use manual save tool or re-capture report
 
-*System ready for handoff - All services operational*
-*ChatGPT server: RUNNING on http://localhost:8888*
-*Portfolio: $205,338.41 (+2.54%)*
-*Positions: 20 active (17 SHORGAN, 3 DEE)*
+### Yahoo Finance Rate Limiting
+- Issue: 429 errors on data requests
+- Workaround: Use Alpaca API as primary data source
 
-### 📝 Session Management Reminders
-- Always save session summaries, todos, and product plans each session
-- Update changes and commit to git
-- Maintain continuity documentation for seamless handoffs
-- make updates and save changes, commit to git when done.
-- update any other files before closing down this window.
-- update todos, product plan, system architecture, and any other files before closing this window.
+### Wash Trade Blocks
+- Issue: Alpaca rejects trades for recently traded symbols
+- Solution: Wait T+2 or use complex orders
+
+## Session Handoff Protocol
+
+When continuing work in a new session:
+1. Check ChatGPT server status (port 8888)
+2. Review overnight position changes in CSV files
+3. Check for stopped out positions
+4. Get fresh ChatGPT recommendations
+5. Monitor upcoming catalysts
+6. Execute any pending orders from ORDERS_FOR_SEPT_18.md
+
+## Critical Files for Continuity
+- `CLAUDE.md` - This file
+- `ORDERS_FOR_SEPT_18.md` - Tomorrow's execution plan
+- `PROFIT_TAKING_ORDERS.md` - Profit strategy
+- `INCY_FDA_STRATEGY.md` - Thursday FDA playbook
+- Position CSVs in `scripts-and-data/daily-csv/`
+- Update all relevant files, update todos, update system architecture, product plan

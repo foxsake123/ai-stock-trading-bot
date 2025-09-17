@@ -1,5 +1,5 @@
 # AI Trading Bot - System Architecture
-## Version 2.5 - September 17, 2025
+## Version 2.6 - September 17, 2025, 5:45 PM ET - Post-Earnings
 
 ---
 
