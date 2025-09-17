@@ -1,0 +1,54 @@
+<b>PRE-MARKET ANALYSIS REPORT</b>
+<b>Tuesday, September 16, 2025</b>
+<b>10:31 PM ET</b>
+========================================
+
+<b>KEY EVENTS TODAY</b>
+No major catalyst events today
+
+<b>UPCOMING CATALYSTS</b>
+Sept 19: INCY FDA Decision (PDUFA)
+  Position: 61 shares @ $83.97
+  Binary event - Opzelura approval
+
+<b>PORTFOLIO STATUS</b>
+Total Value: $205,338.41
+Unrealized P&L: +$5,080.89 (+5.45%)
+Capital Deployed: 58.2%
+Risk Level: CONTROLLED
+
+<b>TOP PERFORMERS (Monitor for Exit)</b>
+1. RGTI: +22.73% - Consider partial profit
+2. ORCL: +21.92% - Near resistance
+3. DAKT: +13.85% - Strong momentum
+
+<b>UNDERPERFORMERS (Review Stop Loss)</b>
+1. KSS: -7.37% - Near stop loss
+2. SAVA: -3.22% - Weak momentum
+3. GPK: -1.66% - Monitor closely
+
+<b>TODAY'S STRATEGY</b>
+2. Portfolio Management:
+   - Review stop losses on all positions
+   - Consider profit taking on 20%+ winners
+   - Maintain defensive DEE-BOT allocation
+3. New Opportunities:
+   - Check ChatGPT for fresh signals
+   - Focus on high-conviction setups only
+   - Keep powder dry for INCY event
+
+<b>RISK REMINDERS</b>
+- All stops are in place
+- CBRL earnings risk today
+- INCY binary event in 2 days
+- Maintain position sizing discipline
+
+<b>SYSTEM STATUS</b>
+Multi-Agent Analysis: ACTIVE
+Automated Reports: SCHEDULED
+Stop Loss Protection: ENABLED
+ChatGPT Integration: MANUAL MODE
+
+========================================
+Trade carefully. Protect capital.
+Next update: Post-Market 4:15 PM ET
