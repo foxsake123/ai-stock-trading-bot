@@ -245,3 +245,4 @@ ai-stock-trading-bot/
 - Update changes and commit to git
 - Maintain continuity documentation for seamless handoffs
 - make updates and save changes, commit to git when done.
+- update any other files before closing down this window.
