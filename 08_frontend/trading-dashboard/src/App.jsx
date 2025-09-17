@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import DashboardEnhanced from './components/DashboardEnhanced'
+import BloombergDashboard from './components/BloombergDashboard'
 import './App.css'
 
 function App() {
   return (
-    <DashboardEnhanced />
+    <BloombergDashboard />
   )
 }
 
