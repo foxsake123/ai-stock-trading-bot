@@ -201,6 +201,8 @@ When picking up next session:
 ---
 
 *System ready for handoff - All services operational*
-- Always save session summaries, todos, and product plans each session.
-- Always save session summaries, todos, and product plans each session.
-- Always save session summaries, todos, and product plans each session.
+
+### 📝 Session Management Reminders
+- Always save session summaries, todos, and product plans each session
+- Update changes and commit to git
+- Maintain continuity documentation for seamless handoffs
