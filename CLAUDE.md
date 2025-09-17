@@ -206,3 +206,4 @@ When picking up next session:
 - Always save session summaries, todos, and product plans each session
 - Update changes and commit to git
 - Maintain continuity documentation for seamless handoffs
+- make updates and save changes, commit to git when done.
