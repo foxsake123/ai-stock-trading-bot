@@ -246,3 +246,4 @@ ai-stock-trading-bot/
 - Maintain continuity documentation for seamless handoffs
 - make updates and save changes, commit to git when done.
 - update any other files before closing down this window.
+- update todos, product plan, system architecture, and any other files before closing this window.
