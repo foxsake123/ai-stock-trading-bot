@@ -1,0 +1,32 @@
+TRADING RECOMMENDATIONS REQUEST - September 17, 2025
+
+Generate 5 high-conviction micro-cap trading opportunities for today focusing on:
+
+CURRENT POSITIONS TO CONSIDER:
+- CBRL: Earnings after close today (we hold 81 shares @ $51.00, 34% short interest)
+- INCY: FDA PDUFA decision Sept 19 (we hold 61 shares @ $83.97)
+
+NEW OPPORTUNITIES - Look for:
+1. Earnings plays for Sept 18-20
+2. FDA/Clinical trial catalysts this week
+3. Short squeeze setups (>30% short interest)
+4. M&A rumors or activist situations
+5. Unusual options activity
+
+For each recommendation provide:
+- Ticker & Company Name
+- Market Cap (must be under $2B)
+- Catalyst & Date
+- Entry Price (current)
+- Stop Loss (-8%)
+- Target Price (+15-20%)
+- Risk/Reward Ratio
+- Confidence Score (1-10)
+- Brief thesis (2-3 sentences)
+
+Also provide:
+- Overall market assessment
+- Sector rotation insights
+- Risk factors to monitor today
+
+Format as structured data for automated processing.

@@ -1,0 +1,11 @@
+{
+  "date": "2025-09-17",
+  "time": "12:32:01",
+  "source": "ChatGPT TradingAgents (Auto-captured)",
+  "trades": [],
+  "market_context": "To generate a post-market report for shorgan-bot, could you confirm a few things:\nWhat specific performance metrics or data should I include in the report (e.g., realized/unrealized P&L, win/loss count, execution slippage, signal accuracy)?\nDoes the bot log its trade decisions, fills, or performance metrics in your GitHub repo (foxsake123/solana-trading-bot_v2), or elsewhere?\nShould this report be scoped to just the current day, or a rolling multi-day analysis (e.g., week-to-date)?\nOnce confirmed, I\u2019ll generate today\u2019s report and automate it for each market close.",
+  "raw_text": "To generate a post-market report for shorgan-bot, could you confirm a few things:\n\nWhat specific performance metrics or data should I include in the report (e.g., realized/unrealized P&L, win/loss count, execution slippage, signal accuracy)?\n\nDoes the bot log its trade decisions, fills, or performance metrics in your GitHub repo (foxsake123/solana-trading-bot_v2), or elsewhere?\n\nShould this report be scoped to just the current day, or a rolling multi-day analysis (e.g., week-to-date)?\n\nOnce confirmed, I\u2019ll generate today\u2019s report and automate it for each market close.",
+  "conversation_id": "68c216e4-98a4-8324-9340-4d1d659e62f6",
+  "url": "https://chatgpt.com/g/g-p-68b723c17d988191b66f1b2637d00c33/c/68c216e4-98a4-8324-9340-4d1d659e62f6",
+  "capture_timestamp": "2025-09-17T02:09:30.855Z"
+}
