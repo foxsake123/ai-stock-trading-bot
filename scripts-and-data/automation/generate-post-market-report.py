@@ -44,7 +44,7 @@ def load_current_portfolio_data():
     }
     
     # Load DEE-BOT positions
-    dee_file = Path("02_data/portfolio/positions/dee_bot_positions.csv")
+    dee_file = Path("scripts-and-data/daily-csv/dee-bot-positions.csv")
     if dee_file.exists():
         with open(dee_file, 'r') as f:
             lines = f.readlines()[1:]  # Skip header
@@ -71,8 +71,8 @@ def load_current_portfolio_data():
                         portfolios['DEE-BOT']['total_value'] += position_value
                         portfolios['DEE-BOT']['pnl'] += pnl
     
-    # Load SHORGAN-BOT positions  
-    shorgan_file = Path("02_data/portfolio/positions/shorgan_bot_positions.csv")
+    # Load SHORGAN-BOT positions
+    shorgan_file = Path("scripts-and-data/daily-csv/shorgan-bot-positions.csv")
     if shorgan_file.exists():
         with open(shorgan_file, 'r') as f:
             lines = f.readlines()[1:]  # Skip header
@@ -142,14 +142,14 @@ def load_execution_data():
     executions = {'DEE-BOT': [], 'SHORGAN-BOT': []}
     
     # Check for DEE-BOT executions
-    dee_exec_file = Path(f"02_data/portfolio/executions/dee_bot_execution_{date.today().strftime('%Y-%m-%d')}.json")
+    dee_exec_file = Path(f"scripts-and-data/daily-json/executions/dee_bot_execution_{date.today().strftime('%Y-%m-%d')}.json")
     if dee_exec_file.exists():
         with open(dee_exec_file, 'r') as f:
             data = json.load(f)
             executions['DEE-BOT'] = data.get('executed_trades', [])
-    
+
     # Check for SHORGAN-BOT executions (from execution reports)
-    exec_dir = Path("02_data/reports/execution")
+    exec_dir = Path("scripts-and-data/daily-json/execution")
     if exec_dir.exists():
         for exec_file in exec_dir.glob(f"execution_report_{date.today().strftime('%Y%m%d')}*.json"):
             with open(exec_file, 'r') as f:
@@ -292,9 +292,9 @@ def generate_and_send_report():
         print("\n[SUCCESS] Post-market report sent to Telegram")
         
         # Save report locally
-        report_dir = Path("02_data/research/reports/post_market_daily")
+        report_dir = Path("docs/reports/post-market")
         report_dir.mkdir(parents=True, exist_ok=True)
-        
+
         report_file = report_dir / f"post_market_report_{date.today()}.txt"
         with open(report_file, 'w', encoding='utf-8') as f:
             f.write(report)
