@@ -200,3 +200,5 @@ When picking up next session:
 
 *System ready for handoff - All services operational*
 - Always save session summaries, todos, and product plans each session.
+- Always save session summaries, todos, and product plans each session.
+- Always save session summaries, todos, and product plans each session.
