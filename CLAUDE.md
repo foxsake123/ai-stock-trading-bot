@@ -1,5 +1,5 @@
 # AI Trading Bot - Session Continuity Documentation
-## Last Updated: September 16, 2025, 11:45 PM ET - SESSION COMPLETE
+## Last Updated: September 17, 2025, 12:15 AM ET - REORGANIZATION COMPLETE
 
 ---
 
@@ -53,28 +53,28 @@ Worst: KSS (-7.37%)
 ### Background Services Running
 ```bash
 # ChatGPT Report Server
-cd 01_trading_system/automation && python chatgpt_report_server.py
+cd scripts-and-data/automation && python chatgpt_report_server.py
 # Running on http://localhost:8888
 ```
 
 ### Automated Reports
 - **Post-Market Report**: 4:30 PM ET daily via Telegram
-- **Command**: `python generate_current_post_market_report.py`
+- **Command**: `python scripts-and-data/automation/generate-post-market-report.py`
 - **Scheduled**: Windows Task Scheduler "AI Trading Bot - Post Market 4_30PM"
 
 ### Key Commands
 ```bash
 # Generate post-market report manually
-python generate_current_post_market_report.py
+python scripts-and-data/automation/generate-post-market-report.py
 
 # Send daily report via Telegram
-python 06_utils/send_daily_report.py
+python scripts-and-data/automation/send_daily_report.py
 
 # Process new trades
-python process_trades.py
+python scripts-and-data/automation/process-trades.py
 
 # Generate DEE-BOT trades
-python generate_enhanced_dee_bot_trades.py
+python scripts-and-data/automation/generate_enhanced_dee_bot_trades.py
 ```
 
 ---
@@ -82,17 +82,17 @@ python generate_enhanced_dee_bot_trades.py
 ## 📁 CRITICAL FILES
 
 ### Trading Execution
-- `process_trades.py` - Multi-agent trade processor
-- `execute_dee_bot_trades.py` - DEE-BOT execution
-- `generate_enhanced_dee_bot_trades.py` - Beta analysis
+- `scripts-and-data/automation/process-trades.py` - Multi-agent trade processor
+- `scripts-and-data/automation/execute_dee_bot_trades.py` - DEE-BOT execution
+- `scripts-and-data/automation/generate_enhanced_dee_bot_trades.py` - Beta analysis
 
 ### Reporting
-- `generate_current_post_market_report.py` - Main post-market report
-- `06_utils/send_daily_report.py` - Daily Telegram report
+- `scripts-and-data/automation/generate-post-market-report.py` - Main post-market report
+- `scripts-and-data/automation/send_daily_report.py` - Daily Telegram report
 
 ### Position Tracking
-- `02_data/portfolio/positions/dee_bot_positions.csv`
-- `02_data/portfolio/positions/shorgan_bot_positions.csv`
+- `scripts-and-data/daily-csv/dee-bot-positions.csv`
+- `scripts-and-data/daily-csv/shorgan-bot-positions.csv`
 
 ### Configuration
 - Telegram Bot Token: 8093845586:AAEqytNDQ_dVzVp6ZbDyveMTx7MZMtG6N0c
@@ -105,7 +105,7 @@ python generate_enhanced_dee_bot_trades.py
 
 ### ChatGPT Extension
 - **Issue**: Float parsing errors ("could not convert string to float: '.'")
-- **Workaround**: Use manual save tool `save_chatgpt_report.py`
+- **Workaround**: Use manual save tool `scripts-and-data/automation/save_chatgpt_report.py`
 
 ### Yahoo Finance API
 - **Issue**: Rate limiting (429 errors)
@@ -119,12 +119,15 @@ python generate_enhanced_dee_bot_trades.py
 
 ## 📈 RECENT ACCOMPLISHMENTS
 
-### September 16, 2025
-- ✅ Fixed post-market report calculations
+### September 16-17, 2025
+- ✅ **MAJOR**: Complete repository reorganization to clean structure
+- ✅ Fixed post-market report calculations ($205,338.41 accurate)
 - ✅ Executed DEE-BOT defensive trades (PG, JNJ, KO)
 - ✅ Achieved beta-neutral target (1.144 → 1.0)
 - ✅ Enhanced reporting with accurate portfolio values
 - ✅ Set up automated Telegram notifications
+- ✅ Migrated from numbered folders to meaningful names
+- ✅ Updated all hardcoded paths in automation scripts
 
 ### System Enhancements
 - Dual-bot architecture fully operational
@@ -200,7 +203,42 @@ When picking up next session:
 
 ---
 
-*System ready for handoff - All services operational*
+## 🏗️ REPOSITORY REORGANIZATION (Sept 17, 2025)
+
+### Structure Migration Completed
+**Before**: Numbered folders (01_, 02_, 03_, etc.)
+**After**: Clean, meaningful directory structure
+
+```
+ai-stock-trading-bot/
+├── agents/                    # Multi-agent trading system
+├── communication/             # Agent coordination
+├── docs/                     # Documentation and reports
+├── scripts-and-data/         # Automation and data
+│   ├── automation/           # Trading scripts
+│   ├── daily-csv/           # Portfolio positions
+│   └── daily-json/          # Execution data
+├── web-dashboard/            # Trading dashboard
+└── main.py                   # Primary entry point
+```
+
+### Files Updated
+- ✅ All import statements in main.py
+- ✅ Hardcoded paths in automation scripts
+- ✅ Portfolio CSV file paths
+- ✅ Report generation paths
+- ✅ Task scheduler commands
+
+### Benefits Achieved
+- Professional repository structure
+- Easier navigation and maintenance
+- Cleaner file organization
+- Better alignment with industry standards
+- Preserved all functionality while improving organization
+
+---
+
+*System ready for handoff - All services operational with clean structure*
 
 ### 📝 Session Management Reminders
 - Always save session summaries, todos, and product plans each session
