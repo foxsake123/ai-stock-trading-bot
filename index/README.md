@@ -3,24 +3,43 @@
 
 ---
 
-## 💰 PORTFOLIO PERFORMANCE
+## 💰 DUAL-STRATEGY PORTFOLIO PERFORMANCE
 
-### Overall Statistics
-| Metric | Value | Change |
-|--------|--------|--------|
-| **Total Portfolio Value** | $205,338.41 | +2.54% |
-| **Total P&L** | +$5,080.89 | - |
-| **Win Rate** | 65% (13/20 positions) | - |
-| **Best Position** | RGTI | +22.73% |
-| **Worst Position** | KSS | -7.37% |
-| **Sharpe Ratio** | ~1.45 | - |
+### Combined Portfolio
+| Metric | Value | Details |
+|--------|--------|---------|
+| **Total Portfolio Value** | $205,338.41 | Both strategies combined |
+| **Total P&L** | +$5,199.73 | SHORGAN: +$5,081, DEE: +$119 |
+| **Total Positions** | 20 | SHORGAN: 17, DEE: 3 |
+| **Cash Available** | $88,844 | For new opportunities |
 
-### Bot Performance
-| Bot | Value | P&L | Positions | Strategy |
-|-----|-------|-----|-----------|----------|
-| **SHORGAN-BOT** | $105,338.41 | +$5,080.89 | 17 | Catalyst Trading |
-| **DEE-BOT** | $100,118.84 | +$118.84 | 3 | Beta-Neutral |
-| **Combined** | $205,457.25 | +$5,199.73 | 20 | Dual Strategy |
+---
+
+## 🚀 SHORGAN-BOT (Catalyst Strategy)
+| Metric | Value | Details |
+|--------|--------|---------|
+| **Portfolio Value** | $105,338.41 | 51% of total |
+| **P&L** | +$5,080.89 | +4.82% return |
+| **Positions** | 17 | Active catalyst plays |
+| **Win Rate** | 65% | 11/17 profitable |
+| **Strategy** | Aggressive | Earnings, FDA, momentum |
+| **Top Winner** | RGTI +22.73% | AI momentum play |
+
+[📊 SHORGAN Details](../portfolio-holdings/shorgan-bot/SHORGAN_SUMMARY.md)
+
+---
+
+## 🛡️ DEE-BOT (Beta-Neutral Strategy)
+| Metric | Value | Details |
+|--------|--------|---------|
+| **Portfolio Value** | $100,118.84 | 49% of total |
+| **P&L** | +$118.84 | +0.12% return |
+| **Positions** | 3 | Defensive holdings |
+| **Portfolio Beta** | ~1.0 | Market neutral |
+| **Strategy** | Defensive | S&P 100 large-caps |
+| **Holdings** | PG, JNJ, KO | Consumer/Healthcare |
+
+[📊 DEE Details](../portfolio-holdings/dee-bot/DEE_SUMMARY.md)
 
 ---
 
@@ -52,17 +71,22 @@ Expected Impact: +$908 net profit, $11,048 cash raised
 - [CBRL Earnings Strategy](../CBRL_EARNINGS_STRATEGY.md)
 - [INCY FDA Strategy](../INCY_FDA_STRATEGY.md)
 
-### Portfolio Holdings (ORGANIZED)
-- [Combined Portfolio](../portfolio-holdings/current/combined-portfolio.csv)
-- [SHORGAN Positions](../portfolio-holdings/current/shorgan-bot-positions.csv)
-- [DEE Positions](../portfolio-holdings/current/dee-bot-positions.csv)
-- [Historical Snapshots](../portfolio-holdings/historical/)
+### SHORGAN-BOT Portfolio
+- [Strategy Overview](../portfolio-holdings/shorgan-bot/SHORGAN_SUMMARY.md)
+- [Current Positions](../portfolio-holdings/shorgan-bot/current/positions.csv)
+- [Trade History](../trade-logs/shorgan-bot/)
+- [Historical Snapshots](../portfolio-holdings/shorgan-bot/historical/)
 
-### Trade Logs (CONSOLIDATED)
-- [Master Trade Log](../trade-logs/all-trades.csv)
-- [Recent Trades](../trade-logs/recent-trades.csv)
-- [SHORGAN Trade JSON](../09_logs/trading/SHORGAN_BOT_TRADE_LOG_COMPLETE.json)
-- [DEE Trade JSON](../09_logs/trading/DEE_BOT_TRADE_LOG_COMPLETE.json)
+### DEE-BOT Portfolio
+- [Strategy Overview](../portfolio-holdings/dee-bot/DEE_SUMMARY.md)
+- [Current Positions](../portfolio-holdings/dee-bot/current/positions.csv)
+- [Trade History](../trade-logs/dee-bot/)
+- [Historical Snapshots](../portfolio-holdings/dee-bot/historical/)
+
+### Combined Views
+- [Combined Portfolio](../portfolio-holdings/current/combined-portfolio.csv)
+- [All Trades](../trade-logs/all-trades.csv)
+- [Recent Activity](../trade-logs/recent-trades.csv)
 
 ### System Documentation
 - [Architecture](../docs/SYSTEM_ARCHITECTURE.md)

@@ -44,58 +44,50 @@
 
 ---
 
-## 🎯 IDEAL STRUCTURE (Like LuckyOne7777)
+## 🎯 IMPLEMENTED STRUCTURE (Properly Separated Strategies)
 
-### Proposed Reorganization:
+### Current Organization:
 ```
 📂 ai-stock-trading-bot/
 │
 ├── 📁 index/                          # Main dashboard
-│   ├── README.md                      # Portfolio overview & links
-│   ├── portfolio-performance.csv      # Daily P&L tracking
-│   └── trade-log.csv                  # All executed trades
+│   └── README.md                      # Dual-strategy overview
 │
 ├── 📁 daily-reports/                  # All daily reports in one place
-│   ├── 2025-09-17/
-│   │   ├── premarket-report.pdf
-│   │   ├── premarket-report.md
-│   │   ├── postmarket-report.pdf
-│   │   ├── postmarket-report.md
-│   │   ├── trades-executed.csv
-│   │   └── position-snapshot.csv
-│   └── 2025-09-18/
-│       └── ...
+│   ├── 2025-09-16/                   # 7 PDFs consolidated
+│   ├── 2025-09-17/                   # Current reports
+│   └── 2025-09-18/                   # Today's folder
 │
-├── 📁 portfolio-holdings/             # Current positions
-│   ├── current/
-│   │   ├── combined-portfolio.csv
-│   │   ├── shorgan-bot-positions.csv
-│   │   └── dee-bot-positions.csv
-│   └── historical/
-│       ├── 2025-09-17-EOD.csv
-│       └── 2025-09-16-EOD.csv
+├── 📁 portfolio-holdings/             # SEPARATED BY STRATEGY
+│   ├── shorgan-bot/                  # SHORGAN-specific
+│   │   ├── SHORGAN_SUMMARY.md        # Strategy overview
+│   │   ├── current/
+│   │   │   └── positions.csv         # Current SHORGAN positions
+│   │   └── historical/               # SHORGAN snapshots
+│   │
+│   ├── dee-bot/                      # DEE-specific
+│   │   ├── DEE_SUMMARY.md            # Strategy overview
+│   │   ├── current/
+│   │   │   └── positions.csv         # Current DEE positions
+│   │   └── historical/               # DEE snapshots
+│   │
+│   └── current/                      # Combined views
+│       └── combined-portfolio.csv    # Both strategies merged
 │
-├── 📁 trade-logs/                     # All trade history
-│   ├── all-trades.csv                # Master trade log
-│   ├── shorgan-trades.json
-│   ├── dee-trades.json
-│   └── monthly/
-│       ├── 2025-09-trades.csv
-│       └── 2025-08-trades.csv
+├── 📁 trade-logs/                     # SEPARATED BY STRATEGY
+│   ├── shorgan-bot/                  # SHORGAN trades only
+│   ├── dee-bot/                      # DEE trades only
+│   ├── all-trades.csv                # Combined master log
+│   └── recent-trades.csv             # Quick reference
 │
 ├── 📁 research-analysis/              # ChatGPT & analysis
 │   ├── chatgpt-reports/
-│   │   ├── 2025-09-17-chatgpt.json
-│   │   └── 2025-09-17-chatgpt.pdf
 │   ├── multi-agent-analysis/
-│   │   └── consensus-reports/
 │   └── academic-papers/
 │
 └── 📁 performance-metrics/            # Analytics
-    ├── daily-performance.csv
-    ├── win-loss-analysis.csv
-    ├── risk-metrics.csv
-    └── sharpe-ratio.csv
+    ├── shorgan-metrics/               # SHORGAN performance
+    └── dee-metrics/                   # DEE performance
 ```
 
 ---
