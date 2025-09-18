@@ -8,10 +8,10 @@
 ### Combined Portfolio
 | Metric | Value | Details |
 |--------|--------|---------|
-| **Total Portfolio Value** | $205,338.41 | Both strategies combined |
-| **Total P&L** | +$5,199.73 | SHORGAN: +$5,081, DEE: +$119 |
-| **Total Positions** | 20 | SHORGAN: 17, DEE: 3 |
-| **Cash Available** | $88,844 | For new opportunities |
+| **Total Portfolio Value** | $208,356.74 | Both strategies combined |
+| **Total P&L** | +$8,099.12 | SHORGAN: +$5,081, DEE: +$3,018 |
+| **Total Positions** | 25 | SHORGAN: 17, DEE: 8 |
+| **Cash Available** | $40,338 | For new opportunities |
 
 ---
 
@@ -32,12 +32,12 @@
 ## 🛡️ DEE-BOT (Beta-Neutral Strategy)
 | Metric | Value | Details |
 |--------|--------|---------|
-| **Portfolio Value** | $100,118.84 | 49% of total |
-| **P&L** | +$118.84 | +0.12% return |
-| **Positions** | 3 | Defensive holdings |
+| **Portfolio Value** | $103,018.33 | 49% of total |
+| **P&L** | +$3,018.23 | +3.01% return |
+| **Positions** | 8 | Quality large-caps |
 | **Portfolio Beta** | ~1.0 | Market neutral |
 | **Strategy** | Defensive | S&P 100 large-caps |
-| **Holdings** | PG, JNJ, KO | Consumer/Healthcare |
+| **Top Holdings** | AAPL, JPM, MSFT | Tech/Finance leaders |
 
 [📊 DEE Details](../portfolio-holdings/dee-bot/DEE_SUMMARY.md)
 

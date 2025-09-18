@@ -5,29 +5,34 @@
 
 ## Strategy Overview
 - **Type**: Beta-neutral S&P 100 defensive
-- **Focus**: Large-cap defensive stocks
-- **Capital**: $100,118.84
-- **Positions**: 3 active
+- **Focus**: Large-cap quality stocks
+- **Capital**: $103,018.33
+- **Positions**: 8 active (AAPL, JPM, MSFT, GOOGL, XOM, CVX, HD, NVDA)
 - **Style**: Buy-and-hold with beta targeting
 
 ## Current Performance
-- **Portfolio Value**: $100,118.84
-- **Total P&L**: +$118.84
+- **Portfolio Value**: $103,018.33
+- **Total P&L**: +$3,018.23
 - **Portfolio Beta**: ~1.0 (target)
 - **Average Hold**: Long-term
 
 ## Portfolio Allocation
-- **Deployed Capital**: ~49% ($49,162)
-- **Cash Reserve**: ~51% ($50,956)
+- **Deployed Capital**: ~97% ($100,522)
+- **Cash Reserve**: ~3% ($2,496)
 - **Strategy**: Maintains beta-neutral positioning
 - **Rebalancing**: Only when beta drifts significantly
 
-## Current Positions
-| Symbol | Shares | Entry | Current | P&L | P&L % | Beta |
-|--------|--------|-------|---------|-----|-------|------|
-| PG | 39 | $155.20 | $156.85 | +$64.35 | +1.06% | 0.60 |
-| JNJ | 37 | $162.45 | $163.22 | +$28.49 | +0.47% | 0.70 |
-| KO | 104 | $58.90 | $59.15 | +$26.00 | +0.42% | 0.65 |
+## Current Positions (ACTUAL from Alpaca)
+| Symbol | Shares | Entry | Current | P&L | P&L % |
+|--------|--------|-------|---------|-----|-------|
+| AAPL | 93 | $226.87 | $239.67 | +$1,190.20 | +5.64% |
+| JPM | 71 | $299.23 | $312.60 | +$949.27 | +4.47% |
+| MSFT | 34 | $500.62 | $512.34 | +$398.41 | +2.34% |
+| GOOGL | 24 | $237.86 | $252.22 | +$344.59 | +6.04% |
+| XOM | 44 | $112.23 | $115.62 | +$149.16 | +3.02% |
+| CVX | 31 | $157.87 | $160.51 | +$81.84 | +1.67% |
+| HD | 12 | $416.53 | $418.01 | +$17.76 | +0.36% |
+| NVDA | 100 | $175.99 | $174.86 | -$113.00 | -0.64% |
 
 ## Strategy Details
 - **Target Beta**: 1.0 (market neutral)

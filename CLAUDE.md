@@ -277,3 +277,4 @@ ai-stock-trading-bot/
 - Execute ORDERS_FOR_SEPT_18.md at market open
 - Monitor INCY for FDA decision Thursday
 - remember updates
+- great, always keep these strategies separate
