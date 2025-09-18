@@ -4,42 +4,54 @@
   "strategy": "Beta-Neutral S&P 100 with 2X Leverage",
   "last_updated": "2025-09-16T15:30:00",
   "status": "ACTIVE - Defensive Rebalancing",
-  
   "configuration": {
     "api_keys": {
       "alpaca_key": "PK6FZK4DAQVTD7DYVH78",
       "alpaca_secret": "JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt",
       "base_url": "https://paper-api.alpaca.markets"
     },
-    
     "trading_parameters": {
-      "portfolio_value": 120879.90,
+      "portfolio_value": 102914.84,
       "target_leverage": 2.0,
       "target_beta": 1.0,
       "current_beta": 1.144,
       "beta_tolerance": 0.1,
       "max_positions": 15,
-      "current_positions": 3,
+      "current_positions": 8,
       "position_size_min": 0.03,
       "position_size_max": 0.08,
-      "stop_loss_range": [0.03, 0.05],
-      "take_profit_range": [0.08, 0.12]
+      "stop_loss_range": [
+        0.03,
+        0.05
+      ],
+      "take_profit_range": [
+        0.08,
+        0.12
+      ]
     },
-    
     "universe": {
       "index": "S&P 100",
       "market_cap_min": 10000000000,
       "exclude_sectors": [],
       "focus": "Large-cap quality stocks with beta diversification",
-      "defensive_stocks": ["PG", "JNJ", "KO", "WMT", "VZ", "T"]
+      "defensive_stocks": [
+        "PG",
+        "JNJ",
+        "KO",
+        "WMT",
+        "VZ",
+        "T"
+      ]
     },
-    
     "risk_management": {
       "portfolio_beta_target": 1.0,
       "max_sector_exposure": 0.25,
       "correlation_limit": 0.7,
       "var_confidence": 0.95,
-      "trailing_stop_pct": [3, 5],
+      "trailing_stop_pct": [
+        3,
+        5
+      ],
       "rebalance_frequency": "daily",
       "leverage_controls": {
         "max_leverage": 2.0,
@@ -49,7 +61,6 @@
         "force_close_threshold": 0.07
       }
     },
-    
     "research_sources": {
       "primary": "Enhanced 7-agent consensus system",
       "secondary": "Beta analysis + Fundamental + Technical",
@@ -57,58 +68,86 @@
       "beta_calculation_period": 252
     }
   },
-  
   "current_portfolio": {
     "positions": [
       {
-        "symbol": "PG",
-        "shares": 39,
-        "avg_price": 155.20,
-        "market_value": 6052.80,
-        "beta": 0.3,
-        "sector": "Consumer Staples"
+        "symbol": "AAPL",
+        "shares": 93,
+        "avg_price": 226.872151,
+        "market_value": 22263.27,
+        "unrealized_pl": 1164.16
       },
       {
-        "symbol": "JNJ", 
-        "shares": 37,
-        "avg_price": 162.45,
-        "market_value": 6010.65,
-        "beta": 0.4,
-        "sector": "Healthcare"
+        "symbol": "CVX",
+        "shares": 31,
+        "avg_price": 157.87,
+        "market_value": 4973.64,
+        "unrealized_pl": 79.67
       },
       {
-        "symbol": "KO",
-        "shares": 104,
-        "avg_price": 58.90,
-        "market_value": 6125.60,
-        "beta": 0.5,
-        "sector": "Consumer Staples"
+        "symbol": "GOOGL",
+        "shares": 24,
+        "avg_price": 237.862083,
+        "market_value": 6053.28,
+        "unrealized_pl": 344.59
+      },
+      {
+        "symbol": "HD",
+        "shares": 12,
+        "avg_price": 416.53,
+        "market_value": 5016.0,
+        "unrealized_pl": 17.64
+      },
+      {
+        "symbol": "JPM",
+        "shares": 71,
+        "avg_price": 299.23,
+        "market_value": 22152.0,
+        "unrealized_pl": 906.67
+      },
+      {
+        "symbol": "MSFT",
+        "shares": 34,
+        "avg_price": 500.622059,
+        "market_value": 17408.0,
+        "unrealized_pl": 386.85
+      },
+      {
+        "symbol": "NVDA",
+        "shares": 100,
+        "avg_price": 175.99,
+        "market_value": 17465.0,
+        "unrealized_pl": -134.0
+      },
+      {
+        "symbol": "XOM",
+        "shares": 44,
+        "avg_price": 112.23,
+        "market_value": 5087.28,
+        "unrealized_pl": 149.16
       }
     ],
-    "total_market_value": 18189.05,
-    "cash_available": 102690.85,
+    "total_market_value": 100418.47,
+    "cash_available": 2496.37,
     "portfolio_beta": 1.0,
     "sector_allocation": {
       "Consumer Staples": 0.67,
       "Healthcare": 0.33
     }
   },
-  
   "latest_activity": {
-    "date": "2025-09-16",
-    "action": "Defensive Rebalancing",
+    "date": "2025-09-18",
+    "action": "Daily position update",
     "trades_executed": 3,
     "strategy_change": "Beta reduction from 1.144 to 1.0",
     "risk_adjustment": "Increased defensive allocation"
   },
-  
   "pending_actions": [
     "Monitor beta convergence to 1.0 target",
-    "Evaluate hedge position requirements", 
+    "Evaluate hedge position requirements",
     "Assess correlation matrix for current holdings",
     "Review leverage utilization vs risk metrics"
   ],
-  
   "performance_metrics": {
     "total_return_pct": 20.88,
     "sharpe_ratio": "TBD",

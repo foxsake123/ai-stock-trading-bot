@@ -1,0 +1,61 @@
+{
+  "date": "2025-09-18",
+  "time": "09:00:00",
+  "source": "ChatGPT TradingAgents Pre-Market",
+  "trades": [
+    {
+      "symbol": "INCY",
+      "action": "LONG",
+      "entry": 84.00,
+      "stop": 80.00,
+      "target": 92.00,
+      "size_pct": 5,
+      "catalyst": "Sept 19 FDA decision (PDUFA) - Opzelura pediatric approval",
+      "risk_reward": 2.0
+    },
+    {
+      "symbol": "SRRK",
+      "action": "LONG",
+      "entry": 32.00,
+      "stop": 27.00,
+      "target": 40.00,
+      "size_pct": 3,
+      "catalyst": "Sept 22 FDA decision - apitegromab (SMA drug)",
+      "risk_reward": 1.6
+    },
+    {
+      "symbol": "FBIO",
+      "action": "LONG",
+      "entry": 2.40,
+      "stop": 2.00,
+      "target": 3.00,
+      "size_pct": 2,
+      "catalyst": "Sept 30 FDA decision - rare disease drug, PRV potential",
+      "risk_reward": 1.5
+    },
+    {
+      "symbol": "RIVN",
+      "action": "LONG",
+      "entry": 14.50,
+      "stop": 12.70,
+      "target": 16.00,
+      "size_pct": 6,
+      "catalyst": "Early Oct deliveries report; R2 model updates",
+      "risk_reward": 0.83
+    },
+    {
+      "symbol": "HELE",
+      "action": "LONG",
+      "entry": 23.00,
+      "stop": 20.00,
+      "target": 28.00,
+      "size_pct": 4,
+      "catalyst": "Ongoing - New CEO + insider buys; turnaround progress",
+      "risk_reward": 1.67
+    }
+  ],
+  "trade_count": 5,
+  "total_allocation": 20,
+  "url": "https://chatgpt.com/share/dr_68cc0025e4f481918731ee6a0e27e5f9",
+  "extracted_at": "2025-09-18T09:00:00"
+}

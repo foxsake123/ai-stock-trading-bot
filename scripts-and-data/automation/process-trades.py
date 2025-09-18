@@ -150,8 +150,26 @@ class TradeProcessor:
     def process_all_trades(self):
         """Process all trades from ChatGPT report"""
         
-        # Load report
-        report_path = '02_data/research/reports/pre_market_daily/2025-09-16_chatgpt_report.json'
+        # Load report - check multiple paths
+        from datetime import datetime
+        today = datetime.now().strftime('%Y-%m-%d')
+
+        # Try multiple paths
+        report_paths = [
+            f'../daily-json/chatgpt/chatgpt_report_{today}.json',
+            '../daily-json/chatgpt/chatgpt_report_2025-09-18.json',
+            '../../02_data/research/reports/pre_market_daily/2025-09-16_chatgpt_report.json'
+        ]
+
+        report_path = None
+        for path in report_paths:
+            if os.path.exists(path):
+                report_path = path
+                break
+
+        if not report_path:
+            logging.error("No ChatGPT report found!")
+            return {'analyses': [], 'executed': [], 'rejected': []}
         with open(report_path, 'r') as f:
             report = json.load(f)
         
