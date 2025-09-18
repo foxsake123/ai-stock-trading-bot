@@ -11,13 +11,13 @@
       "base_url": "https://paper-api.alpaca.markets"
     },
     "trading_parameters": {
-      "portfolio_value": 102694.32,
+      "portfolio_value": 102684.4,
       "target_leverage": 2.0,
       "target_beta": 1.0,
       "current_beta": 1.144,
       "beta_tolerance": 0.1,
       "max_positions": 15,
-      "current_positions": 8,
+      "current_positions": 11,
       "position_size_min": 0.03,
       "position_size_max": 0.08,
       "stop_loss_range": [
@@ -72,63 +72,84 @@
     "positions": [
       {
         "symbol": "AAPL",
-        "shares": 93,
+        "shares": 84,
         "avg_price": 226.872151,
-        "market_value": 22320.465,
-        "unrealized_pl": 1221.355
+        "market_value": 19993.5792,
+        "unrealized_pl": 936.318555
       },
       {
         "symbol": "CVX",
         "shares": 31,
         "avg_price": 157.87,
-        "market_value": 4961.24,
-        "unrealized_pl": 67.27
+        "market_value": 4912.7374,
+        "unrealized_pl": 18.7674
       },
       {
         "symbol": "GOOGL",
         "shares": 24,
         "avg_price": 237.862083,
-        "market_value": 6042.0,
-        "unrealized_pl": 333.31
+        "market_value": 6020.16,
+        "unrealized_pl": 311.47
       },
       {
         "symbol": "HD",
         "shares": 12,
         "avg_price": 416.53,
-        "market_value": 5010.6,
-        "unrealized_pl": 12.24
+        "market_value": 5029.68,
+        "unrealized_pl": 31.32
+      },
+      {
+        "symbol": "JNJ",
+        "shares": 30,
+        "avg_price": 175.38,
+        "market_value": 5261.7,
+        "unrealized_pl": 0.3
       },
       {
         "symbol": "JPM",
-        "shares": 71,
+        "shares": 64,
         "avg_price": 299.23,
-        "market_value": 22061.83,
-        "unrealized_pl": 816.5
+        "market_value": 19964.8,
+        "unrealized_pl": 814.08
       },
       {
         "symbol": "MSFT",
         "shares": 34,
         "avg_price": 500.622059,
-        "market_value": 17348.84,
-        "unrealized_pl": 327.69
+        "market_value": 17307.7,
+        "unrealized_pl": 286.55
       },
       {
         "symbol": "NVDA",
-        "shares": 100,
+        "shares": 60,
         "avg_price": 175.99,
-        "market_value": 17398.0,
-        "unrealized_pl": -201.0
+        "market_value": 10578.342,
+        "unrealized_pl": 18.942
+      },
+      {
+        "symbol": "PG",
+        "shares": 33,
+        "avg_price": 157.82,
+        "market_value": 5207.895,
+        "unrealized_pl": -0.165
+      },
+      {
+        "symbol": "WMT",
+        "shares": 35,
+        "avg_price": 103.84,
+        "market_value": 3633.35,
+        "unrealized_pl": -1.05
       },
       {
         "symbol": "XOM",
         "shares": 44,
         "avg_price": 112.23,
-        "market_value": 5068.36,
-        "unrealized_pl": 130.24
+        "market_value": 5004.78,
+        "unrealized_pl": 66.66
       }
     ],
-    "total_market_value": 100211.335,
-    "cash_available": 2496.37,
+    "total_market_value": 102914.7236,
+    "cash_available": -230.32,
     "portfolio_beta": 1.0,
     "sector_allocation": {
       "Consumer Staples": 0.67,
