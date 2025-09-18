@@ -278,3 +278,4 @@ ai-stock-trading-bot/
 - Monitor INCY for FDA decision Thursday
 - remember updates
 - great, always keep these strategies separate
+- remember separate strategies, update todos, product plan, and suggest enhancements

@@ -1,0 +1,100 @@
+{
+  "bot": "DEE-BOT",
+  "strategy": "Beta-Neutral S&P 100",
+  "date": "2025-09-18",
+  "time": "09:30:00",
+  "source": "ChatGPT DEE-BOT Corrected Pre-Market",
+  "current_portfolio": {
+    "total_value": 103018.33,
+    "total_pnl": 3018.23,
+    "capital_deployed_pct": 97,
+    "cash_reserve_pct": 3,
+    "portfolio_beta": 1.0,
+    "concentration_risk": "AAPL+JPM = 44% of portfolio"
+  },
+  "recommendations": [
+    {
+      "action": "REDUCE",
+      "symbol": "NVDA",
+      "percent_to_sell": 20,
+      "shares_to_sell": 20,
+      "reason": "Underperforming (-0.64% P&L) and adds excess volatility",
+      "impact": "Reduces volatility while maintaining beta neutrality"
+    },
+    {
+      "action": "TRIM",
+      "symbol": "AAPL",
+      "percent_to_sell": 10,
+      "shares_to_sell": 9,
+      "reason": "Part of 44% concentration with JPM",
+      "impact": "Reduces concentration risk"
+    },
+    {
+      "action": "TRIM",
+      "symbol": "JPM",
+      "percent_to_sell": 10,
+      "shares_to_sell": 7,
+      "reason": "Part of 44% concentration with AAPL",
+      "impact": "Reduces concentration risk"
+    },
+    {
+      "action": "ADD",
+      "symbol": "JNJ",
+      "allocation_pct": 5,
+      "shares_to_buy": 30,
+      "reason": "Defensive healthcare play with stable beta",
+      "sector": "Healthcare",
+      "impact": "Adds stability and reduces volatility"
+    },
+    {
+      "action": "ADD",
+      "symbol": "PG",
+      "allocation_pct": 5,
+      "shares_to_buy": 33,
+      "reason": "Strong cash flow, consumer staples exposure",
+      "sector": "Consumer Staples",
+      "impact": "Balances tech/financials bias"
+    },
+    {
+      "action": "ADD",
+      "symbol": "WMT",
+      "allocation_pct": 5,
+      "shares_to_buy": 35,
+      "reason": "Resilient consumer spending theme",
+      "sector": "Consumer Staples",
+      "impact": "Further portfolio diversification"
+    },
+    {
+      "action": "MAINTAIN",
+      "symbols": ["MSFT", "GOOGL", "XOM", "CVX", "HD"],
+      "reason": "These holdings contribute to portfolio balance and beta neutrality",
+      "impact": "Only minor re-sizing needed for weight alignment"
+    }
+  ],
+  "execution_plan": {
+    "total_sells": {
+      "NVDA": 20,
+      "AAPL": 9,
+      "JPM": 7
+    },
+    "total_buys": {
+      "JNJ": 30,
+      "PG": 33,
+      "WMT": 35
+    },
+    "estimated_capital_movement": {
+      "from_sells": 8500,
+      "to_buys": 8500,
+      "net_cash_change": 0
+    }
+  },
+  "risk_metrics": {
+    "target_beta": 1.0,
+    "expected_beta_after": 0.98,
+    "sector_diversification": "Improved with healthcare and consumer staples",
+    "concentration_after": "No single position > 15%"
+  },
+  "automation_note": "These recommendations should be generated daily at 7 AM ET on trading days",
+  "strategy_alignment": "CORRECT - All recommendations are S&P 100 large-caps appropriate for beta-neutral strategy",
+  "extracted_at": "2025-09-18T09:30:00"
+}

@@ -11,7 +11,7 @@
       "base_url": "https://paper-api.alpaca.markets"
     },
     "trading_parameters": {
-      "portfolio_value": 102914.84,
+      "portfolio_value": 102694.32,
       "target_leverage": 2.0,
       "target_beta": 1.0,
       "current_beta": 1.144,
@@ -74,60 +74,60 @@
         "symbol": "AAPL",
         "shares": 93,
         "avg_price": 226.872151,
-        "market_value": 22263.27,
-        "unrealized_pl": 1164.16
+        "market_value": 22320.465,
+        "unrealized_pl": 1221.355
       },
       {
         "symbol": "CVX",
         "shares": 31,
         "avg_price": 157.87,
-        "market_value": 4973.64,
-        "unrealized_pl": 79.67
+        "market_value": 4961.24,
+        "unrealized_pl": 67.27
       },
       {
         "symbol": "GOOGL",
         "shares": 24,
         "avg_price": 237.862083,
-        "market_value": 6053.28,
-        "unrealized_pl": 344.59
+        "market_value": 6042.0,
+        "unrealized_pl": 333.31
       },
       {
         "symbol": "HD",
         "shares": 12,
         "avg_price": 416.53,
-        "market_value": 5016.0,
-        "unrealized_pl": 17.64
+        "market_value": 5010.6,
+        "unrealized_pl": 12.24
       },
       {
         "symbol": "JPM",
         "shares": 71,
         "avg_price": 299.23,
-        "market_value": 22152.0,
-        "unrealized_pl": 906.67
+        "market_value": 22061.83,
+        "unrealized_pl": 816.5
       },
       {
         "symbol": "MSFT",
         "shares": 34,
         "avg_price": 500.622059,
-        "market_value": 17408.0,
-        "unrealized_pl": 386.85
+        "market_value": 17348.84,
+        "unrealized_pl": 327.69
       },
       {
         "symbol": "NVDA",
         "shares": 100,
         "avg_price": 175.99,
-        "market_value": 17465.0,
-        "unrealized_pl": -134.0
+        "market_value": 17398.0,
+        "unrealized_pl": -201.0
       },
       {
         "symbol": "XOM",
         "shares": 44,
         "avg_price": 112.23,
-        "market_value": 5087.28,
-        "unrealized_pl": 149.16
+        "market_value": 5068.36,
+        "unrealized_pl": 130.24
       }
     ],
-    "total_market_value": 100418.47,
+    "total_market_value": 100211.335,
     "cash_available": 2496.37,
     "portfolio_beta": 1.0,
     "sector_allocation": {

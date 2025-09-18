@@ -1,0 +1,59 @@
+{
+  "bot": "DEE-BOT",
+  "strategy": "Beta-Neutral S&P 100",
+  "date": "2025-09-18",
+  "time": "07:00:00",
+  "source": "ChatGPT DEE-BOT Pre-Market",
+  "current_portfolio": {
+    "total_value": 103018.33,
+    "total_pnl": 3018.23,
+    "capital_deployed_pct": 97,
+    "cash_reserve": 2496,
+    "portfolio_beta": 1.0
+  },
+  "current_positions": [
+    {"symbol": "AAPL", "shares": 93, "weight_pct": 22.2, "pnl": 1190.20},
+    {"symbol": "JPM", "shares": 71, "weight_pct": 22.1, "pnl": 949.27},
+    {"symbol": "MSFT", "shares": 34, "weight_pct": 17.3, "pnl": 398.41},
+    {"symbol": "NVDA", "shares": 100, "weight_pct": 17.4, "pnl": -113.00},
+    {"symbol": "GOOGL", "shares": 24, "weight_pct": 6.0, "pnl": 344.59},
+    {"symbol": "XOM", "shares": 44, "weight_pct": 5.1, "pnl": 149.16},
+    {"symbol": "CVX", "shares": 31, "weight_pct": 5.0, "pnl": 81.84},
+    {"symbol": "HD", "shares": 12, "weight_pct": 5.0, "pnl": 17.76}
+  ],
+  "recommendations": [
+    {
+      "action": "REBALANCE",
+      "symbol": "AAPL",
+      "type": "REDUCE",
+      "shares_to_sell": 37,
+      "reason": "Concentration risk - reduce from 22% to 13%",
+      "capital_freed": 9000
+    },
+    {
+      "action": "HEDGE",
+      "instrument": "QQQ_PUT_SPREAD",
+      "strike_long": 350,
+      "strike_short": 330,
+      "expiry": "November",
+      "allocation_pct": 2,
+      "reason": "Maintain beta neutrality and downside protection"
+    }
+  ],
+  "warnings": [
+    "Small-cap recommendations (SOUN, IONQ, BBAI) are NOT appropriate for DEE-BOT beta-neutral strategy",
+    "These should be directed to SHORGAN-BOT instead",
+    "DEE-BOT should focus on S&P 100 large-caps only"
+  ],
+  "correct_strategy": {
+    "focus": "S&P 100 large-cap stocks",
+    "objective": "Maintain portfolio beta near 1.0",
+    "rebalance_trigger": "Beta drift > 0.15",
+    "appropriate_trades": [
+      "Reduce high-beta positions when beta > 1.15",
+      "Add defensive stocks when beta < 0.85",
+      "Rotate within S&P 100 constituents only"
+    ]
+  },
+  "extracted_at": "2025-09-18T09:15:00"
+}

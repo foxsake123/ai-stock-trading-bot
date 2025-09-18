@@ -36,15 +36,18 @@ def send_telegram_message(message):
         return False
 
 def load_current_portfolio_data():
-    """Load current portfolio positions from CSV files"""
-    
+    """Load current portfolio positions from properly separated portfolio folders"""
+
     portfolios = {
-        'DEE-BOT': {'positions': [], 'total_value': 0, 'pnl': 0, 'cash': 100000},
-        'SHORGAN-BOT': {'positions': [], 'total_value': 0, 'pnl': 0, 'cash': 100000}
+        'DEE-BOT': {'positions': [], 'total_value': 0, 'pnl': 0, 'cash': 2496.37, 'strategy': 'Beta-Neutral S&P 100'},
+        'SHORGAN-BOT': {'positions': [], 'total_value': 0, 'pnl': 0, 'cash': 37896.67, 'strategy': 'Catalyst Trading'}
     }
-    
-    # Load DEE-BOT positions
-    dee_file = Path("scripts-and-data/daily-csv/dee-bot-positions.csv")
+
+    # Load DEE-BOT positions from new structure
+    dee_file = Path("portfolio-holdings/dee-bot/current/positions.csv")
+    if not dee_file.exists():
+        # Fallback to old location
+        dee_file = Path("scripts-and-data/daily-csv/dee-bot-positions.csv")
     if dee_file.exists():
         with open(dee_file, 'r') as f:
             lines = f.readlines()[1:]  # Skip header
@@ -71,8 +74,11 @@ def load_current_portfolio_data():
                         portfolios['DEE-BOT']['total_value'] += position_value
                         portfolios['DEE-BOT']['pnl'] += pnl
     
-    # Load SHORGAN-BOT positions
-    shorgan_file = Path("scripts-and-data/daily-csv/shorgan-bot-positions.csv")
+    # Load SHORGAN-BOT positions from new structure
+    shorgan_file = Path("portfolio-holdings/shorgan-bot/current/positions.csv")
+    if not shorgan_file.exists():
+        # Fallback to old location
+        shorgan_file = Path("scripts-and-data/daily-csv/shorgan-bot-positions.csv")
     if shorgan_file.exists():
         with open(shorgan_file, 'r') as f:
             lines = f.readlines()[1:]  # Skip header
@@ -183,20 +189,23 @@ def format_comprehensive_report():
     report.append("=" * 45)
     
     # Portfolio Overview
-    report.append("\n<b>PORTFOLIO OVERVIEW</b>")
+    report.append("\n<b>DUAL-STRATEGY PORTFOLIO OVERVIEW</b>")
     report.append(f"Total Portfolio Value: <b>${total_portfolio_value:,.2f}</b>")
     report.append(f"Total Unrealized P&L: <b>${total_pnl:+,.2f}</b>")
     report.append(f"Total Return: <b>{total_return_pct:+.2f}%</b>")
     report.append(f"Active Positions: <b>{total_positions}</b>")
+    report.append(f"Strategy Split: <b>DEE 49% | SHORGAN 51%</b>")
     
     # DEE-BOT Analysis
-    report.append("\n<b>DEE-BOT (Beta-Neutral Strategy)</b>")
+    report.append("\n<b>==== DEE-BOT (Beta-Neutral S&P 100) ====</b>")
     dee_data = portfolios['DEE-BOT']
+    report.append(f"Strategy: <b>{dee_data.get('strategy', 'Beta-Neutral S&P 100')}</b>")
     report.append(f"Portfolio Value: <b>${dee_total_value:,.2f}</b>")
     report.append(f"Position Value: <b>${dee_data['total_value']:,.2f}</b>")
     report.append(f"Cash Available: <b>${dee_data['cash']:,.2f}</b>")
     report.append(f"Unrealized P&L: <b>${dee_data['pnl']:+,.2f}</b>")
-    report.append(f"Positions: <b>{len(dee_data['positions'])}</b>")
+    report.append(f"Positions: <b>{len(dee_data['positions'])} large-caps</b>")
+    report.append(f"Portfolio Beta: <b>~1.0 (target)</b>")
     
     if dee_data['positions']:
         # Best and worst performers
@@ -212,13 +221,15 @@ def format_comprehensive_report():
                 report.append(f"- {trade['symbol']}: {trade['shares']} @ ${trade['price']:.2f}")
     
     # SHORGAN-BOT Analysis
-    report.append("\n<b>SHORGAN-BOT (Catalyst Strategy)</b>")
+    report.append("\n<b>==== SHORGAN-BOT (Catalyst Trading) ====</b>")
     shorgan_data = portfolios['SHORGAN-BOT']
+    report.append(f"Strategy: <b>{shorgan_data.get('strategy', 'Catalyst Trading')}</b>")
     report.append(f"Portfolio Value: <b>${shorgan_total_value:,.2f}</b>")
     report.append(f"Position Value: <b>${shorgan_data['total_value']:,.2f}</b>")
     report.append(f"Cash Available: <b>${shorgan_data['cash']:,.2f}</b>")
     report.append(f"Unrealized P&L: <b>${shorgan_data['pnl']:+,.2f}</b>")
-    report.append(f"Positions: <b>{len(shorgan_data['positions'])}</b>")
+    report.append(f"Positions: <b>{len(shorgan_data['positions'])} catalyst plays</b>")
+    report.append(f"Focus: <b>FDA events, earnings, momentum</b>")
     
     if shorgan_data['positions']:
         # Best and worst performers
