@@ -1,0 +1,5 @@
+date,symbol,action,quantity,price,order_id,catalyst,stop_loss,take_profit,bot
+2025-01-10,PLTR,BUY,520,14.5,73f60f65-2ea3-4aa6-aee4-24924bd11089,AI contract rumors,13.3,16.0,SHORGAN
+2025-01-10,CVNA,SELL,100,48.0,b291d76c-9c22-4e12-aeae-d5b17c62a6ae,Parabolic exhaustion pattern,51.5,42.0,SHORGAN
+2025-01-10,CRWD,BUY,36,210.0,72611c8f-f847-4add-8f5b-8edae7e37522,Cybersecurity demand surge,199.5,225.0,SHORGAN
+2025-01-10,UPST,SELL,100,30.0,e3da904c-fc8e-4126-87d8-03d29498306c,Breaking key support level,31.5,27.0,SHORGAN
