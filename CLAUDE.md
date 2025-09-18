@@ -1,5 +1,5 @@
 # AI Trading Bot - Session Continuity Documentation
-## Last Updated: September 17, 2025, 6:00 PM ET - CBRL MISS, ORDERS READY
+## Last Updated: September 18, 2025, 8:30 AM ET - READY FOR MORNING EXECUTION
 
 ---
 
@@ -84,6 +84,12 @@ python scripts-and-data/automation/process-trades.py
 
 # Generate DEE-BOT trades
 python scripts-and-data/automation/generate_enhanced_dee_bot_trades.py
+
+# Daily portfolio snapshot (4 PM)
+python scripts-and-data/automation/daily_portfolio_snapshot.py
+
+# Quick holdings check
+python show_holdings.py
 ```
 
 ---
@@ -102,6 +108,8 @@ python scripts-and-data/automation/generate_enhanced_dee_bot_trades.py
 ### Position Tracking
 - `scripts-and-data/daily-csv/dee-bot-positions.csv`
 - `scripts-and-data/daily-csv/shorgan-bot-positions.csv`
+- `scripts-and-data/daily-snapshots/` - Daily CSV archives
+- `show_holdings.py` - Quick position viewer
 
 ### Morning Execution
 - `docs/ORDERS_FOR_SEPT_18.md` - Tomorrow's trade plan
@@ -133,13 +141,13 @@ python scripts-and-data/automation/generate_enhanced_dee_bot_trades.py
 
 ## 📈 RECENT ACCOMPLISHMENTS
 
-### September 17, 2025
-- ✅ **CBRL Earnings**: Monitored and documented miss
-- ✅ **Exit Strategy**: Created urgent action plan
-- ✅ **Profit Taking**: Planned RGTI/ORCL reductions
-- ✅ **ChatGPT Extension**: Fixed with enhanced error handling
-- ✅ **Stop Losses**: Documented all 20 positions
-- ✅ **Orders Ready**: Tomorrow's execution plan complete
+### September 17-18, 2025
+- ✅ **CBRL Earnings**: Monitored miss (-10% AH), exit ready
+- ✅ **Daily Snapshot System**: Created automated portfolio CSV generator
+- ✅ **Profit Taking**: RGTI/ORCL orders ready (65 & 21 shares)
+- ✅ **ChatGPT Extension**: Fixed with visual indicators
+- ✅ **Stop Losses**: KSS near trigger at $15.18
+- ✅ **Orders Ready**: Sept 18 execution plan documented
 
 ### System Enhancements
 - Dual-bot architecture fully operational
