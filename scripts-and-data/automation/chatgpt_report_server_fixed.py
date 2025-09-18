@@ -68,9 +68,12 @@ class ReportProcessor:
 
                             # Prices with tilde or dollar sign
                             elif '~' in part or '$' in part:
-                                price_match = re.search(r'\$?([\d.]+)', part)
+                                price_match = re.search(r'\$?(\d+\.?\d*)', part)
                                 if price_match:
-                                    price = float(price_match.group(1))
+                                    try:
+                                        price = float(price_match.group(1))
+                                    except ValueError:
+                                        continue
                                     if 'entry' not in trade:
                                         trade['entry'] = price
                                         # Check for long/short
@@ -112,19 +115,28 @@ class ReportProcessor:
                     line_lower = line.lower()
 
                     if 'entry' in line_lower or '~' in line:
-                        price = re.search(r'\$?([\d.]+)', line)
+                        price = re.search(r'\$?(\d+\.?\d*)', line)
                         if price and 'entry' not in current_trade:
-                            current_trade['entry'] = float(price.group(1))
+                            try:
+                                current_trade['entry'] = float(price.group(1))
+                            except ValueError:
+                                pass
 
                     if 'stop' in line_lower:
-                        price = re.search(r'\$?([\d.]+)', line)
+                        price = re.search(r'\$?(\d+\.?\d*)', line)
                         if price:
-                            current_trade['stop'] = float(price.group(1))
+                            try:
+                                current_trade['stop'] = float(price.group(1))
+                            except ValueError:
+                                pass
 
                     if 'target' in line_lower:
-                        price = re.search(r'\$?([\d.]+)', line)
+                        price = re.search(r'\$?(\d+\.?\d*)', line)
                         if price:
-                            current_trade['target'] = float(price.group(1))
+                            try:
+                                current_trade['target'] = float(price.group(1))
+                            except ValueError:
+                                pass
 
                     if '%' in line:
                         size = re.search(r'(\d+)%', line)
