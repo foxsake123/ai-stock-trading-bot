@@ -268,3 +268,4 @@ ai-stock-trading-bot/
 - Maintain continuity documentation for seamless handoffs
 - Execute ORDERS_FOR_SEPT_18.md at market open
 - Monitor INCY for FDA decision Thursday
+- remember updates
