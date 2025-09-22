@@ -201,19 +201,19 @@ class TradingSystem:
         """Run analysis for a single agent"""
         try:
             result = agent.analyze(ticker, market_data, **kwargs)
-            
+
             # Publish to message bus
-            from communication.protocols import AgentMessage
-            message = AgentMessage(
-                agent_id=agent.agent_id,
-                agent_type=agent.agent_type,
-                timestamp=datetime.now(),
-                ticker=ticker,
-                message_type="analysis",
-                payload=result,
-                priority=1
-            )
-            await self.message_bus.publish(message)
+            topic = "agent.analysis"
+            message = {
+                "agent_id": agent.agent_id,
+                "agent_type": agent.agent_type,
+                "timestamp": datetime.now().isoformat(),
+                "ticker": ticker,
+                "message_type": "analysis",
+                "payload": result,
+                "priority": 1,
+            }
+            await self.message_bus.publish(topic, message)
             
             return result
             
