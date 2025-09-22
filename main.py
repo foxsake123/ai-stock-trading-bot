@@ -13,6 +13,7 @@ import json
 # Import communication components
 from communication.message_bus import MessageBus
 from communication.coordinator import Coordinator
+from communication.protocols import AgentMessage
 
 # Import all agents
 from agents.fundamental_analyst import FundamentalAnalystAgent
@@ -203,7 +204,6 @@ class TradingSystem:
             result = agent.analyze(ticker, market_data, **kwargs)
             
             # Publish to message bus
-            from communication.protocols import AgentMessage
             message = AgentMessage(
                 agent_id=agent.agent_id,
                 agent_type=agent.agent_type,
