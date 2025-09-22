@@ -93,105 +93,59 @@ class TradingSystem:
         try:
             # Get market data
             market_data = await self._get_market_data(ticker)
-            
+
             # Get supplementary data
             news_data = await self._get_news_data(ticker)
             social_data = await self._get_social_data(ticker)
-            
+            portfolio_data = await self._get_portfolio_data()
+
             # Prepare data packages for agents
             catalyst_data = {
                 'news': news_data,
                 'events': []  # Would fetch from calendar API
             }
-            
+
             fundamental_data = self._extract_fundamental_data(market_data)
             technical_data = self._extract_technical_data(market_data)
-            
-            # Run all agent analyses in parallel
-            tasks = []
-            
-            # Fundamental analyst
-            tasks.append(self._run_agent_analysis(
-                self.agents['fundamental'], ticker, market_data,
-                fundamental_data=fundamental_data
-            ))
-            
-            # Technical analyst
-            tasks.append(self._run_agent_analysis(
-                self.agents['technical'], ticker, market_data,
-                technical_data=technical_data
-            ))
-            
-            # News analyst
-            tasks.append(self._run_agent_analysis(
-                self.agents['news'], ticker, market_data,
-                news_data=news_data
-            ))
-            
-            # Sentiment analyst
-            tasks.append(self._run_agent_analysis(
-                self.agents['sentiment'], ticker, market_data,
-                social_data=social_data
-            ))
-            
-            # Bull researcher
-            tasks.append(self._run_agent_analysis(
-                self.agents['bull'], ticker, market_data,
-                fundamental_data=fundamental_data,
-                technical_data=technical_data,
-                news_data=news_data
-            ))
-            
-            # Bear researcher
-            tasks.append(self._run_agent_analysis(
-                self.agents['bear'], ticker, market_data,
-                fundamental_data=fundamental_data,
-                technical_data=technical_data,
-                news_data=news_data
-            ))
-            
-            # Catalyst trader
-            tasks.append(self._run_agent_analysis(
-                self.agents['catalyst'], ticker, market_data,
-                catalyst_data=catalyst_data
-            ))
-            
-            # Options trader
-            tasks.append(self._run_agent_analysis(
-                self.agents['options'], ticker, market_data,
-                catalyst_data=catalyst_data
-            ))
-            
-            # Wait for all analyses to complete
-            agent_results = await asyncio.gather(*tasks)
-            
-            # Risk manager analyzes last with all other results
-            portfolio_data = await self._get_portfolio_data()
-            risk_result = await self._run_agent_analysis(
-                self.agents['risk'], ticker, market_data,
-                portfolio_data=portfolio_data,
-                agent_reports=agent_results
+
+            supplemental_data = {}
+
+            def _register_context(agent_key: str, context: Dict[str, Any]) -> None:
+                agent = self.agents[agent_key]
+                supplemental_data[agent.agent_type] = context
+                supplemental_data[agent.agent_id] = context
+
+            _register_context('fundamental', {'fundamental_data': fundamental_data})
+            _register_context('technical', {'technical_data': technical_data})
+            _register_context('news', {'news_data': news_data})
+            _register_context('sentiment', {'social_data': social_data})
+            bull_context = {
+                'fundamental_data': fundamental_data,
+                'technical_data': technical_data,
+                'news_data': news_data
+            }
+            _register_context('bull', bull_context)
+            _register_context('bear', bull_context)
+            _register_context('catalyst', {'catalyst_data': catalyst_data})
+            _register_context('options', {'catalyst_data': catalyst_data})
+            _register_context('risk', {'portfolio_data': portfolio_data})
+
+            analyses = self.coordinator.request_analysis(
+                ticker,
+                market_data,
+                supplemental_data=supplemental_data
             )
-            
-            # Add risk result to agent results
-            agent_results.append(risk_result)
-            
-            # Let coordinator make final decision
-            await self.coordinator.request_analysis(ticker, market_data, catalyst_data)
-            
-            # Wait for coordinator decision
-            await asyncio.sleep(2)  # Give time for consensus
-            
-            # Get final decision
+
+            self.coordinator.make_decision(ticker, analyses)
             decisions = self.coordinator.get_decision_history(ticker, limit=1)
-            
+
             if decisions:
                 final_decision = decisions[0]
                 logger.info(f"Final decision for {ticker}: {final_decision.action.value}")
                 return final_decision.to_dict()
-            else:
-                logger.warning(f"No decision reached for {ticker}")
-                return {"error": "No consensus reached"}
+
+            logger.warning(f"No decision reached for {ticker}")
+            return {"error": "No consensus reached"}
                 
         except Exception as e:
             logger.error(f"Analysis failed for {ticker}: {e}")
