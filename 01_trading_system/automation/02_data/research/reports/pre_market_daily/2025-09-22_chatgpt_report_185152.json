@@ -1,0 +1,11 @@
+{
+  "date": "2025-09-22",
+  "time": "18:51:52",
+  "source": "ChatGPT TradingAgents (Auto-captured)",
+  "trades": [],
+  "market_context": "Got it \u2705 \u2014 each Shorgan & Dee Combined Report will now open with a visual summary table like this:\n\ud83d\udcca Portfolio Snapshot\nBot\tCapital\tCash %\tNet Exposure\tTop Holdings\tP&L (Unrealized)\nShorgan (Offense)\t$XX,XXX\tX%\t80% long / 5% short\tSOUN, IONQ, BBAI\t+$X,XXX (+X%)\nDee (Defense)\t$XX,XXX\t3%\tBeta \u2248 1.0\tAAPL, JPM, MSFT, JNJ\t+$X,XXX (+X%)",
+  "raw_text": "Got it \u2705 \u2014 each Shorgan & Dee Combined Report will now open with a visual summary table like this:\n\n\ud83d\udcca Portfolio Snapshot\nBot\tCapital\tCash %\tNet Exposure\tTop Holdings\tP&L (Unrealized)\nShorgan (Offense)\t$XX,XXX\tX%\t80% long / 5% short\tSOUN, IONQ, BBAI\t+$X,XXX (+X%)\nDee (Defense)\t$XX,XXX\t3%\tBeta \u2248 1.0\tAAPL, JPM, MSFT, JNJ\t+$X,XXX (+X%)\n\nThis way you\u2019ll have a quick-glance dashboard before diving into each section (market overview, Shorgan catalysts, Dee defense, combined outlook).\n\nWould you like me to include sector exposure bars (e.g., Tech 45%, Financials 20%, Energy 15%, Staples 10%, Healthcare 10%) in that snapshot as well, or keep it simple with holdings + P&L?",
+  "conversation_id": "",
+  "url": "https://chatgpt.com/g/g-p-68b723c17d988191b66f1b2637d00c33/c/68ca25bc-2bec-8321-b397-93af90cf339b",
+  "capture_timestamp": "2025-09-22T22:51:52.271Z"
+}
