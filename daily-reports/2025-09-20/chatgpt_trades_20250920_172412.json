@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-09-20T17:24:12.340979",
+  "dee_bot": [
+    {
+      "action": "BUY",
+      "symbol": "XOM",
+      "quantity": 15,
+      "notes": ""
+    },
+    {
+      "action": "BUY",
+      "symbol": "CVX",
+      "quantity": 10,
+      "notes": ""
+    }
+  ],
+  "shorgan_bot": [],
+  "total_trades": 2
+}

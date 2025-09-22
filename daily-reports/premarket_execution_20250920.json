@@ -1,0 +1,37 @@
+{
+  "timestamp": "2025-09-20T16:54:03.221099",
+  "dee_bot": {
+    "recommended": [
+      {
+        "symbol": "XOM",
+        "quantity": 15,
+        "action": "BUY",
+        "reason": "Add energy exposure"
+      },
+      {
+        "symbol": "CVX",
+        "quantity": 10,
+        "action": "BUY",
+        "reason": "Energy diversification"
+      }
+    ],
+    "executed": []
+  },
+  "shorgan_bot": {
+    "recommended": [
+      {
+        "symbol": "INCY",
+        "quantity": 0,
+        "action": "HOLD",
+        "catalyst": "FDA Decision Today"
+      },
+      {
+        "symbol": "KSS",
+        "quantity": 0,
+        "action": "MONITOR",
+        "catalyst": "Near Stop Loss"
+      }
+    ],
+    "executed": []
+  }
+}
