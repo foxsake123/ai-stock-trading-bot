@@ -11,7 +11,7 @@
       "base_url": "https://paper-api.alpaca.markets"
     },
     "trading_parameters": {
-      "portfolio_value": 102721.73,
+      "portfolio_value": 103672.12,
       "target_leverage": 2.0,
       "target_beta": 1.0,
       "current_beta": 1.144,
@@ -73,83 +73,83 @@
       {
         "symbol": "AAPL",
         "shares": 84,
-        "avg_price": 226.872151,
-        "market_value": 20004.6,
-        "unrealized_pl": 947.339355
+        "avg_price": 226.914237,
+        "market_value": 20622.0,
+        "unrealized_pl": 1561.204092
       },
       {
         "symbol": "CVX",
         "shares": 31,
         "avg_price": 157.87,
-        "market_value": 4924.505,
-        "unrealized_pl": 30.535
+        "market_value": 4842.51,
+        "unrealized_pl": -51.46
       },
       {
         "symbol": "GOOGL",
         "shares": 24,
         "avg_price": 237.862083,
-        "market_value": 6048.72,
-        "unrealized_pl": 340.03
+        "market_value": 6113.28,
+        "unrealized_pl": 404.59
       },
       {
         "symbol": "HD",
         "shares": 12,
         "avg_price": 416.53,
-        "market_value": 5009.76,
-        "unrealized_pl": 11.4
+        "market_value": 4988.28,
+        "unrealized_pl": -10.08
       },
       {
         "symbol": "JNJ",
         "shares": 30,
         "avg_price": 175.38,
-        "market_value": 5224.8,
-        "unrealized_pl": -36.6
+        "market_value": 5285.7,
+        "unrealized_pl": 24.3
       },
       {
         "symbol": "JPM",
         "shares": 64,
         "avg_price": 299.23,
-        "market_value": 20046.72,
-        "unrealized_pl": 896.0
+        "market_value": 20145.92,
+        "unrealized_pl": 995.2
       },
       {
         "symbol": "MSFT",
         "shares": 34,
         "avg_price": 500.622059,
-        "market_value": 17287.3,
-        "unrealized_pl": 266.15
+        "market_value": 17609.62,
+        "unrealized_pl": 588.47
       },
       {
         "symbol": "NVDA",
         "shares": 60,
         "avg_price": 175.99,
-        "market_value": 10575.6,
-        "unrealized_pl": 16.2
+        "market_value": 10600.2,
+        "unrealized_pl": 40.8
       },
       {
         "symbol": "PG",
         "shares": 33,
         "avg_price": 157.82,
-        "market_value": 5190.24,
-        "unrealized_pl": -17.82
+        "market_value": 5149.32,
+        "unrealized_pl": -58.74
       },
       {
         "symbol": "WMT",
         "shares": 35,
         "avg_price": 103.84,
-        "market_value": 3626.0,
-        "unrealized_pl": -8.4
+        "market_value": 3581.55,
+        "unrealized_pl": -52.85
       },
       {
         "symbol": "XOM",
         "shares": 44,
         "avg_price": 112.23,
-        "market_value": 5013.8,
-        "unrealized_pl": 75.68
+        "market_value": 4964.08,
+        "unrealized_pl": 25.96
       }
     ],
-    "total_market_value": 102952.045,
-    "cash_available": -230.32,
+    "total_market_value": 103902.45999999999,
+    "cash_available": -230.34,
     "portfolio_beta": 1.0,
     "sector_allocation": {
       "Consumer Staples": 0.67,
@@ -157,7 +157,7 @@
     }
   },
   "latest_activity": {
-    "date": "2025-09-18",
+    "date": "2025-09-20",
     "action": "Daily position update",
     "trades_executed": 3,
     "strategy_change": "Beta reduction from 1.144 to 1.0",
