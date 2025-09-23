@@ -53,7 +53,7 @@ class FinancialDatasetsClient:
         interval_multiplier: int = 1
     ) -> pd.DataFrame:
         """Fetch historical price data from Financial Datasets API"""
-        url = f"{self.base_url}/prices/"
+        url = f"{self.base_url}/prices"
         params = {
             "ticker": ticker,
             "interval": interval,
@@ -63,22 +63,26 @@ class FinancialDatasetsClient:
             "limit": 5000
         }
 
-        all_data = []
-        next_page = url
-
-        while next_page:
-            response = requests.get(next_page, headers=self.headers, params=params if next_page == url else None)
+        try:
+            response = requests.get(url, headers=self.headers, params=params)
             if response.status_code != 200:
                 raise Exception(f"API Error: {response.status_code} - {response.text}")
 
             data = response.json()
-            all_data.extend(data.get("prices", []))
-            next_page = data.get("next_page_url")
+            # The API returns a dict with 'prices' key containing the array
+            if isinstance(data, dict) and 'prices' in data:
+                prices = data['prices']
+                if prices and isinstance(prices, list):
+                    df = pd.DataFrame(prices)
+                    if 'time' in df.columns:
+                        df['time'] = pd.to_datetime(df['time'])
+                        df.set_index('time', inplace=True)
+                        return df[['open', 'high', 'low', 'close', 'volume']]
 
-        df = pd.DataFrame(all_data)
-        df['time'] = pd.to_datetime(df['time'])
-        df.set_index('time', inplace=True)
-        return df
+            return pd.DataFrame()
+        except Exception as e:
+            print(f"Error fetching data for {ticker}: {e}")
+            return pd.DataFrame()
 
 class BacktestEngine:
     def __init__(self, api_key: str, initial_capital: float = 100000):

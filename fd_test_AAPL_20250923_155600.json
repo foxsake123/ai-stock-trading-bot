@@ -1,0 +1,225 @@
+{
+  "ticker": "AAPL",
+  "timestamp": "2025-09-23T15:55:59.325168",
+  "data_source": "Financial Datasets API",
+  "price_analysis": {
+    "ticker": "AAPL",
+    "price": 256.08,
+    "change": 7.779999999999973,
+    "change_percent": 3.1333064840918134,
+    "volume": 105517416,
+    "high": 256.64,
+    "low": 248.12,
+    "timestamp": "2025-09-22T04:00:00Z",
+    "52_week_high": 260.1,
+    "52_week_low": 169.21,
+    "ytd_return": 12.58444827129421,
+    "volatility": 0.3254986941410081
+  },
+  "fundamental_analysis": {
+    "gross_margin": 46.67825022942796,
+    "operating_margin": 31.866381156316915,
+    "net_margin": 24.296115019883757,
+    "roa": 29.9491696707341,
+    "revenue": 408625000000.0,
+    "net_income": 99280000000.0,
+    "eps": 6.61,
+    "total_assets": 331495000000.0,
+    "total_equity": 0
+  },
+  "earnings_analysis": {
+    "recent_earnings": [
+      {
+        "date": "2025-06-28",
+        "revenue": 94036000000.0,
+        "net_income": 23434000000.0,
+        "eps": 1.57,
+        "reported_eps": 1.57,
+        "estimated_eps": 0,
+        "surprise_percent": 0
+      },
+      {
+        "date": "2025-03-29",
+        "revenue": 95359000000.0,
+        "net_income": 24780000000.0,
+        "eps": 1.65,
+        "reported_eps": 1.65,
+        "estimated_eps": 0,
+        "surprise_percent": 0
+      },
+      {
+        "date": "2024-12-28",
+        "revenue": 124300000000.0,
+        "net_income": 36330000000.0,
+        "eps": 2.41,
+        "reported_eps": 2.41,
+        "estimated_eps": 0,
+        "surprise_percent": 0
+      },
+      {
+        "date": "2024-09-28",
+        "revenue": 94930000000.0,
+        "net_income": 14736000000.0,
+        "eps": 0.98,
+        "reported_eps": 0.98,
+        "estimated_eps": 0,
+        "surprise_percent": 0
+      }
+    ],
+    "avg_surprise": 0.0,
+    "beat_rate": 0.0
+  },
+  "analyst_sentiment": {},
+  "news_sentiment": {
+    "recent_articles": [
+      {
+        "title": "These Under-$10 Stocks Are Up 100%+ This Quarter - And Some Still Have Room to Run",
+        "summary": "David Wagner",
+        "url": "https://www.investing.com/analysis/these-under10-stocks-are-up-100-this-quarter--and-some-still-have-room-to-run-200667317",
+        "source": "Investing.com",
+        "published": "2025-09-23T14:32:00Z",
+        "tickers": [
+          "AAPL"
+        ],
+        "sentiment": "positive"
+      },
+      {
+        "title": "Structured Technical Interview Prep Course Offers Software Engineers' Career Guide, Mock Interviews for Meta and Reddit With Coding and Algorithms Coaching",
+        "summary": "Sarah Chen",
+        "url": "https://www.globenewswire.com/news-release/2025/09/22/3154228/0/en/Structured-Technical-Interview-Prep-Course-Offers-Software-Engineers-Career-Guide-Mock-Interviews-for-Meta-and-Reddit-With-Coding-and-Algorithms-Coaching.html",
+        "source": "GlobeNewswire Inc.",
+        "published": "2025-09-22T17:56:00Z",
+        "tickers": [
+          "AAPL"
+        ],
+        "sentiment": "positive"
+      },
+      {
+        "title": "S&P 500: Could Forward Earnings and Fed Cuts Spark a 1999-Style Rally?",
+        "summary": "Ed Yardeni",
+        "url": "https://www.investing.com/analysis/could-forward-earnings-and-fed-cuts-spark-a-1999style-rally-200667251",
+        "source": "Investing.com",
+        "published": "2025-09-22T15:12:00Z",
+        "tickers": [
+          "AAPL"
+        ],
+        "sentiment": "positive"
+      }
+    ],
+    "article_count": 3,
+    "avg_sentiment": 0.6999999999999998
+  },
+  "insider_activity": {
+    "recent_trades": [
+      {
+        "filing_date": "2025-08-29",
+        "trade_date": null,
+        "insider_name": "Arthur D Levinson",
+        "title": null,
+        "transaction": "Sell",
+        "shares": 0,
+        "price": null,
+        "value": null,
+        "shares_owned": 56000
+      },
+      {
+        "filing_date": "2025-08-29",
+        "trade_date": "2025-08-28",
+        "insider_name": "Arthur D Levinson",
+        "title": null,
+        "transaction": "Sell",
+        "shares": 90000,
+        "price": 232.07,
+        "value": 20886300,
+        "shares_owned": 4069576
+      },
+      {
+        "filing_date": "2025-08-27",
+        "trade_date": "2025-08-25",
+        "insider_name": "Chris Kondo",
+        "title": "Principal Accounting Officer",
+        "transaction": "Sell",
+        "shares": 435,
+        "price": 0.0,
+        "value": null,
+        "shares_owned": 15098
+      },
+      {
+        "filing_date": "2025-08-12",
+        "trade_date": "2025-08-08",
+        "insider_name": "Deirdre Obrien",
+        "title": "Senior Vice President",
+        "transaction": "Sell",
+        "shares": 34821,
+        "price": 223.2,
+        "value": 7772047,
+        "shares_owned": 136687
+      },
+      {
+        "filing_date": "2025-07-25",
+        "trade_date": null,
+        "insider_name": "Sabih Khan",
+        "title": "COO",
+        "transaction": "Sell",
+        "shares": 0,
+        "price": null,
+        "value": null,
+        "shares_owned": 43901
+      }
+    ],
+    "buy_sell_ratio": 0.0,
+    "net_sentiment": "bearish"
+  },
+  "institutional_activity": {
+    "ticker": "AAPL",
+    "number_of_institutions": 10,
+    "shares_held": 895310,
+    "value_held": 183714907.0,
+    "top_holders": [
+      {
+        "name": "CONVERGENCE_FINANCIAL_LLC",
+        "shares": 43373,
+        "value": 8898894.0
+      },
+      {
+        "name": "DDFG_INC",
+        "shares": 24170,
+        "value": 4959043.0
+      },
+      {
+        "name": "CM_WEALTH_ADVISORS_LLC",
+        "shares": 31622,
+        "value": 6487886.0
+      },
+      {
+        "name": "CLOUDALPHA_CAPITAL_MANAGEMENT_LIMITED",
+        "shares": 625000,
+        "value": 128231250.0
+      },
+      {
+        "name": "CHERRY_CREEK_INVESTMENT_ADVISORS_INC",
+        "shares": 47130,
+        "value": 9669590.0
+      }
+    ]
+  },
+  "technical_signals": {},
+  "dee_bot_signals": {
+    "quality_score": 25,
+    "dividend_safety": 0,
+    "valuation_score": 0,
+    "stability_score": 50,
+    "recommendation": "AVOID"
+  },
+  "shorgan_bot_signals": {
+    "catalyst_score": 0,
+    "momentum_score": 0,
+    "sentiment_score": 60,
+    "insider_score": 0,
+    "recommendation": "WAIT"
+  },
+  "risk_assessment": [
+    "Net insider selling activity"
+  ],
+  "opportunities": []
+}
