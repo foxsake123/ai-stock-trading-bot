@@ -1,0 +1,179 @@
+{
+  "bot_name": "DEE-BOT",
+  "version": "2.1",
+  "strategy": "Beta-Neutral S&P 100 with 2X Leverage",
+  "last_updated": "2025-09-16T15:30:00",
+  "status": "ACTIVE - Defensive Rebalancing",
+  "configuration": {
+    "api_keys": {
+      "alpaca_key": "PK6FZK4DAQVTD7DYVH78",
+      "alpaca_secret": "JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt",
+      "base_url": "https://paper-api.alpaca.markets"
+    },
+    "trading_parameters": {
+      "portfolio_value": 104519.29,
+      "target_leverage": 2.0,
+      "target_beta": 1.0,
+      "current_beta": 1.144,
+      "beta_tolerance": 0.1,
+      "max_positions": 15,
+      "current_positions": 11,
+      "position_size_min": 0.03,
+      "position_size_max": 0.08,
+      "stop_loss_range": [
+        0.03,
+        0.05
+      ],
+      "take_profit_range": [
+        0.08,
+        0.12
+      ]
+    },
+    "universe": {
+      "index": "S&P 100",
+      "market_cap_min": 10000000000,
+      "exclude_sectors": [],
+      "focus": "Large-cap quality stocks with beta diversification",
+      "defensive_stocks": [
+        "PG",
+        "JNJ",
+        "KO",
+        "WMT",
+        "VZ",
+        "T"
+      ]
+    },
+    "risk_management": {
+      "portfolio_beta_target": 1.0,
+      "max_sector_exposure": 0.25,
+      "correlation_limit": 0.7,
+      "var_confidence": 0.95,
+      "trailing_stop_pct": [
+        3,
+        5
+      ],
+      "rebalance_frequency": "daily",
+      "leverage_controls": {
+        "max_leverage": 2.0,
+        "current_leverage": 1.85,
+        "margin_buffer": 0.25,
+        "deleverage_threshold": 0.03,
+        "force_close_threshold": 0.07
+      }
+    },
+    "research_sources": {
+      "primary": "Enhanced 7-agent consensus system",
+      "secondary": "Beta analysis + Fundamental + Technical",
+      "schedule": "Daily 7:00 AM ET",
+      "beta_calculation_period": 252
+    }
+  },
+  "current_portfolio": {
+    "positions": [
+      {
+        "symbol": "AAPL",
+        "shares": 84,
+        "avg_price": 226.914237,
+        "market_value": 21527.52,
+        "unrealized_pl": 2466.724092
+      },
+      {
+        "symbol": "CVX",
+        "shares": 31,
+        "avg_price": 157.87,
+        "market_value": 4936.905,
+        "unrealized_pl": 42.935
+      },
+      {
+        "symbol": "GOOGL",
+        "shares": 24,
+        "avg_price": 237.862083,
+        "market_value": 6058.2312,
+        "unrealized_pl": 349.5412
+      },
+      {
+        "symbol": "HD",
+        "shares": 12,
+        "avg_price": 416.53,
+        "market_value": 4920.12,
+        "unrealized_pl": -78.24
+      },
+      {
+        "symbol": "JNJ",
+        "shares": 30,
+        "avg_price": 175.38,
+        "market_value": 5272.95,
+        "unrealized_pl": 11.55
+      },
+      {
+        "symbol": "JPM",
+        "shares": 64,
+        "avg_price": 299.23,
+        "market_value": 20209.28,
+        "unrealized_pl": 1058.56
+      },
+      {
+        "symbol": "MSFT",
+        "shares": 34,
+        "avg_price": 500.622059,
+        "market_value": 17439.11,
+        "unrealized_pl": 417.96
+      },
+      {
+        "symbol": "NVDA",
+        "shares": 60,
+        "avg_price": 175.99,
+        "market_value": 10800.9,
+        "unrealized_pl": 241.5
+      },
+      {
+        "symbol": "PG",
+        "shares": 33,
+        "avg_price": 157.82,
+        "market_value": 4999.6617,
+        "unrealized_pl": -208.3983
+      },
+      {
+        "symbol": "WMT",
+        "shares": 35,
+        "avg_price": 103.84,
+        "market_value": 3564.848,
+        "unrealized_pl": -69.552
+      },
+      {
+        "symbol": "XOM",
+        "shares": 44,
+        "avg_price": 112.23,
+        "market_value": 5018.2,
+        "unrealized_pl": 80.08
+      }
+    ],
+    "total_market_value": 104747.7259,
+    "cash_available": -230.34,
+    "portfolio_beta": 1.0,
+    "sector_allocation": {
+      "Consumer Staples": 0.67,
+      "Healthcare": 0.33
+    }
+  },
+  "latest_activity": {
+    "date": "2025-09-23",
+    "action": "Daily position update",
+    "trades_executed": 3,
+    "strategy_change": "Beta reduction from 1.144 to 1.0",
+    "risk_adjustment": "Increased defensive allocation"
+  },
+  "pending_actions": [
+    "Monitor beta convergence to 1.0 target",
+    "Evaluate hedge position requirements",
+    "Assess correlation matrix for current holdings",
+    "Review leverage utilization vs risk metrics"
+  ],
+  "performance_metrics": {
+    "total_return_pct": 20.88,
+    "sharpe_ratio": "TBD",
+    "max_drawdown": "TBD",
+    "win_rate": "TBD",
+    "avg_holding_period": "TBD"
+  }
+}

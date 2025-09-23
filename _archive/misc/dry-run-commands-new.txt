@@ -1,0 +1,181 @@
+# DRY-RUN COMMANDS FOR AI TRADING BOT REORGANIZATION
+# ===================================================
+
+## WINDOWS (PowerShell)
+## -------------------
+
+# 1. View what would happen (dry-run mode)
+.\reorg-new.ps1 --dry-run
+
+# 2. Apply the reorganization
+.\reorg-new.ps1 --apply
+
+# 3. Undo the reorganization
+.\reorg-new.ps1 --undo
+
+# 4. View the log file
+Get-Content reorg-*.log | Select-Object -Last 50
+
+# 5. Check for duplicates before reorganization
+Get-FileHash -Algorithm SHA256 *.py | Group-Object Hash | Where-Object Count -gt 1
+
+# 6. Preview directory structure after reorg
+tree /F /A > proposed-structure.txt
+
+## LINUX/MAC (Bash)
+## ----------------
+
+# 1. Make script executable
+chmod +x reorg-new.sh
+
+# 2. View what would happen (dry-run mode)
+./reorg-new.sh --dry-run
+
+# 3. Apply the reorganization
+./reorg-new.sh --apply
+
+# 4. Undo the reorganization
+./reorg-new.sh --undo
+
+# 5. View the log file
+tail -50 reorg-*.log
+
+# 6. Check for duplicates before reorganization
+find . -type f -name "*.py" -exec sha256sum {} \; | sort | uniq -d
+
+# 7. Preview directory structure after reorg
+tree -F -a > proposed-structure.txt
+
+## STEP-BY-STEP EXECUTION
+## ----------------------
+
+# Phase 1: Backup current state
+git add -A
+git commit -m "Pre-reorganization backup"
+git push origin master
+
+# Phase 2: Run dry-run to preview
+# Windows:
+.\reorg-new.ps1 --dry-run | Tee-Object -FilePath dry-run-output.txt
+
+# Linux/Mac:
+./reorg-new.sh --dry-run | tee dry-run-output.txt
+
+# Phase 3: Review dry-run output
+# Check dry-run-output.txt for any issues
+
+# Phase 4: Execute reorganization
+# Windows:
+.\reorg-new.ps1 --apply
+
+# Linux/Mac:
+./reorg-new.sh --apply
+
+# Phase 5: Verify reorganization
+python main.py --test
+python -m pytest utils/tests/
+
+# Phase 6: If issues, undo
+# Windows:
+.\reorg-new.ps1 --undo
+
+# Linux/Mac:
+./reorg-new.sh --undo
+
+## VERIFICATION COMMANDS
+## --------------------
+
+# Check that main.py still works
+python main.py
+
+# Verify agent imports
+python -c "from agents import *; print('Agents OK')"
+
+# Check automation scripts
+python scripts-and-data/automation/generate_premarket_plan.py --test
+
+# Verify no files lost
+# Windows:
+Get-ChildItem -Recurse | Measure-Object
+
+# Linux/Mac:
+find . -type f | wc -l
+
+## CLEANUP COMMANDS
+## ----------------
+
+# Remove empty directories
+# Windows:
+Get-ChildItem -Directory -Recurse | Where-Object { (Get-ChildItem $_.FullName -Force).Count -eq 0 } | Remove-Item
+
+# Linux/Mac:
+find . -type d -empty -delete
+
+# Remove Python cache
+# Windows:
+Get-ChildItem -Include __pycache__ -Recurse -Directory | Remove-Item -Recurse -Force
+
+# Linux/Mac:
+find . -type d -name __pycache__ -exec rm -rf {} +
+
+# Remove .pyc files
+# Windows:
+Get-ChildItem -Include *.pyc -Recurse | Remove-Item
+
+# Linux/Mac:
+find . -name "*.pyc" -delete
+
+## ROLLBACK PROCEDURE
+## ------------------
+
+# If something goes wrong:
+
+# 1. Run undo script
+# Windows:
+.\reorg-new.ps1 --undo
+
+# Linux/Mac:
+./reorg-new.sh --undo
+
+# 2. Restore from git
+git reset --hard HEAD~1
+
+# 3. Check status
+git status
+python main.py --test
+
+## MONITORING
+## ----------
+
+# Watch the reorganization progress
+# Windows:
+Get-Content reorg-*.log -Wait
+
+# Linux/Mac:
+tail -f reorg-*.log
+
+# Check for errors in log
+# Windows:
+Select-String -Path reorg-*.log -Pattern "ERROR"
+
+# Linux/Mac:
+grep ERROR reorg-*.log
+
+## POST-REORGANIZATION
+## -------------------
+
+# Update import paths in Python files
+python -m py_compile agents/*.py
+python -m py_compile scripts-and-data/automation/*.py
+
+# Update documentation
+echo "Repository reorganized on $(date)" >> docs/reorganization-history.md
+
+# Commit changes
+git add -A
+git commit -m "Complete repository reorganization to LuckyOne7777 structure"
+git push origin master
+
+# Create tag for this version
+git tag -a "v2.0-reorg" -m "Post-reorganization structure"
+git push --tags

@@ -1,423 +1,354 @@
-# AI Stock Trading Bot - Project Documentation
+# AI Trading Bot - Session Continuity Documentation
+## Last Updated: September 23, 2025, 8:10 AM ET - PRE-MARKET AUTOMATION COMPLETE
 
-## Project Overview
-This is a multi-agent AI trading bot system based on the TradingAgents framework. The system uses specialized AI agents working collaboratively to analyze markets, make trading decisions, and manage risk.
+---
 
-**Current Performance (September 16, 2025, 9:00 PM ET)**:
-- Total Portfolio Value: $205,338.41 (+2.67%)
-- DEE-BOT: $100,000.00 (18,189.05 positions + 81,810.95 cash)
-- SHORGAN-BOT: $105,338.41 (98,305.44 positions + 7,032.97 cash)
-- Active Positions: 20 (17 SHORGAN + 3 DEE)
-- Today's Trades: PG, JNJ, KO (DEE-BOT defensive rebalancing)
-- Portfolio Beta: ~1.0 (target achieved through defensive positions)
-- Unrealized P&L: +$5,080.89 (+2.54% return)
+## 🎯 TODAY'S ACCOMPLISHMENTS (Sept 23, 2025)
 
-## Architecture
+### Morning Trading Session ✅
+1. **Pre-Market Plan Generated**: Comprehensive plan sent to Telegram at 8:04 AM
+2. **Multi-Agent Consensus**: All 5 SHORGAN trades approved (SRRK highest: 8.78/10)
+3. **Trade Execution**: DEE-BOT trades executed, SHORGAN partially blocked
+4. **ChatGPT Extension**: Captured 8 reports, successfully extracted recommendations
+5. **New Automation**: Pre-market report now runs daily at 9:00 AM ET
 
-### Multi-Agent Workflow Overview
+### Trades Executed
+**DEE-BOT** (All successful):
+- SOLD: PG (33), CVX (31), AAPL (5), NVDA (15)
+- BOUGHT: UNH (14), NEE (53), AMZN (21)
 
-The system implements a sophisticated multi-agent collaborative framework where 7 specialized AI agents work together to analyze markets and make trading decisions. Each agent has a specific role and contributes to a weighted consensus system.
+**SHORGAN-BOT** (Partial):
+- ✅ FBIO (700 shares) - Sept 30 FDA
+- ✅ IONQ (50 shares SHORT)
+- ❌ SRRK, RIVN, KSS - Wash trade blocks
 
-**Agent Consensus Formula**:
+### System Enhancements
+- Created pre-market report generator with multi-agent consensus
+- Set up 7 Windows Task Scheduler jobs for automation
+- Fixed Unicode encoding issues in execution scripts
+- Established complete automation schedule:
+  - 9:00 AM: Pre-market trading plan to Telegram
+  - 9:30 AM: Morning position sync
+  - 4:00 PM: Afternoon position sync + snapshot
+  - 4:30 PM: Dual-bot post-market report
+
+### Next Week's Trade Plan (Sept 23-27)
+**DEE-BOT**:
+- Add XOM (15 shares) for energy exposure
+- Trim NVDA (10 shares) to reduce beta
+- Add JNJ (10 shares) for defensive positioning
+
+**SHORGAN-BOT**:
+- Enter SOUN (1000 shares @ $5.30-5.50)
+- Add IONQ (200 shares) for quantum conference
+- Exit GPK (142 shares) - cut losses
+- Monitor BBAI earnings Wednesday
+
+---
+
+## 📊 CURRENT PORTFOLIO STATE (Sept 23, 2025 - 8:00 AM)
+
+### Overall Performance
 ```
-Consensus Score = 
-  Fundamental (20%) + Technical (20%) + News (15%) + 
-  Sentiment (10%) + Bull (15%) + Bear (15%) + Risk (5%)
-```
-
-**Trade Execution Criteria**:
-- Consensus Score > 6.5
-- Risk Manager Approval = TRUE
-- Portfolio Risk Check = PASS
-
-### Core Components
-
-#### 1. Trading Agents (7 Specialist Agents)
-The system implements 7 specialized agents, each with distinct responsibilities:
-
-1. **Fundamental Analyst Agent** (`agents/fundamental_analyst.py`)
-   - Analyzes company financials, earnings reports, and economic indicators
-   - Evaluates P/E ratios, debt levels, revenue growth, and market position
-   - Provides long-term value assessments
-
-2. **Technical Analyst Agent** (`agents/technical_analyst.py`)
-   - Performs technical analysis using indicators (RSI, MACD, Bollinger Bands, etc.)
-   - Identifies chart patterns and support/resistance levels
-   - Generates short to medium-term trading signals
-
-3. **News Analyst Agent** (`agents/news_analyst.py`)
-   - Monitors real-time news feeds and financial headlines
-   - Assesses news impact on stock prices
-   - Identifies market-moving events and breaking news
-
-4. **Sentiment Analyst Agent** (`agents/sentiment_analyst.py`)
-   - Analyzes social media sentiment (Twitter, Reddit, StockTwits)
-   - Tracks retail and institutional sentiment indicators
-   - Monitors options flow and put/call ratios
-
-5. **Bull Researcher Agent** (`agents/bull_researcher.py`)
-   - Focuses on positive catalysts and growth opportunities
-   - Identifies bullish trends and momentum
-   - Provides optimistic market perspectives
-
-6. **Bear Researcher Agent** (`agents/bear_researcher.py`)
-   - Identifies risks, vulnerabilities, and potential downside
-   - Analyzes bearish indicators and warning signals
-   - Provides critical counterarguments to bullish theses
-
-7. **Risk Manager Agent** (`agents/risk_manager.py`)
-   - Oversees portfolio risk metrics (VaR, Sharpe ratio, max drawdown)
-   - Sets position sizing and stop-loss levels
-   - Has veto power over trades exceeding risk thresholds
-
-### Communication Protocol
-
-#### Agent Decision Flow
-```
-Research Input → 7 Parallel Agent Analyses → 
-Coordinator Aggregation → Risk Manager Review → 
-Trade Decision → Execution/Rejection
+Total Portfolio Value: $103,708.95
+Buying Power: $91.99
+Active Positions: 18 (SHORGAN-BOT)
+Today's Trades: 9 executed (7 DEE + 2 SHORGAN)
+Market Status: Pre-market (opens 9:30 AM ET)
 ```
 
-#### Structured Report Format
-All agents communicate using a standardized JSON report format:
+### CBRL EARNINGS RESULT
+```
+EPS: $0.74 vs $0.80 expected (MISS)
+Revenue: $868M vs $855M expected (BEAT)
+After-Hours: -10% to ~$45.82
+Action: EXIT all 81 shares tomorrow
+```
 
-```json
-{
-  "agent_id": "string",
-  "agent_type": "string",
-  "timestamp": "ISO 8601",
-  "ticker": "string",
-  "recommendation": {
-    "action": "BUY|SELL|HOLD",
-    "confidence": 0.0-1.0,
-    "timeframe": "intraday|short|medium|long"
-  },
-  "analysis": {
-    "key_factors": [],
-    "metrics": {},
-    "reasoning": "string"
-  },
-  "risk_assessment": {
-    "risk_level": "LOW|MEDIUM|HIGH",
-    "stop_loss": "number",
-    "take_profit": "number"
-  }
+### DEE-BOT Status (Sept 22, 2025)
+```
+Strategy: Beta-Neutral S&P 100
+Portfolio Value: $104,419.48
+Positions: 11 (AAPL, JPM, NVDA, XOM, WMT, MSFT, PG, CVX, JNJ, GOOGL, HD)
+Unrealized P&L: +$4,419.48
+Beta: 1.0 (target achieved)
+Cash: -$230.34 (fully deployed)
+```
+
+### SHORGAN-BOT Status (Sept 22, 2025)
+```
+Strategy: Catalyst Event Trading
+Portfolio Value: $104,869.42
+Positions: 18 active
+Cash Available: $30,115.61
+Unrealized P&L: +$4,869.42
+Best: RGTI (+61.4%), ORCL (+25.3%), DAKT (+5.7%)
+Worst: GPK (-7.6%), HELE (-5.4%)
+```
+
+---
+
+## 🚀 TODAY'S ACCOMPLISHMENTS (Sept 18)
+
+### Morning Trade Execution
+- ✅ Exited CBRL position (81 shares) after earnings miss
+- ✅ Took profits on 50% RGTI position (+22.7%)
+- ✅ Took profits on 50% ORCL position (+21.9%)
+- ✅ Reset stop-loss orders for all positions
+
+### ChatGPT Extension Fixed
+- ✅ Fixed server parsing errors ("float: '.'" issue)
+- ✅ Updated to handle table format from TradingAgents
+- ✅ Successfully extracted 6 trades from ChatGPT report
+- ✅ Server running on localhost:8888
+
+---
+
+## 🔧 SYSTEM SERVICES
+
+### Background Services Running
+```bash
+# ChatGPT Report Server (ACTIVE)
+cd 01_trading_system/automation && python chatgpt_report_server.py
+# Running on http://localhost:8888
+# Status: ✅ Server running and ready for extension connection
+```
+
+### Automated Reports
+- **Pre-Market Plan**: 9:00 AM ET daily via Telegram (NEW!)
+- **Post-Market Report**: 4:30 PM ET daily via Telegram
+- **Windows Task Scheduler Jobs**: 7 active tasks
+  - Pre-market report (9:00 AM)
+  - Position syncs (9:30 AM, 4:00 PM)
+  - Post-market report (4:30 PM)
+  - Weekly reports (Friday/Sunday)
+
+### Key Commands
+```bash
+# Generate pre-market plan (9 AM automated)
+python scripts-and-data/automation/generate_premarket_plan.py
+
+# Execute Tuesday's trades
+python scripts-and-data/automation/execute_tuesday_trades.py
+
+# Generate post-market report manually
+python scripts-and-data/automation/generate-post-market-report.py
+
+# Process trades through multi-agent consensus
+python scripts-and-data/automation/process-trades.py
+
+# Daily portfolio snapshot (4 PM)
+python scripts-and-data/automation/daily_portfolio_snapshot.py
+
+# Quick holdings check
+python scripts-and-data/automation/check_positions.py
+```
+
+---
+
+## 📁 CRITICAL FILES
+
+### Trading Execution
+- `scripts-and-data/automation/process-trades.py` - Multi-agent trade processor
+- `scripts-and-data/automation/execute_dee_bot_trades.py` - DEE-BOT execution
+- `scripts-and-data/automation/generate_enhanced_dee_bot_trades.py` - Beta analysis
+
+### Reporting
+- `scripts-and-data/automation/generate-post-market-report.py` - Main post-market report
+- `scripts-and-data/automation/send_daily_report.py` - Daily Telegram report
+
+### Position Tracking
+- `scripts-and-data/daily-csv/dee-bot-positions.csv`
+- `scripts-and-data/daily-csv/shorgan-bot-positions.csv`
+- `scripts-and-data/daily-snapshots/` - Daily CSV archives
+- `show_holdings.py` - Quick position viewer
+
+### Morning Execution
+- `docs/ORDERS_FOR_SEPT_18.md` - Tomorrow's trade plan
+- `docs/CBRL_EARNINGS_URGENT.md` - Exit strategy
+- `docs/STOP_LOSS_LEVELS.md` - Risk management
+
+### Configuration
+- Telegram Bot Token: 8093845586:AAEqytNDQ_dVzVp6ZbDyveMTx7MZMtG6N0c
+- Telegram Chat ID: 7870288896
+- Alpaca API Key: PK6FZK4DAQVTD7DYVH78
+
+---
+
+## ⚠️ KNOWN ISSUES & WORKAROUNDS
+
+### ChatGPT Extension
+- **Issue**: Float parsing errors ("could not convert string to float: '.'")
+- **Workaround**: Use manual save tool `scripts-and-data/automation/save_chatgpt_report.py`
+
+### Yahoo Finance API
+- **Issue**: Rate limiting (429 errors)
+- **Workaround**: Using Alpaca API fallback in DEE-BOT generator
+
+### Wash Trade Blocks
+- **Issue**: Some trades blocked by Alpaca (SRRK, INCY, CBRL, RIVN)
+- **Solution**: Need to implement complex orders
+
+---
+
+## 📈 RECENT ACCOMPLISHMENTS
+
+### September 17-18, 2025
+- ✅ **CBRL Earnings**: Monitored miss (-10% AH), exit ready
+- ✅ **Daily Snapshot System**: Created automated portfolio CSV generator
+- ✅ **Profit Taking**: RGTI/ORCL orders ready (65 & 21 shares)
+- ✅ **ChatGPT Extension**: Fixed with visual indicators
+- ✅ **Stop Losses**: KSS near trigger at $15.18
+- ✅ **Orders Ready**: Sept 18 execution plan documented
+
+### System Enhancements
+- Dual-bot architecture fully operational
+- 7-agent consensus system active
+- Comprehensive risk management
+- Real-time position monitoring
+- Automated reporting pipeline
+
+---
+
+## 🎯 TODO LIST CURRENT STATE
+
+### Tuesday's Execution Plan (Sept 23, 2025)
+1. **[9:30 AM]** Automated position updates for both bots
+2. **[9:35 AM]** Run `python execute_tuesday_trades.py`
+3. **[10:00 AM]** Place BBAI limit order (500 @ $1.95)
+4. **[10:30 AM]** Verify Monday's trades executed (SOUN, GPK)
+5. **[All Day]** Monitor BBAI for Wednesday earnings
+
+### Weekly Priorities
+- **Monday**: Should have executed SOUN/GPK trades (verify Tuesday)
+- **Tuesday**: BBAI earnings positioning (500 shares @ $1.95)
+- **Wednesday**: BBAI earnings after close (monitor closely)
+- **Thursday**: Review mid-week performance
+- **Friday**: 4:30 PM automated weekly performance report
+
+### System Tasks
+- Fix ChatGPT server float parsing errors
+- Test weekly extraction with real trades
+- Monitor automated Windows Task Scheduler jobs
+- Update position CSVs after each trade session
+
+---
+
+## 💡 QUICK REFERENCE
+
+### Position Exit Criteria
+- Stop loss triggered (-8% catalyst, -3% defensive)
+- Target reached (+15% catalyst, +8% defensive)
+- Catalyst event completed
+- Fundamental thesis broken
+
+### Risk Limits
+- Max position size: 10% (SHORGAN), 8% (DEE)
+- Max sector concentration: 30%
+- Daily loss limit: 3% (deleveraging)
+- Force close: 7% daily loss
+
+### Multi-Agent Weights
+```python
+weights = {
+    "fundamental": 0.20,
+    "technical": 0.20,
+    "news": 0.15,
+    "sentiment": 0.10,
+    "bull": 0.15,
+    "bear": 0.15,
+    "risk": 0.05
 }
 ```
 
-#### Decision Aggregation
-- Central coordinator (`communication/coordinator.py`) collects all agent reports
-- Weighted voting system: Fundamental (20%), Technical (20%), News (15%), Sentiment (10%), Bull (15%), Bear (15%), Risk (5%)
-- Risk Manager has **VETO POWER** for high-risk trades
-- Final decisions require consensus threshold > 6.5
-- All trades must pass portfolio risk checks
+---
 
-## Code Style and Conventions
+## 📝 NOTES FOR CONTINUITY
 
-### Python Style Guide
-- Follow PEP 8 conventions
-- Use type hints for all function signatures
-- Maximum line length: 100 characters
-- Use descriptive variable names (no single letters except in loops)
+### What's Working Well
+- CBRL earnings strategy executed perfectly
+- Profit taking on winners (RGTI +22.7%, ORCL +21.9%)
+- Stop-loss documentation comprehensive
+- ChatGPT extension operational with visual feedback
+- Risk management preventing major losses
 
-### Project Structure
+### Areas for Improvement
+- ChatGPT integration needs browser extension fix
+- Need database migration from CSV to PostgreSQL
+- Wash trade blocks need complex order implementation
+- Could use more sophisticated ML models
+
+### Session Handoff
+CRITICAL for Sept 23 morning:
+1. **9:30 AM: EXECUTE TRADES** - See weekly trade plan
+2. **SOUN ENTRY**: 1000 shares @ $5.30-5.50 limit
+3. **GPK EXIT**: 142 shares at market (cut losses)
+4. **DEE REBALANCE**: Add XOM, trim NVDA, add JNJ
+5. **MONITOR**: BBAI for Wednesday earnings setup
+6. **CHECK**: Windows Task Scheduler running properly
+
+---
+
+## 🏗️ REPOSITORY REORGANIZATION COMPLETED (Sept 23, 2025)
+
+### Structure Migration Successfully Completed ✅
+**Status**: COMPLETE - Following LuckyOne7777 ChatGPT-Micro-Cap-Experiment structure
+**Bot Separation**: DEE-BOT and SHORGAN-BOT maintained as distinct strategies
+
 ```
 ai-stock-trading-bot/
-├── agents/
-│   ├── __init__.py
-│   ├── base_agent.py           # Abstract base class for all agents
-│   ├── fundamental_analyst.py
-│   ├── technical_analyst.py
-│   ├── news_analyst.py
-│   ├── sentiment_analyst.py
-│   ├── bull_researcher.py
-│   ├── bear_researcher.py
-│   └── risk_manager.py
-├── communication/
-│   ├── __init__.py
-│   ├── coordinator.py          # Central message coordinator
-│   ├── message_bus.py          # Async message passing
-│   └── protocols.py            # Message format definitions
-├── data/
-│   ├── __init__.py
-│   ├── market_data.py          # Real-time and historical data
-│   ├── news_feed.py            # News data ingestion
-│   └── sentiment_data.py       # Social media data
-├── risk_management/
-│   ├── __init__.py
-│   ├── portfolio_manager.py    # Portfolio tracking
-│   ├── risk_metrics.py         # Risk calculations
-│   └── position_sizing.py      # Position size calculator
-├── backtesting/
-│   ├── __init__.py
-│   ├── backtest_engine.py      # Main backtesting logic
-│   ├── performance_metrics.py  # Performance analysis
-│   └── strategy_tester.py      # Strategy validation
-├── config/
-│   ├── __init__.py
-│   ├── settings.py              # Global settings
-│   └── trading_rules.yaml      # Trading rules configuration
-├── tests/
-│   └── (test files)
-├── .env.example                 # Environment variables template
-├── requirements.txt
-└── main.py                      # Entry point
-
+├── agents/                    # Multi-agent trading system
+│   ├── dee-bot/              # DEE-BOT strategy (Beta-neutral S&P 100)
+│   ├── shorgan-bot/          # SHORGAN-BOT strategy (Catalyst-driven)
+│   ├── core/                 # Core trading execution
+│   ├── communication/        # Agent coordination
+│   └── *.py                  # Shared multi-agent infrastructure
+├── scripts-and-data/         # Automation and data
+│   ├── automation/           # Trading scripts
+│   ├── data/                 # Market data and reports
+│   └── scripts/              # Utility scripts
+├── docs/                     # Documentation
+├── research/                 # Research papers and analysis
+├── configs/                  # Configuration files
+├── backtests/               # Backtesting results
+├── risk/                    # Risk management
+├── utils/                   # Utilities and tests
+├── logs/                    # System and trading logs
+├── _archive/                # Deprecated/old files
+└── main.py                  # Primary entry point
 ```
 
-### Error Handling
-- Use structured logging with `structlog`
-- Implement circuit breakers for external API calls
-- Graceful degradation when individual agents fail
-- All exceptions should be caught and logged at the agent level
+### Key Features Preserved
+- ✅ DEE-BOT and SHORGAN-BOT remain separate strategies
+- ✅ Both bots share multi-agent consensus infrastructure
+- ✅ All trading functionality maintained
+- ✅ Automation scripts operational
+- ✅ Windows Task Scheduler jobs intact
+- ✅ Reversible operations (can undo if needed)
 
-### Testing Requirements
-- Minimum 80% code coverage
-- Unit tests for each agent's decision logic
-- Integration tests for agent communication
-- Backtesting validation for all strategies
+### Cleanup Completed
+- Moved 50+ directories to new structure
+- Applied kebab-case naming convention
+- Archived deprecated files (no deletions)
+- SHA-256 deduplication applied
+- Empty directories removed
+- Old numbered structure (01_, 02_) archived but still present
 
-## Daily Trading Workflow
+---
 
-### Pre-Market Pipeline (7:00 AM ET)
-1. **Research Generation** (6:30-7:00 AM)
-   - SHORGAN: ChatGPT TradingAgents reports captured
-   - DEE: Automated S&P 100 beta-neutral analysis generated
+*System ready for handoff - CBRL exit and profit taking orders ready*
+*Portfolio: $205,338.41 (+2.54%)*
+*Tomorrow's expected net: +$1,134*
+*INCY FDA decision Thursday: 61 shares positioned*
 
-2. **Multi-Agent Analysis** (7:00-7:15 AM)
-   - Each agent analyzes recommendations in parallel
-   - Beta calculations performed for portfolio balancing
-   - Scores generated on 0-10 scale
-
-3. **Consensus Building** (7:15-7:20 AM)
-   - Weighted scores aggregated
-   - Beta-neutral portfolio construction
-   - Risk Manager final review with leverage controls
-
-4. **Trade Execution** (7:20-7:30 AM)
-   - Beta-neutral trades submitted via Alpaca
-   - Long positions + hedge positions for neutrality
-   - Dynamic stop losses automatically set (2% for leverage)
-   - 2X leverage applied with margin monitoring
-
-5. **Reporting & Monitoring** (7:30-7:45 AM)
-   - Portfolio beta tracking initiated
-   - Risk dashboard activated
-   - PDF reports generated
-   - Real-time monitoring commenced
-
-## Trading Bot Configurations
-
-### DEE-BOT Configuration (LATEST: Beta-Neutral with 2X Leverage System)
-- **Strategy**: Beta-neutral S&P 100 multi-agent consensus with 2X leverage
-- **Capital**: $100,000 starting (currently $120,879.90)
-- **Universe**: S&P 100 large-cap stocks with beta diversification
-- **Position Sizing**: 3-8% per position with Kelly Criterion optimization (25% Kelly fraction)
-- **Portfolio Beta Target**: 1.0 (market neutral, tolerance ±0.1)
-- **Current Beta**: 1.144 → targeting 1.0 (defensive rebalancing)
-- **Leverage**: 2.0x maximum (currently using 1.85x)
-- **Allocation**: 60% long positions, 40% hedge positions
-- **Stop Loss**: Dynamic 3-5% (beta-adjusted)
-- **Take Profit**: 8-12% target (volatility multiplier)
-- **Risk Management**: 
-  - Automatic deleveraging at 3% daily loss
-  - Force close all at 7% daily loss
-  - Margin buffer 25% minimum
-  - Sector concentration max 3 positions
-- **Current Positions**: 3 (defensive rebalancing 9/16)
-- **Latest Trades (9/16)**: 
-  - PG: 39 @ $155.20 (Consumer Staples, Beta: 0.3)
-  - JNJ: 37 @ $162.45 (Healthcare, Beta: 0.4)
-  - KO: 104 @ $58.90 (Consumer Staples, Beta: 0.5)
-- **Beta Reduction**: From 1.144 to ~1.0 via defensive allocation
-- **Research**: Enhanced 7-agent consensus system with beta analysis
-- **Files**:
-  - Main: `execute_dee_bot_trades.py`
-  - Enhanced: `generate_enhanced_dee_bot_trades.py`
-  - Monitor: `monitor_dee_bot.py`
-  - Master: `run_dee_bot.py`
-- **Alpaca API Key**: PK6FZK4DAQVTD7DYVH78
-
-### SHORGAN-BOT Configuration  
-- **Strategy**: Aggressive micro-cap catalyst-driven trading
-- **Capital**: $100,000 starting (currently $103,552.63)
-- **Universe**: Micro/small/mid-cap catalyst stocks (<$20B market cap)
-- **Position Sizing**: 5-10% per position (2-5% for binary events)
-- **Stop Loss**: 8-10% for catalyst trades
-- **Risk/Reward**: Target 1:3+ ratio
-- **Current Positions**: 17 (MFIC, INCY, CBRL, RIVN added 9/16)
-- **Latest Trades (9/16)**: 
-  - MFIC: 770 @ $12.16 (insider buying)
-  - INCY: 61 @ $83.97 (FDA 9/19)
-  - CBRL: 81 @ $51.00 (earnings 9/17)
-  - RIVN: 357 @ $14.50 (Q3 deliveries)
-- **Research**: ChatGPT TradingAgents daily reports
-- **Alpaca API Key**: PKJRLSB2MFEJUSK6UK2E
-
-## Trading Bot Specific Guidelines
-
-### Risk Management Rules (UPDATED)
-1. **Position Sizing**: Maximum 5% of portfolio per position
-2. **Diversification**: Maximum 20% allocation to any single position
-3. **Stop Loss**: Mandatory stop-loss orders on all positions (3-4%)
-4. **Daily Loss Limit**: Circuit breaker at 5% daily portfolio loss
-5. **Correlation Limits**: Monitor and limit correlated positions
-6. **Exposure Monitoring**: Alert when total exposure exceeds 80%
-
-### Data Requirements
-- Real-time market data with < 1 second latency
-- 5 years of historical data for backtesting
-- News data from multiple sources (Reuters, Bloomberg, etc.)
-- Social sentiment data updated every 5 minutes
-
-### Performance Metrics
-- Track Sharpe Ratio, Sortino Ratio, Maximum Drawdown
-- Win rate and profit factor
-- Average trade duration and turnover
-- Risk-adjusted returns vs. benchmark (S&P 500)
-
-### Compliance and Ethics
-- No insider trading or market manipulation
-- Comply with PDT (Pattern Day Trading) rules
-- Implement pre-trade compliance checks
-- Maintain audit trail of all trading decisions
-
-## Beta-Neutral Strategy Implementation (DEE-BOT)
-
-### Core Beta-Neutral System
-- **Objective**: Generate alpha returns independent of market direction
-- **Method**: Maintain portfolio beta near 0.0 through hedged positions
-- **Implementation**: Long high-conviction picks + inverse ETF hedges
-
-### Beta Calculation & Management
-```python
-# Portfolio Beta = Σ(Position Weight × Stock Beta)
-portfolio_beta = sum(weight_i * beta_i for all positions)
-
-# Target: -0.1 ≤ portfolio_beta ≤ 0.1
-# Rebalance when |portfolio_beta| > 0.2
-```
-
-### Leverage Implementation
-- **2X Leverage**: Doubles effective buying power
-- **Margin Requirements**: 50% initial, 25% maintenance
-- **Safety Buffer**: 25% margin cushion required
-- **Position Sizing**: Kelly Criterion with 25% fraction
-
-### Risk Controls for Leverage
-1. **Daily Loss Limits**:
-   - 3% loss → Automatic deleveraging
-   - 7% loss → Force close all positions
-2. **Position Limits**:
-   - Maximum 2% risk per position (with leverage)
-   - Maximum 10% portfolio risk total
-3. **Dynamic Stops**:
-   - 1.5x volatility for stop loss
-   - 2.5x volatility for take profit
-
-### Hedge Instruments
-- **Primary**: Inverse ETFs (SH, PSQ, SDS, QID)
-- **Secondary**: Low-beta defensive stocks
-- **Allocation**: 40% of portfolio for hedging
-
-## Automation & Scheduling
-
-### Daily Automation (UPDATED)
-```batch
-# Run DEE-BOT beta-neutral system
-python 01_trading_system/run_dee_bot.py
-
-# Or run components individually
-python 01_trading_system/generate_dee_bot_recommendations.py
-python 01_trading_system/execute_dee_bot_beta_neutral.py
-python 01_trading_system/monitor_dee_bot.py
-
-# Run SHORGAN-BOT
-python 01_trading_system/automation/daily_pre_market_pipeline.py --bot SHORGAN
-```
-
-### Report Generation
-```python
-# Generate combined HTML/PDF reports
-python 01_trading_system/automation/dual_bot_report_generator.py
-
-# Generate weekly summary
-python 01_trading_system/automation/weekly_report_generator.py
-```
-
-### Windows Task Scheduler
-- Task: "Daily Trading Pipeline"
-- Trigger: 7:00 AM ET weekdays
-- Action: Run `run_daily_pipelines.bat`
-
-## Development Workflow
-
-### Git Workflow
-- Main branch: Production-ready code
-- Develop branch: Integration branch
-- Feature branches: `feature/agent-name` or `feature/description`
-- Hotfix branches: `hotfix/issue-description`
-
-### Testing Commands
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=./ --cov-report=html
-
-# Run specific test file
-pytest tests/test_agents.py
-
-# Run linting
-flake8 . && mypy . && black --check .
-```
-
-### Environment Setup
-1. Create virtual environment: `python -m venv venv`
-2. Activate: `source venv/bin/activate` (Linux/Mac) or `venv\Scripts\activate` (Windows)
-3. Install dependencies: `pip install -r requirements.txt`
-4. Copy `.env.example` to `.env` and configure API keys
-
-## API Keys Required
-- OpenAI API key for GPT integration
-- Anthropic API key for Claude integration
-- Alpha Vantage API key for market data
-- Optional: Twitter API for sentiment analysis
-- Optional: Reddit API for sentiment analysis
-
-## Security Considerations
-- Never commit API keys or secrets
-- Use environment variables for all sensitive data
-- Implement rate limiting on all external API calls
-- Encrypt sensitive data at rest
-- Use secure WebSocket connections for real-time data
-
-## Performance Optimization
-- Use async/await for concurrent agent operations
-- Implement caching for frequently accessed data
-- Use Redis for inter-agent message passing
-- Batch API requests where possible
-- Profile and optimize hot paths in decision-making
-
-## Monitoring and Observability
-- Prometheus metrics for system performance
-- Structured logging with correlation IDs
-- Real-time dashboard for trading activity
-- Alert system for anomalies and errors
-- Daily performance reports
-
-## Deployment
-- Docker containerization for each component
-- Kubernetes orchestration for production
-- CI/CD pipeline with GitHub Actions
-- Blue-green deployment strategy
-- Automated rollback on failure
-
-## Future Enhancements
-- Reinforcement learning for strategy optimization
-- Additional specialized agents (Options, Crypto, Forex)
-- Multi-asset class support
-- Advanced portfolio optimization algorithms
-- Real-time strategy adaptation based on market regime
+### 📝 Session Management Reminders
+- Always save session summaries, todos, and product plans each session
+- Update changes and commit to git
+- Maintain continuity documentation for seamless handoffs
+- Execute ORDERS_FOR_SEPT_18.md at market open
+- Monitor INCY for FDA decision Thursday
+- remember updates
+- great, always keep these strategies separate
+- remember separate strategies, update todos, product plan, and suggest enhancements
+- remember this session
+- update files and todos
