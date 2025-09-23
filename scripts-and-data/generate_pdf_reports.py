@@ -13,7 +13,11 @@ import os
 def create_post_market_pdf(date_str, text_content):
     """Create PDF from post-market report text"""
 
-    pdf_path = f"../daily-reports/{date_str}/post_market_report_{date_str}.pdf"
+    # Create directory if it doesn't exist
+    pdf_dir = f"../docs/index/reports-pdf/{date_str}"
+    os.makedirs(pdf_dir, exist_ok=True)
+
+    pdf_path = f"{pdf_dir}/post_market_report_{date_str}.pdf"
 
     # Create PDF document
     doc = SimpleDocTemplate(pdf_path, pagesize=letter)
