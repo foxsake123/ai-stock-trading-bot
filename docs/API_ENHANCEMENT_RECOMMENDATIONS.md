@@ -2,13 +2,47 @@
 ## Current State Analysis & Upgrade Path
 
 ## 📊 Current Data Sources
+- **Financial Datasets API** ⭐ **ALREADY SUBSCRIBED** - Premium data with MCP support
 - **Alpaca Markets API** - Trading execution and basic market data
 - **yfinance** - Yahoo Finance data (limited, prone to rate limiting)
 - **Manual ChatGPT** - Deep research via browser extension
 
-## 🚀 Recommended API Integrations
+## 🎯 PRIMARY RECOMMENDATION: Financial Datasets API (You Have This!)
 
-### 1. Real-Time Market Data APIs
+### Financial Datasets API ⭐⭐⭐⭐⭐ USE THIS FIRST
+Since you already subscribe to Financial Datasets, this should be your PRIMARY data source:
+
+**What It Provides:**
+- Historical prices (30+ years, minute/day/week/month intervals)
+- Real-time snapshots
+- Financial statements (income, balance, cash flow)
+- Financial metrics & ratios
+- Earnings history & estimates
+- Analyst consensus
+- News with sentiment
+- Insider trades
+- Institutional ownership
+- SEC filings
+- **MCP Support** for AI integration
+
+**Implementation Priority:**
+1. Replace all yfinance calls with Financial Datasets
+2. Use for all fundamental analysis (DEE-BOT)
+3. Use earnings/news for catalyst detection (SHORGAN-BOT)
+4. Set up MCP server for Claude integration
+
+**Integration Steps:**
+```bash
+# Add to .env file
+FINANCIAL_DATASETS_API_KEY=your_api_key_here
+
+# Use the integration module
+python scripts-and-data/automation/financial_datasets_integration.py
+```
+
+## 🚀 Supplementary API Integrations
+
+### 1. Real-Time Market Data APIs (Only if needed beyond Financial Datasets)
 
 #### **Polygon.io** ⭐ Highly Recommended
 - **Cost**: $29-199/month
