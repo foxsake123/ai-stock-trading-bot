@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-09-22T21:25:26.962590",
+  "week_ending": "2025-09-22",
+  "report": {
+    "date": "2025-09-22",
+    "week_ending": "2025-09-22",
+    "dee_bot": {
+      "portfolio_assessment": [],
+      "candidate_set": [],
+      "portfolio_actions": [],
+      "exact_orders": []
+    },
+    "shorgan_bot": {
+      "portfolio_assessment": [],
+      "candidate_set": [],
+      "portfolio_actions": [],
+      "exact_orders": []
+    },
+    "risk_checks": {},
+    "thesis_summary": ""
+  }
+}
