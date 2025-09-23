@@ -1,0 +1,112 @@
+{
+  "analyses": [
+    {
+      "symbol": "SRRK",
+      "approved": true,
+      "consensus_score": 8.78,
+      "agent_scores": {
+        "fundamental": 9.5,
+        "technical": 8.8,
+        "news": 10.0,
+        "sentiment": 9,
+        "bull": 9.8,
+        "bear": 5.5,
+        "risk": 8.5
+      },
+      "position_size_pct": 4,
+      "position_size_shares": 127,
+      "current_price": 32.56,
+      "stop_price": 29.96,
+      "target_price": 39.07,
+      "catalyst": "FDA decision TODAY"
+    },
+    {
+      "symbol": "FBIO",
+      "approved": true,
+      "consensus_score": 7.93,
+      "agent_scores": {
+        "fundamental": 8.5,
+        "technical": 7.8,
+        "news": 9.0,
+        "sentiment": 8,
+        "bull": 8.8,
+        "bear": 5.5,
+        "risk": 7.5
+      },
+      "position_size_pct": 4,
+      "position_size_shares": 1037,
+      "current_price": 4.0,
+      "stop_price": 3.68,
+      "target_price": 4.8,
+      "catalyst": "Sept 30 FDA decision"
+    },
+    {
+      "symbol": "RIVN",
+      "approved": true,
+      "consensus_score": 7.03,
+      "agent_scores": {
+        "fundamental": 7.5,
+        "technical": 6.8,
+        "news": 8.0,
+        "sentiment": 7,
+        "bull": 7.8,
+        "bear": 5,
+        "risk": 7
+      },
+      "position_size_pct": 10.0,
+      "position_size_shares": 648,
+      "current_price": 16.01,
+      "stop_price": 14.73,
+      "target_price": 19.21,
+      "catalyst": "Q3 deliveries early Oct"
+    },
+    {
+      "symbol": "IONQ",
+      "approved": true,
+      "consensus_score": 7.88,
+      "agent_scores": {
+        "fundamental": 8.5,
+        "technical": 7.8,
+        "news": 9.0,
+        "sentiment": 8,
+        "bull": 8.8,
+        "bear": 5,
+        "risk": 8
+      },
+      "position_size_pct": 11.5,
+      "position_size_shares": 165,
+      "current_price": 71.89,
+      "stop_price": 66.14,
+      "target_price": 86.27,
+      "catalyst": "Overhyped quantum, no catalyst"
+    },
+    {
+      "symbol": "KSS",
+      "approved": true,
+      "consensus_score": 6.93,
+      "agent_scores": {
+        "fundamental": 7.5,
+        "technical": 6.8,
+        "news": 8.0,
+        "sentiment": 7,
+        "bull": 7.8,
+        "bear": 4,
+        "risk": 8
+      },
+      "position_size_pct": 8.5,
+      "position_size_shares": 522,
+      "current_price": 16.89,
+      "stop_price": 15.54,
+      "target_price": 20.27,
+      "catalyst": "Retail turnaround, holiday catalyst"
+    }
+  ],
+  "executed": [],
+  "rejected": [
+    "SRRK",
+    "FBIO",
+    "RIVN",
+    "IONQ",
+    "KSS"
+  ]
+}

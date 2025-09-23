@@ -1,0 +1,54 @@
+<b>AI TRADING BOT - POST-MARKET REPORT</b>
+<b>Tuesday, September 23, 2025</b>
+<b>07:46 AM ET</b>
+=============================================
+
+<b>DUAL-STRATEGY PORTFOLIO OVERVIEW</b>
+Total Portfolio Value: <b>$209,240.87</b>
+Total Unrealized P&L: <b>$+8,548.28</b>
+Total Return: <b>+4.27%</b>
+Active Positions: <b>28</b>
+Strategy Split: <b>DEE 49% | SHORGAN 51%</b>
+
+<b>==== DEE-BOT (Beta-Neutral S&P 100) ====</b>
+Strategy: <b>Beta-Neutral S&P 100</b>
+Portfolio Value: <b>$103,902.46</b>
+Position Value: <b>$103,902.46</b>
+Cash Available: <b>$0.00</b>
+Unrealized P&L: <b>$+3,467.39</b>
+Positions: <b>11 large-caps</b>
+Portfolio Beta: <b>~1.0 (target)</b>
+Best: <b>AAPL (+8.19%)</b>
+Worst: <b>WMT (-1.45%)</b>
+
+<b>==== SHORGAN-BOT (Catalyst Trading) ====</b>
+Strategy: <b>Catalyst Trading</b>
+Portfolio Value: <b>$105,338.41</b>
+Position Value: <b>$98,305.44</b>
+Cash Available: <b>$7,032.97</b>
+Unrealized P&L: <b>$+5,080.89</b>
+Positions: <b>17 catalyst plays</b>
+Focus: <b>FDA events, earnings, momentum</b>
+Best: <b>RGTI (+22.73%)</b>
+Worst: <b>KSS (-7.37%)</b>
+
+<b>UPCOMING CATALYSTS</b>
+<b>Tomorrow (Sept 17):</b> CBRL Earnings
+   - 81 shares positioned for potential squeeze
+<b>Thursday (Sept 19):</b> INCY FDA Decision
+   - 61 shares positioned for binary approval
+
+<b>RISK ASSESSMENT</b>
+Capital Deployed: <b>$202,207.90</b>
+Capital Exposure: <b>101.1%</b>
+<b>HIGH EXPOSURE WARNING</b>
+
+<b>SYSTEM STATUS</b>
+Multi-Agent Analysis: <b>ACTIVE</b>
+Risk Management: <b>ACTIVE</b>
+Stop Losses: <b>PROTECTED</b>
+Portfolio Monitoring: <b>24/7</b>
+
+=============================================
+<b>Next Report:</b> Tomorrow 4:15 PM ET
+<b>Status:</b> FULLY OPERATIONAL

@@ -1,0 +1,62 @@
+{
+  "date": "2025-09-23",
+  "time": "08:00:00",
+  "source": "ChatGPT Manual Extract",
+  "trades": [
+    {
+      "symbol": "SRRK",
+      "action": "buy",
+      "shares": 100,
+      "limit": 34.50,
+      "stop": 27.00,
+      "catalyst": "FDA decision TODAY",
+      "confidence": "high",
+      "risk": "high",
+      "size_pct": 11.5
+    },
+    {
+      "symbol": "FBIO",
+      "action": "buy",
+      "shares": 700,
+      "limit": 4.10,
+      "stop": 3.00,
+      "catalyst": "Sept 30 FDA decision",
+      "confidence": "medium-high",
+      "risk": "high",
+      "size_pct": 9.5
+    },
+    {
+      "symbol": "RIVN",
+      "action": "buy",
+      "shares": 200,
+      "limit": 15.50,
+      "stop": 13.00,
+      "catalyst": "Q3 deliveries early Oct",
+      "confidence": "medium",
+      "risk": "medium",
+      "size_pct": 10.0
+    },
+    {
+      "symbol": "IONQ",
+      "action": "short",
+      "shares": 50,
+      "limit": 69.00,
+      "stop": 80.00,
+      "catalyst": "Overhyped quantum, no catalyst",
+      "confidence": "medium-high",
+      "risk": "medium",
+      "size_pct": 11.5
+    },
+    {
+      "symbol": "KSS",
+      "action": "buy",
+      "shares": 150,
+      "limit": 17.00,
+      "stop": 15.00,
+      "catalyst": "Retail turnaround, holiday catalyst",
+      "confidence": "medium",
+      "risk": "low",
+      "size_pct": 8.5
+    }
+  ]
+}
