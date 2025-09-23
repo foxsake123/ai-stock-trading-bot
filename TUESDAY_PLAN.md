@@ -28,18 +28,28 @@
 
 ## Manual Trading Actions Required
 
-### Primary Focus: BBAI Earnings Setup
-Wednesday (Sept 24) has BBAI earnings after close. Tuesday strategy:
+### Complete SHORGAN-BOT Weekly Positioning
+Execute all ChatGPT deep research recommendations:
 
-1. **Monitor BBAI Price Action**
-   - Current setup: Buy 500 shares if drops below $1.95
+1. **IONQ Entry** (NEW)
+   - Buy 200 shares @ $12.50 limit
+   - Stop loss: $11.00
+   - Catalyst: Quantum computing conference
+
+2. **BBAI Earnings Setup**
+   - Buy 500 shares @ $1.95 limit
    - Stop loss: $1.75
-   - Catalyst: Wednesday earnings
+   - Catalyst: Wednesday earnings after close
 
-2. **Check Monday's Trades**
-   - Verify if SOUN position was filled (1000 shares @ $5.30-5.50)
-   - Confirm GPK was exited (142 shares)
-   - Check DEE-BOT rebalancing completed
+3. **SOUN Position** (if Monday didn't fill)
+   - Buy 1000 shares @ $5.45 limit
+   - Stop loss: $4.85
+   - Catalyst: AI voice technology
+
+4. **GPK Exit** (if not done Monday)
+   - Sell 142 shares at market
+   - Currently down -7.6%
+   - Cut losses per weekly plan
 
 3. **Position Monitoring**
    - **KSS**: Watch stop at $15.18 (currently $16.91)
@@ -53,10 +63,14 @@ Run the Tuesday execution script:
 python execute_tuesday_trades.py
 ```
 
-This will:
-- Place BBAI limit order (500 @ $1.95)
-- Retry SOUN if Monday's didn't fill
-- Set stop losses automatically
+This will execute ALL pending trades:
+- IONQ: 200 shares @ $12.50 (quantum catalyst)
+- BBAI: 500 shares @ $1.95 (earnings Wednesday)
+- SOUN: 1000 shares @ $5.45 (AI voice, if needed)
+- GPK: Exit 142 shares (cut losses)
+- Set stop losses automatically for all buys
+
+Total capital needed: ~$10,400 (well within $30,116 available)
 
 ## Key Metrics to Watch
 

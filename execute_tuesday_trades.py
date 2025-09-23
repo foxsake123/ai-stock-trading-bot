@@ -26,18 +26,20 @@ BOTS = {
     }
 }
 
-# Tuesday's trade plan - positioning for Wednesday BBAI earnings
+# Tuesday's trade plan - complete SHORGAN-BOT positioning
 TUESDAY_TRADES = {
     'DEE': [
         # DEE-BOT should maintain defensive positioning
         # Monday's rebalancing should have already been done
     ],
     'SHORGAN': [
-        # Monitor BBAI for entry ahead of Wednesday earnings
-        # Consider adding if it dips below $2.00
+        # Complete weekly trade recommendations
+        {'action': 'BUY', 'symbol': 'IONQ', 'qty': 200, 'order_type': 'LIMIT', 'limit_price': 12.50, 'reason': 'Quantum computing conference catalyst', 'stop_loss': 11.00},
         {'action': 'BUY', 'symbol': 'BBAI', 'qty': 500, 'order_type': 'LIMIT', 'limit_price': 1.95, 'reason': 'Wednesday earnings catalyst', 'stop_loss': 1.75},
         # If Monday's SOUN order didn't fill, try again
-        {'action': 'BUY', 'symbol': 'SOUN', 'qty': 1000, 'order_type': 'LIMIT', 'limit_price': 5.45, 'reason': 'AI voice catalyst (retry)', 'stop_loss': 4.85},
+        {'action': 'BUY', 'symbol': 'SOUN', 'qty': 1000, 'order_type': 'LIMIT', 'limit_price': 5.45, 'reason': 'AI voice catalyst (retry if needed)', 'stop_loss': 4.85},
+        # Exit GPK if not done Monday
+        {'action': 'SELL', 'symbol': 'GPK', 'qty': 142, 'order_type': 'MARKET', 'reason': 'Cut losses at -7.6%'},
     ]
 }
 
