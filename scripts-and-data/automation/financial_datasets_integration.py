@@ -47,7 +47,7 @@ class FinancialDatasetsAPI:
             end_date: YYYY-MM-DD format
             limit: Max records (default 1000, max 5000)
         """
-        endpoint = f"{self.base_url}/v1/prices/historical"
+        endpoint = f"{self.base_url}/prices"
 
         if not start_date:
             start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
@@ -57,8 +57,9 @@ class FinancialDatasetsAPI:
         params = {
             'ticker': ticker.upper(),
             'interval': interval,
-            'start': start_date,
-            'end': end_date,
+            'interval_multiplier': 1,  # Default to 1 for standard intervals
+            'start_date': start_date,
+            'end_date': end_date,
             'limit': limit
         }
 
@@ -66,12 +67,20 @@ class FinancialDatasetsAPI:
             response = requests.get(endpoint, headers=self.headers, params=params)
             if response.status_code == 200:
                 data = response.json()
-                df = pd.DataFrame(data['prices'])
-                df['datetime'] = pd.to_datetime(df['time'])
-                df = df.set_index('datetime')
-                return df[['open', 'high', 'low', 'close', 'volume']]
+                # The API returns a dict with 'prices' key
+                if isinstance(data, dict) and 'prices' in data:
+                    prices = data['prices']
+                    if prices and isinstance(prices, list):
+                        df = pd.DataFrame(prices)
+                        if 'time' in df.columns:
+                            df['datetime'] = pd.to_datetime(df['time'])
+                            df = df.set_index('datetime')
+                            return df[['open', 'high', 'low', 'close', 'volume']]
+                return pd.DataFrame()
             else:
                 print(f"Error fetching prices: {response.status_code}")
+                if response.status_code == 400:
+                    print(f"Response: {response.text}")
                 return pd.DataFrame()
         except Exception as e:
             print(f"Error: {e}")
@@ -79,22 +88,51 @@ class FinancialDatasetsAPI:
 
     def get_snapshot_price(self, ticker: str) -> Dict:
         """Get current/snapshot price data"""
-        endpoint = f"{self.base_url}/v1/prices/snapshot"
-        params = {'ticker': ticker.upper()}
+        # Get the most recent price data (last 1 day)
+        endpoint = f"{self.base_url}/prices"
+        end_date = datetime.now().strftime('%Y-%m-%d')
+        start_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+
+        params = {
+            'ticker': ticker.upper(),
+            'interval': 'day',
+            'interval_multiplier': 1,
+            'start_date': start_date,
+            'end_date': end_date,
+            'limit': 1
+        }
 
         try:
             response = requests.get(endpoint, headers=self.headers, params=params)
             if response.status_code == 200:
                 data = response.json()
-                return {
-                    'ticker': ticker,
-                    'price': data.get('price'),
-                    'change': data.get('change'),
-                    'change_percent': data.get('change_percent'),
-                    'volume': data.get('volume'),
-                    'market_cap': data.get('market_cap'),
-                    'timestamp': data.get('timestamp')
-                }
+                # Get the latest price from the prices array
+                if isinstance(data, dict) and 'prices' in data:
+                    prices = data['prices']
+                    if prices and isinstance(prices, list) and len(prices) > 0:
+                        # Get the most recent price (last in array)
+                        latest = prices[-1]
+                        # Calculate change from previous day if available
+                        if len(prices) > 1:
+                            prev_close = prices[-2].get('close')
+                        else:
+                            prev_close = latest.get('open', latest.get('close'))
+
+                        current_price = latest.get('close')
+                        change = current_price - prev_close if prev_close else 0
+                        change_percent = (change / prev_close * 100) if prev_close else 0
+
+                        return {
+                            'ticker': ticker,
+                            'price': current_price,
+                            'change': change,
+                            'change_percent': change_percent,
+                            'volume': latest.get('volume'),
+                            'high': latest.get('high'),
+                            'low': latest.get('low'),
+                            'timestamp': latest.get('time')
+                        }
+                return {}
         except Exception as e:
             print(f"Snapshot error: {e}")
         return {}
@@ -108,110 +146,142 @@ class FinancialDatasetsAPI:
         Args:
             ticker: Stock symbol
             statement_type: 'income', 'balance', 'cashflow'
-            period: 'quarterly' or 'annual'
+            period: 'quarterly', 'annual', or 'ttm'
             limit: Number of periods
         """
-        endpoint = f"{self.base_url}/v1/financials/statements"
+        endpoint = f"{self.base_url}/financials"
         params = {
             'ticker': ticker.upper(),
-            'type': statement_type,
-            'period': period,
-            'limit': limit
+            'period': period  # The API requires period parameter
         }
 
         try:
             response = requests.get(endpoint, headers=self.headers, params=params)
             if response.status_code == 200:
-                return response.json().get('statements', [])
+                data = response.json()
+                # Return financials data directly
+                return data if isinstance(data, list) else data.get('financials', [])
         except Exception as e:
             print(f"Financial statements error: {e}")
         return []
 
     def get_financial_metrics(self, ticker: str) -> Dict:
-        """Get key financial metrics and ratios"""
-        endpoint = f"{self.base_url}/v1/financials/metrics"
-        params = {'ticker': ticker.upper()}
-
-        try:
-            response = requests.get(endpoint, headers=self.headers, params=params)
-            if response.status_code == 200:
-                data = response.json()
-                return {
-                    'pe_ratio': data.get('pe_ratio'),
-                    'peg_ratio': data.get('peg_ratio'),
-                    'price_to_book': data.get('pb_ratio'),
-                    'price_to_sales': data.get('ps_ratio'),
-                    'ev_to_ebitda': data.get('ev_ebitda'),
-                    'roi': data.get('return_on_investment'),
-                    'roe': data.get('return_on_equity'),
-                    'roa': data.get('return_on_assets'),
-                    'debt_to_equity': data.get('debt_equity'),
-                    'current_ratio': data.get('current_ratio'),
-                    'quick_ratio': data.get('quick_ratio'),
-                    'gross_margin': data.get('gross_margin'),
-                    'operating_margin': data.get('operating_margin'),
-                    'net_margin': data.get('net_margin'),
-                    'dividend_yield': data.get('dividend_yield'),
-                    'beta': data.get('beta')
-                }
-        except Exception as e:
-            print(f"Metrics error: {e}")
-        return {}
-
-    # =============== EARNINGS & ESTIMATES ===============
-    def get_earnings(self, ticker: str, limit: int = 8) -> List[Dict]:
-        """Get earnings history and surprises"""
-        endpoint = f"{self.base_url}/v1/earnings/history"
+        """Get key financial metrics and ratios from TTM financials"""
+        endpoint = f"{self.base_url}/financials"
         params = {
             'ticker': ticker.upper(),
-            'limit': limit
+            'period': 'ttm'  # Use TTM for current metrics
         }
 
         try:
             response = requests.get(endpoint, headers=self.headers, params=params)
             if response.status_code == 200:
-                earnings = response.json().get('earnings', [])
-                return [{
-                    'date': e.get('date'),
-                    'reported_eps': e.get('reported_eps'),
-                    'estimated_eps': e.get('estimated_eps'),
-                    'surprise': e.get('surprise'),
-                    'surprise_percent': e.get('surprise_percent')
-                } for e in earnings]
+                data = response.json()
+                # Extract metrics from financials data
+                if isinstance(data, dict) and 'financials' in data:
+                    financials = data['financials']
+                    # financials is a dict with income_statements, balance_sheets, cash_flow_statements
+                    if isinstance(financials, dict):
+                        income = financials.get('income_statements', [])
+                        balance = financials.get('balance_sheets', [])
+                        if income and len(income) > 0 and balance and len(balance) > 0:
+                            return self._extract_metrics_from_financials_dict(income[0], balance[0])
         except Exception as e:
-            print(f"Earnings error: {e}")
-        return []
+            print(f"Metrics error: {e}")
+        return {}
 
-    def get_analyst_estimates(self, ticker: str) -> Dict:
-        """Get analyst consensus estimates"""
-        endpoint = f"{self.base_url}/v1/estimates/consensus"
-        params = {'ticker': ticker.upper()}
+    def _extract_metrics_from_financials_dict(self, income_stmt: Dict, balance_sheet: Dict) -> Dict:
+        """Extract key metrics from separate financial statements"""
+        metrics = {}
+
+        # From income statement
+        revenue = income_stmt.get('revenue', 0)
+        net_income = income_stmt.get('net_income', 0)
+        gross_profit = income_stmt.get('gross_profit', 0)
+        operating_income = income_stmt.get('operating_income', 0)
+        eps = income_stmt.get('earnings_per_share', 0)
+
+        # From balance sheet
+        total_assets = balance_sheet.get('total_assets', 0)
+        total_equity = balance_sheet.get('total_equity', balance_sheet.get('total_stockholders_equity', 0))
+        total_liabilities = balance_sheet.get('total_liabilities', 0)
+        current_assets = balance_sheet.get('total_current_assets', 0)
+        current_liabilities = balance_sheet.get('total_current_liabilities', 0)
+
+        # Calculate ratios
+        if revenue > 0:
+            metrics['gross_margin'] = (gross_profit / revenue * 100) if gross_profit else 0
+            metrics['operating_margin'] = (operating_income / revenue * 100) if operating_income else 0
+            metrics['net_margin'] = (net_income / revenue * 100) if net_income else 0
+
+        if total_equity > 0:
+            metrics['roe'] = (net_income / total_equity * 100) if net_income else 0
+            metrics['debt_to_equity'] = (total_liabilities / total_equity * 100) if total_liabilities else 0
+
+        if total_assets > 0:
+            metrics['roa'] = (net_income / total_assets * 100) if net_income else 0
+
+        if current_liabilities > 0:
+            metrics['current_ratio'] = current_assets / current_liabilities
+
+        # Add raw values
+        metrics['revenue'] = revenue
+        metrics['net_income'] = net_income
+        metrics['eps'] = eps
+        metrics['total_assets'] = total_assets
+        metrics['total_equity'] = total_equity
+
+        return metrics
+
+    # =============== EARNINGS & ESTIMATES ===============
+    def get_earnings(self, ticker: str, limit: int = 8) -> List[Dict]:
+        """Get earnings history from financials data"""
+        # Since earnings endpoint doesn't exist, get from quarterly financials
+        endpoint = f"{self.base_url}/financials"
+        params = {
+            'ticker': ticker.upper(),
+            'period': 'quarterly'
+        }
 
         try:
             response = requests.get(endpoint, headers=self.headers, params=params)
             if response.status_code == 200:
                 data = response.json()
-                return {
-                    'current_quarter_estimate': data.get('current_quarter_eps'),
-                    'next_quarter_estimate': data.get('next_quarter_eps'),
-                    'current_year_estimate': data.get('current_year_eps'),
-                    'next_year_estimate': data.get('next_year_eps'),
-                    'revenue_estimate': data.get('revenue_estimate'),
-                    'price_target': data.get('price_target'),
-                    'strong_buy': data.get('strong_buy'),
-                    'buy': data.get('buy'),
-                    'hold': data.get('hold'),
-                    'sell': data.get('sell'),
-                    'strong_sell': data.get('strong_sell')
-                }
+                if isinstance(data, dict) and 'financials' in data:
+                    financials = data['financials']
+                    if isinstance(financials, dict):
+                        income_stmts = financials.get('income_statements', [])
+
+                        # Extract earnings data from income statements
+                        earnings = []
+                        for i, stmt in enumerate(income_stmts):
+                            if i >= limit:
+                                break
+                            if isinstance(stmt, dict):
+                                earnings.append({
+                                    'date': stmt.get('report_period', ''),
+                                    'revenue': stmt.get('revenue', 0),
+                                    'net_income': stmt.get('net_income', 0),
+                                    'eps': stmt.get('earnings_per_share', 0),
+                                    'reported_eps': stmt.get('earnings_per_share', 0),
+                                    'estimated_eps': 0,  # Not available in this API
+                                    'surprise_percent': 0  # Not available
+                                })
+                        return earnings
         except Exception as e:
-            print(f"Estimates error: {e}")
+            print(f"Earnings error: {e}")
+        return []
+
+    def get_analyst_estimates(self, ticker: str) -> Dict:
+        """Get analyst consensus estimates (placeholder since endpoint doesn't exist)"""
+        # Estimates endpoint doesn't exist in the API
+        # Return empty dict for now
         return {}
 
     # =============== NEWS & SENTIMENT ===============
     def get_news(self, ticker: str = None, limit: int = 10) -> List[Dict]:
         """Get latest news articles"""
-        endpoint = f"{self.base_url}/v1/news/articles"
+        endpoint = f"{self.base_url}/news"
         params = {'limit': limit}
         if ticker:
             params['ticker'] = ticker.upper()
@@ -219,15 +289,16 @@ class FinancialDatasetsAPI:
         try:
             response = requests.get(endpoint, headers=self.headers, params=params)
             if response.status_code == 200:
-                articles = response.json().get('articles', [])
+                data = response.json()
+                articles = data.get('news', [])  # Changed from 'articles' to 'news'
                 return [{
                     'title': a.get('title'),
-                    'summary': a.get('summary'),
+                    'summary': a.get('author', ''),  # No summary field, using author as placeholder
                     'url': a.get('url'),
                     'source': a.get('source'),
-                    'published': a.get('published_at'),
-                    'tickers': a.get('tickers', []),
-                    'sentiment': a.get('sentiment_score')
+                    'published': a.get('date'),
+                    'tickers': [a.get('ticker')] if a.get('ticker') else [],
+                    'sentiment': a.get('sentiment', 0.5)  # Default neutral sentiment
                 } for a in articles]
         except Exception as e:
             print(f"News error: {e}")
@@ -236,7 +307,7 @@ class FinancialDatasetsAPI:
     # =============== INSIDER & INSTITUTIONAL ===============
     def get_insider_trades(self, ticker: str, limit: int = 20) -> List[Dict]:
         """Get insider trading activity"""
-        endpoint = f"{self.base_url}/v1/insider/trades"
+        endpoint = f"{self.base_url}/insider-trades"
         params = {
             'ticker': ticker.upper(),
             'limit': limit
@@ -245,17 +316,18 @@ class FinancialDatasetsAPI:
         try:
             response = requests.get(endpoint, headers=self.headers, params=params)
             if response.status_code == 200:
-                trades = response.json().get('trades', [])
+                data = response.json()
+                trades = data.get('insider_trades', [])  # Changed from 'trades' to 'insider_trades'
                 return [{
                     'filing_date': t.get('filing_date'),
-                    'trade_date': t.get('trade_date'),
-                    'insider_name': t.get('insider_name'),
+                    'trade_date': t.get('transaction_date'),
+                    'insider_name': t.get('name'),
                     'title': t.get('title'),
-                    'transaction': t.get('transaction_type'),
-                    'shares': t.get('shares'),
-                    'price': t.get('price'),
-                    'value': t.get('value'),
-                    'shares_owned': t.get('shares_owned_after')
+                    'transaction': 'Buy' if t.get('transaction_shares', 0) > 0 else 'Sell',
+                    'shares': abs(t.get('transaction_shares', 0)),
+                    'price': t.get('transaction_price_per_share'),
+                    'value': t.get('transaction_value'),
+                    'shares_owned': t.get('shares_owned_after_transaction')
                 } for t in trades]
         except Exception as e:
             print(f"Insider trades error: {e}")
@@ -263,49 +335,35 @@ class FinancialDatasetsAPI:
 
     def get_institutional_ownership(self, ticker: str) -> Dict:
         """Get institutional ownership data"""
-        endpoint = f"{self.base_url}/v1/institutional/ownership"
+        endpoint = f"{self.base_url}/institutional-ownership"
         params = {'ticker': ticker.upper()}
 
         try:
             response = requests.get(endpoint, headers=self.headers, params=params)
             if response.status_code == 200:
                 data = response.json()
+                ownership = data.get('institutional_ownership', [])
+
+                # Calculate total shares and value
+                total_shares = sum(h.get('shares', 0) for h in ownership)
+                total_value = sum(h.get('market_value', 0) for h in ownership)
+
                 return {
-                    'institutional_percent': data.get('institutional_ownership_percent'),
-                    'number_of_institutions': data.get('number_of_institutions'),
-                    'shares_held': data.get('total_shares_held'),
-                    'value_held': data.get('total_value_held'),
-                    'top_holders': data.get('top_holders', [])
+                    'ticker': data.get('ticker'),
+                    'number_of_institutions': len(ownership),
+                    'shares_held': total_shares,
+                    'value_held': total_value,
+                    'top_holders': [{
+                        'name': h.get('investor'),
+                        'shares': h.get('shares'),
+                        'value': h.get('market_value')
+                    } for h in ownership[:5]]  # Top 5 holders
                 }
         except Exception as e:
             print(f"Institutional ownership error: {e}")
         return {}
 
-    # =============== SEC FILINGS ===============
-    def get_sec_filings(self, ticker: str, filing_type: str = None, limit: int = 10) -> List[Dict]:
-        """Get recent SEC filings"""
-        endpoint = f"{self.base_url}/v1/sec/filings"
-        params = {
-            'ticker': ticker.upper(),
-            'limit': limit
-        }
-        if filing_type:
-            params['type'] = filing_type  # e.g., '10-K', '10-Q', '8-K'
-
-        try:
-            response = requests.get(endpoint, headers=self.headers, params=params)
-            if response.status_code == 200:
-                filings = response.json().get('filings', [])
-                return [{
-                    'filing_date': f.get('filing_date'),
-                    'type': f.get('form_type'),
-                    'title': f.get('title'),
-                    'url': f.get('url'),
-                    'size': f.get('size')
-                } for f in filings]
-        except Exception as e:
-            print(f"SEC filings error: {e}")
-        return []
+    # SEC Filings endpoint not available in API
 
     # =============== COMPREHENSIVE RESEARCH ===============
     async def get_comprehensive_research_async(self, ticker: str) -> Dict:
@@ -339,7 +397,7 @@ class FinancialDatasetsAPI:
 
     async def _fetch_async(self, session: aiohttp.ClientSession, endpoint: str, params: Dict) -> Dict:
         """Helper for async fetching"""
-        url = f"{self.base_url}/v1/{endpoint}"
+        url = f"{self.base_url}/{endpoint}"
         headers = {'X-API-KEY': self.api_key}
 
         try:
@@ -414,10 +472,17 @@ class FinancialDatasetsAPI:
         print("  Analyzing news...")
         news = self.get_news(ticker, limit=10)
         if news:
+            # Convert text sentiment to numeric
+            sentiment_map = {'positive': 0.7, 'negative': 0.3, 'neutral': 0.5}
+            sentiments = []
+            for article in news:
+                sent = article.get('sentiment', 'neutral')
+                sentiments.append(sentiment_map.get(sent, 0.5))
+
             research['news_sentiment'] = {
                 'recent_articles': news[:5],
                 'article_count': len(news),
-                'avg_sentiment': sum(a.get('sentiment', 0.5) for a in news) / len(news) if news else 0.5
+                'avg_sentiment': sum(sentiments) / len(sentiments) if sentiments else 0.5
             }
 
         # 6. Insider Trading

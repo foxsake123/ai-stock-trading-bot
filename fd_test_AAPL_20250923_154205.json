@@ -1,0 +1,48 @@
+{
+  "ticker": "AAPL",
+  "timestamp": "2025-09-23T15:42:04.715185",
+  "data_source": "Financial Datasets API",
+  "price_analysis": {
+    "ticker": "AAPL",
+    "price": 256.08,
+    "change": 7.779999999999973,
+    "change_percent": 3.1333064840918134,
+    "volume": 105517416,
+    "high": 256.64,
+    "low": 248.12,
+    "timestamp": "2025-09-22T04:00:00Z",
+    "52_week_high": 260.1,
+    "52_week_low": 169.21,
+    "ytd_return": 12.58444827129421,
+    "volatility": 0.3254986941410081
+  },
+  "fundamental_analysis": {},
+  "earnings_analysis": {},
+  "analyst_sentiment": {},
+  "news_sentiment": {},
+  "insider_activity": {},
+  "institutional_activity": {
+    "institutional_percent": null,
+    "number_of_institutions": null,
+    "shares_held": null,
+    "value_held": null,
+    "top_holders": []
+  },
+  "technical_signals": {},
+  "dee_bot_signals": {
+    "quality_score": 0,
+    "dividend_safety": 0,
+    "valuation_score": 0,
+    "stability_score": 50,
+    "recommendation": "AVOID"
+  },
+  "shorgan_bot_signals": {
+    "catalyst_score": 0,
+    "momentum_score": 0,
+    "sentiment_score": 0,
+    "insider_score": 0,
+    "recommendation": "WAIT"
+  },
+  "risk_assessment": [],
+  "opportunities": []
+}

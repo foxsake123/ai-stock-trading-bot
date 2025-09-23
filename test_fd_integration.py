@@ -45,7 +45,8 @@ def test_basic_functionality():
     if snapshot:
         print(f"   [OK] Current Price: ${snapshot.get('price', 'N/A')}")
         print(f"   [OK] Change: {snapshot.get('change_percent', 'N/A')}%")
-        print(f"   [OK] Volume: {snapshot.get('volume', 'N/A'):,}")
+        if snapshot.get('volume'):
+            print(f"   [OK] Volume: {snapshot.get('volume', 0):,}")
     else:
         print("   [FAIL] Failed to get snapshot price")
 

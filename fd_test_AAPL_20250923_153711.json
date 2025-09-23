@@ -1,0 +1,29 @@
+{
+  "ticker": "AAPL",
+  "timestamp": "2025-09-23T15:36:41.251554",
+  "data_source": "Financial Datasets API",
+  "price_analysis": {},
+  "fundamental_analysis": {},
+  "earnings_analysis": {},
+  "analyst_sentiment": {},
+  "news_sentiment": {},
+  "insider_activity": {},
+  "institutional_activity": {},
+  "technical_signals": {},
+  "dee_bot_signals": {
+    "quality_score": 0,
+    "dividend_safety": 0,
+    "valuation_score": 0,
+    "stability_score": 0,
+    "recommendation": "AVOID"
+  },
+  "shorgan_bot_signals": {
+    "catalyst_score": 0,
+    "momentum_score": 0,
+    "sentiment_score": 0,
+    "insider_score": 0,
+    "recommendation": "WAIT"
+  },
+  "risk_assessment": [],
+  "opportunities": []
+}
