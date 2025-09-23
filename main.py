@@ -7,8 +7,12 @@ import asyncio
 import logging
 from datetime import datetime
 from typing import Dict, Any, List
-import yfinance as yf
 import json
+# Import Financial Datasets integration instead of yfinance
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'scripts-and-data', 'automation'))
+from financial_datasets_integration import FinancialDatasetsAPI
 
 # Import communication components
 from communication.message_bus import MessageBus
@@ -41,6 +45,8 @@ class TradingSystem:
         self.coordinator = Coordinator(self.message_bus)
         self.agents = {}
         self.running = False
+        # Initialize Financial Datasets API
+        self.fd_api = FinancialDatasetsAPI()
         
     async def initialize(self):
         """Initialize the trading system"""
@@ -176,39 +182,61 @@ class TradingSystem:
             return {"error": str(e)}
             
     async def _get_market_data(self, ticker: str) -> Dict[str, Any]:
-        """Fetch current market data"""
+        """Fetch current market data using Financial Datasets API"""
         try:
-            stock = yf.Ticker(ticker)
-            info = stock.info
-            hist = stock.history(period="1mo")
-            
+            # Get snapshot data
+            snapshot = self.fd_api.get_snapshot_price(ticker)
+
+            # Get historical data for volatility calculation
+            hist_df = self.fd_api.get_historical_prices(ticker, interval='day', limit=30)
+
+            # Get financial metrics
+            metrics = self.fd_api.get_financial_metrics(ticker)
+
+            # Calculate volatility if historical data available
+            volatility = 0.3  # Default
+            support_level = 0
+            if not hist_df.empty:
+                volatility = hist_df['close'].pct_change().std() * (252 ** 0.5)
+                support_level = hist_df['low'].min()
+
             return {
-                'price': info.get('regularMarketPrice', hist['Close'].iloc[-1] if not hist.empty else 0),
-                'volume': info.get('regularMarketVolume', hist['Volume'].iloc[-1] if not hist.empty else 0),
-                'market_cap': info.get('marketCap', 0),
-                'pe_ratio': info.get('trailingPE', 0),
-                'beta': info.get('beta', 1),
-                'volatility': hist['Close'].pct_change().std() * (252 ** 0.5) if not hist.empty else 0.3,
-                'sector': info.get('sector', 'Unknown'),
-                'avg_volume': info.get('averageVolume', 0),
-                'support_level': hist['Low'].min() if not hist.empty else 0,
-                'info': info
+                'price': snapshot.get('price', 0),
+                'volume': snapshot.get('volume', 0),
+                'market_cap': snapshot.get('market_cap', 0),
+                'pe_ratio': metrics.get('pe_ratio', 0),
+                'beta': metrics.get('beta', 1),
+                'volatility': volatility,
+                'sector': 'Technology',  # Would need to fetch from company info
+                'avg_volume': snapshot.get('volume', 0),  # Using current as proxy
+                'support_level': support_level,
+                'info': {**snapshot, **metrics}  # Combine all data
             }
         except Exception as e:
             logger.error(f"Failed to get market data for {ticker}: {e}")
             return {}
             
     async def _get_news_data(self, ticker: str) -> List[Dict[str, Any]]:
-        """Fetch news data (placeholder)"""
-        # In production, would connect to news API
-        return [
-            {
-                'title': f"Sample news for {ticker}",
-                'content': "Placeholder news content",
-                'source': 'reuters',
-                'published_date': datetime.now().isoformat()
-            }
-        ]
+        """Fetch news data from Financial Datasets API"""
+        try:
+            # Get real news from Financial Datasets
+            news_articles = self.fd_api.get_news(ticker, limit=10)
+
+            if news_articles:
+                return news_articles
+            else:
+                # Fallback to placeholder if no news
+                return [
+                    {
+                        'title': f"No recent news for {ticker}",
+                        'content': "No news articles found",
+                        'source': 'none',
+                        'published_date': datetime.now().isoformat()
+                    }
+                ]
+        except Exception as e:
+            logger.error(f"Failed to get news data: {e}")
+            return []
         
     async def _get_social_data(self, ticker: str) -> Dict[str, Any]:
         """Fetch social media data (placeholder)"""
