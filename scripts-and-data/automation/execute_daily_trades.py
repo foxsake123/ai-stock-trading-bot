@@ -184,8 +184,107 @@ class DailyTradeExecutor:
 
         return dee_trades, shorgan_trades
 
+    def validate_trade(self, api, symbol, shares, side, limit_price=None):
+        """Validate trade before execution"""
+        try:
+            account = api.get_account()
+            buying_power = float(account.buying_power)
+
+            # Check if we're using margin (especially for DEE-BOT)
+            cash_available = float(account.cash)
+            is_dee_bot = (api == self.dee_api)
+
+            validation_errors = []
+
+            # 1. Check market hours
+            clock = api.get_clock()
+            if not clock.is_open:
+                validation_errors.append(f"Market is closed")
+                return False, validation_errors
+
+            # 2. Validate SELL orders
+            if side == 'sell':
+                try:
+                    position = api.get_position(symbol)
+                    current_qty = float(position.qty)
+
+                    if current_qty <= 0:
+                        validation_errors.append(f"No long position to sell (current: {current_qty})")
+                        return False, validation_errors
+
+                    if shares > current_qty:
+                        validation_errors.append(f"Trying to sell {shares} but only have {current_qty}")
+                        # Adjust to sell only what we have
+                        print(f"[ADJUST] Reducing sell qty from {shares} to {int(current_qty)}")
+                        shares = int(current_qty)
+
+                except Exception as e:
+                    validation_errors.append(f"No position exists to sell")
+                    return False, validation_errors
+
+            # 3. Validate BUY orders
+            if side == 'buy':
+                # Get current price for validation
+                try:
+                    bars = api.get_latest_bar(symbol)
+                    current_price = bars.c  # Close price
+                except:
+                    current_price = limit_price if limit_price else 100  # Conservative estimate
+
+                required_capital = shares * current_price
+
+                # Check buying power
+                if required_capital > buying_power:
+                    validation_errors.append(f"Insufficient buying power: need ${required_capital:.2f}, have ${buying_power:.2f}")
+                    return False, validation_errors
+
+                # DEE-BOT specific: Prevent margin usage
+                if is_dee_bot and cash_available < required_capital:
+                    validation_errors.append(f"DEE-BOT would use margin: cash ${cash_available:.2f}, need ${required_capital:.2f}")
+                    # Calculate max shares we can buy with cash only
+                    max_shares = int(cash_available / current_price)
+                    if max_shares > 0:
+                        print(f"[ADJUST] DEE-BOT: Reducing buy from {shares} to {max_shares} shares (cash-only)")
+                        shares = max_shares
+                    else:
+                        return False, validation_errors
+
+                # Check position concentration (max 10% for SHORGAN, 8% for DEE)
+                portfolio_value = float(account.portfolio_value)
+                max_position_pct = 0.08 if is_dee_bot else 0.10
+                max_position_value = portfolio_value * max_position_pct
+
+                if required_capital > max_position_value:
+                    validation_errors.append(f"Position too large: ${required_capital:.2f} exceeds {max_position_pct*100}% limit (${max_position_value:.2f})")
+                    # Adjust shares to fit within limit
+                    max_shares = int(max_position_value / current_price)
+                    if max_shares > 0:
+                        print(f"[ADJUST] Reducing position from {shares} to {max_shares} shares (position limit)")
+                        shares = max_shares
+                    else:
+                        return False, validation_errors
+
+            # 4. Check for existing opposite orders
+            try:
+                orders = api.list_orders(status='open', symbols=[symbol])
+                for order in orders:
+                    if order.side != side:
+                        validation_errors.append(f"Conflicting {order.side} order already exists")
+                        return False, validation_errors
+            except:
+                pass  # Continue if we can't check orders
+
+            if validation_errors:
+                return False, validation_errors
+
+            # Return validated (possibly adjusted) share count
+            return True, shares
+
+        except Exception as e:
+            return False, [f"Validation error: {str(e)}"]
+
     def execute_trade(self, api, trade_info, side):
-        """Execute a single trade"""
+        """Execute a single trade with pre-validation"""
         try:
             symbol = trade_info['symbol']
             shares = trade_info['shares']
@@ -194,6 +293,27 @@ class DailyTradeExecutor:
             if shares <= 0:
                 print(f"[SKIP] {symbol}: Invalid share count ({shares})")
                 return None
+
+            # PRE-EXECUTION VALIDATION
+            is_valid, result = self.validate_trade(api, symbol, shares, side, limit_price)
+
+            if not is_valid:
+                print(f"[VALIDATION FAILED] {symbol}: {', '.join(result)}")
+                self.failed_trades.append({
+                    'symbol': symbol,
+                    'shares': shares,
+                    'side': side,
+                    'error': f"Validation failed: {', '.join(result)}",
+                    'timestamp': datetime.now().isoformat()
+                })
+                return None
+
+            # If validation returned adjusted share count, use it
+            if isinstance(result, int):
+                original_shares = shares
+                shares = result
+                if shares != original_shares:
+                    print(f"[ADJUSTED] {symbol}: Changed from {original_shares} to {shares} shares")
 
             # DEE-BOT LONG-ONLY ENFORCEMENT
             if api == self.dee_api and self.dee_bot_long_only and side == 'sell':
@@ -284,8 +404,8 @@ class DailyTradeExecutor:
             print(f"[WARNING] Could not check market status: {e}")
             return True  # Proceed anyway
 
-    def execute_all_trades(self):
-        """Execute all trades from today's file"""
+    def execute_all_trades(self, max_retries=2):
+        """Execute all trades from today's file with retry logic"""
         print("=" * 80)
         print(f"DAILY TRADE EXECUTION - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("=" * 80)
@@ -293,8 +413,18 @@ class DailyTradeExecutor:
         # Find and parse trades file
         trades_file = self.find_todays_trades_file()
         if not trades_file:
-            print("[ERROR] No trades file found for today")
-            return False
+            print("[WARNING] No trades file found for today, attempting to generate...")
+            # Try to generate trades file automatically
+            try:
+                from generate_todays_trades import AutomatedTradeGenerator
+                generator = AutomatedTradeGenerator()
+                trades_file = generator.run()
+                if not trades_file:
+                    print("[ERROR] Could not generate trades file")
+                    return False
+            except Exception as e:
+                print(f"[ERROR] Failed to generate trades: {e}")
+                return False
 
         dee_trades, shorgan_trades = self.parse_trades_file(trades_file)
 
@@ -312,6 +442,9 @@ class DailyTradeExecutor:
         print(f"[INFO] Found {total_trades} total trades to execute")
         print()
 
+        # Track trades for retry
+        retry_queue = []
+
         # Execute DEE-BOT trades
         if dee_trades['sell'] or dee_trades['buy']:
             print("-" * 40)
@@ -320,12 +453,16 @@ class DailyTradeExecutor:
 
             # Execute sells first
             for trade in dee_trades['sell']:
-                self.execute_trade(self.dee_api, trade, 'sell')
+                result = self.execute_trade(self.dee_api, trade, 'sell')
+                if result is None:
+                    retry_queue.append(('dee', trade, 'sell'))
                 time.sleep(1)  # Rate limiting
 
             # Execute buys
             for trade in dee_trades['buy']:
-                self.execute_trade(self.dee_api, trade, 'buy')
+                result = self.execute_trade(self.dee_api, trade, 'buy')
+                if result is None:
+                    retry_queue.append(('dee', trade, 'buy'))
                 time.sleep(1)
 
         # Execute SHORGAN-BOT trades
@@ -336,17 +473,48 @@ class DailyTradeExecutor:
 
             # Execute sells first
             for trade in shorgan_trades['sell']:
-                self.execute_trade(self.shorgan_api, trade, 'sell')
+                result = self.execute_trade(self.shorgan_api, trade, 'sell')
+                if result is None:
+                    retry_queue.append(('shorgan', trade, 'sell'))
                 time.sleep(1)
 
             # Execute buys
             for trade in shorgan_trades['buy']:
-                self.execute_trade(self.shorgan_api, trade, 'buy')
+                result = self.execute_trade(self.shorgan_api, trade, 'buy')
+                if result is None:
+                    retry_queue.append(('shorgan', trade, 'buy'))
                 time.sleep(1)
 
             # Execute shorts
             for trade in shorgan_trades['short']:
-                self.execute_trade(self.shorgan_api, trade, 'sell')  # Short = sell
+                result = self.execute_trade(self.shorgan_api, trade, 'sell')  # Short = sell
+                if result is None:
+                    retry_queue.append(('shorgan', trade, 'sell'))
+                time.sleep(1)
+
+        # Retry failed trades if any
+        if retry_queue and max_retries > 0:
+            print()
+            print("-" * 40)
+            print(f"RETRYING {len(retry_queue)} FAILED TRADES")
+            print("-" * 40)
+            time.sleep(5)  # Wait before retry
+
+            for bot_type, trade, side in retry_queue:
+                print(f"\n[RETRY] {side.upper()} {trade['shares']} {trade['symbol']}")
+                api = self.dee_api if bot_type == 'dee' else self.shorgan_api
+
+                # Re-validate and retry with adjusted parameters
+                result = self.execute_trade(api, trade, side)
+                if result:
+                    print(f"[RETRY SUCCESS] {trade['symbol']}")
+                    # Remove from failed trades if it succeeded on retry
+                    self.failed_trades = [
+                        f for f in self.failed_trades
+                        if f['symbol'] != trade['symbol'] or f['side'] != side
+                    ]
+                else:
+                    print(f"[RETRY FAILED] {trade['symbol']} - will not retry again")
                 time.sleep(1)
 
         # Summary
