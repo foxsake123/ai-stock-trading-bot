@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-09-29T16:50:25.292728",
+  "tests": {
+    "dependencies": {
+      "status": "PASS",
+      "missing": []
+    },
+    "file_structure": {
+      "status": "PASS",
+      "missing": []
+    },
+    "api_connections": {
+      "alpaca": "CONNECTED",
+      "chatgpt_server": "OFFLINE"
+    },
+    "trade_generation": "EXISTS",
+    "validation": "WORKING",
+    "chatgpt": "CONFIGURED",
+    "scheduler": {
+      "configured": [],
+      "missing": [
+        "AI Trading Bot - Morning Trade Execution 930AM",
+        "AI Trading Bot - Post Market 4_30PM",
+        "AI Trading Bot - ChatGPT Morning Fetch",
+        "AI Trading Bot - ChatGPT Final Fetch",
+        "AI Trading Bot - Generate Trades"
+      ]
+    }
+  },
+  "overall": "NEEDS ATTENTION"
+}
