@@ -1,0 +1,115 @@
+WEEKLY DEEP RESEARCH REPORT REQUEST
+Week of September 30 - October 4, 2025
+
+You are TradingAgents, an elite AI-powered trading research system managing $200,000 across two strategies. Generate a comprehensive weekly research report with SPECIFIC, ACTIONABLE trade recommendations.
+
+IMPORTANT: Provide REAL analysis based on current market conditions, actual stock prices, and this week's actual economic calendar.
+
+==========================================
+SECTION 1: MACRO MARKET ANALYSIS
+==========================================
+Analyze:
+- Current SPY level and trend (actual price)
+- Fed policy stance and this week's Fed speakers
+- This week's actual economic data releases
+- VIX level and implications
+- Dollar index (DXY) trend
+- Key geopolitical concerns
+
+==========================================
+SECTION 2: DEE-BOT RESEARCH ($100K, LONG-ONLY)
+==========================================
+Provide 10 specific S&P 100 stocks for defensive positioning:
+
+For EACH stock include:
+- Symbol and company name
+- Current price (actual)
+- Entry price range
+- Stop loss (-3%)
+- Target price (+5-8%)
+- Position size in shares (max $8,000)
+- Beta coefficient
+- Dividend yield
+- Why it's defensive this week
+- Specific catalyst or earnings date
+
+Focus on: JNJ, PG, KO, PEP, WMT, CVX, XOM, V, UNH, MRK, VZ, T
+
+==========================================
+SECTION 3: SHORGAN-BOT RESEARCH ($100K, CATALYSTS)
+==========================================
+Provide 15 specific catalyst trades for this week:
+
+For EACH trade include:
+- Symbol
+- Current price (actual)
+- Catalyst type and exact date/time
+- Entry price
+- Stop loss (-8%)
+- Target price (+15-20%)
+- Position size in shares (max $10,000)
+- Risk level (Low/Medium/High)
+- Why this catalyst matters
+
+Focus on these catalysts:
+1. BBAI - Earnings Wednesday after close
+2. SOUN - AI momentum/partnerships
+3. FBIO - FDA decision Sept 30
+4. IONQ - Quantum computing conference
+5. RIOT/MARA - Bitcoin correlation
+6. LCID/RIVN - EV delivery numbers
+7. PLTR - Government contracts
+8. SOFI - Student loan catalyst
+9. Any biotech with FDA events this week
+10. Stocks with unusual options activity
+
+==========================================
+SECTION 4: THIS WEEK'S CALENDAR
+==========================================
+List ACTUAL events for Sept 30 - Oct 4:
+
+Monday Sept 30:
+- Economic data (times ET)
+- Earnings (specific companies)
+- FDA/Clinical events
+
+Tuesday Oct 1:
+- [Continue for each day]
+
+Wednesday Oct 2:
+- BBAI earnings after close
+- FOMC minutes
+- [Other events]
+
+Thursday Oct 3:
+- [Events]
+
+Friday Oct 4:
+- Jobs report (8:30 AM)
+- [Other events]
+
+==========================================
+SECTION 5: HIGHEST CONVICTION TRADES
+==========================================
+Rank your TOP 10 trades for the week:
+1. Symbol - Strategy (DEE/SHORGAN) - Why - Conviction Score /10
+[Continue for all 10]
+
+==========================================
+SECTION 6: RISK WARNINGS
+==========================================
+- Specific risks for this week
+- Key support/resistance for SPY
+- Events that could cause volatility
+- Positions to avoid and why
+
+==========================================
+OUTPUT FORMAT REQUIREMENTS:
+==========================================
+- Use ACTUAL current stock prices
+- Provide SPECIFIC entry/exit prices (not ranges)
+- Include EXACT position sizes in shares
+- Give REAL dates and times for events
+- Make recommendations based on THIS WEEK's actual calendar
+
+Generate a professional report that can guide real trading decisions with $200,000 capital. Be specific, actionable, and accurate.
