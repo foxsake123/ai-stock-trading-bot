@@ -48,6 +48,9 @@ class DailyTradeExecutor:
         self.executed_trades = []
         self.failed_trades = []
 
+        # DEE-BOT is LONG-ONLY - no shorting allowed
+        self.dee_bot_long_only = True
+
     def find_todays_trades_file(self):
         """Find today's trades file"""
         today = datetime.now().strftime('%Y-%m-%d')
@@ -191,6 +194,34 @@ class DailyTradeExecutor:
             if shares <= 0:
                 print(f"[SKIP] {symbol}: Invalid share count ({shares})")
                 return None
+
+            # DEE-BOT LONG-ONLY ENFORCEMENT
+            if api == self.dee_api and self.dee_bot_long_only and side == 'sell':
+                # Only allow sells if we have an existing long position to close
+                try:
+                    position = api.get_position(symbol)
+                    if float(position.qty) < 0:  # This is a short position
+                        print(f"[BLOCKED] {symbol}: DEE-BOT cannot sell short (LONG-ONLY strategy)")
+                        self.failed_trades.append({
+                            'symbol': symbol,
+                            'shares': shares,
+                            'side': side,
+                            'error': 'DEE-BOT is LONG-ONLY - shorting not allowed',
+                            'timestamp': datetime.now().isoformat()
+                        })
+                        return None
+                except:
+                    # No position exists - this would create a short
+                    if side == 'sell':
+                        print(f"[BLOCKED] {symbol}: DEE-BOT cannot initiate short positions (LONG-ONLY)")
+                        self.failed_trades.append({
+                            'symbol': symbol,
+                            'shares': shares,
+                            'side': side,
+                            'error': 'DEE-BOT is LONG-ONLY - cannot initiate shorts',
+                            'timestamp': datetime.now().isoformat()
+                        })
+                        return None
 
             # Determine order type
             order_type = 'limit' if limit_price else 'market'
