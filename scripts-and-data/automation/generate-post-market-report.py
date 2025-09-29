@@ -54,12 +54,13 @@ def load_current_portfolio_data():
             for line in lines:
                 if line.strip():
                     parts = line.strip().split(',')
-                    if len(parts) >= 8:
+                    if len(parts) >= 11:
                         symbol = parts[0]
                         quantity = int(parts[1])
                         avg_price = float(parts[2])
                         current_price = float(parts[3])
-                        pnl = float(parts[4])
+                        market_value = float(parts[4])
+                        pnl = float(parts[5])
                         
                         position_value = quantity * current_price
                         portfolios['DEE-BOT']['positions'].append({
@@ -92,9 +93,10 @@ def load_current_portfolio_data():
                         avg_price = float(parts[2])
                         current_price = float(parts[3])
                         market_value = float(parts[4])
-                        cost_basis = float(parts[5])
-                        unrealized_pnl = float(parts[6])
-                        unrealized_pnl_pct = float(parts[7])
+                        unrealized_pnl = float(parts[5])
+                        unrealized_pnl_pct = float(parts[6])
+                        # parts[7] is 'side' (long/short) - skip it
+                        cost_basis = quantity * avg_price
                         
                         # Use absolute value for short positions
                         position_value = abs(market_value)
