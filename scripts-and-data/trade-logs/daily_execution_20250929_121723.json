@@ -1,0 +1,94 @@
+{
+  "execution_time": "2025-09-29T12:17:23.162386",
+  "trades_file": "docs\\TODAYS_TRADES_2025-09-29.md",
+  "executed_trades": [
+    {
+      "symbol": "NVDA",
+      "shares": 30,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 177.0,
+      "order_id": "7f46fae0-1060-4e1b-9707-af8fe98d8335",
+      "timestamp": "2025-09-29T12:17:14.809559",
+      "status": "submitted",
+      "rationale": "Trim after modest gain, reduce tech weight"
+    },
+    {
+      "symbol": "PG",
+      "shares": 40,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 152.5,
+      "order_id": "93d4ad35-fb1c-4486-94f1-7a850b7fbce2",
+      "timestamp": "2025-09-29T12:17:15.830678",
+      "status": "submitted",
+      "rationale": "Re-enter defensive consumer staples"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 30,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 176.5,
+      "order_id": "461d6fea-00ad-433d-bee1-ba30f1643c58",
+      "timestamp": "2025-09-29T12:17:16.856867",
+      "status": "submitted",
+      "rationale": "Increase healthcare defensive position"
+    },
+    {
+      "symbol": "KO",
+      "shares": 100,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 69.8,
+      "order_id": "7a1d66de-bdd4-463a-b083-a2d4c825363d",
+      "timestamp": "2025-09-29T12:17:17.936442",
+      "status": "submitted",
+      "rationale": "Add dividend aristocrat for stability"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "HD",
+      "shares": 12,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 12, available: 0)",
+      "timestamp": "2025-09-29T12:17:12.755703"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 35,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 35, available: 0)",
+      "timestamp": "2025-09-29T12:17:13.781061"
+    },
+    {
+      "symbol": "PLTR",
+      "shares": 200,
+      "side": "buy",
+      "error": "insufficient buying power",
+      "timestamp": "2025-09-29T12:17:19.045398"
+    },
+    {
+      "symbol": "MSTR",
+      "shares": 5,
+      "side": "buy",
+      "error": "insufficient buying power",
+      "timestamp": "2025-09-29T12:17:20.116578"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 30,
+      "side": "buy",
+      "error": "insufficient buying power",
+      "timestamp": "2025-09-29T12:17:21.139076"
+    },
+    {
+      "symbol": "CVNA",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient buying power",
+      "timestamp": "2025-09-29T12:17:22.161313"
+    }
+  ]
+}

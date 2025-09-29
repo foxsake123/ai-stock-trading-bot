@@ -16,13 +16,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 BOTS = {
     'DEE': {
         'api_key': 'PK6FZK4DAQVTD7DYVH78',
-        'secret_key': 'OvdGPcvzYHQmJnGhLVxsvrobMcrpYLmqGKYesmcS',
+        'secret_key': 'JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt',
         'csv_file': 'scripts-and-data/daily-csv/dee-bot-positions.csv',
         'name': 'DEE-BOT'
     },
     'SHORGAN': {
         'api_key': 'PKJRLSB2MFEJUSK6UK2E',
-        'secret_key': 'eTSRAfs9AobCJyqGkycrHFLdD2sAOp8DpqOGVvvr',
+        'secret_key': 'QBpREJmZ7HgHS1tHptvHgwjH4MtjFSoEcQ0wmGic',
         'csv_file': 'scripts-and-data/daily-csv/shorgan-bot-positions.csv',
         'name': 'SHORGAN-BOT'
     }

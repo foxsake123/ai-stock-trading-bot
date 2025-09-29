@@ -1,0 +1,156 @@
+{
+  "execution_time": "2025-09-29T12:18:10.973419",
+  "trades_file": "docs\\TODAYS_TRADES_2025-09-29.md",
+  "executed_trades": [
+    {
+      "symbol": "NVDA",
+      "shares": 30,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 177.0,
+      "order_id": "a27f866a-2e4f-4511-9b00-d006fe440329",
+      "timestamp": "2025-09-29T12:17:56.546847",
+      "status": "submitted",
+      "rationale": "Trim after modest gain, reduce tech weight"
+    },
+    {
+      "symbol": "PG",
+      "shares": 40,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 152.5,
+      "order_id": "486d23aa-d430-454b-a548-ae0f6cc8ff3e",
+      "timestamp": "2025-09-29T12:17:57.581711",
+      "status": "submitted",
+      "rationale": "Re-enter defensive consumer staples"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 30,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 176.5,
+      "order_id": "cc6cc078-c504-4e51-8ff7-c91c6a510aaf",
+      "timestamp": "2025-09-29T12:17:58.606438",
+      "status": "submitted",
+      "rationale": "Increase healthcare defensive position"
+    },
+    {
+      "symbol": "KO",
+      "shares": 100,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 69.8,
+      "order_id": "8147ebfc-4af7-486f-a590-1ab13635a3bd",
+      "timestamp": "2025-09-29T12:17:59.630531",
+      "status": "submitted",
+      "rationale": "Add dividend aristocrat for stability"
+    },
+    {
+      "symbol": "TSLA",
+      "shares": 2,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 440.0,
+      "order_id": "9baef508-4284-4ff7-9f88-64f5d928b57a",
+      "timestamp": "2025-09-29T12:18:02.764281",
+      "status": "submitted",
+      "rationale": "Secure +25.64% gain"
+    },
+    {
+      "symbol": "FBIO",
+      "shares": 1700,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 3.65,
+      "order_id": "ac17b191-0a71-4474-81c7-61fb1bfc747a",
+      "timestamp": "2025-09-29T12:18:04.826515",
+      "status": "submitted",
+      "rationale": "Reduce position by half"
+    },
+    {
+      "symbol": "HELE",
+      "shares": 180,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 22.5,
+      "order_id": "84436ca8-8f2a-4a90-9c2f-01a25780179e",
+      "timestamp": "2025-09-29T12:18:05.847326",
+      "status": "submitted",
+      "rationale": "Cut -4.75% loss"
+    },
+    {
+      "symbol": "MSTR",
+      "shares": 5,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 175.0,
+      "order_id": "6ca84ed6-faf8-4b08-a66a-b107ca2507ce",
+      "timestamp": "2025-09-29T12:18:07.914871",
+      "status": "submitted",
+      "rationale": "Bitcoin proxy momentum"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 30,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 35.5,
+      "order_id": "3222fa64-026d-40a3-a43d-e708a9ca853b",
+      "timestamp": "2025-09-29T12:18:08.946286",
+      "status": "submitted",
+      "rationale": "Oversold AI infrastructure bounce"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "HD",
+      "shares": 12,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 12, available: 0)",
+      "timestamp": "2025-09-29T12:17:54.492275"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 35,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 35, available: 0)",
+      "timestamp": "2025-09-29T12:17:55.521901"
+    },
+    {
+      "symbol": "RGTI",
+      "shares": 65,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 65, available: 0)",
+      "timestamp": "2025-09-29T12:18:00.706401"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 21,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 21, available: 0)",
+      "timestamp": "2025-09-29T12:18:01.733907"
+    },
+    {
+      "symbol": "GPK",
+      "shares": 142,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 142, available: 0)",
+      "timestamp": "2025-09-29T12:18:03.796497"
+    },
+    {
+      "symbol": "PLTR",
+      "shares": 200,
+      "side": "buy",
+      "error": "insufficient buying power",
+      "timestamp": "2025-09-29T12:18:06.886810"
+    },
+    {
+      "symbol": "CVNA",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient buying power",
+      "timestamp": "2025-09-29T12:18:09.972830"
+    }
+  ]
+}

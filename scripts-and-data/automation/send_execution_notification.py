@@ -121,7 +121,9 @@ def main():
     print("Preparing execution notification...")
 
     message = format_notification_message()
-    print(f"Message preview:\n{message}\n")
+    # Remove Unicode characters for console output
+    preview = message.encode('ascii', 'replace').decode('ascii')
+    print(f"Message preview:\n{preview}\n")
 
     send_telegram_message(message)
 

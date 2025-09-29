@@ -132,6 +132,21 @@ class DailyTradeExecutor:
         if shorgan_section_match:
             shorgan_content = shorgan_section_match.group(0)
 
+            # Parse SHORGAN-BOT sell orders
+            sell_table_match = re.search(r'### SELL ORDERS.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', shorgan_content, re.DOTALL)
+            if sell_table_match:
+                sell_rows = sell_table_match.group(1).strip().split('\n')
+                for row in sell_rows:
+                    if '|' in row and not row.strip().startswith('|--') and not '-----' in row:
+                        parts = [p.strip() for p in row.split('|') if p.strip()]
+                        if len(parts) >= 3:
+                            shorgan_trades['sell'].append({
+                                'symbol': parts[0],
+                                'shares': int(parts[1]) if parts[1].isdigit() else 0,
+                                'limit_price': float(parts[2].replace('$', '')) if parts[2].replace('$', '').replace('.', '').isdigit() else None,
+                                'rationale': parts[3] if len(parts) > 3 else ''
+                            })
+
             # Parse SHORGAN-BOT buy orders
             buy_table_match = re.search(r'### BUY ORDERS.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', shorgan_content, re.DOTALL)
             if buy_table_match:
@@ -283,10 +298,15 @@ class DailyTradeExecutor:
                 time.sleep(1)
 
         # Execute SHORGAN-BOT trades
-        if shorgan_trades['buy'] or shorgan_trades['short']:
+        if shorgan_trades['sell'] or shorgan_trades['buy'] or shorgan_trades['short']:
             print("-" * 40)
             print("SHORGAN-BOT TRADES")
             print("-" * 40)
+
+            # Execute sells first
+            for trade in shorgan_trades['sell']:
+                self.execute_trade(self.shorgan_api, trade, 'sell')
+                time.sleep(1)
 
             # Execute buys
             for trade in shorgan_trades['buy']:
