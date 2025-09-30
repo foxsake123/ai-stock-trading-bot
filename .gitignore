@@ -96,3 +96,15 @@ backup/
 
 # Claude specific
 .claude/
+
+# Browser profiles (should never be committed)
+chrome_profile/
+**/chrome_profile/
+
+# Test output files
+fd_test_*.json
+**/fd_test_*.json
+
+# One-time emergency scripts
+cover_nvda_short.py
+cancel_old_orders.py

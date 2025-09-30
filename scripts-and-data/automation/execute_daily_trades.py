@@ -12,22 +12,32 @@ import time
 import alpaca_trade_api as tradeapi
 from datetime import datetime, timedelta
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Add path for logging
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
-# Alpaca API Configuration
+# Alpaca API Configuration (from environment variables)
 DEE_BOT_CONFIG = {
-    'API_KEY': 'PK6FZK4DAQVTD7DYVH78',
-    'SECRET_KEY': 'JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt',
+    'API_KEY': os.getenv('ALPACA_API_KEY_DEE'),
+    'SECRET_KEY': os.getenv('ALPACA_SECRET_KEY_DEE'),
     'BASE_URL': 'https://paper-api.alpaca.markets'
 }
 
 SHORGAN_BOT_CONFIG = {
-    'API_KEY': 'PKJRLSB2MFEJUSK6UK2E',
-    'SECRET_KEY': 'QBpREJmZ7HgHS1tHptvHgwjH4MtjFSoEcQ0wmGic',
+    'API_KEY': os.getenv('ALPACA_API_KEY_SHORGAN'),
+    'SECRET_KEY': os.getenv('ALPACA_SECRET_KEY_SHORGAN'),
     'BASE_URL': 'https://paper-api.alpaca.markets'
 }
+
+# Validate API keys are loaded
+if not DEE_BOT_CONFIG['API_KEY'] or not DEE_BOT_CONFIG['SECRET_KEY']:
+    raise ValueError("DEE-BOT API keys not found in environment variables. Check your .env file.")
+if not SHORGAN_BOT_CONFIG['API_KEY'] or not SHORGAN_BOT_CONFIG['SECRET_KEY']:
+    raise ValueError("SHORGAN-BOT API keys not found in environment variables. Check your .env file.")
 
 class DailyTradeExecutor:
     def __init__(self):
@@ -88,18 +98,38 @@ class DailyTradeExecutor:
 
         print(f"[INFO] Parsing trades from: {file_path}")
 
-        with open(file_path, 'r') as f:
+        with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
 
         dee_trades = {'sell': [], 'buy': []}
         shorgan_trades = {'sell': [], 'buy': [], 'short': []}
 
-        # Find DEE-BOT section
-        dee_section_match = re.search(r'## DEE-BOT.*?(?=^## [A-Z]|^---|\Z)', content, re.DOTALL | re.MULTILINE)
+        # Find DEE-BOT section (with or without emoji)
+        dee_section_match = re.search(r'## (?:🛡️ )?DEE-BOT.*?(?=^## (?:🚀 )?SHORGAN|^## \[|^---|\Z)', content, re.DOTALL | re.MULTILINE)
         if dee_section_match:
             dee_content = dee_section_match.group(0)
 
-            # Parse DEE-BOT sell orders
+            # Parse individual trade entries (#### format)
+            trade_pattern = r'####\s+\d+\.\s+(BUY|SELL|HOLD|TRIM)\s+(\w+).*?- \*\*Shares\*\*:\s*(\d+).*?- \*\*Price\*\*:\s*\$?([\d.]+)'
+            for match in re.finditer(trade_pattern, dee_content, re.DOTALL):
+                action, symbol, shares, price = match.groups()
+                if action in ['SELL', 'TRIM']:
+                    dee_trades['sell'].append({
+                        'symbol': symbol,
+                        'shares': int(shares),
+                        'limit_price': float(price),
+                        'rationale': action
+                    })
+                elif action == 'BUY':
+                    dee_trades['buy'].append({
+                        'symbol': symbol,
+                        'shares': int(shares),
+                        'limit_price': float(price),
+                        'stop_loss': None,
+                        'rationale': 'DEE-BOT buy'
+                    })
+
+            # Also check for table format (legacy)
             sell_table_match = re.search(r'### SELL ORDERS.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', dee_content, re.DOTALL)
             if sell_table_match:
                 sell_rows = sell_table_match.group(1).strip().split('\n')
@@ -114,7 +144,6 @@ class DailyTradeExecutor:
                                 'rationale': parts[3] if len(parts) > 3 else ''
                             })
 
-            # Parse DEE-BOT buy orders
             buy_table_match = re.search(r'### BUY ORDERS.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', dee_content, re.DOTALL)
             if buy_table_match:
                 buy_rows = buy_table_match.group(1).strip().split('\n')
@@ -130,12 +159,39 @@ class DailyTradeExecutor:
                                 'rationale': parts[4] if len(parts) > 4 else ''
                             })
 
-        # Find SHORGAN-BOT section
-        shorgan_section_match = re.search(r'## SHORGAN-BOT.*?(?=^## [A-Z]|^---|\Z)', content, re.DOTALL | re.MULTILINE)
+        # Find SHORGAN-BOT section (with or without emoji)
+        shorgan_section_match = re.search(r'## (?:🚀 )?SHORGAN-BOT.*?(?=^## 📋|^## \[|^---|\Z)', content, re.DOTALL | re.MULTILINE)
         if shorgan_section_match:
             shorgan_content = shorgan_section_match.group(0)
 
-            # Parse SHORGAN-BOT sell orders
+            # Parse individual trade entries (#### format)
+            trade_pattern = r'####\s+\d+\.\s+(BUY|SHORT|SELL)\s+(\w+).*?- \*\*Shares\*\*:\s*(\d+).*?- \*\*Price\*\*:\s*\$?([\d.]+)'
+            for match in re.finditer(trade_pattern, shorgan_content, re.DOTALL):
+                action, symbol, shares, price = match.groups()
+                if action == 'SHORT':
+                    shorgan_trades['short'].append({
+                        'symbol': symbol,
+                        'shares': int(shares),
+                        'limit_price': float(price),
+                        'rationale': 'Short position'
+                    })
+                elif action == 'BUY':
+                    shorgan_trades['buy'].append({
+                        'symbol': symbol,
+                        'shares': int(shares),
+                        'limit_price': float(price),
+                        'stop_loss': None,
+                        'rationale': 'SHORGAN-BOT buy'
+                    })
+                elif action == 'SELL':
+                    shorgan_trades['sell'].append({
+                        'symbol': symbol,
+                        'shares': int(shares),
+                        'limit_price': float(price),
+                        'rationale': 'SHORGAN-BOT sell'
+                    })
+
+            # Also check for table format (legacy)
             sell_table_match = re.search(r'### SELL ORDERS.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', shorgan_content, re.DOTALL)
             if sell_table_match:
                 sell_rows = sell_table_match.group(1).strip().split('\n')
@@ -150,7 +206,6 @@ class DailyTradeExecutor:
                                 'rationale': parts[3] if len(parts) > 3 else ''
                             })
 
-            # Parse SHORGAN-BOT buy orders
             buy_table_match = re.search(r'### BUY ORDERS.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', shorgan_content, re.DOTALL)
             if buy_table_match:
                 buy_rows = buy_table_match.group(1).strip().split('\n')
@@ -166,7 +221,6 @@ class DailyTradeExecutor:
                                 'rationale': parts[4] if len(parts) > 4 else ''
                             })
 
-            # Parse SHORT SELL orders
             short_table_match = re.search(r'### SHORT SELL.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', shorgan_content, re.DOTALL)
             if short_table_match:
                 short_rows = short_table_match.group(1).strip().split('\n')
