@@ -1,0 +1,50 @@
+MIT License
+
+Copyright (c) 2025 AI Stock Trading Bot Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+DISCLAIMER:
+
+This software is for educational and research purposes only. The authors and
+contributors are not financial advisors and make no representations or
+warranties about the accuracy, reliability, completeness, or timeliness of
+any trading signals, market data, or investment recommendations provided by
+this software.
+
+USE AT YOUR OWN RISK. Trading stocks, options, and other financial instruments
+involves substantial risk of loss and is not suitable for every investor. Past
+performance is not indicative of future results. You should carefully consider
+whether trading is suitable for you in light of your financial condition.
+
+The authors and contributors shall not be held liable for any losses, damages,
+or other liabilities arising from the use of this software, including but not
+limited to:
+- Financial losses from trading activities
+- Data inaccuracies or errors
+- System failures or downtime
+- Third-party API or service disruptions
+
+By using this software, you acknowledge that you have read this disclaimer and
+agree to assume full responsibility for all trading decisions and their outcomes.
+
+Always consult with a qualified financial advisor before making investment
+decisions.

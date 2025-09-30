@@ -1,0 +1,60 @@
+# Dependabot configuration for automated dependency updates
+# GitHub will automatically create PRs to update dependencies
+
+version: 2
+updates:
+  # Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "foxsake123"
+    assignees:
+      - "foxsake123"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "python"
+    # Group updates for related packages
+    groups:
+      alpaca:
+        patterns:
+          - "alpaca*"
+      testing:
+        patterns:
+          - "pytest*"
+      linting:
+        patterns:
+          - "black"
+          - "flake8"
+          - "mypy"
+          - "isort"
+      data-science:
+        patterns:
+          - "pandas"
+          - "numpy"
+          - "scipy"
+          - "plotly"
+          - "matplotlib"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
