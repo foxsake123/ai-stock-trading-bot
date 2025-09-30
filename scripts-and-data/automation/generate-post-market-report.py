@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 """
-Current Post-Market Report Generator
-Uses actual portfolio data and sends comprehensive report via Telegram
-September 16, 2025
+Post-Market Report Generator with Live Alpaca Data
+Includes today's trades, individual holdings, and daily performance
 """
 
+import os
 import json
+import csv
 import requests
 from datetime import datetime, date
 from pathlib import Path
+from alpaca.trading.client import TradingClient
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Telegram Configuration
 TELEGRAM_BOT_TOKEN = "8093845586:AAEqytNDQ_dVzVp6ZbDyveMTx7MZMtG6N0c"
@@ -22,9 +27,9 @@ def send_telegram_message(message):
         'text': message,
         'parse_mode': 'HTML'
     }
-    
+
     try:
-        response = requests.post(url, json=payload)
+        response = requests.post(url, json=payload, timeout=10)
         if response.status_code == 200:
             print("[SUCCESS] Message sent to Telegram")
             return True
@@ -35,289 +40,389 @@ def send_telegram_message(message):
         print(f"[ERROR] Telegram send failed: {str(e)}")
         return False
 
-def load_current_portfolio_data():
-    """Load current portfolio positions from properly separated portfolio folders"""
+def get_todays_trades():
+    """Get today's executed trades from the most recent log file"""
+    log_dir = Path("scripts-and-data/trade-logs")
+    if not log_dir.exists():
+        return [], []
 
-    portfolios = {
-        'DEE-BOT': {'positions': [], 'total_value': 0, 'pnl': 0, 'cash': 2496.37, 'strategy': 'Beta-Neutral S&P 100'},
-        'SHORGAN-BOT': {'positions': [], 'total_value': 0, 'pnl': 0, 'cash': 37896.67, 'strategy': 'Catalyst Trading'}
-    }
+    # Find today's log files
+    today = datetime.now().strftime("%Y%m%d")
+    log_files = sorted(log_dir.glob(f"daily_execution_{today}_*.json"), reverse=True)
 
-    # Load DEE-BOT positions from new structure
-    dee_file = Path("portfolio-holdings/dee-bot/current/positions.csv")
-    if not dee_file.exists():
-        # Fallback to old location
-        dee_file = Path("scripts-and-data/daily-csv/dee-bot-positions.csv")
-    if dee_file.exists():
-        with open(dee_file, 'r') as f:
-            lines = f.readlines()[1:]  # Skip header
-            for line in lines:
-                if line.strip():
-                    parts = line.strip().split(',')
-                    if len(parts) >= 11:
-                        symbol = parts[0]
-                        quantity = int(parts[1])
-                        avg_price = float(parts[2])
-                        current_price = float(parts[3])
-                        market_value = float(parts[4])
-                        pnl = float(parts[5])
-                        
-                        position_value = quantity * current_price
-                        portfolios['DEE-BOT']['positions'].append({
-                            'symbol': symbol,
-                            'quantity': quantity,
-                            'avg_price': avg_price,
-                            'current_price': current_price,
-                            'position_value': position_value,
-                            'pnl': pnl,
-                            'pnl_pct': pnl / (quantity * avg_price) * 100 if quantity * avg_price > 0 else 0
-                        })
-                        portfolios['DEE-BOT']['total_value'] += position_value
-                        portfolios['DEE-BOT']['pnl'] += pnl
-    
-    # Load SHORGAN-BOT positions from new structure
-    shorgan_file = Path("portfolio-holdings/shorgan-bot/current/positions.csv")
-    if not shorgan_file.exists():
-        # Fallback to old location
-        shorgan_file = Path("scripts-and-data/daily-csv/shorgan-bot-positions.csv")
-    if shorgan_file.exists():
-        with open(shorgan_file, 'r') as f:
-            lines = f.readlines()[1:]  # Skip header
-            for line in lines:
-                if line.strip():
-                    parts = line.strip().split(',')
-                    # Handle new format with 11 columns (market_value column)
-                    if len(parts) >= 11:
-                        symbol = parts[0]
-                        quantity = int(parts[1])
-                        avg_price = float(parts[2])
-                        current_price = float(parts[3])
-                        market_value = float(parts[4])
-                        unrealized_pnl = float(parts[5])
-                        unrealized_pnl_pct = float(parts[6])
-                        # parts[7] is 'side' (long/short) - skip it
-                        cost_basis = quantity * avg_price
-                        
-                        # Use absolute value for short positions
-                        position_value = abs(market_value)
-                        
-                        portfolios['SHORGAN-BOT']['positions'].append({
-                            'symbol': symbol,
-                            'quantity': quantity,
-                            'avg_price': avg_price,
-                            'current_price': current_price,
-                            'position_value': position_value,
-                            'pnl': unrealized_pnl,
-                            'pnl_pct': unrealized_pnl_pct
-                        })
-                        portfolios['SHORGAN-BOT']['total_value'] += position_value
-                        portfolios['SHORGAN-BOT']['pnl'] += unrealized_pnl
-                    elif len(parts) >= 8:
-                        # Fallback to old format
-                        symbol = parts[0]
-                        quantity = int(parts[1])
-                        avg_price = float(parts[2])
-                        current_price = float(parts[3])
-                        pnl = float(parts[4])
-                        
-                        position_value = quantity * current_price
-                        portfolios['SHORGAN-BOT']['positions'].append({
-                            'symbol': symbol,
-                            'quantity': quantity,
-                            'avg_price': avg_price,
-                            'current_price': current_price,
-                            'position_value': position_value,
-                            'pnl': pnl,
-                            'pnl_pct': pnl / (quantity * avg_price) * 100 if quantity * avg_price > 0 else 0
-                        })
-                        portfolios['SHORGAN-BOT']['total_value'] += position_value
-                        portfolios['SHORGAN-BOT']['pnl'] += pnl
-    
-    # Calculate actual portfolio values (cash + positions)
-    # Estimate cash remaining based on starting capital minus cost basis
-    if portfolios['SHORGAN-BOT']['positions']:
-        total_cost = sum(abs(p['quantity'] * p['avg_price']) for p in portfolios['SHORGAN-BOT']['positions'])
-        portfolios['SHORGAN-BOT']['cash'] = max(0, 100000 - total_cost)
-    
-    if portfolios['DEE-BOT']['positions']:
-        total_cost = sum(p['quantity'] * p['avg_price'] for p in portfolios['DEE-BOT']['positions'])
-        portfolios['DEE-BOT']['cash'] = max(0, 100000 - total_cost)
-    
-    return portfolios
+    dee_trades = []
+    shorgan_trades = []
 
-def load_execution_data():
-    """Load today's execution data"""
-    executions = {'DEE-BOT': [], 'SHORGAN-BOT': []}
-    
-    # Check for DEE-BOT executions
-    dee_exec_file = Path(f"scripts-and-data/daily-json/executions/dee_bot_execution_{date.today().strftime('%Y-%m-%d')}.json")
-    if dee_exec_file.exists():
-        with open(dee_exec_file, 'r') as f:
-            data = json.load(f)
-            executions['DEE-BOT'] = data.get('executed_trades', [])
-
-    # Check for SHORGAN-BOT executions (from execution reports)
-    exec_dir = Path("scripts-and-data/daily-json/execution")
-    if exec_dir.exists():
-        for exec_file in exec_dir.glob(f"execution_report_{date.today().strftime('%Y%m%d')}*.json"):
-            with open(exec_file, 'r') as f:
+    for log_file in log_files:
+        try:
+            with open(log_file, 'r') as f:
                 data = json.load(f)
-                if data.get('executed_orders'):
-                    executions['SHORGAN-BOT'].extend(data['executed_orders'])
-    
-    return executions
 
-def format_comprehensive_report():
-    """Generate comprehensive post-market report"""
-    
-    portfolios = load_current_portfolio_data()
-    executions = load_execution_data()
-    
-    # Calculate totals (cash + positions)
-    dee_total_value = portfolios['DEE-BOT']['cash'] + portfolios['DEE-BOT']['total_value']
-    shorgan_total_value = portfolios['SHORGAN-BOT']['cash'] + portfolios['SHORGAN-BOT']['total_value']
-    total_portfolio_value = dee_total_value + shorgan_total_value
-    total_pnl = portfolios['DEE-BOT']['pnl'] + portfolios['SHORGAN-BOT']['pnl']
-    total_positions = len(portfolios['DEE-BOT']['positions']) + len(portfolios['SHORGAN-BOT']['positions'])
-    
-    # Calculate returns based on starting capital
-    starting_capital = 200000  # $100k per bot
-    total_return_pct = (total_pnl / starting_capital) * 100 if starting_capital > 0 else 0
-    
-    report = []
-    report.append("<b>AI TRADING BOT - POST-MARKET REPORT</b>")
-    report.append(f"<b>{date.today().strftime('%A, %B %d, %Y')}</b>")
-    report.append(f"<b>{datetime.now().strftime('%I:%M %p ET')}</b>")
-    report.append("=" * 45)
-    
-    # Portfolio Overview
-    report.append("\n<b>DUAL-STRATEGY PORTFOLIO OVERVIEW</b>")
-    report.append(f"Total Portfolio Value: <b>${total_portfolio_value:,.2f}</b>")
-    report.append(f"Total Unrealized P&L: <b>${total_pnl:+,.2f}</b>")
-    report.append(f"Total Return: <b>{total_return_pct:+.2f}%</b>")
-    report.append(f"Active Positions: <b>{total_positions}</b>")
-    report.append(f"Strategy Split: <b>DEE 49% | SHORGAN 51%</b>")
-    
-    # DEE-BOT Analysis
-    report.append("\n<b>==== DEE-BOT (Beta-Neutral S&P 100) ====</b>")
-    dee_data = portfolios['DEE-BOT']
-    report.append(f"Strategy: <b>{dee_data.get('strategy', 'Beta-Neutral S&P 100')}</b>")
-    report.append(f"Portfolio Value: <b>${dee_total_value:,.2f}</b>")
-    report.append(f"Position Value: <b>${dee_data['total_value']:,.2f}</b>")
-    report.append(f"Cash Available: <b>${dee_data['cash']:,.2f}</b>")
-    report.append(f"Unrealized P&L: <b>${dee_data['pnl']:+,.2f}</b>")
-    report.append(f"Positions: <b>{len(dee_data['positions'])} large-caps</b>")
-    report.append(f"Portfolio Beta: <b>~1.0 (target)</b>")
-    
-    if dee_data['positions']:
-        # Best and worst performers
-        best_dee = max(dee_data['positions'], key=lambda x: x['pnl_pct'])
-        worst_dee = min(dee_data['positions'], key=lambda x: x['pnl_pct'])
-        report.append(f"Best: <b>{best_dee['symbol']} ({best_dee['pnl_pct']:+.2f}%)</b>")
-        report.append(f"Worst: <b>{worst_dee['symbol']} ({worst_dee['pnl_pct']:+.2f}%)</b>")
-        
-        # Today's DEE-BOT trades
-        if executions['DEE-BOT']:
-            report.append(f"\n<b>Today's DEE-BOT Trades:</b>")
-            for trade in executions['DEE-BOT']:
-                report.append(f"- {trade['symbol']}: {trade['shares']} @ ${trade['price']:.2f}")
-    
-    # SHORGAN-BOT Analysis
-    report.append("\n<b>==== SHORGAN-BOT (Catalyst Trading) ====</b>")
-    shorgan_data = portfolios['SHORGAN-BOT']
-    report.append(f"Strategy: <b>{shorgan_data.get('strategy', 'Catalyst Trading')}</b>")
-    report.append(f"Portfolio Value: <b>${shorgan_total_value:,.2f}</b>")
-    report.append(f"Position Value: <b>${shorgan_data['total_value']:,.2f}</b>")
-    report.append(f"Cash Available: <b>${shorgan_data['cash']:,.2f}</b>")
-    report.append(f"Unrealized P&L: <b>${shorgan_data['pnl']:+,.2f}</b>")
-    report.append(f"Positions: <b>{len(shorgan_data['positions'])} catalyst plays</b>")
-    report.append(f"Focus: <b>FDA events, earnings, momentum</b>")
-    
-    if shorgan_data['positions']:
-        # Best and worst performers
-        best_shorgan = max(shorgan_data['positions'], key=lambda x: x['pnl_pct'])
-        worst_shorgan = min(shorgan_data['positions'], key=lambda x: x['pnl_pct'])
-        report.append(f"Best: <b>{best_shorgan['symbol']} ({best_shorgan['pnl_pct']:+.2f}%)</b>")
-        report.append(f"Worst: <b>{worst_shorgan['symbol']} ({worst_shorgan['pnl_pct']:+.2f}%)</b>")
-        
-        # Today's SHORGAN-BOT trades
-        if executions['SHORGAN-BOT']:
-            report.append(f"\n<b>Today's SHORGAN-BOT Trades:</b>")
-            for trade in executions['SHORGAN-BOT']:
-                report.append(f"- {trade['symbol']}: {trade['shares']} @ ${trade['price']:.2f}")
-    
-    # Upcoming Catalysts
-    report.append("\n<b>UPCOMING CATALYSTS</b>")
-    report.append("<b>Tomorrow (Sept 17):</b> CBRL Earnings")
-    report.append("   - 81 shares positioned for potential squeeze")
-    report.append("<b>Thursday (Sept 19):</b> INCY FDA Decision")
-    report.append("   - 61 shares positioned for binary approval")
-    
-    # Risk Assessment
-    report.append("\n<b>RISK ASSESSMENT</b>")
-    positions_value = portfolios['DEE-BOT']['total_value'] + portfolios['SHORGAN-BOT']['total_value']
-    exposure_pct = (positions_value / starting_capital) * 100
-    report.append(f"Capital Deployed: <b>${positions_value:,.2f}</b>")
-    report.append(f"Capital Exposure: <b>{exposure_pct:.1f}%</b>")
-    
-    if exposure_pct > 90:
-        report.append("<b>HIGH EXPOSURE WARNING</b>")
-    elif exposure_pct > 75:
-        report.append("<b>MODERATE EXPOSURE</b>")
-    else:
-        report.append("<b>CONTROLLED EXPOSURE</b>")
-    
-    # System Status
-    report.append("\n<b>SYSTEM STATUS</b>")
-    report.append("Multi-Agent Analysis: <b>ACTIVE</b>")
-    report.append("Risk Management: <b>ACTIVE</b>")
-    report.append("Stop Losses: <b>PROTECTED</b>")
-    report.append("Portfolio Monitoring: <b>24/7</b>")
-    
-    # Footer
-    report.append("\n" + "=" * 45)
-    report.append("<b>Next Report:</b> Tomorrow 4:15 PM ET")
-    report.append("<b>Status:</b> FULLY OPERATIONAL")
-    
-    return "\n".join(report)
+            if 'executed_trades' in data:
+                for trade in data['executed_trades']:
+                    bot = trade.get('bot', 'UNKNOWN')
+                    trade_str = f"{trade['action']} {trade['shares']} {trade['symbol']} @ ${trade.get('price', 'MKT')}"
 
-def generate_and_send_report():
-    """Main function to generate and send post-market report"""
-    
-    print("=" * 60)
+                    if bot == 'DEE-BOT':
+                        dee_trades.append(trade_str)
+                    elif bot == 'SHORGAN-BOT':
+                        shorgan_trades.append(trade_str)
+        except Exception as e:
+            print(f"Error reading log {log_file}: {e}")
+            continue
+
+    return dee_trades, shorgan_trades
+
+def get_live_portfolio_data(client, bot_name, starting_capital):
+    """Fetch live portfolio data from Alpaca"""
+    try:
+        account = client.get_account()
+        positions = client.get_all_positions()
+
+        # Account level data
+        portfolio_value = float(account.portfolio_value)
+        cash = float(account.cash)
+        equity = float(account.equity)
+
+        # Calculate total P&L
+        pnl = portfolio_value - starting_capital
+        pnl_pct = (pnl / starting_capital) * 100
+
+        # Process positions
+        holdings = []
+        total_todays_pl = 0
+        total_todays_pl_pct = 0
+
+        for pos in positions:
+            qty = int(pos.qty)
+            side = "SHORT" if pos.side == "short" else "LONG"
+            price = float(pos.current_price)
+            value = float(pos.market_value)
+            avg_entry = float(pos.avg_entry_price)
+            cost_basis = float(pos.cost_basis)
+
+            # Total P/L (unrealized)
+            unrealized = float(pos.unrealized_pl)
+            unrealized_pct = float(pos.unrealized_plpc) * 100
+
+            # Today's P/L (intraday change)
+            todays_pl = float(pos.unrealized_intraday_pl)
+            todays_pl_pct = float(pos.unrealized_intraday_plpc) * 100
+
+            total_todays_pl += todays_pl
+
+            holdings.append({
+                'symbol': pos.symbol,
+                'qty': qty,
+                'side': side,
+                'price': price,
+                'value': value,
+                'avg_entry': avg_entry,
+                'cost_basis': cost_basis,
+                'todays_pl': todays_pl,
+                'todays_pl_pct': todays_pl_pct,
+                'unrealized_pl': unrealized,
+                'unrealized_pct': unrealized_pct
+            })
+
+        # Sort by absolute value (largest positions first)
+        holdings.sort(key=lambda x: abs(x['value']), reverse=True)
+
+        # Calculate today's portfolio P/L percentage
+        if portfolio_value > 0:
+            todays_portfolio_pct = (total_todays_pl / portfolio_value) * 100
+        else:
+            todays_portfolio_pct = 0
+
+        return {
+            'portfolio_value': portfolio_value,
+            'cash': cash,
+            'equity': equity,
+            'pnl': pnl,
+            'pnl_pct': pnl_pct,
+            'todays_pl': total_todays_pl,
+            'todays_pl_pct': todays_portfolio_pct,
+            'positions_count': len(holdings),
+            'holdings': holdings
+        }
+
+    except Exception as e:
+        print(f"[ERROR] Failed to get data for {bot_name}: {e}")
+        return None
+
+def format_report(dee_data, shorgan_data, dee_trades, shorgan_trades):
+    """Format the comprehensive post-market report"""
+
+    now = datetime.now()
+
+    # Calculate combined totals
+    combined_value = dee_data['portfolio_value'] + shorgan_data['portfolio_value']
+    combined_pnl = dee_data['pnl'] + shorgan_data['pnl']
+    combined_pnl_pct = (combined_pnl / 200000) * 100
+
+    # Calculate combined today's P/L
+    combined_todays_pl = dee_data['todays_pl'] + shorgan_data['todays_pl']
+    combined_todays_pl_pct = (combined_todays_pl / combined_value) * 100 if combined_value > 0 else 0
+
+    report = f"""<b>POST-MARKET REPORT</b>
+{now.strftime('%A, %B %d, %Y - %I:%M %p ET')}
+============================================
+
+<b>DEE-BOT HOLDINGS ({dee_data['positions_count']} positions)</b>
++-------+-----+--------+------+-----------+-----------+------------+-------------+-------------+-------------+
+| Asset | Qty | Price  | Side | Mkt Value | Avg Entry | Cost Basis | Today P/L % | Today P/L $ | Total P/L % |
++-------+-----+--------+------+-----------+-----------+------------+-------------+-------------+-------------+"""
+
+    # DEE-BOT holdings
+    for holding in dee_data['holdings']:
+        report += f"\n| {holding['symbol']:<5} | {holding['qty']:>3} | ${holding['price']:>6.2f} | {holding['side']:<4} | ${holding['value']:>8,.2f} | ${holding['avg_entry']:>8.2f} | ${holding['cost_basis']:>9,.2f} | {holding['todays_pl_pct']:>+10.2f}% | ${holding['todays_pl']:>+10.2f} | {holding['unrealized_pct']:>+10.2f}% |"
+
+    # DEE-BOT Total row
+    dee_total_value = sum(h['value'] for h in dee_data['holdings'])
+    dee_total_cost = sum(h['cost_basis'] for h in dee_data['holdings'])
+    report += f"\n+-------+-----+--------+------+-----------+-----------+------------+-------------+-------------+-------------+"
+    report += f"\n| TOTAL |     |        |      | ${dee_total_value:>8,.2f} |           | ${dee_total_cost:>9,.2f} | {dee_data['todays_pl_pct']:>+10.2f}% | ${dee_data['todays_pl']:>+10.2f} | {dee_data['pnl_pct']:>+10.2f}% |"
+    report += f"\n+-------+-----+--------+------+-----------+-----------+------------+-------------+-------------+-------------+"
+
+    report += f"""
+
+<b>SHORGAN-BOT HOLDINGS ({shorgan_data['positions_count']} positions)</b>
++-------+------+--------+-------+-----------+-----------+------------+-------------+-------------+-------------+
+| Asset | Qty  | Price  | Side  | Mkt Value | Avg Entry | Cost Basis | Today P/L % | Today P/L $ | Total P/L % |
++-------+------+--------+-------+-----------+-----------+------------+-------------+-------------+-------------+"""
+
+    # SHORGAN-BOT holdings
+    for holding in shorgan_data['holdings']:
+        report += f"\n| {holding['symbol']:<5} | {holding['qty']:>4} | ${holding['price']:>6.2f} | {holding['side']:<5} | ${holding['value']:>8,.2f} | ${holding['avg_entry']:>8.2f} | ${holding['cost_basis']:>9,.2f} | {holding['todays_pl_pct']:>+10.2f}% | ${holding['todays_pl']:>+10.2f} | {holding['unrealized_pct']:>+10.2f}% |"
+
+    # SHORGAN-BOT Total row
+    shorgan_total_value = sum(h['value'] for h in shorgan_data['holdings'])
+    shorgan_total_cost = sum(h['cost_basis'] for h in shorgan_data['holdings'])
+    report += f"\n+-------+------+--------+-------+-----------+-----------+------------+-------------+-------------+-------------+"
+    report += f"\n| TOTAL |      |        |       | ${shorgan_total_value:>8,.2f} |           | ${shorgan_total_cost:>9,.2f} | {shorgan_data['todays_pl_pct']:>+10.2f}% | ${shorgan_data['todays_pl']:>+10.2f} | {shorgan_data['pnl_pct']:>+10.2f}% |"
+    report += f"\n+-------+------+--------+-------+-----------+-----------+------------+-------------+-------------+-------------+"
+
+    report += f"""
+
+<b>COMBINED PORTFOLIO SUMMARY</b>
+Portfolio Value:  ${combined_value:>12,.2f}
+Today's P/L:      ${combined_todays_pl:>+12,.2f} ({combined_todays_pl_pct:>+6.2f}%)
+Total P/L:        ${combined_pnl:>+12,.2f} ({combined_pnl_pct:>+6.2f}%)
+Active Positions: {dee_data['positions_count'] + shorgan_data['positions_count']:>3}
+
+<b>TODAY'S TRADES</b>
+DEE-BOT:    {len(dee_trades)} trades
+SHORGAN:    {len(shorgan_trades)} trades
+
+============================================
+Next Report: 4:30 PM ET | System: Online
+============================================"""
+
+    return report
+
+def save_report(report_text):
+    """Save report to file"""
+    report_dir = Path("docs/reports/post-market")
+    report_dir.mkdir(parents=True, exist_ok=True)
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    report_file = report_dir / f"post_market_report_{today}.txt"
+
+    with open(report_file, 'w') as f:
+        # Strip HTML tags for text file
+        clean_text = report_text.replace('<b>', '').replace('</b>', '')
+        f.write(clean_text)
+
+    print(f"Report saved: {report_file}")
+    return report_file
+
+def save_csv_report(dee_data, shorgan_data):
+    """Save portfolio data to CSV for easy analysis"""
+    report_dir = Path("docs/reports/post-market")
+    report_dir.mkdir(parents=True, exist_ok=True)
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    csv_file = report_dir / f"post_market_report_{today}.csv"
+
+    # Prepare CSV data
+    rows = []
+
+    # Header row
+    rows.append([
+        'Bot',
+        'Symbol',
+        'Quantity',
+        'Side',
+        'Current Price',
+        'Market Value',
+        'Avg Entry Price',
+        'Cost Basis',
+        'Today P/L %',
+        'Today P/L $',
+        'Total P/L %',
+        'Total P/L $'
+    ])
+
+    # DEE-BOT holdings
+    for holding in dee_data['holdings']:
+        rows.append([
+            'DEE-BOT',
+            holding['symbol'],
+            holding['qty'],
+            holding['side'],
+            f"${holding['price']:.2f}",
+            f"${holding['value']:,.2f}",
+            f"${holding['avg_entry']:.2f}",
+            f"${holding['cost_basis']:,.2f}",
+            f"{holding['todays_pl_pct']:+.2f}%",
+            f"${holding['todays_pl']:+,.2f}",
+            f"{holding['unrealized_pct']:+.2f}%",
+            f"${holding['unrealized_pl']:+,.2f}"
+        ])
+
+    # DEE-BOT totals
+    rows.append([
+        'DEE-BOT',
+        'TOTAL',
+        len(dee_data['holdings']),
+        '',
+        '',
+        f"${sum(h['value'] for h in dee_data['holdings']):,.2f}",
+        '',
+        f"${sum(h['cost_basis'] for h in dee_data['holdings']):,.2f}",
+        f"{dee_data['todays_pl_pct']:+.2f}%",
+        f"${dee_data['todays_pl']:+,.2f}",
+        f"{dee_data['pnl_pct']:+.2f}%",
+        f"${dee_data['pnl']:+,.2f}"
+    ])
+
+    # Empty row separator
+    rows.append([''] * 12)
+
+    # SHORGAN-BOT holdings
+    for holding in shorgan_data['holdings']:
+        rows.append([
+            'SHORGAN-BOT',
+            holding['symbol'],
+            holding['qty'],
+            holding['side'],
+            f"${holding['price']:.2f}",
+            f"${holding['value']:,.2f}",
+            f"${holding['avg_entry']:.2f}",
+            f"${holding['cost_basis']:,.2f}",
+            f"{holding['todays_pl_pct']:+.2f}%",
+            f"${holding['todays_pl']:+,.2f}",
+            f"{holding['unrealized_pct']:+.2f}%",
+            f"${holding['unrealized_pl']:+,.2f}"
+        ])
+
+    # SHORGAN-BOT totals
+    rows.append([
+        'SHORGAN-BOT',
+        'TOTAL',
+        len(shorgan_data['holdings']),
+        '',
+        '',
+        f"${sum(h['value'] for h in shorgan_data['holdings']):,.2f}",
+        '',
+        f"${sum(h['cost_basis'] for h in shorgan_data['holdings']):,.2f}",
+        f"{shorgan_data['todays_pl_pct']:+.2f}%",
+        f"${shorgan_data['todays_pl']:+,.2f}",
+        f"{shorgan_data['pnl_pct']:+.2f}%",
+        f"${shorgan_data['pnl']:+,.2f}"
+    ])
+
+    # Empty row separator
+    rows.append([''] * 12)
+
+    # Combined summary
+    combined_value = dee_data['portfolio_value'] + shorgan_data['portfolio_value']
+    combined_pnl = dee_data['pnl'] + shorgan_data['pnl']
+    combined_pnl_pct = (combined_pnl / 200000) * 100
+    combined_todays_pl = dee_data['todays_pl'] + shorgan_data['todays_pl']
+    combined_todays_pl_pct = (combined_todays_pl / combined_value) * 100 if combined_value > 0 else 0
+
+    rows.append([
+        'COMBINED',
+        'PORTFOLIO',
+        dee_data['positions_count'] + shorgan_data['positions_count'],
+        '',
+        '',
+        f"${combined_value:,.2f}",
+        '',
+        '$200,000.00',
+        f"{combined_todays_pl_pct:+.2f}%",
+        f"${combined_todays_pl:+,.2f}",
+        f"{combined_pnl_pct:+.2f}%",
+        f"${combined_pnl:+,.2f}"
+    ])
+
+    # Write CSV
+    with open(csv_file, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerows(rows)
+
+    print(f"CSV report saved: {csv_file}")
+    return csv_file
+
+def main():
+    """Main execution"""
+    print("="*60)
     print("GENERATING POST-MARKET REPORT")
-    print("=" * 60)
-    
-    # Generate comprehensive report
-    report = format_comprehensive_report()
-    
+    print("="*60)
+
+    # Initialize Alpaca clients
+    dee_client = TradingClient(
+        os.getenv('ALPACA_API_KEY_DEE'),
+        os.getenv('ALPACA_SECRET_KEY_DEE'),
+        paper=True
+    )
+
+    shorgan_client = TradingClient(
+        os.getenv('ALPACA_API_KEY_SHORGAN'),
+        os.getenv('ALPACA_SECRET_KEY_SHORGAN'),
+        paper=True
+    )
+
+    # Fetch live data
+    print("Fetching live portfolio data from Alpaca...")
+    dee_data = get_live_portfolio_data(dee_client, "DEE-BOT", 100000)
+    shorgan_data = get_live_portfolio_data(shorgan_client, "SHORGAN-BOT", 100000)
+
+    if not dee_data or not shorgan_data:
+        print("[ERROR] Failed to fetch portfolio data")
+        return
+
+    # Get today's trades
+    print("Loading today's trade history...")
+    dee_trades, shorgan_trades = get_todays_trades()
+
+    # Generate report
+    print("Generating report...")
+    report = format_report(dee_data, shorgan_data, dee_trades, shorgan_trades)
+
+    # Preview
     print("\nReport Preview:")
     print("-" * 50)
-    # Show plain text version for console
-    console_report = report.replace("<b>", "").replace("</b>", "")
-    print(console_report[:1500] + "..." if len(console_report) > 1500 else console_report)
+    clean_preview = report.replace('<b>', '').replace('</b>', '')
+    print(clean_preview[:1500])  # Show first 1500 chars
+    if len(clean_preview) > 1500:
+        print("... (truncated)")
     print("-" * 50)
-    
-    # Send to Telegram
-    success = send_telegram_message(report)
-    
-    if success:
-        print("\n[SUCCESS] Post-market report sent to Telegram")
-        
-        # Save report locally
-        report_dir = Path("docs/reports/post-market")
-        report_dir.mkdir(parents=True, exist_ok=True)
 
-        report_file = report_dir / f"post_market_report_{date.today()}.txt"
-        with open(report_file, 'w', encoding='utf-8') as f:
-            f.write(report)
-        
-        print(f"Report saved: {report_file}")
-    else:
-        print("\n[ERROR] Failed to send post-market report")
-    
-    print("=" * 60)
-    return success
+    # Save report (TXT)
+    report_file = save_report(report)
+
+    # Save CSV report
+    csv_file = save_csv_report(dee_data, shorgan_data)
+
+    # Send to Telegram
+    send_telegram_message(report)
+
+    print("\n[SUCCESS] Post-market report generated and sent")
+    print(f"TXT: {report_file}")
+    print(f"CSV: {csv_file}")
+    print("="*60)
 
 if __name__ == "__main__":
-    generate_and_send_report()
+    main()

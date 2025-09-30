@@ -1,6 +1,6 @@
 # 📊 WEEKLY DEEP RESEARCH REPORT - CHATGPT ANALYSIS
 ## Week of September 29 - October 03, 2025
-### Generated: September 29, 2025 at 05:39 PM ET
+### Generated: September 29, 2025 at 05:43 PM ET
 ### Source: ChatGPT TradingAgents Deep Research
 
 ---
@@ -39,6 +39,6 @@ This comprehensive weekly research report provides strategic guidance for both D
 
 ---
 
-*Report Generated: September 29, 2025 at 05:39 PM ET*
+*Report Generated: September 29, 2025 at 05:43 PM ET*
 *Next Update: Sunday Evening*
 *Source: ChatGPT TradingAgents Analysis*

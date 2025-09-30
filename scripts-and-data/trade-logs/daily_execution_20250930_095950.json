@@ -1,0 +1,142 @@
+{
+  "execution_time": "2025-09-30T09:59:50.407613",
+  "trades_file": "docs\\TODAYS_TRADES_2025-09-30.md",
+  "executed_trades": [
+    {
+      "symbol": "AMZN",
+      "shares": 42,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 220.0,
+      "order_id": "8c0ca823-1acd-45c7-b623-29b81b796084",
+      "timestamp": "2025-09-30T09:59:21.821616",
+      "status": "submitted",
+      "rationale": "Free up cash"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 15,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 255.0,
+      "order_id": "468a69ca-5d76-4b97-a733-c1caed00df45",
+      "timestamp": "2025-09-30T09:59:28.966088",
+      "status": "submitted",
+      "rationale": "Cover short position"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "CVX",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-09-30T09:59:23.195091"
+    },
+    {
+      "symbol": "NVDA",
+      "shares": 60,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-26418.48, need $10989.00",
+      "timestamp": "2025-09-30T09:59:24.483276"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 21,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 21, available: 0)",
+      "timestamp": "2025-09-30T09:59:26.034494"
+    },
+    {
+      "symbol": "GPK",
+      "shares": 142,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 142, available: 0)",
+      "timestamp": "2025-09-30T09:59:27.494727"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 93,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $14388.03 exceeds 10.0% limit ($10542.31)",
+      "timestamp": "2025-09-30T09:59:30.182210"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 200,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $12626.00 exceeds 10.0% limit ($10542.60)",
+      "timestamp": "2025-09-30T09:59:31.610149"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 348,
+      "side": "buy",
+      "error": "insufficient qty available for order (requested: 348, available: 0)",
+      "timestamp": "2025-09-30T09:59:32.882862"
+    },
+    {
+      "symbol": "PG",
+      "shares": 132,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $20203.26 exceeds 10.0% limit ($10542.79)",
+      "timestamp": "2025-09-30T09:59:34.081471"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-09-30T09:59:40.317731"
+    },
+    {
+      "symbol": "NVDA",
+      "shares": 60,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-26418.48, need $10989.00",
+      "timestamp": "2025-09-30T09:59:41.542462"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 21,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 21, available: 0)",
+      "timestamp": "2025-09-30T09:59:42.736922"
+    },
+    {
+      "symbol": "GPK",
+      "shares": 142,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 142, available: 0)",
+      "timestamp": "2025-09-30T09:59:44.139638"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 93,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $14388.03 exceeds 10.0% limit ($10544.11)",
+      "timestamp": "2025-09-30T09:59:45.587012"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 200,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $12626.00 exceeds 10.0% limit ($10543.83)",
+      "timestamp": "2025-09-30T09:59:46.986314"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 348,
+      "side": "buy",
+      "error": "insufficient qty available for order (requested: 348, available: 0)",
+      "timestamp": "2025-09-30T09:59:48.202478"
+    },
+    {
+      "symbol": "PG",
+      "shares": 132,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $20203.26 exceeds 10.0% limit ($10544.66)",
+      "timestamp": "2025-09-30T09:59:49.406537"
+    }
+  ]
+}

@@ -51,6 +51,9 @@ python scripts-and-data/automation/update_all_bot_positions.py
 
 # Generate reports
 python scripts-and-data/automation/generate-post-market-report.py
+
+# Generate performance graph (NEW!)
+python generate_performance_graph.py
 ```
 
 ## System Architecture
@@ -110,12 +113,19 @@ Market Data → AI Agents → Consensus → Risk Review → Execution → Monito
 
 ### Current Statistics (Sept 29, 2025)
 ```
-Portfolio Value: $210,255
-Total Return: +5.13% ($10,255)
+Combined Portfolio: $210,285 (+5.14%)
+DEE-BOT:           $104,454 (+4.45%)
+SHORGAN-BOT:       $105,832 (+5.83%)
 Win Rate: 65%
 Sharpe Ratio: 1.4
 Max Drawdown: -8.3%
 ```
+
+### Performance Tracking
+Professional visualization system benchmarking both bots against S&P 500:
+- **Generate Graph**: `python generate_performance_graph.py`
+- **Documentation**: See [docs/PERFORMANCE_TRACKING.md](docs/PERFORMANCE_TRACKING.md)
+- **Methodology**: Based on [ChatGPT-Micro-Cap-Experiment](https://github.com/LuckyOne7777/ChatGPT-Micro-Cap-Experiment)
 
 ### Top Performers
 - RGTI: +94% (quantum computing)

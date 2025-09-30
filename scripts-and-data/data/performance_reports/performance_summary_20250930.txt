@@ -1,0 +1,33 @@
+
+============================================================
+PORTFOLIO PERFORMANCE SUMMARY
+2025-09-30 10:21:11
+============================================================
+
+CURRENT VALUES:
+- DEE-BOT:     $109,863.31
+- SHORGAN-BOT: $49,344.63
+- TOTAL:       $159,207.94
+
+RETURNS:
+- DEE-BOT:     9.86%
+- SHORGAN-BOT: -50.66%
+- TOTAL:       -20.40%
+
+TOP POSITIONS:
+- RGTI: +117% (Quantum momentum)
+- SAVA: +50% (CEO insider buying)
+- IBM: New position (Quantum catalyst)
+
+KEY METRICS:
+- Win Rate: ~65%
+- Average Win: +15%
+- Average Loss: -6%
+- Sharpe Ratio: ~1.2 (estimated)
+
+UPCOMING EVENTS:
+- BBAI earnings Wednesday
+- FBIO FDA decision (check outcome)
+- Weekly rebalancing Sunday
+
+============================================================
