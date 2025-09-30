@@ -18,6 +18,14 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
 import json
+import markdown
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Preformatted
+from reportlab.lib.enums import TA_LEFT, TA_CENTER
+from reportlab.lib.colors import HexColor
+from html.parser import HTMLParser
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent.parent))
@@ -364,8 +372,9 @@ Focus on:
 Be thorough, data-driven, and actionable. Include specific limit prices based on market data.
 """
 
-        # 5. Call Claude API
-        print(f"[*] Calling Claude API (Sonnet 4)...")
+        # 5. Call Claude API with Extended Thinking (Deep Research Mode)
+        print(f"[*] Calling Claude API (Sonnet 4 with Extended Thinking)...")
+        print(f"[*] Deep research mode enabled - this may take 2-3 minutes...")
         system_prompt = DEE_BOT_SYSTEM_PROMPT if bot_name == "DEE-BOT" else SHORGAN_BOT_SYSTEM_PROMPT
 
         try:
@@ -373,6 +382,10 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                 model="claude-sonnet-4-20250514",  # Latest Sonnet 4 model
                 max_tokens=16000,
                 temperature=0.7,
+                thinking={
+                    "type": "enabled",
+                    "budget_tokens": 10000  # Extended thinking for deep research
+                },
                 system=system_prompt,
                 messages=[{"role": "user", "content": user_prompt}]
             )
@@ -402,25 +415,184 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             print(f"[-] Error calling Claude API: {e}")
             raise
 
-    def save_report(self, report: str, bot_name: str) -> Path:
-        """Save report to file system"""
+    def save_report(self, report: str, bot_name: str, export_pdf: bool = True) -> tuple[Path, Optional[Path]]:
+        """
+        Save report to file system in both Markdown and PDF formats
+
+        Args:
+            report: Markdown-formatted report content
+            bot_name: "DEE-BOT" or "SHORGAN-BOT"
+            export_pdf: Whether to generate PDF version
+
+        Returns:
+            Tuple of (markdown_path, pdf_path)
+        """
         # Create directory structure
         report_dir = Path("scripts-and-data/data/reports/weekly/claude-research")
         report_dir.mkdir(parents=True, exist_ok=True)
 
-        # Generate filename
+        # Generate filenames
         timestamp = datetime.now().strftime("%Y-%m-%d")
         bot_slug = bot_name.lower().replace("-", "_")
-        filename = f"claude_research_{bot_slug}_{timestamp}.md"
 
-        filepath = report_dir / filename
+        md_filename = f"claude_research_{bot_slug}_{timestamp}.md"
+        pdf_filename = f"claude_research_{bot_slug}_{timestamp}.pdf"
 
-        # Write file
-        with open(filepath, 'w', encoding='utf-8') as f:
+        md_filepath = report_dir / md_filename
+        pdf_filepath = report_dir / pdf_filename if export_pdf else None
+
+        # Write Markdown file
+        with open(md_filepath, 'w', encoding='utf-8') as f:
             f.write(report)
+        print(f"[+] Markdown report saved: {md_filepath}")
 
-        print(f"[+] Report saved to: {filepath}")
-        return filepath
+        # Generate PDF if requested
+        if export_pdf:
+            try:
+                print(f"[*] Generating PDF report...")
+                self._generate_pdf(report, pdf_filepath, bot_name)
+                print(f"[+] PDF report saved: {pdf_filepath}")
+            except Exception as e:
+                print(f"[-] PDF generation failed: {e}")
+                pdf_filepath = None
+
+        return md_filepath, pdf_filepath
+
+    def _generate_pdf(self, markdown_content: str, output_path: Path, bot_name: str):
+        """Convert markdown report to professional PDF using reportlab"""
+
+        # Create PDF document
+        doc = SimpleDocTemplate(
+            str(output_path),
+            pagesize=letter,
+            rightMargin=0.75*inch,
+            leftMargin=0.75*inch,
+            topMargin=0.75*inch,
+            bottomMargin=0.75*inch
+        )
+
+        # Define styles
+        styles = getSampleStyleSheet()
+
+        # Custom styles
+        title_style = ParagraphStyle(
+            'CustomTitle',
+            parent=styles['Heading1'],
+            fontSize=24,
+            textColor=HexColor('#1a1a1a'),
+            spaceAfter=12,
+            spaceBefore=0,
+            leading=30
+        )
+
+        heading_style = ParagraphStyle(
+            'CustomHeading',
+            parent=styles['Heading2'],
+            fontSize=16,
+            textColor=HexColor('#0066cc'),
+            spaceAfter=10,
+            spaceBefore=20,
+            leading=20
+        )
+
+        subheading_style = ParagraphStyle(
+            'CustomSubHeading',
+            parent=styles['Heading3'],
+            fontSize=13,
+            textColor=HexColor('#333333'),
+            spaceAfter=8,
+            spaceBefore=15,
+            leading=16
+        )
+
+        body_style = ParagraphStyle(
+            'CustomBody',
+            parent=styles['BodyText'],
+            fontSize=10,
+            leading=14,
+            spaceAfter=8
+        )
+
+        code_style = ParagraphStyle(
+            'CustomCode',
+            parent=styles['Code'],
+            fontSize=9,
+            fontName='Courier',
+            leftIndent=20,
+            rightIndent=20,
+            spaceBefore=8,
+            spaceAfter=8,
+            backColor=HexColor('#f8f8f8'),
+            borderColor=HexColor('#0066cc'),
+            borderWidth=1,
+            borderPadding=8
+        )
+
+        # Parse markdown and build story
+        story = []
+        lines = markdown_content.split('\n')
+
+        in_code_block = False
+        code_lines = []
+
+        for line in lines:
+            # Handle code blocks
+            if line.startswith('```'):
+                if in_code_block:
+                    # End code block
+                    code_text = '\n'.join(code_lines)
+                    story.append(Preformatted(code_text, code_style))
+                    story.append(Spacer(1, 0.2*inch))
+                    code_lines = []
+                in_code_block = not in_code_block
+                continue
+
+            if in_code_block:
+                code_lines.append(line)
+                continue
+
+            # Handle headings
+            if line.startswith('# ') and not line.startswith('## '):
+                text = line[2:].strip()
+                story.append(Paragraph(text, title_style))
+            elif line.startswith('## '):
+                text = line[3:].strip()
+                story.append(Paragraph(text, heading_style))
+            elif line.startswith('### '):
+                text = line[4:].strip()
+                story.append(Paragraph(text, subheading_style))
+            elif line.startswith('---'):
+                story.append(Spacer(1, 0.1*inch))
+            elif line.strip():
+                # Regular text - clean markdown formatting
+                import re
+                text = line
+
+                # First escape XML special chars (except our markers)
+                text = text.replace('&', '&amp;')
+
+                # Convert markdown to XML tags
+                text = re.sub(r'\*\*(.*?)\*\*', r'|||BOLD_START|||\1|||BOLD_END|||', text)
+                text = re.sub(r'\*(.*?)\*', r'|||ITALIC_START|||\1|||ITALIC_END|||', text)
+
+                # Now escape < and >
+                text = text.replace('<', '&lt;').replace('>', '&gt;')
+
+                # Replace our markers with actual tags
+                text = text.replace('|||BOLD_START|||', '<b>').replace('|||BOLD_END|||', '</b>')
+                text = text.replace('|||ITALIC_START|||', '<i>').replace('|||ITALIC_END|||', '</i>')
+
+                try:
+                    story.append(Paragraph(text, body_style))
+                except:
+                    # If paragraph fails, just skip this line
+                    pass
+            else:
+                # Empty line
+                story.append(Spacer(1, 0.1*inch))
+
+        # Build PDF
+        doc.build(story)
 
 
 def main():
@@ -467,11 +639,13 @@ def main():
                 include_market_data=not args.no_market_data
             )
 
-            filepath = generator.save_report(report, bot_name)
+            md_path, pdf_path = generator.save_report(report, bot_name, export_pdf=True)
 
             print(f"\n{'='*60}")
             print(f"[+] {bot_name} report complete!")
-            print(f"[+] File: {filepath}")
+            print(f"[+] Markdown: {md_path}")
+            if pdf_path:
+                print(f"[+] PDF: {pdf_path}")
             print(f"{'='*60}\n")
 
         except Exception as e:
