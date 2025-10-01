@@ -1,0 +1,24 @@
+{
+  "bot": "DEE-BOT",
+  "report_path": "scripts-and-data\\data\\reports\\weekly\\claude-research\\claude_research_dee_bot_2025-09-30.md",
+  "total_trades": 1,
+  "approved_trades": [],
+  "rejected_trades": [
+    {
+      "action": "buy",
+      "ticker": "NEE",
+      "shares": 105,
+      "order_type": "limit",
+      "limit_price": 79.0,
+      "time_in_force": "DAY",
+      "execution_date": "2025-10-02",
+      "stop_loss": 72.68,
+      "target_price": null,
+      "catalyst_date": null,
+      "rationale": "Add defensive utility with clean energy growth"
+    }
+  ],
+  "approval_scores": [],
+  "execution_ready": false,
+  "timestamp": "2025-09-30T20:17:35.995117"
+}
