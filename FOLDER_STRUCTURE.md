@@ -1,6 +1,6 @@
 # AI Trading Bot - Folder Structure
 
-## 📁 Clean, Organized Structure (Updated Oct 1, 2025)
+## 📁 Clean, Organized Structure (Updated Oct 1, 2025 - Phase 3)
 
 ```
 ai-stock-trading-bot/
@@ -35,11 +35,13 @@ ai-stock-trading-bot/
 │   │   ├── execute_chatgpt_trades.py
 │   │   ├── execute_daily_trades.py
 │   │   ├── consensus_validator.py
+│   │   ├── generate_research_html.py
 │   │   └── ...
 │   │
 │   ├── backtesting/               # Backtesting scripts
 │   │   ├── backtest_engine.py
-│   │   └── ...
+│   │   ├── strategies.py
+│   │   └── run_backtest.py
 │   │
 │   ├── performance/               # Performance tracking
 │   │   ├── generate_performance_graph.py
@@ -50,10 +52,18 @@ ai-stock-trading-bot/
 │   │   ├── rebalance_phase1.py
 │   │   └── rebalance_phase2.py
 │   │
-│   └── utilities/                 # Utility scripts
-│       ├── check_remaining_orders.py
-│       ├── cancel_all_pending.py
-│       └── ...
+│   ├── utilities/                 # Utility scripts
+│   │   ├── check_remaining_orders.py
+│   │   ├── cancel_all_pending.py
+│   │   ├── check_orders.py
+│   │   └── setup_alternative_data.py
+│   │
+│   └── windows/                   # Windows automation (NEW)
+│       ├── GENERATE_PERFORMANCE_GRAPH.bat
+│       ├── EXECUTE_TUESDAY_930AM.bat
+│       ├── execute_morning_trades_automated.bat
+│       ├── Morning_Trade_Execution_930AM.xml
+│       └── ... (12 batch files + prompts)
 │
 ├── agents/                        # Trading agents
 │   ├── base_agent.py
@@ -65,13 +75,35 @@ ai-stock-trading-bot/
 │   ├── telegram_bot.py
 │   └── ...
 │
-├── docs/                          # Documentation
+├── docs/                          # Documentation (NEW)
+│   ├── CHANGELOG.md
+│   ├── CONTRIBUTING.md
+│   ├── PERFORMANCE_README.md
+│   ├── daily_monitoring_checklist.md
+│   └── archive/                   # Archived documentation
+│       ├── SESSION_SUMMARY_2025-09-29_EVENING.md
+│       ├── PORTFOLIO_REBALANCING_PLAN.md
+│       ├── REPOSITORY_REVIEW.md
+│       └── ... (13 archived docs)
 │
-└── [Legacy root scripts]          # Keep for backward compatibility
+├── tests/                         # Test files (NEW)
+│   ├── test_complete_system.py
+│   ├── test_live_data_sources.py
+│   └── test_tuesday_setup.py
+│
+└── [ROOT: 22 Essential Files]     # Minimal, clean root
     ├── main.py
     ├── generate_performance_graph.py
     ├── update_performance_history.py
-    └── ...
+    ├── execute_chatgpt_trades.py
+    ├── get_portfolio_status.py
+    ├── setup.py
+    ├── README.md
+    ├── CLAUDE.md
+    ├── CLAUDE_UPDATE_OCT1.md
+    ├── FOLDER_STRUCTURE.md
+    ├── LICENSE
+    └── ... (config files: .env, .gitignore, requirements.txt, etc.)
 ```
 
 ---
@@ -141,21 +173,38 @@ python scripts/utilities/cancel_all_pending.py
 
 ---
 
-## 🔧 Backward Compatibility
+## 🔧 Root Directory Philosophy
 
-Key scripts remain in root directory for backward compatibility:
-- `generate_performance_graph.py` (updated to use new paths)
-- `update_performance_history.py` (updated to use new paths)
-- `get_portfolio_status.py`
+**22 Essential Files Only:**
+- **Core Scripts (6)**: Frequently-used scripts remain in root for quick access
+- **Key Documentation (4)**: README, CLAUDE session docs, folder guide, LICENSE
+- **Configuration (12)**: .env, .gitignore, requirements.txt, pytest.ini, etc.
 
-All scripts work correctly with the new structure.
+**Everything Else Organized:**
+- Documentation → `docs/` and `docs/archive/`
+- Tests → `tests/`
+- Batch files → `scripts/windows/`
+- Utility scripts → `scripts/utilities/`
+
+All scripts work correctly with the new structure. Root scripts can call organized scripts seamlessly.
 
 ---
 
 ## 📝 Migration Notes
 
-**Date**: October 1, 2025
-**Changes**: Complete reorganization from `scripts-and-data/` structure to clean `data/` and `scripts/` structure
+**Phase 1-2 (Oct 1, 2025 - Afternoon):**
+- Reorganized from `scripts-and-data/` to clean `data/` and `scripts/` structure
+- Deleted 11 duplicate files
+- Archived 6 completed documentation files
+- **Result**: 75 → 53 files in root
+
+**Phase 3 (Oct 1, 2025 - Evening):**
+- Created `docs/` and `docs/archive/` directories
+- Created `scripts/windows/` for batch files
+- Moved tests to `tests/` directory
+- Organized all documentation and utility scripts
+- **Result**: 53 → 22 files in root (71% total reduction!)
+
 **Status**: ✅ Complete and tested
 **Scripts Updated**: All path references updated to new structure
 **Tests Passed**: Performance graph generation, portfolio status, all working

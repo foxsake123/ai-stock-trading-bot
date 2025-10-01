@@ -1,5 +1,59 @@
 # AI Trading Bot - Session Continuity Documentation
-## Last Updated: September 30, 2025, 12:50 AM ET - CONSULTANT REVIEW & INDEXED CHART COMPLETE
+## Last Updated: October 1, 2025, 6:15 PM ET - AGGRESSIVE ROOT CLEANUP COMPLETE
+
+---
+
+## 🎯 CURRENT SESSION (Oct 1, 2025 - Evening)
+
+### Major Root Directory Cleanup ✅
+**Problem**: Root directory cluttered with 75 files - duplicates, old docs, batch files, tests
+
+**Solution Executed (3 Phases):**
+
+**Phase 2 (Afternoon):**
+- Deleted 11 duplicate/outdated files (cancel_all_pending.py, rebalance_phase1.py, etc.)
+- Archived 6 completed docs to docs/archive/
+- Moved 3 trade files to data/daily/reports/
+- **Result**: 75 → 53 files
+
+**Phase 3 (Evening - Aggressive):**
+- Created docs/ and docs/archive/ structure
+- Moved 7 completed docs to docs/archive/ (rebalancing, reviews)
+- Moved 4 active docs to docs/ (CHANGELOG, CONTRIBUTING, etc.)
+- Created scripts/windows/ for all batch files (12 files)
+- Moved 3 test files to tests/
+- Moved 3 utility scripts to scripts/utilities/
+- **Result**: 53 → 22 files (71% total reduction!)
+
+**Current Root (22 Essential Files):**
+```
+✅ Core Scripts (6): main.py, generate_performance_graph.py,
+   update_performance_history.py, execute_chatgpt_trades.py,
+   get_portfolio_status.py, setup.py
+
+✅ Key Docs (4): README.md, CLAUDE.md, CLAUDE_UPDATE_OCT1.md,
+   FOLDER_STRUCTURE.md, LICENSE
+
+✅ Config (12): .env, .gitignore, requirements.txt, pytest.ini,
+   mypy.ini, .pre-commit-config.yaml, performance_results.png, etc.
+```
+
+**New Structure:**
+- `docs/` - Active documentation (4 files)
+- `docs/archive/` - Completed docs (13 files)
+- `scripts/windows/` - Batch files (14 files)
+- `tests/` - Test scripts (3 files)
+
+**Git Status:**
+- Commit ffe5793: Phase 2 cleanup (20 files)
+- Commit 8ab52af: Phase 3 aggressive cleanup (31 files)
+- Pushed: ✅ origin/master
+
+**Benefits:**
+- Professional, minimal root directory
+- Everything organized by function
+- Easy to navigate and maintain
+- Follows industry best practices
 
 ---
 
@@ -37,10 +91,10 @@
 
 **New Scripts Created:**
 1. `generate_performance_graph.py` - Indexed visualization system
-2. `scripts-and-data/automation/update_portfolio_csv.py` - CSV tracker
-3. `GENERATE_PERFORMANCE_GRAPH.bat` - Quick execution
-4. `docs/PERFORMANCE_TRACKING.md` - Complete documentation
-5. `FIX_SP500_BENCHMARK.md` - S&P 500 data issue resolution guide
+2. `scripts/automation/update_portfolio_csv.py` - CSV tracker
+3. `scripts/windows/GENERATE_PERFORMANCE_GRAPH.bat` - Quick execution
+4. `docs/PERFORMANCE_README.md` - Complete documentation
+5. `docs/archive/FIX_SP500_BENCHMARK.md` - S&P 500 data issue resolution guide
 
 **Key Features:**
 - ✅ **Indexed chart**: All strategies start at $100 for easy comparison
@@ -64,10 +118,10 @@ Estimated Alpha vs S&P 500: +2.73%
 # Generate indexed performance graph
 python generate_performance_graph.py
 # or
-GENERATE_PERFORMANCE_GRAPH.bat
+scripts\windows\GENERATE_PERFORMANCE_GRAPH.bat
 
 # Update CSV tracking files
-python scripts-and-data/automation/update_portfolio_csv.py
+python scripts/automation/update_portfolio_csv.py
 ```
 
 ---
@@ -108,11 +162,14 @@ python scripts-and-data/automation/update_portfolio_csv.py
 - Remove "nul" file (command error artifact)
 - Delete stale git branches (pre-cleanup-backup, etc.)
 
-**Priority 3 (Structure):**
-- Create requirements.txt and requirements-dev.txt
-- Add pytest.ini for test configuration
-- Move batch files to scripts/windows/
-- Split scripts-and-data/ into scripts/ and data/
+**Priority 3 (Structure):** ✅ COMPLETED (Oct 1, 2025)
+- ✅ Created requirements.txt and requirements-dev.txt
+- ✅ Added pytest.ini for test configuration
+- ✅ Moved batch files to scripts/windows/
+- ✅ Split scripts-and-data/ into scripts/ and data/
+- ✅ Organized docs/ and docs/archive/
+- ✅ Created tests/ directory
+- ✅ Reduced root from 75 → 22 files (71% reduction)
 
 ---
 
@@ -267,44 +324,88 @@ python test_fd_integration.py  # All tests passing
 
 ### Key Commands (Updated)
 ```bash
-# Test Financial Datasets API
-python test_fd_integration.py
+# Performance tracking
+python generate_performance_graph.py
+python update_performance_history.py
+python get_portfolio_status.py
 
-# Generate enhanced research reports
-python scripts-and-data/automation/financial_datasets_integration.py
+# Trading execution
+python execute_chatgpt_trades.py
+python scripts/automation/execute_daily_trades.py
 
-# Run backtests with new data source
-python scripts-and-data/backtesting/run_backtest.py
+# Portfolio management
+python scripts/portfolio/rebalance_phase1.py
+python scripts/portfolio/rebalance_phase2.py
 
-# Traditional commands still working
-python scripts-and-data/automation/generate-post-market-report.py
-python scripts-and-data/automation/send_daily_report.py
-python show_holdings.py
+# Utilities
+python scripts/utilities/check_remaining_orders.py
+python scripts/utilities/cancel_all_pending.py
+
+# Backtesting
+python scripts/backtesting/run_backtest.py
 ```
 
 ---
 
-## 📁 CRITICAL FILES (Updated)
+## 📁 CRITICAL FILES (Updated Oct 1, 2025)
 
-### NEW: Financial Datasets Integration
-- `scripts-and-data/automation/financial_datasets_integration.py` - Main API wrapper
-- `test_fd_integration.py` - Comprehensive API testing suite
-- `test_fd_simple.py` - Basic API connectivity test
-- `test_fd_endpoints.py` - Individual endpoint testing
+### Core Scripts (Root Directory)
+- `main.py` - Core trading system entry point
+- `generate_performance_graph.py` - Performance visualization
+- `update_performance_history.py` - Daily portfolio tracking
+- `execute_chatgpt_trades.py` - ChatGPT research execution
+- `get_portfolio_status.py` - Quick portfolio status
+- `setup.py` - Package installer
 
-### Trading Execution (Enhanced)
-- `main.py` - Updated to use Financial Datasets as primary data source
-- `scripts-and-data/automation/process-trades.py` - Multi-agent processor with richer data
-- `scripts-and-data/automation/execute_dee_bot_trades.py` - DEE-BOT with enhanced fundamentals
+### Trading Execution
+- `scripts/automation/execute_daily_trades.py` - Daily trade execution
+- `scripts/automation/process-trades.py` - Multi-agent trade processor
+- `scripts/automation/execute_dee_bot_trades.py` - DEE-BOT execution
+- `scripts/automation/consensus_validator.py` - Multi-agent consensus
 
-### Enhanced Backtesting
-- `scripts-and-data/backtesting/backtest_engine.py` - NEW: Professional backtesting
-- `scripts-and-data/backtesting/strategies.py` - Strategy definitions
-- `scripts-and-data/backtesting/run_backtest.py` - Execution script
+### Performance & Portfolio Management
+- `scripts/performance/generate_performance_graph.py` - Performance charts
+- `scripts/performance/update_performance_history.py` - History updates
+- `scripts/performance/get_portfolio_status.py` - Status checks
+- `scripts/portfolio/rebalance_phase1.py` - Emergency rebalancing
+- `scripts/portfolio/rebalance_phase2.py` - Strategic rebalancing
 
-### Configuration (Updated)
-- `.env` - Financial Datasets API key: c93a9274-4183-446e-a9e1-6befeba1003b
-- Alpaca APIs and other services unchanged
+### Data Integration & Backtesting
+- `scripts/automation/financial_datasets_integration.py` - Financial Datasets API
+- `scripts/backtesting/backtest_engine.py` - Professional backtesting
+- `scripts/backtesting/strategies.py` - Strategy definitions
+- `scripts/backtesting/run_backtest.py` - Backtest execution
+
+### Utilities
+- `scripts/utilities/check_remaining_orders.py` - Order monitoring
+- `scripts/utilities/cancel_all_pending.py` - Order cancellation
+- `scripts/utilities/check_orders.py` - Order status checks
+
+### Windows Automation
+- `scripts/windows/GENERATE_PERFORMANCE_GRAPH.bat` - Performance graph
+- `scripts/windows/execute_morning_trades_automated.bat` - Morning trades
+- `scripts/windows/Morning_Trade_Execution_930AM.xml` - Task scheduler
+
+### Documentation
+- `README.md` - Main project documentation
+- `CLAUDE.md` - Session continuity (CRITICAL!)
+- `FOLDER_STRUCTURE.md` - Organization guide
+- `docs/PERFORMANCE_README.md` - Performance tracking guide
+- `docs/daily_monitoring_checklist.md` - Daily monitoring
+- `docs/archive/` - Archived documentation (13 files)
+
+### Data Files
+- `data/daily/performance/performance_history.json` - Performance tracking
+- `data/daily/positions/*.csv` - Current positions
+- `data/daily/reports/{date}/` - Daily reports
+- `data/research/claude/` - Claude research
+- `data/research/chatgpt/` - ChatGPT research
+
+### Configuration
+- `.env` - API keys and secrets
+- `requirements.txt` - Python dependencies
+- `pytest.ini` - Test configuration
+- `.gitignore` - Git ignore rules
 
 ---
 
