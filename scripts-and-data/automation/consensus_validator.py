@@ -17,7 +17,7 @@ Date: September 30, 2025
 import os
 import sys
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List, Dict, Optional
 import json
@@ -329,8 +329,8 @@ def main():
     )
     parser.add_argument(
         "--date",
-        default=datetime.now().strftime("%Y-%m-%d"),
-        help="Date of reports to validate (YYYY-MM-DD)"
+        default=(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d"),
+        help="Date of reports to validate (YYYY-MM-DD), defaults to yesterday"
     )
 
     args = parser.parse_args()
