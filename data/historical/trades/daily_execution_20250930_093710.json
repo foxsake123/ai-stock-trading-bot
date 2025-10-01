@@ -1,0 +1,119 @@
+{
+  "execution_time": "2025-09-30T09:37:10.249786",
+  "trades_file": "docs\\TODAYS_TRADES_2025-09-30.md",
+  "executed_trades": [],
+  "failed_trades": [
+    {
+      "symbol": "PG",
+      "shares": 90,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-26418.48, need $13766.40",
+      "timestamp": "2025-09-30T09:36:47.965412"
+    },
+    {
+      "symbol": "PEP",
+      "shares": 88,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-26418.48, need $12376.32",
+      "timestamp": "2025-09-30T09:36:49.020362"
+    },
+    {
+      "symbol": "ABBV",
+      "shares": 96,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-26418.48, need $21576.96",
+      "timestamp": "2025-09-30T09:36:50.083005"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 857,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $16334.42 exceeds 10.0% limit ($10570.38)",
+      "timestamp": "2025-09-30T09:36:51.219427"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 187,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $15191.88 exceeds 10.0% limit ($10571.97)",
+      "timestamp": "2025-09-30T09:36:52.478759"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 967,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $15133.55 exceeds 10.0% limit ($10573.46)",
+      "timestamp": "2025-09-30T09:36:53.540396"
+    },
+    {
+      "symbol": "CRS",
+      "shares": 79,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $19217.15 exceeds 10.0% limit ($10572.76)",
+      "timestamp": "2025-09-30T09:36:54.656252"
+    },
+    {
+      "symbol": "TLRY",
+      "shares": 5,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-09-30T09:36:55.709183"
+    },
+    {
+      "symbol": "PG",
+      "shares": 90,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-26418.48, need $13761.45",
+      "timestamp": "2025-09-30T09:37:01.766127"
+    },
+    {
+      "symbol": "PEP",
+      "shares": 88,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-26418.48, need $12368.40",
+      "timestamp": "2025-09-30T09:37:02.852011"
+    },
+    {
+      "symbol": "ABBV",
+      "shares": 96,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-26418.48, need $21575.52",
+      "timestamp": "2025-09-30T09:37:03.905325"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 857,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $16317.28 exceeds 10.0% limit ($10573.58)",
+      "timestamp": "2025-09-30T09:37:04.978631"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 187,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $15191.88 exceeds 10.0% limit ($10574.95)",
+      "timestamp": "2025-09-30T09:37:06.041716"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 967,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $15167.40 exceeds 10.0% limit ($10574.86)",
+      "timestamp": "2025-09-30T09:37:07.135850"
+    },
+    {
+      "symbol": "CRS",
+      "shares": 79,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $19217.15 exceeds 10.0% limit ($10575.80)",
+      "timestamp": "2025-09-30T09:37:08.198765"
+    },
+    {
+      "symbol": "TLRY",
+      "shares": 5,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-09-30T09:37:09.249253"
+    }
+  ]
+}

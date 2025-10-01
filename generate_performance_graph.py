@@ -13,17 +13,22 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import json
 import numpy as np
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configuration
 DATA_DIR = "scripts-and-data"
 PERFORMANCE_JSON = f"{DATA_DIR}/data/json/performance_history.json"
 RESULTS_PATH = Path("performance_results.png")
 
-# Alpaca API Configuration
-DEE_BOT_API_KEY = 'PK6FZK4DAQVTD7DYVH78'
-DEE_BOT_SECRET = 'JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt'
-SHORGAN_API_KEY = 'PKJRLSB2MFEJUSK6UK2E'
-SHORGAN_SECRET = 'QBpREJmZ7HgHS1tHptvHgwjH4MtjFSoEcQ0wmGic'
+# Alpaca API Configuration (from .env)
+DEE_BOT_API_KEY = os.getenv('ALPACA_API_KEY_DEE')
+DEE_BOT_SECRET = os.getenv('ALPACA_SECRET_KEY_DEE')
+SHORGAN_API_KEY = os.getenv('ALPACA_API_KEY_SHORGAN')
+SHORGAN_SECRET = os.getenv('ALPACA_SECRET_KEY_SHORGAN')
 BASE_URL = 'https://paper-api.alpaca.markets'
 
 # Starting capital
@@ -177,44 +182,108 @@ def download_sp500(start_date: pd.Timestamp, end_date: pd.Timestamp) -> pd.DataF
     except Exception as e:
         print(f"Alpha Vantage failed: {e}")
 
-    # Method 2: Try Alpaca API (limited for paper accounts)
+    # Method 2: Try Alpaca API with free IEX data feed
     try:
-        print("Attempting to fetch SPY data from Alpaca API...")
-        alpaca_api = tradeapi.REST(
-            SHORGAN_API_KEY,
-            SHORGAN_SECRET,
-            BASE_URL,
-            api_version='v2'
+        print("Attempting to fetch SPY data from Alpaca API (IEX feed)...")
+        from alpaca.data.historical import StockHistoricalDataClient
+        from alpaca.data.requests import StockBarsRequest
+        from alpaca.data.timeframe import TimeFrame
+
+        # Use data client instead of trading client
+        data_client = StockHistoricalDataClient(
+            api_key=SHORGAN_API_KEY,
+            secret_key=SHORGAN_SECRET
         )
 
-        # Fetch SPY bars from Alpaca
-        bars = alpaca_api.get_bars(
-            'SPY',
-            tradeapi.TimeFrame.Day,
-            start=start_date.strftime('%Y-%m-%d'),
-            end=end_date.strftime('%Y-%m-%d'),
-            adjustment='all'
-        ).df
+        # Request SPY bars with free IEX feed
+        request_params = StockBarsRequest(
+            symbol_or_symbols=["SPY"],
+            timeframe=TimeFrame.Day,
+            start=start_date,
+            end=end_date
+        )
 
-        if not bars.empty:
-            print(f"Successfully downloaded SPY data from Alpaca API ({len(bars)} bars)")
+        bars = data_client.get_stock_bars(request_params)
 
-            # Convert to expected format
+        if bars and "SPY" in bars:
+            spy_bars = bars["SPY"]
+
+            if len(spy_bars) > 0:
+                print(f"Successfully downloaded SPY data from Alpaca IEX ({len(spy_bars)} bars)")
+
+                # Convert to DataFrame
+                dates = [bar.timestamp for bar in spy_bars]
+                closes = [bar.close for bar in spy_bars]
+
+                sp500 = pd.DataFrame({
+                    'date': pd.to_datetime(dates),
+                    'Close': closes
+                })
+
+                # Normalize to match starting capital
+                sp500_baseline = sp500['Close'].iloc[0]
+                sp500['sp500_value'] = (sp500['Close'] / sp500_baseline) * INITIAL_CAPITAL_COMBINED
+
+                return sp500[['date', 'sp500_value']].reset_index(drop=True)
+
+    except Exception as e:
+        print(f"Alpaca API failed: {e}")
+
+    # Method 3: Try Financial Datasets API (premium, $49/month)
+    try:
+        print("Attempting to fetch SPY data from Financial Datasets API...")
+        import requests
+
+        FD_API_KEY = os.getenv('FINANCIAL_DATASETS_API_KEY', 'c93a9274-4183-446e-a9e1-6befeba1003b')
+
+        # Financial Datasets endpoint for historical prices
+        dates = []
+        closes = []
+
+        current_date = start_date
+        while current_date <= end_date:
+            date_str = current_date.strftime('%Y-%m-%d')
+
+            # Financial Datasets API endpoint
+            url = f"https://api.financialdatasets.ai/prices/?ticker=SPY&interval=day&interval_multiplier=1&start_date={date_str}&end_date={date_str}"
+
+            headers = {
+                'X-API-KEY': FD_API_KEY,
+                'Accept': 'application/json'
+            }
+
+            response = requests.get(url, headers=headers, timeout=10)
+
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('prices') and len(data['prices']) > 0:
+                    price_data = data['prices'][0]
+                    dates.append(pd.to_datetime(price_data['time']))
+                    closes.append(float(price_data['close']))
+
+            current_date += pd.Timedelta(days=1)
+
+            # Rate limiting
+            import time
+            time.sleep(0.1)
+
+        if dates and closes:
             sp500 = pd.DataFrame({
-                'date': bars.index,
-                'Close': bars['close']
-            })
+                'date': dates,
+                'Close': closes
+            }).sort_values('date').reset_index(drop=True)
 
             # Normalize to match starting capital
             sp500_baseline = sp500['Close'].iloc[0]
             sp500['sp500_value'] = (sp500['Close'] / sp500_baseline) * INITIAL_CAPITAL_COMBINED
 
-            return sp500[['date', 'sp500_value']].reset_index(drop=True)
+            print(f"Successfully downloaded SPY data from Financial Datasets API ({len(sp500)} bars)")
+            return sp500[['date', 'sp500_value']]
 
     except Exception as e:
-        print(f"Alpaca API failed: {e}")
+        print(f"Financial Datasets API failed: {e}")
 
-    # Method 2: Fallback to yfinance (currently broken but keep for future)
+    # Method 4: Fallback to yfinance (currently broken but keep for future)
     try:
         print("Falling back to yfinance...")
         tickers_to_try = ["SPY", "^GSPC", "^SPX"]
@@ -407,9 +476,21 @@ def main():
 
     # Merge with portfolio data
     if not sp500_df.empty:
+        # Normalize timezones AND normalize to date-only (remove timestamps)
+        portfolio_df['date'] = pd.to_datetime(portfolio_df['date']).dt.tz_localize(None).dt.normalize()
+        sp500_df['date'] = pd.to_datetime(sp500_df['date']).dt.tz_localize(None).dt.normalize()
+
+        # Merge on normalized dates
         portfolio_df = pd.merge(portfolio_df, sp500_df, on='date', how='left')
-        portfolio_df['sp500_value'] = portfolio_df['sp500_value'].fillna(method='ffill')
+
+        # Forward fill missing S&P 500 values (for weekends/holidays)
+        portfolio_df['sp500_value'] = portfolio_df['sp500_value'].ffill()
+
+        # Backward fill if first value is NaN
+        portfolio_df['sp500_value'] = portfolio_df['sp500_value'].bfill()
+
         print(f"S&P 500 benchmark data merged successfully")
+        print(f"S&P 500 values: {portfolio_df['sp500_value'].tolist()}")
     else:
         print("S&P 500 data unavailable - generating graph without benchmark")
 

@@ -1,0 +1,166 @@
+================================================================================
+PORTFOLIO REBALANCING AT-A-GLANCE
+Date: October 1, 2025
+================================================================================
+
+CRITICAL ISSUE:
+  DEE-BOT has NEGATIVE CASH: -$5,143.84
+  + Pending orders: -$23,935
+  = Would become: -$29,078 (UNACCEPTABLE)
+
+================================================================================
+PHASE 1: EMERGENCY FIX (IMMEDIATE - NEXT HOUR)
+================================================================================
+
+Command: python rebalance_phase1.py
+
+DEE-BOT ACTIONS:
+┌─────────┬────────┬────────┬──────────┬───────────┬────────────────────────┐
+│ Action  │ Symbol │ Shares │ Price    │ Value     │ Reason                 │
+├─────────┼────────┼────────┼──────────┼───────────┼────────────────────────┤
+│ CANCEL  │ JPM    │ 55     │ $145     │ $7,975    │ Prevent margin usage   │
+│ CANCEL  │ LMT    │ 18     │ $445     │ $8,010    │ Prevent margin usage   │
+│ CANCEL  │ ABBV   │ 53     │ $150     │ $7,950    │ Prevent margin usage   │
+│ SELL    │ PG     │ 160    │ Market   │ ~$24,355  │ Largest position       │
+│ SELL    │ CL     │ 136    │ Market   │ ~$10,763  │ Low conviction         │
+└─────────┴────────┴────────┴──────────┴───────────┴────────────────────────┘
+
+DEE-BOT RESULT: Cash goes from -$5,143 → +$29,974 ✓
+
+SHORGAN-BOT ACTIONS:
+┌─────────┬────────┬────────┬──────────┬───────────┬────────────────────────┐
+│ Action  │ Symbol │ Shares │ Price    │ Value     │ Reason                 │
+├─────────┼────────┼────────┼──────────┼───────────┼────────────────────────┤
+│ CANCEL  │ PEP    │ 30     │ $167     │ $5,010    │ Too many defensive     │
+│ COVER   │ PG     │ 132    │ Market   │ ~$20,093  │ Cross-bot conflict     │
+└─────────┴────────┴────────┴──────────┴───────────┴────────────────────────┘
+
+SHORGAN-BOT RESULT: Eliminates PG exposure, cash: $41,072 (healthy) ✓
+
+================================================================================
+PHASE 2: OPTIMIZATION (DAYS 2-3)
+================================================================================
+
+Command: python rebalance_phase2.py
+
+DEE-BOT STEP 1: Trim Overweight Positions
+┌─────────┬────────┬────────┬───────────────────────────────────────────────┐
+│ Symbol  │ Trim   │ Value  │ Reason                                        │
+├─────────┼────────┼────────┼───────────────────────────────────────────────┤
+│ AAPL    │ -24    │ $6,151 │ Reduce tech from 38% to 31%                   │
+│ MSFT    │ -4     │ $2,076 │ Further reduce tech concentration             │
+│ CVX     │ -31    │ $4,785 │ Energy overlap with XOM                       │
+└─────────┴────────┴────────┴───────────────────────────────────────────────┘
+Cash Generated: ~$13,012
+
+DEE-BOT STEP 2: Add Diversification
+┌─────────┬────────┬────────┬────────────────────────────────────────────────┐
+│ Symbol  │ Buy    │ Value  │ Sector                                         │
+├─────────┼────────┼────────┼────────────────────────────────────────────────┤
+│ JNJ     │ 40     │ $6,400 │ Healthcare - Defensive dividend aristocrat     │
+│ ABBV    │ 35     │ $6,000 │ Healthcare - Pharma with strong pipeline      │
+│ LMT     │ 16     │ $8,800 │ Defense - Aerospace & Defense                  │
+│ CAT     │ 25     │ $9,000 │ Industrials - Infrastructure play              │
+└─────────┴────────┴────────┴────────────────────────────────────────────────┘
+Cash Deployed: $30,200
+
+SHORGAN-BOT STEP 3: Clean Up Losers
+┌─────────┬────────┬────────┬────────┬───────────────────────────────────────┐
+│ Symbol  │ Shares │ Value  │ P/L %  │ Reason                                │
+├─────────┼────────┼────────┼────────┼───────────────────────────────────────┤
+│ FUBO    │ 1000   │ $3,980 │ -2.21% │ Streaming sector weak                 │
+│ EMBC    │ 68     │ $976   │ -5.71% │ Biotech too risky                     │
+│ GPK     │ 142    │ $2,752 │ -8.00% │ Packaging sector weak                 │
+│ MFIC    │ 385    │ $4,552 │ -2.75% │ Trim 50% micro-cap exposure           │
+└─────────┴────────┴────────┴────────┴───────────────────────────────────────┘
+Cash Generated: ~$12,260
+
+SHORGAN-BOT STEP 4: Stop Losses (Manual Monitoring)
+┌─────────┬────────────┬────────────┬───────────────────────────────────────┐
+│ Symbol  │ Position   │ Stop Loss  │ Current P/L                           │
+├─────────┼────────────┼────────────┼───────────────────────────────────────┤
+│ IONQ    │ Short      │ $75.00     │ +15.91% ($2,373)                      │
+│ NCNO    │ Short      │ $30.00     │ +11.51% ($1,190)                      │
+│ CVX     │ Short      │ $160.00    │ +1.84% ($269)                         │
+└─────────┴────────────┴────────────┴───────────────────────────────────────┘
+
+================================================================================
+FINAL TARGET PORTFOLIOS
+================================================================================
+
+DEE-BOT (Defensive/Beta-Neutral):
+  Positions:       10 high-quality stocks
+  Sector Mix:      Tech 31%, Financials 20%, Healthcare 12%,
+                   Industrials/Defense 18%, Energy 5%, Consumer 5%
+  Cash:            9% ($9,000 buffer)
+  Beta:            ~1.0 (market-neutral)
+  Strategy:        Quality defensive companies, dividend growth
+
+SHORGAN-BOT (Aggressive/Catalyst):
+  Long Positions:  12 high-conviction catalysts
+  Short Positions: 3 with stop losses
+  Cash:            23% ($24,000 for opportunities)
+  Net Exposure:    65% LONG
+  Strategy:        Momentum, earnings, insider trading, quantum/AI themes
+
+================================================================================
+EXECUTION CHECKLIST
+================================================================================
+
+☐ NOW: Run python get_portfolio_status.py (save as backup)
+☐ NOW: Run python rebalance_phase1.py
+☐ 30 MIN: Verify with python get_portfolio_status.py
+☐ DAY 2: Run python rebalance_phase2.py (DEE-BOT steps)
+☐ DAY 3: Run python rebalance_phase2.py (SHORGAN-BOT steps)
+☐ DAY 4: Final verification and resume normal operations
+
+================================================================================
+SUCCESS METRICS
+================================================================================
+
+Phase 1 Success:
+  ✓ DEE-BOT cash > $0 (target $25,000+)
+  ✓ No dangerous pending orders
+  ✓ Cross-bot PG conflict eliminated
+  ✓ Return maintained (~4.86%)
+
+Phase 2 Success:
+  ✓ DEE-BOT: 10 diversified positions, 9% cash
+  ✓ SHORGAN-BOT: 12 focused positions, 23% cash
+  ✓ Stop losses on all shorts
+  ✓ Professional portfolio structure
+
+================================================================================
+RISK LEVELS
+================================================================================
+
+BEFORE:  ⚠️⚠️⚠️⚠️⚠️ HIGH (Negative cash, margin risk, conflicts)
+PHASE 1: ⚠️⚠️⚠️ MEDIUM (Cash restored, conflicts resolved)
+PHASE 2: ⚠️⚠️ LOW-MEDIUM (Optimized, diversified, risk-controlled)
+
+================================================================================
+FILES CREATED
+================================================================================
+
+1. get_portfolio_status.py - Real-time monitoring
+2. rebalance_phase1.py - Emergency execution script
+3. rebalance_phase2.py - Optimization execution script
+4. PORTFOLIO_REBALANCING_PLAN.md - Comprehensive 60-page plan
+5. REBALANCING_QUICK_REFERENCE.md - Quick action guide
+6. REBALANCING_EXECUTION_SUMMARY.md - Detailed summary
+7. REBALANCING_AT_A_GLANCE.txt - This visual summary
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+1. Review this document and the detailed plan
+2. Backup current portfolio state
+3. Execute Phase 1 immediately (market hours)
+4. Verify results after 30 minutes
+5. Execute Phase 2 over next 2-3 days
+6. Set up ongoing monitoring
+
+Questions? Review PORTFOLIO_REBALANCING_PLAN.md for full details.
+
+================================================================================

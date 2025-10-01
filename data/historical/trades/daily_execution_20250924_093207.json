@@ -1,0 +1,120 @@
+{
+  "execution_time": "2025-09-24T09:32:07.034652",
+  "trades_file": "docs\\TODAYS_TRADES_2025-09-23.md",
+  "executed_trades": [
+    {
+      "symbol": "AAPL",
+      "shares": 5,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 256.0,
+      "order_id": "11b2184c-05c0-44fb-ac74-65fb4268cec4",
+      "timestamp": "2025-09-24T09:31:55.900049",
+      "status": "submitted",
+      "rationale": "Trim profit, reduce concentration"
+    },
+    {
+      "symbol": "NVDA",
+      "shares": 15,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 182.5,
+      "order_id": "3874368e-560a-4424-aa7e-414d1b375897",
+      "timestamp": "2025-09-24T09:31:56.949543",
+      "status": "submitted",
+      "rationale": "Trim high beta position"
+    },
+    {
+      "symbol": "UNH",
+      "shares": 14,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 342.0,
+      "order_id": "9dd10c1f-e40d-4979-9920-ea37123616a8",
+      "timestamp": "2025-09-24T09:31:58.067162",
+      "status": "submitted",
+      "rationale": "Add healthcare defense, low beta"
+    },
+    {
+      "symbol": "NEE",
+      "shares": 53,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 71.5,
+      "order_id": "812d0b2b-3d7f-46d1-b96d-62e2a98bb04c",
+      "timestamp": "2025-09-24T09:31:59.197635",
+      "status": "submitted",
+      "rationale": "Add utilities defense, yield"
+    },
+    {
+      "symbol": "AMZN",
+      "shares": 21,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 228.0,
+      "order_id": "cc548840-eeb3-4a55-8d80-59e02671e5a9",
+      "timestamp": "2025-09-24T09:32:00.347617",
+      "status": "submitted",
+      "rationale": "Add discretionary/cloud growth"
+    },
+    {
+      "symbol": "FBIO",
+      "shares": 700,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 4.1,
+      "order_id": "fb42650a-bb49-4d41-a7b0-8d80c128ee64",
+      "timestamp": "2025-09-24T09:32:02.700899",
+      "status": "submitted",
+      "rationale": "Sept 30 FDA decision, PRV optionality"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 50,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 69.0,
+      "order_id": "37c15fc2-8769-46ff-920b-2f671a323098",
+      "timestamp": "2025-09-24T09:32:06.034337",
+      "status": "submitted",
+      "rationale": "Overhyped quantum, no catalyst"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "PG",
+      "shares": 33,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 33, available: 0)",
+      "timestamp": "2025-09-24T09:31:53.699387"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-09-24T09:31:54.820744"
+    },
+    {
+      "symbol": "SRRK",
+      "shares": 100,
+      "side": "buy",
+      "error": "potential wash trade detected. use complex orders",
+      "timestamp": "2025-09-24T09:32:01.585865"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 200,
+      "side": "buy",
+      "error": "potential wash trade detected. use complex orders",
+      "timestamp": "2025-09-24T09:32:03.826656"
+    },
+    {
+      "symbol": "KSS",
+      "shares": 150,
+      "side": "buy",
+      "error": "potential wash trade detected. use complex orders",
+      "timestamp": "2025-09-24T09:32:04.972831"
+    }
+  ]
+}

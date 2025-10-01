@@ -1,0 +1,81 @@
+{
+  "bot": "SHORGAN-BOT",
+  "report_path": "scripts-and-data\\data\\reports\\weekly\\claude-research\\claude_research_shorgan_bot_2025-09-30.md",
+  "total_trades": 5,
+  "approved_trades": [
+    {
+      "action": "buy",
+      "ticker": "VERB",
+      "shares": 2631,
+      "order_type": "limit",
+      "limit_price": 1.89,
+      "time_in_force": "DAY",
+      "execution_date": "2025-10-01",
+      "stop_loss": 1.61,
+      "target_price": 5.67,
+      "catalyst_date": "2025-10-12",
+      "rationale": "Micro-cap SaaS turnaround + earnings catalyst + oversold bounce"
+    },
+    {
+      "action": "buy",
+      "ticker": "ADMA",
+      "shares": 357,
+      "order_type": "limit",
+      "limit_price": 13.95,
+      "time_in_force": "DAY",
+      "execution_date": "2025-10-02",
+      "stop_loss": 11.86,
+      "target_price": 41.85,
+      "catalyst_date": "2025-10-15",
+      "rationale": "FDA approval catalyst + plasma shortage tailwind + technical breakout"
+    },
+    {
+      "action": "buy",
+      "ticker": "RXRX",
+      "shares": 588,
+      "order_type": "limit",
+      "limit_price": 8.45,
+      "time_in_force": "DAY",
+      "execution_date": "2025-10-01",
+      "stop_loss": 7.18,
+      "target_price": 25.35,
+      "catalyst_date": "2025-10-08",
+      "rationale": "AI drug discovery momentum + Q3 earnings catalyst + partnership rumors"
+    }
+  ],
+  "rejected_trades": [
+    {
+      "action": "sell",
+      "ticker": "CVX",
+      "shares": 93,
+      "order_type": "limit",
+      "limit_price": 155.75,
+      "time_in_force": "DAY",
+      "execution_date": "2025-10-01",
+      "stop_loss": null,
+      "target_price": null,
+      "catalyst_date": null,
+      "rationale": "Close short position - violates long-only rule"
+    },
+    {
+      "action": "sell",
+      "ticker": "IONQ",
+      "shares": 200,
+      "order_type": "limit",
+      "limit_price": 61.85,
+      "time_in_force": "DAY",
+      "execution_date": "2025-10-01",
+      "stop_loss": null,
+      "target_price": null,
+      "catalyst_date": null,
+      "rationale": "Close short position - violates long-only rule"
+    }
+  ],
+  "approval_scores": [
+    100,
+    100,
+    90
+  ],
+  "execution_ready": true,
+  "timestamp": "2025-09-30T20:17:36.000509"
+}

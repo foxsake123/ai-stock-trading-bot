@@ -1,0 +1,72 @@
+{
+  "execution_time": "2025-09-30T10:05:52.977507",
+  "trades_file": "docs\\TODAYS_TRADES_2025-09-30.md",
+  "executed_trades": [
+    {
+      "symbol": "JNJ",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 183.0,
+      "order_id": "3dd3a624-1abd-4edf-ba65-e8d44d469f59",
+      "timestamp": "2025-09-30T10:05:37.282893",
+      "status": "submitted",
+      "rationale": "Clear final margin (need $6K+)"
+    },
+    {
+      "symbol": "FBIO",
+      "shares": 1708,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 3.73,
+      "order_id": "3d7fe7ee-dddc-47e2-b6c2-4bf19e65fa44",
+      "timestamp": "2025-09-30T10:05:42.680258",
+      "status": "submitted",
+      "rationale": "Large position - take profits"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "CVX",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-09-30T10:05:38.737836"
+    },
+    {
+      "symbol": "BTBT",
+      "shares": 570,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 570, available: 0)",
+      "timestamp": "2025-09-30T10:05:40.127017"
+    },
+    {
+      "symbol": "EMBC",
+      "shares": 68,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 68, available: 0)",
+      "timestamp": "2025-09-30T10:05:41.432552"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-09-30T10:05:49.199707"
+    },
+    {
+      "symbol": "BTBT",
+      "shares": 570,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 570, available: 0)",
+      "timestamp": "2025-09-30T10:05:50.670775"
+    },
+    {
+      "symbol": "EMBC",
+      "shares": 68,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 68, available: 0)",
+      "timestamp": "2025-09-30T10:05:51.976639"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "execution_time": "2025-10-01T09:40:22.019994",
+  "trades_file": "docs\\TODAYS_TRADES_2025-09-30.md",
+  "executed_trades": [],
+  "failed_trades": [
+    {
+      "symbol": "GOOGL",
+      "shares": 24,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-10-01T09:40:14.972047"
+    },
+    {
+      "symbol": "GOOGL",
+      "shares": 24,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-10-01T09:40:21.018675"
+    }
+  ]
+}

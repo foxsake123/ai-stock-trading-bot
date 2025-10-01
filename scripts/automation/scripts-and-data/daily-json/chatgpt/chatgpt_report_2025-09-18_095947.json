@@ -1,0 +1,45 @@
+{
+  "date": "2025-09-18",
+  "time": "09:59:47",
+  "source": "ChatGPT TradingAgents",
+  "trades": [
+    {
+      "symbol": "M",
+      "size_pct": 6,
+      "entry": 64.0
+    },
+    {
+      "symbol": "C",
+      "entry": 84.0,
+      "stop": 23.0,
+      "target": 23.0,
+      "size_pct": 4
+    },
+    {
+      "symbol": "O",
+      "target": 17.5
+    },
+    {
+      "symbol": "R",
+      "stop": 1.0,
+      "size_pct": 5,
+      "entry": 5.0
+    },
+    {
+      "symbol": "S",
+      "entry": 1.0,
+      "stop": 1.0,
+      "size_pct": 4
+    },
+    {
+      "symbol": "P",
+      "size_pct": 13,
+      "action": "LONG",
+      "stop": 13.0
+    }
+  ],
+  "trade_count": 6,
+  "url": "https://chatgpt.com/g/g-p-68b723c17d988191b66f1b2637d00c33/c/68c216e4-98a4-8324-9340-4d1d659e62f6",
+  "raw_text": "\ud83d\udcc8 Shorgan-Bot Pre-Market Research Report (Sept 18, 2025)\n1. Market Context & Macro Notes\n\nFed Policy: Yesterday the Fed cut rates 25 bps, its first in 2025. Futures are higher pre-market (Nasdaq +0.6%, S&P +0.5%) as investors price in broader equity participationTradingAgents_Multi-Agents LLM \u2026.\n\nSector Rotation: Historically, rate-cut cycles benefit domestically focused small/mid-caps, banks, consumer cyclicals, and tech growthCan Large Language Models Trade\u2026.\n\nGlobal Backdrop: Europe opened stronger on Fed dovishness; Asia mixed. Oil has slipped to ~$64, easing inflation pressure but capping energy.\n\nRisk Note: While risk-on sentiment dominates, Fed emphasized inflation is still above target; sharp data disappointments could reverse flows.\n\n2. Catalyst Trade Ideas (1\u201330 Day Horizon)\nINCY \u2013 Incyte Corp.\n\nCatalyst: FDA PDUFA Sept 19 (Opzelura cream, pediatric eczema).\n\nThesis: High-probability approval expands TAM; stock trades ~$84.\n\nEntry: $83\u201384. Stop: $80. Targets: $92 (T1), $100 (T2).\n\nOptions: Oct $85/$95 call spread.\n\nSize: ~5% of portfolio.\n\nSRRK \u2013 Scholar Rock\n\nCatalyst: FDA PDUFA Sept 22 (apitegromab, SMA).\n\nThesis: Priority review, positive Phase 3; Street PTs $40\u201345.\n\nEntry: $32. Stop: $27. Targets: $40 (T1), $50 (T2).\n\nOptions: Illiquid \u2192 equity only.\n\nSize: ~3% of portfolio.\n\nFBIO \u2013 Fortress Biotech\n\nCatalyst: FDA decision + Priority Review Voucher potential (Sept 30).\n\nThesis: $100M+ PRV monetization vs $300M mkt cap.\n\nEntry: $2.40. Stop: $2.00. Targets: $3.00 (T1), $4.00 (T2).\n\nOptions: Oct $2.5 calls (OI strong but IV elevated).\n\nSize: 2\u20133% of portfolio.\n\nRIVN \u2013 Rivian Automotive\n\nCatalyst: Q3 delivery report early Oct; R2 SUV updates.\n\nThesis: Deliveries expected peak; macro easing favors growth.\n\nEntry: $14.5 (hold). Stop: $12.7. Targets: $16 (T1), $18 (T2).\n\nOptions: Oct $15/$18 call spread.\n\nSize: ~6% of portfolio.\n\nHELE \u2013 Helen of Troy\n\nCatalyst: Insider buys + new CEO; turnaround watch.\n\nThesis: Shares depressed ~$23, insider buying ~$0.5M.\n\nEntry: $23. Stop: $20. Targets: $28 (T1), $32 (T2).\n\nOptions: Illiquid, stick to stock.\n\nSize: ~4% of portfolio.\n\n3. Options Overlays & Hedging\n\nEvent Hedging: For binary biotechs (INCY, SRRK, FBIO), use call spreads to cap risk.\n\nPortfolio Hedge: Small allocation to SPY or IWM puts to cushion macro downside during Fed week.\n\nCovered Calls: For RIVN, consider Oct $17.5 covered calls to harvest premium if stock rallies to target.\n\n4. Risk & Stop Management\n\nRisk per trade: <1% of total capital (stop \u00d7 position size).\n\nStops: Tight for binary catalysts (INCY, $80); wider for trend/momentum plays (RIVN, $12.7).\n\nMax Drawdown: Portfolio exposure spread across 5 names, total active risk ~5% of equity.\n\nProfit-taking: Scale out at T1; trail stops higher into T2.\n\n5. Summary Table\nTicker\tCatalyst Date/Type\tSize %\tEntry\tStop\tT1\tT2\tOptions\nINCY\tSep 19 FDA (Opzelura)\t5%\t$84\t$80\t$92\t$100\tOct $85/$95 call spread\nSRRK\tSep 22 FDA (Apitegromab)\t3%\t$32\t$27\t$40\t$50\tStock only\nFBIO\tSep 30 FDA + PRV\t2\u20133%\t$2.4\t$2.0\t$3.0\t$4.0\tOct $2.5 calls\nRIVN\tEarly Oct deliveries\t6%\t$14.5\t$12.7\t$16\t$18\tOct $15/$18 spread\nHELE\tOngoing insider/CEO\t4%\t$23\t$20\t$28\t$32\tStock only\n6. Portfolio Review & Adjustments\n\nOPEN (short $9.25): Stock squeezed to $10+ on new CEO + heavy short interest (26%); thesis invalidated. Close short to prevent further loss.\n\nCBRL (long $51): Earnings miss; shares \u201310%. Thesis (short squeeze on beat) failed. Exit to cut loss.\n\nINCY/RIVN: Maintain as above.\n\nLegacy holdings (NVDA, ORCL): Both large winners; consider trimming 20\u201330% to reduce concentration and recycle into catalysts.\n\nBYND/SAVA: Weak, no catalyst; exit and redeploy.\n\nSmall winners (BTBT +13%, RGTI +5%): Lock partial profit; trail stops.\n\n7. Suggested Data Sources\n\nFDA/PDUFA: BioPharmCatalyst, Benzinga FDA calendar.\n\nEarnings: Nasdaq, Zacks, EarningsWhispers.\n\nShort Interest: FINVIZ, Fintel.\n\nInsider Buys: MarketBeat, SEC Form 4 feeds.\n\nOptions Flow: Benzinga UOA, Market Chameleon.\n\n\u2705 TL;DR: Risk-on backdrop post-Fed cut. Focus on INCY (Sep 19 FDA) and SRRK (Sep 22 FDA) as top catalysts. Close OPEN short & CBRL long; recycle capital into higher-probability biotech and EV catalysts.\n\nWould you like me to also generate a one-page \u201ctrader\u2019s checklist\u201d PDF with the summary table and stop levels for quick reference at the desk each morning?",
+  "extracted_at": "2025-09-18T09:59:47.902424"
+}

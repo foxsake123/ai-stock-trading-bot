@@ -1,0 +1,147 @@
+{
+  "execution_time": "2025-09-30T09:22:44.502444",
+  "trades_file": "docs\\TODAYS_TRADES_2025-09-30.md",
+  "executed_trades": [],
+  "failed_trades": [
+    {
+      "symbol": "NVDA",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:18.816940"
+    },
+    {
+      "symbol": "HD",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:19.850575"
+    },
+    {
+      "symbol": "XOM",
+      "shares": 15,
+      "side": "buy",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:20.881599"
+    },
+    {
+      "symbol": "V",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:21.916332"
+    },
+    {
+      "symbol": "UNH",
+      "shares": 8,
+      "side": "buy",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:22.952632"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 50,
+      "side": "buy",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:23.982102"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 20,
+      "side": "buy",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:25.013391"
+    },
+    {
+      "symbol": "RGTI",
+      "shares": 50,
+      "side": "sell",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:26.072221"
+    },
+    {
+      "symbol": "MSTR",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:27.102679"
+    },
+    {
+      "symbol": "GPK",
+      "shares": 142,
+      "side": "sell",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:28.140162"
+    },
+    {
+      "symbol": "NVDA",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:34.172098"
+    },
+    {
+      "symbol": "HD",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:35.200266"
+    },
+    {
+      "symbol": "XOM",
+      "shares": 15,
+      "side": "buy",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:36.230253"
+    },
+    {
+      "symbol": "V",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:37.260975"
+    },
+    {
+      "symbol": "UNH",
+      "shares": 8,
+      "side": "buy",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:38.297203"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 50,
+      "side": "buy",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:39.328885"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 20,
+      "side": "buy",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:40.389160"
+    },
+    {
+      "symbol": "RGTI",
+      "shares": 50,
+      "side": "sell",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:41.428661"
+    },
+    {
+      "symbol": "MSTR",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:42.460495"
+    },
+    {
+      "symbol": "GPK",
+      "shares": 142,
+      "side": "sell",
+      "error": "Validation failed: Market is closed",
+      "timestamp": "2025-09-30T09:22:43.502097"
+    }
+  ]
+}
