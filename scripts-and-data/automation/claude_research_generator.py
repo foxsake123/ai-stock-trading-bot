@@ -381,7 +381,7 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             response = self.claude.messages.create(
                 model="claude-sonnet-4-20250514",  # Latest Sonnet 4 model
                 max_tokens=16000,
-                temperature=0.7,
+                temperature=1.0,  # Required for extended thinking
                 thinking={
                     "type": "enabled",
                     "budget_tokens": 10000  # Extended thinking for deep research
@@ -390,7 +390,11 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                 messages=[{"role": "user", "content": user_prompt}]
             )
 
-            report_content = response.content[0].text
+            # Extract text content (skip thinking blocks)
+            report_content = ""
+            for block in response.content:
+                if hasattr(block, 'text'):
+                    report_content += block.text
 
             # 6. Add header and metadata
             report_header = f"""# CLAUDE DEEP RESEARCH REPORT - {bot_name}
