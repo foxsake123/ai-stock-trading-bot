@@ -575,3 +575,4 @@ Financial Datasets API → Integration Layer → Multi-Agent System → Trading 
 *Next Priority: Complete system migration and performance testing*
 *Expected Outcome: Significantly improved trading signal quality*
 - save session summary of today's changes in /session-summaries folder
+- never use unicode emojis in our code
