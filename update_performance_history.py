@@ -15,7 +15,7 @@ import alpaca_trade_api as tradeapi
 load_dotenv()
 
 # File paths
-PERFORMANCE_JSON = "scripts-and-data/data/json/performance_history.json"
+PERFORMANCE_JSON = "data/daily/performance/performance_history.json"
 
 # Initialize API clients
 dee_api = tradeapi.REST(

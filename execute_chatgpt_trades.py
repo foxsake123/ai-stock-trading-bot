@@ -125,7 +125,7 @@ def main():
     )
 
     # Parse DEE-BOT trades
-    dee_file = Path(f"scripts-and-data/data/reports/daily/daily-reports/{date}/chatgpt_research_dee_bot_{date}.md")
+    dee_file = Path(f"data/daily/reports/{date}/chatgpt_research_dee_bot_{date}.md")
     if dee_file.exists():
         print(f"\n[*] Parsing DEE-BOT trades from {dee_file.name}")
         dee_trades = parse_chatgpt_research(dee_file)
@@ -141,7 +141,7 @@ def main():
         dee_results = []
 
     # Parse SHORGAN-BOT trades
-    shorgan_file = Path(f"scripts-and-data/data/reports/daily/daily-reports/{date}/chatgpt_research_shorgan_bot_{date}.md")
+    shorgan_file = Path(f"data/daily/reports/{date}/chatgpt_research_shorgan_bot_{date}.md")
     if shorgan_file.exists():
         print(f"\n[*] Parsing SHORGAN-BOT trades from {shorgan_file.name}")
         shorgan_trades = parse_chatgpt_research(shorgan_file)

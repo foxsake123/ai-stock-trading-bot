@@ -20,8 +20,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Configuration
-DATA_DIR = "scripts-and-data"
-PERFORMANCE_JSON = f"{DATA_DIR}/data/json/performance_history.json"
+PERFORMANCE_JSON = "data/daily/performance/performance_history.json"
 RESULTS_PATH = Path("performance_results.png")
 
 # Alpaca API Configuration (from .env)
