@@ -85,6 +85,12 @@ bot_credentials.md
 temp/
 tmp/
 nul
+Thumbs.db
+
+# Large data files
+*.pkl
+*.h5
+*.parquet
 
 # PDF reports (can be regenerated)
 *.pdf
@@ -108,3 +114,6 @@ fd_test_*.json
 # One-time emergency scripts
 cover_nvda_short.py
 cancel_old_orders.py
+
+# Legacy duplicate directory (removed except locked PDF)
+scripts-and-data/

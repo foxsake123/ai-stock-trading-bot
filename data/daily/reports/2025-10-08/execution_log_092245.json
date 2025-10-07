@@ -1,0 +1,127 @@
+{
+  "execution_date": "2025-10-08",
+  "execution_time": "2025-10-07T09:22:45.247376",
+  "executed_orders": [
+    {
+      "bot": "DEE-BOT",
+      "symbol": "WMT",
+      "shares": 93,
+      "side": "buy",
+      "limit_price": 102.0,
+      "order_id": "e5df6b48-0924-4235-8664-49c297bdb6e0",
+      "timestamp": "2025-10-07T09:21:33.419567",
+      "type": "buy",
+      "catalyst": ""
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "UNH",
+      "shares": 22,
+      "side": "buy",
+      "limit_price": 360.0,
+      "order_id": "b81fb0d7-8048-4227-b5f0-005bfdfe4763",
+      "timestamp": "2025-10-07T09:21:34.541341",
+      "type": "buy",
+      "catalyst": ""
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "NEE",
+      "shares": 95,
+      "side": "buy",
+      "limit_price": 80.0,
+      "order_id": "d38e8358-2a91-4235-a610-09ed3cbce937",
+      "timestamp": "2025-10-07T09:21:35.617560",
+      "type": "buy",
+      "catalyst": ""
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "COST",
+      "shares": 11,
+      "side": "buy",
+      "limit_price": 915.0,
+      "order_id": "1a57cb79-c802-4b8a-84bb-830fa416f273",
+      "timestamp": "2025-10-07T09:21:36.689266",
+      "type": "buy",
+      "catalyst": ""
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "MRK",
+      "shares": 110,
+      "side": "buy",
+      "limit_price": 89.0,
+      "order_id": "6d187762-bdc2-43d5-80ce-337607fcf3f3",
+      "timestamp": "2025-10-07T09:21:37.746711",
+      "type": "buy",
+      "catalyst": ""
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "ARQT",
+      "shares": 150,
+      "side": "buy",
+      "limit_price": 20.0,
+      "order_id": "dc35c413-4eae-430d-a527-4986ffa4d202",
+      "timestamp": "2025-10-07T09:21:38.957253",
+      "type": "buy",
+      "catalyst": "FDA Oct 13"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "HIMS",
+      "shares": 37,
+      "side": "buy",
+      "limit_price": 54.0,
+      "order_id": "470b96cd-23a7-4b21-82ff-95f072549bec",
+      "timestamp": "2025-10-07T09:21:40.061571",
+      "type": "buy",
+      "catalyst": "Short squeeze"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "WOLF",
+      "shares": 96,
+      "side": "buy",
+      "limit_price": 26.0,
+      "order_id": "4fe1b64c-2056-4297-844b-d31dd7c7847b",
+      "timestamp": "2025-10-07T09:21:41.332902",
+      "type": "buy",
+      "catalyst": "Delisting Oct 10"
+    }
+  ],
+  "failed_orders": [
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "PLUG",
+      "shares": 500,
+      "error": "asset \"PLUG\" cannot be sold short",
+      "timestamp": "2025-10-07T09:21:42.379760"
+    }
+  ],
+  "stop_orders": [
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "ARQT",
+      "shares": 150,
+      "stop_price": 16.5,
+      "type": "buy"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "HIMS",
+      "shares": 37,
+      "stop_price": 49.0,
+      "type": "buy"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "WOLF",
+      "shares": 96,
+      "stop_price": 22.0,
+      "type": "buy"
+    }
+  ],
+  "success_rate": "8/9"
+}

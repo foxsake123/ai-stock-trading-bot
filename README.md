@@ -44,13 +44,13 @@ pip install -r requirements.txt
 python main.py
 
 # Execute daily trades
-python scripts-and-data/automation/execute_daily_trades.py
+python scripts/automation/execute_daily_trades.py
 
 # Update positions
-python scripts-and-data/automation/update_all_bot_positions.py
+python scripts/automation/update_all_bot_positions.py
 
 # Generate reports
-python scripts-and-data/automation/generate-post-market-report.py
+python scripts/automation/generate-post-market-report.py
 
 # Generate performance graph (NEW!)
 python generate_performance_graph.py
@@ -137,14 +137,19 @@ Professional visualization system benchmarking both bots against S&P 500:
 ```
 ai-stock-trading-bot/
 ├── agents/                 # Multi-agent trading system
-├── scripts-and-data/
+├── scripts/
 │   ├── automation/        # Core trading scripts
-│   ├── daily-csv/         # Position tracking
-│   └── trade-logs/        # Execution history
+│   ├── utilities/         # Helper utilities
+│   └── windows/           # Windows batch files
+├── data/
+│   ├── daily/             # Daily positions and performance
+│   ├── research/          # Claude/ChatGPT research
+│   └── reports/           # Execution reports
 ├── docs/
 │   ├── strategies/        # Trading strategies
 │   ├── reports/           # Daily/weekly reports
-│   └── sessions/          # Development logs
+│   ├── archive/           # Archived documentation
+│   └── session-summaries/ # Development logs
 ├── configs/               # Configuration files
 ├── tests/                 # Test suite
 └── main.py               # Entry point
