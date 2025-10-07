@@ -7,6 +7,7 @@ from .base_agent import BaseAgent
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 import numpy as np
+from scipy.stats import norm
 import logging
 
 class RiskManagerAgent(BaseAgent):
