@@ -9,10 +9,11 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict
 
 import pytz
 import pandas as pd
+import yfinance as yf
 from anthropic import Anthropic
 from dotenv import load_dotenv
 
@@ -83,6 +84,75 @@ class PreMarketReportGenerator:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         logger.info(f"Output directory: {self.output_dir.absolute()}")
 
+    def fetch_market_data(self) -> Dict:
+        """
+        Fetch 6pm ET market snapshot: futures, VIX, dollar index, treasury yields
+
+        Returns:
+            Dict: Market data for all indicators
+        """
+        logger.info("Fetching market data snapshot")
+
+        # Market indicators to fetch
+        indicators = {
+            '^VIX': 'VIX Index',
+            'ES=F': 'S&P 500 Futures',
+            'NQ=F': 'Nasdaq Futures',
+            'RTY=F': 'Russell 2000 Futures',
+            'DX-Y.NYB': 'Dollar Index',
+            '^TNX': '10-Year Treasury Yield'
+        }
+
+        market_data = {}
+
+        for symbol, name in indicators.items():
+            try:
+                logger.info(f"Fetching {name} ({symbol})")
+                ticker = yf.Ticker(symbol)
+
+                # Get current data
+                info = ticker.info
+                hist = ticker.history(period='2d')
+
+                if len(hist) == 0:
+                    logger.warning(f"No data available for {symbol}")
+                    continue
+
+                # Get most recent price
+                current_price = hist['Close'].iloc[-1]
+
+                # Calculate change percent
+                if len(hist) >= 2:
+                    previous_close = hist['Close'].iloc[-2]
+                    change_percent = ((current_price - previous_close) / previous_close) * 100
+                else:
+                    change_percent = 0.0
+
+                # Get after-hours price if available
+                after_hours_price = None
+                if 'postMarketPrice' in info and info['postMarketPrice']:
+                    after_hours_price = info['postMarketPrice']
+                elif 'regularMarketPrice' in info and info['regularMarketPrice']:
+                    after_hours_price = info['regularMarketPrice']
+
+                # Store data
+                market_data[symbol] = {
+                    'name': name,
+                    'current_price': round(current_price, 2),
+                    'change_percent': round(change_percent, 2),
+                    'after_hours_price': round(after_hours_price, 2) if after_hours_price else None
+                }
+
+                logger.info(f"  {name}: ${current_price:.2f} ({change_percent:+.2f}%)")
+
+            except Exception as e:
+                logger.error(f"Failed to fetch {symbol} ({name}): {e}")
+                # Continue with other indicators even if one fails
+                continue
+
+        logger.info(f"Successfully fetched {len(market_data)}/{len(indicators)} market indicators")
+        return market_data
+
     def generate_report(self) -> str:
         """
         Generate the pre-market report
@@ -93,8 +163,11 @@ class PreMarketReportGenerator:
         logger.info("Starting report generation")
 
         try:
-            # Create basic prompt (placeholder for now)
-            prompt = self._create_prompt()
+            # Fetch market data snapshot
+            market_data = self.fetch_market_data()
+
+            # Create prompt with market data
+            prompt = self._create_prompt(market_data)
             logger.info(f"Prompt created ({len(prompt)} characters)")
 
             # Call Claude API
@@ -107,20 +180,34 @@ class PreMarketReportGenerator:
             logger.error(f"Error generating report: {e}", exc_info=True)
             raise
 
-    def _create_prompt(self) -> str:
+    def _create_prompt(self, market_data: Dict) -> str:
         """
         Create the prompt for Claude API
+
+        Args:
+            market_data: Dictionary of market indicators and their values
 
         Returns:
             str: Formatted prompt
         """
+        # Format market data section
+        market_snapshot = "\nMarket Snapshot (6:00 PM ET):\n"
+        if market_data:
+            for symbol, data in market_data.items():
+                name = data['name']
+                price = data['current_price']
+                change = data['change_percent']
+                market_snapshot += f"- {name}: ${price:.2f} ({change:+.2f}%)\n"
+        else:
+            market_snapshot += "- Market data unavailable\n"
+
         prompt = f"""Generate a comprehensive pre-market trading report for {self.trading_date}.
 
 Portfolio Information:
 - Portfolio Value: ${self.portfolio_value:,}
 - Trading Date: {self.trading_date}
 - Generation Time: {self.generation_date.strftime('%Y-%m-%d %H:%M:%S %Z')}
-
+{market_snapshot}
 Please provide:
 1. Market overview and key events
 2. Sector analysis
