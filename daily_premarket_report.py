@@ -84,6 +84,96 @@ class PreMarketReportGenerator:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         logger.info(f"Output directory: {self.output_dir.absolute()}")
 
+        # Load stock recommendations
+        self.recommendations = self.load_recommendations()
+
+    def load_recommendations(self) -> pd.DataFrame:
+        """
+        Load stock recommendations from CSV or use defaults
+
+        Returns:
+            pd.DataFrame: Stock recommendations with columns: Ticker, Strategy, Catalyst, Risk, Conviction
+        """
+        csv_path = Path('data/daily_recommendations.csv')
+
+        # Try to load from CSV
+        if csv_path.exists():
+            logger.info(f"Loading recommendations from {csv_path}")
+            try:
+                df = pd.read_csv(csv_path)
+                logger.info(f"Loaded {len(df)} recommendations from CSV")
+                return df
+            except Exception as e:
+                logger.warning(f"Failed to load CSV: {e}. Using default recommendations.")
+
+        # Use default recommendations
+        logger.info("Using default stock recommendations")
+
+        default_recommendations = [
+            # SHORGAN-BOT stocks (catalyst-driven)
+            {
+                'Ticker': 'SNDX',
+                'Strategy': 'SHORGAN',
+                'Catalyst': 'Oct 25 PDUFA for Revuforj',
+                'Risk': 9,
+                'Conviction': 9
+            },
+            {
+                'Ticker': 'GKOS',
+                'Strategy': 'SHORGAN',
+                'Catalyst': 'Oct 20 PDUFA for Epioxa',
+                'Risk': 7,
+                'Conviction': 7
+            },
+            {
+                'Ticker': 'ARWR',
+                'Strategy': 'SHORGAN',
+                'Catalyst': 'Nov 18 PDUFA for plozasiran',
+                'Risk': 8,
+                'Conviction': 8
+            },
+            {
+                'Ticker': 'ALT',
+                'Strategy': 'SHORGAN',
+                'Catalyst': 'Nov 11 Q3 earnings + IMPACT data',
+                'Risk': 5,
+                'Conviction': 5
+            },
+            {
+                'Ticker': 'CAPR',
+                'Strategy': 'SHORGAN',
+                'Catalyst': 'Q4 HOPE-3 Phase 3 data',
+                'Risk': 6,
+                'Conviction': 6
+            },
+            # DEE-BOT stocks (defensive)
+            {
+                'Ticker': 'DUK',
+                'Strategy': 'DEE',
+                'Catalyst': 'Long-term defensive utility',
+                'Risk': 8,
+                'Conviction': 8
+            },
+            {
+                'Ticker': 'ED',
+                'Strategy': 'DEE',
+                'Catalyst': 'Long-term defensive utility',
+                'Risk': 9,
+                'Conviction': 9
+            },
+            {
+                'Ticker': 'PEP',
+                'Strategy': 'DEE',
+                'Catalyst': 'Long-term defensive consumer staples',
+                'Risk': 6,
+                'Conviction': 6
+            }
+        ]
+
+        df = pd.DataFrame(default_recommendations)
+        logger.info(f"Loaded {len(df)} default recommendations ({len(df[df['Strategy'] == 'SHORGAN'])} SHORGAN, {len(df[df['Strategy'] == 'DEE'])} DEE)")
+        return df
+
     def fetch_market_data(self) -> Dict:
         """
         Fetch 6pm ET market snapshot: futures, VIX, dollar index, treasury yields
@@ -249,6 +339,20 @@ Keep the analysis professional, data-driven, and actionable.
         else:
             market_snapshot = "- Market data unavailable at generation time\n"
 
+        # Extract recommendations by strategy
+        shorgan_stocks = self.recommendations[self.recommendations['Strategy'] == 'SHORGAN'].to_dict('records')
+        dee_stocks = self.recommendations[self.recommendations['Strategy'] == 'DEE'].to_dict('records')
+
+        # Format SHORGAN recommendations
+        shorgan_list = ""
+        for stock in shorgan_stocks:
+            shorgan_list += f"- **{stock['Ticker']}**: {stock['Catalyst']} (Risk: {stock['Risk']}/10, Conviction: {stock['Conviction']}/10)\n"
+
+        # Format DEE recommendations
+        dee_list = ""
+        for stock in dee_stocks:
+            dee_list += f"- **{stock['Ticker']}**: {stock['Catalyst']} (Risk: {stock['Risk']}/10, Conviction: {stock['Conviction']}/10)\n"
+
         prompt = f"""# COMPREHENSIVE PRE-MARKET TRADING REPORT
 
 ## Report Metadata
@@ -319,6 +423,10 @@ Analyze what happened while U.S. markets were closed:
 {market_snapshot}
 
 ### 3. SHORGAN-BOT RECOMMENDATIONS (5-7 TRADES)
+
+**Priority Stocks to Analyze:**
+{shorgan_list}
+
 For each recommended position, provide:
 
 **Format:**
@@ -344,6 +452,10 @@ For each recommended position, provide:
 - 0-1 merger arbitrage or event-driven trades
 
 ### 4. DEE-BOT RECOMMENDATIONS (3-5 DEFENSIVE STOCKS)
+
+**Priority Stocks to Analyze:**
+{dee_list}
+
 For each recommended position, provide:
 
 **Format:**
