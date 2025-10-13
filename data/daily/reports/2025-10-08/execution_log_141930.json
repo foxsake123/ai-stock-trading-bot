@@ -1,0 +1,93 @@
+{
+  "execution_date": "2025-10-08",
+  "execution_time": "2025-10-09T14:19:30.559614",
+  "executed_orders": [
+    {
+      "bot": "DEE-BOT",
+      "symbol": "WMT",
+      "shares": 93,
+      "side": "buy",
+      "limit_price": 102.0,
+      "order_id": "19bcbe7e-fb96-4858-a623-cb39b66297c2",
+      "timestamp": "2025-10-09T14:19:20.188750",
+      "type": "buy",
+      "catalyst": ""
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "UNH",
+      "shares": 22,
+      "side": "buy",
+      "limit_price": 360.0,
+      "order_id": "7e7135a6-3b35-4279-885f-7243047206da",
+      "timestamp": "2025-10-09T14:19:21.283662",
+      "type": "buy",
+      "catalyst": ""
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "NEE",
+      "shares": 95,
+      "side": "buy",
+      "limit_price": 80.0,
+      "order_id": "4712f6d4-064f-4d42-926e-5a121e1e7748",
+      "timestamp": "2025-10-09T14:19:22.357960",
+      "type": "buy",
+      "catalyst": ""
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "COST",
+      "shares": 11,
+      "side": "buy",
+      "limit_price": 915.0,
+      "order_id": "9d26b4e7-b246-47c1-a564-06b057b39c28",
+      "timestamp": "2025-10-09T14:19:23.410306",
+      "type": "buy",
+      "catalyst": ""
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "MRK",
+      "shares": 110,
+      "side": "buy",
+      "limit_price": 89.0,
+      "order_id": "c64e2eab-9424-422f-8021-4d1859264f62",
+      "timestamp": "2025-10-09T14:19:24.492434",
+      "type": "buy",
+      "catalyst": ""
+    }
+  ],
+  "failed_orders": [
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "ARQT",
+      "shares": 150,
+      "error": "potential wash trade detected. use complex orders",
+      "timestamp": "2025-10-09T14:19:25.779157"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "HIMS",
+      "shares": 37,
+      "error": "potential wash trade detected. use complex orders",
+      "timestamp": "2025-10-09T14:19:26.843496"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "WOLF",
+      "shares": 96,
+      "error": "potential wash trade detected. use complex orders",
+      "timestamp": "2025-10-09T14:19:27.922771"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "PLUG",
+      "shares": 500,
+      "error": "asset \"PLUG\" cannot be sold short",
+      "timestamp": "2025-10-09T14:19:29.002809"
+    }
+  ],
+  "stop_orders": [],
+  "success_rate": "5/9"
+}

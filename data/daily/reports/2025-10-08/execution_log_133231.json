@@ -1,0 +1,72 @@
+{
+  "execution_date": "2025-10-08",
+  "execution_time": "2025-10-13T13:32:31.924706",
+  "executed_orders": [],
+  "failed_orders": [
+    {
+      "bot": "DEE-BOT",
+      "symbol": "WMT",
+      "shares": 93,
+      "error": "insufficient buying power",
+      "timestamp": "2025-10-13T13:32:15.188507"
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "UNH",
+      "shares": 22,
+      "error": "insufficient buying power",
+      "timestamp": "2025-10-13T13:32:16.207127"
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "NEE",
+      "shares": 95,
+      "error": "insufficient buying power",
+      "timestamp": "2025-10-13T13:32:17.228790"
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "COST",
+      "shares": 11,
+      "error": "insufficient buying power",
+      "timestamp": "2025-10-13T13:32:18.265200"
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "MRK",
+      "shares": 110,
+      "error": "insufficient buying power",
+      "timestamp": "2025-10-13T13:32:19.287203"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "ARQT",
+      "shares": 150,
+      "error": "potential wash trade detected. use complex orders",
+      "timestamp": "2025-10-13T13:32:27.469172"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "HIMS",
+      "shares": 37,
+      "error": "potential wash trade detected. use complex orders",
+      "timestamp": "2025-10-13T13:32:28.492574"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "WOLF",
+      "shares": 96,
+      "error": "potential wash trade detected. use complex orders",
+      "timestamp": "2025-10-13T13:32:29.513245"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "PLUG",
+      "shares": 500,
+      "error": "asset \"PLUG\" cannot be sold short",
+      "timestamp": "2025-10-13T13:32:30.533504"
+    }
+  ],
+  "stop_orders": [],
+  "success_rate": "0/9"
+}
