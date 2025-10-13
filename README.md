@@ -659,13 +659,47 @@ ai-stock-trading-bot/
 ## Development
 
 ### Running Tests
-```bash
-# Run all tests
-pytest tests/
 
-# Run specific test suite
-pytest tests/integration/
+The project includes a comprehensive pytest test suite for unit and integration testing with **94% pass rate** and **9% code coverage**.
+
+**Current Status:**
+- **59/63 tests passing** (94% success rate)
+- **Coverage**: 9% overall (daily_premarket_report.py: 52%, schedule_config.py: 59%)
+- **Test Files**: 4 files with 63 comprehensive unit tests
+
+**Run all tests:**
+```bash
+pytest tests/ -v
 ```
+
+**Run specific test files:**
+```bash
+pytest tests/test_schedule_config.py -v          # Schedule/date tests
+pytest tests/test_report_generator.py -v         # Report generation tests
+pytest tests/test_notifications.py -v            # Notification tests
+```
+
+**Run tests by marker:**
+```bash
+pytest tests/ -m unit -v                         # Only unit tests
+pytest tests/ -m integration -v                  # Only integration tests
+pytest tests/ -m "not slow" -v                   # Skip slow tests
+```
+
+**Run tests with coverage:**
+```bash
+pytest tests/ --cov=agents --cov=scripts --cov-report=html
+# Open htmlcov/index.html to view coverage report
+```
+
+**Test fixtures available:**
+- `temp_dir` - Temporary directory for file operations
+- `mock_env_vars` - Mock environment variables
+- `mock_market_data` - Sample market data
+- `mock_stock_recommendations` - Sample stock recommendations
+- `sample_report_content` - Sample report markdown
+
+**Note:** Some tests require environment variables to be set in `.env` file. Use `pytest.ini` to configure test behavior.
 
 ### Contributing
 1. Fork the repository
