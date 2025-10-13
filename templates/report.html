@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report - {{ date }} - AI Trading Bot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        .report-header {
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .report-header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .report-date {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .report-content {
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .report-content h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .report-content h2 {
+            color: #764ba2;
+            font-size: 24px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        .report-content h3 {
+            color: #333;
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .report-content p {
+            margin-bottom: 15px;
+        }
+
+        .report-content ul,
+        .report-content ol {
+            margin-bottom: 15px;
+            padding-left: 30px;
+        }
+
+        .report-content li {
+            margin-bottom: 8px;
+        }
+
+        .report-content strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .report-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .report-content table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .report-content table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .report-content table tr:hover {
+            background: #f7fafc;
+        }
+
+        .report-content code {
+            background: #f7fafc;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #e53e3e;
+        }
+
+        .report-content pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .report-content pre code {
+            background: transparent;
+            color: #e2e8f0;
+            padding: 0;
+        }
+
+        .report-content blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        .report-content hr {
+            border: none;
+            border-top: 2px solid #e2e8f0;
+            margin: 30px 0;
+        }
+
+        .download-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #48bb78;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .download-btn:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .report-content h1 {
+                font-size: 24px;
+            }
+
+            .report-content h2 {
+                font-size: 20px;
+            }
+
+            .report-content h3 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/" class="back-link">&larr; Back to All Reports</a>
+    </div>
+
+    <div class="container">
+        <div class="report-header">
+            <h1>Pre-Market Trading Report</h1>
+            <div class="report-date">{{ date }}</div>
+        </div>
+
+        <div class="report-content">
+            {{ html_content|safe }}
+        </div>
+
+        {% if date != 'Latest' %}
+        <div class="download-section">
+            <a href="/download/{{ date }}" class="download-btn">Download Markdown File</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

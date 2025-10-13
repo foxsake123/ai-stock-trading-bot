@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Market Reports - AI Trading Bot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .report-date {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .report-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .report-meta-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .report-meta-label {
+            font-weight: 600;
+            margin-right: 8px;
+            color: #333;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #48bb78;
+            color: white;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 10px;
+            padding: 60px 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #666;
+        }
+
+        .latest-badge {
+            display: inline-block;
+            background: #48bb78;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .api-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .api-link a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+
+        .api-link a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Pre-Market Trading Reports</h1>
+            <p>AI-generated hedge-fund-level analysis for SHORGAN-BOT and DEE-BOT strategies</p>
+        </div>
+
+        {% if reports %}
+        <div class="reports-grid">
+            {% for report in reports %}
+            <div class="report-card">
+                <div class="report-date">
+                    {{ report.trading_date }}
+                    {% if loop.index == 1 %}
+                    <span class="latest-badge">LATEST</span>
+                    {% endif %}
+                </div>
+                <div class="report-meta">
+                    <div class="report-meta-item">
+                        <span class="report-meta-label">Generated:</span>
+                        <span>{{ report.generated_at[:10] if report.generated_at != 'Unknown' else 'Unknown' }}</span>
+                    </div>
+                    <div class="report-meta-item">
+                        <span class="report-meta-label">Portfolio:</span>
+                        <span>${{ "{:,}".format(report.portfolio_value) }}</span>
+                    </div>
+                    <div class="report-meta-item">
+                        <span class="report-meta-label">Model:</span>
+                        <span>{{ report.model.split('-')[-1] if report.model != 'Unknown' else 'Unknown' }}</span>
+                    </div>
+                </div>
+                <div class="report-actions">
+                    <a href="/report/{{ report.trading_date }}" class="btn btn-primary">View Report</a>
+                    <a href="/download/{{ report.trading_date }}" class="btn btn-secondary">Download</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h2>No Reports Available</h2>
+            <p>Generate your first pre-market report to see it here.</p>
+        </div>
+        {% endif %}
+
+        <div class="api-link">
+            <a href="/api/reports" target="_blank">API Endpoint: /api/reports</a>
+        </div>
+    </div>
+</body>
+</html>

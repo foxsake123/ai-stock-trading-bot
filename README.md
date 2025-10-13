@@ -58,6 +58,9 @@ python generate_performance_graph.py
 # Generate daily pre-market report (NEW!)
 python daily_premarket_report.py          # Production mode
 python daily_premarket_report.py --test   # Test mode (no API calls)
+
+# Start web dashboard (NEW!)
+python web_dashboard.py                   # Web interface on http://localhost:5000
 ```
 
 ## Pre-Market Report Generator
@@ -327,6 +330,74 @@ All notifications are optional and independent - failure of one doesn't affect o
 - Check webhook hasn't been deleted in Discord server
 - Test webhook with curl: `curl -X POST -H 'Content-Type: application/json' -d '{"content":"Test"}' YOUR_WEBHOOK_URL`
 - Ensure bot has permissions to post in channel
+
+## Web Dashboard
+
+View and download pre-market reports through a beautiful web interface.
+
+### Features
+
+- List all generated reports with metadata
+- View reports rendered as HTML with styled tables and formatting
+- Download markdown files for archival
+- JSON API for programmatic access
+- Responsive design with professional UI
+- Real-time status of latest report
+
+### Starting the Dashboard
+
+**Windows**:
+```bash
+scripts\windows\START_WEB_DASHBOARD.bat
+```
+
+**Python**:
+```bash
+python web_dashboard.py
+```
+
+The dashboard will be available at: http://localhost:5000
+
+### Routes
+
+- `/` - Homepage listing all reports
+- `/report/<date>` - View specific report (e.g., `/report/2025-10-14`)
+- `/latest` - View the most recent report
+- `/download/<date>` - Download markdown file
+- `/api/reports` - JSON API endpoint with all reports metadata
+
+### API Response Format
+
+```json
+{
+  "success": true,
+  "count": 5,
+  "reports": [
+    {
+      "trading_date": "2025-10-14",
+      "filename": "premarket_report_2025-10-14.md",
+      "generated_at": "2025-10-13T17:29:51-04:00",
+      "portfolio_value": 100000,
+      "model": "claude-sonnet-4-20250514"
+    }
+  ]
+}
+```
+
+### Dependencies
+
+The web dashboard requires Flask and markdown:
+```bash
+pip install flask markdown
+```
+
+### Production Deployment
+
+For production use, consider using a WSGI server like Gunicorn:
+```bash
+pip install gunicorn
+gunicorn -w 4 -b 0.0.0.0:5000 web_dashboard:app
+```
 
 ## System Architecture
 
