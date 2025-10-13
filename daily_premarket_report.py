@@ -219,6 +219,240 @@ Keep the analysis professional, data-driven, and actionable.
 """
         return prompt
 
+    def generate_comprehensive_prompt(self, market_data: Dict) -> str:
+        """
+        Generate comprehensive hedge-fund-level prompt for Claude
+
+        Args:
+            market_data: Dictionary of market indicators and their values
+
+        Returns:
+            str: Comprehensive formatted prompt
+        """
+        # Format trading date
+        trading_date_formatted = self.trading_date.strftime('%B %d, %Y')
+        generation_time_formatted = self.generation_date.strftime('%B %d, %Y at %I:%M %p %Z')
+
+        # Format market data section
+        market_snapshot = ""
+        if market_data:
+            for symbol, data in market_data.items():
+                name = data['name']
+                price = data['current_price']
+                change = data['change_percent']
+                after_hours = data.get('after_hours_price')
+
+                market_snapshot += f"- **{name}**: ${price:.2f} ({change:+.2f}%)"
+                if after_hours and after_hours != price:
+                    market_snapshot += f" | After-hours: ${after_hours:.2f}"
+                market_snapshot += "\n"
+        else:
+            market_snapshot = "- Market data unavailable at generation time\n"
+
+        prompt = f"""# COMPREHENSIVE PRE-MARKET TRADING REPORT
+
+## Report Metadata
+- **Trading Day**: {trading_date_formatted}
+- **Generated**: {generation_time_formatted}
+- **Portfolio Value**: ${self.portfolio_value:,}
+- **Report Type**: Dual-strategy pre-market analysis (SHORGAN-BOT + DEE-BOT)
+
+---
+
+## INSTRUCTIONS
+
+You are a hedge-fund-level trading analyst generating a comprehensive pre-market research report for a dual-strategy automated trading system. This report must provide actionable, data-driven recommendations for tomorrow's market open ({trading_date_formatted}).
+
+The portfolio operates two distinct strategies:
+
+### SHORGAN-BOT Strategy
+- **Objective**: High-conviction catalyst-driven trades
+- **Time Horizon**: 2-8 weeks
+- **Position Sizing**: 5-7 positions total
+- **Capital Allocation**: 10-15% of portfolio per position
+- **Focus**: Earnings surprises, FDA approvals, mergers, product launches, regulatory changes
+- **Risk Profile**: Aggressive with defined stop-losses
+
+### DEE-BOT Strategy
+- **Objective**: Defensive beta-neutral core holdings
+- **Time Horizon**: 3-12 months
+- **Position Sizing**: 3-5 positions total
+- **Capital Allocation**: 60% of portfolio distributed across positions
+- **Focus**: S&P 100 stocks with strong fundamentals, dividend safety, low volatility
+- **Risk Profile**: Conservative wealth preservation
+
+---
+
+## REQUIRED ANALYSIS SECTIONS
+
+### 1. EXECUTIVE SUMMARY TABLE
+Provide a concise overview table:
+
+| Metric | Value |
+|--------|-------|
+| Market Sentiment | [Bullish/Bearish/Neutral] |
+| VIX Level | [Current level and interpretation] |
+| Key Catalysts Today | [Top 3 events] |
+| Recommended SHORGAN Positions | [Number] |
+| Recommended DEE Positions | [Number] |
+| Overall Risk Level | [Low/Medium/High] |
+
+### 2. OVERNIGHT MARKET CONTEXT
+Analyze what happened while U.S. markets were closed:
+
+**Asian Markets**
+- Major index performance (Nikkei, Hang Seng, Shanghai)
+- Key economic data releases
+- Sector-specific movements
+
+**European Markets**
+- FTSE, DAX, CAC performance
+- ECB or Bank of England developments
+- Commodity price movements (oil, gold, base metals)
+
+**U.S. Futures & Pre-Market**
+- S&P 500, Nasdaq, Russell 2000 futures direction
+- After-hours earnings reactions
+- Major pre-market movers (>3% moves)
+
+**Market Data Snapshot (6:00 PM ET Previous Day)**
+{market_snapshot}
+
+### 3. SHORGAN-BOT RECOMMENDATIONS (5-7 TRADES)
+For each recommended position, provide:
+
+**Format:**
+#### [TICKER] - [Company Name]
+- **Action**: BUY/SHORT
+- **Entry Price**: $XX.XX (specific price, not range)
+- **Position Size**: XXX shares (calculated from portfolio value)
+- **Stop-Loss**: $XX.XX (X% below entry)
+- **Price Target**: $XX.XX (X% upside)
+- **Time Horizon**: X weeks
+- **Catalyst**: [Specific upcoming event with date]
+- **Catalyst Timeline**: [Date and expected impact]
+- **Risk/Reward Ratio**: X:1
+- **Technical Setup**: [Chart pattern, support/resistance levels]
+- **Why Now**: [Timing rationale - why this exact entry point]
+- **Bear Case**: [What could go wrong]
+- **Data Sources**: [Where you got this information]
+
+**Include positions across different catalyst types:**
+- 2-3 earnings-driven trades
+- 1-2 FDA/regulatory approval plays
+- 1-2 technical breakout/breakdown trades
+- 0-1 merger arbitrage or event-driven trades
+
+### 4. DEE-BOT RECOMMENDATIONS (3-5 DEFENSIVE STOCKS)
+For each recommended position, provide:
+
+**Format:**
+#### [TICKER] - [Company Name]
+- **Action**: BUY
+- **Entry Price**: $XX.XX
+- **Position Size**: XXX shares (aiming for ~20% portfolio allocation each)
+- **Sector**: [Sector name]
+- **Dividend Yield**: X.XX%
+- **Beta**: X.XX (vs S&P 500)
+- **Key Fundamentals**:
+  - P/E Ratio: XX.X
+  - ROE: XX.X%
+  - Debt/Equity: X.XX
+  - Free Cash Flow: $XXX million
+- **Defensive Qualities**: [Why this is a safe holding]
+- **Valuation**: [Fair value analysis]
+- **Dividend Safety**: [Payout ratio, coverage analysis]
+- **Recent Insider Activity**: [Buys/sells in last 3 months]
+- **Institutional Ownership**: [Top holders]
+
+**Portfolio must be beta-neutral (target beta: 0.95-1.05 vs S&P 500)**
+
+### 5. PORTFOLIO MANAGEMENT
+**Current Portfolio Review** (if applicable):
+- Positions to hold
+- Positions to trim or exit
+- Stop-loss adjustments
+
+**Cash Management**:
+- Recommended cash allocation: X%
+- Available buying power: $XXX,XXX
+- Reserve for opportunistic trades: $XX,XXX
+
+**Risk Limits**:
+- Maximum position size: 15% per SHORGAN trade
+- Maximum sector concentration: 30%
+- Maximum portfolio beta: 1.2
+
+### 6. EXECUTION GUIDANCE FOR TOMORROW'S OPEN
+**Pre-Market (7:00-9:30 AM ET)**:
+- Key economic data releases (exact times)
+- Earnings reports to watch
+- News flow to monitor
+
+**Market Open Strategy (9:30-10:00 AM)**:
+- Order types to use (limit vs market)
+- Specific entry triggers
+- Volume/liquidity considerations
+
+**Intraday Monitoring**:
+- FOMC statements, Fed speakers
+- Sector rotation patterns
+- Technical level breaks
+
+**End-of-Day Actions**:
+- GTC stop-loss order placement
+- Position sizing adjustments
+
+### 7. ALTERNATIVE DATA INTEGRATION
+Incorporate non-traditional data sources:
+
+**Sentiment Analysis**:
+- Social media trends (StockTwits, Twitter/X)
+- News sentiment scores
+- Options flow (unusual activity)
+
+**Supply Chain Signals**:
+- Shipping data
+- Inventory levels
+- Commodity price trends
+
+**Insider Activity**:
+- Recent Form 4 filings
+- Cluster buying/selling patterns
+- C-suite transactions
+
+### 8. RISK DISCLOSURES
+Include standard disclaimers:
+- Not financial advice
+- Past performance doesn't guarantee future results
+- Consult licensed financial advisor
+- Paper trading account (if applicable)
+
+---
+
+## OUTPUT FORMAT REQUIREMENTS
+
+1. **Use Markdown formatting** throughout
+2. **Include tables** for Executive Summary and portfolio allocations
+3. **Provide specific entry prices** - never use ranges like "$50-$55"
+4. **Include precise timing** - exact dates and times for catalysts
+5. **Cite data sources** - where did you get earnings dates, FDA decisions, etc.
+6. **Be concise but comprehensive** - aim for 3,000-4,000 words total
+7. **Use professional hedge-fund language** - avoid retail trading jargon
+8. **Include risk warnings** - this is real money (even if paper trading)
+
+---
+
+## CURRENT MARKET DATA (as of {generation_time_formatted})
+
+{market_snapshot}
+
+---
+
+Now generate the comprehensive pre-market trading report for {trading_date_formatted} following ALL sections and formatting requirements above.
+"""
+        return prompt
+
     def call_claude_api(self, prompt: str) -> str:
         """
         Call Claude API to generate content
