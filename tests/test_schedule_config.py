@@ -4,7 +4,7 @@ Tests trading day calculation, holiday detection, and timezone handling.
 """
 
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from unittest.mock import patch, MagicMock
 import pytz
 
@@ -22,8 +22,8 @@ class TestGetNextTradingDay:
     @pytest.mark.unit
     def test_friday_to_monday(self):
         """Test Friday -> Monday transition (skip weekend)."""
-        # Friday, October 10, 2025 at 3:00 PM (after market close)
-        friday = datetime(2025, 10, 10, 15, 0, 0)
+        # Friday, October 10, 2025 at 5:00 PM (after market close at 4:00 PM)
+        friday = datetime(2025, 10, 10, 17, 0, 0)
 
         next_day = get_next_trading_day(from_date=friday)
 
@@ -37,7 +37,7 @@ class TestGetNextTradingDay:
     def test_before_holiday_to_after_holiday(self):
         """Test day before holiday -> day after holiday."""
         # Wednesday, November 26, 2025 (day before Thanksgiving)
-        before_thanksgiving = datetime(2025, 11, 26, 15, 0, 0)
+        before_thanksgiving = datetime(2025, 11, 26, 17, 0, 0)
 
         next_day = get_next_trading_day(from_date=before_thanksgiving)
 
@@ -51,7 +51,7 @@ class TestGetNextTradingDay:
     def test_regular_weekday_to_next_day(self):
         """Test regular weekday -> next weekday."""
         # Monday, October 13, 2025 at 3:00 PM (after market close)
-        monday = datetime(2025, 10, 13, 15, 0, 0)
+        monday = datetime(2025, 10, 13, 17, 0, 0)
 
         next_day = get_next_trading_day(from_date=monday)
 
@@ -65,7 +65,7 @@ class TestGetNextTradingDay:
     def test_thursday_to_friday(self):
         """Test Thursday -> Friday transition."""
         # Thursday, October 9, 2025 at 3:00 PM (after market close)
-        thursday = datetime(2025, 10, 9, 15, 0, 0)
+        thursday = datetime(2025, 10, 9, 17, 0, 0)
 
         next_day = get_next_trading_day(from_date=thursday)
 
@@ -79,7 +79,7 @@ class TestGetNextTradingDay:
     def test_year_boundary(self):
         """Test year boundary (December -> January)."""
         # Tuesday, December 30, 2025 at 3:00 PM (after market close)
-        dec_30 = datetime(2025, 12, 30, 15, 0, 0)
+        dec_30 = datetime(2025, 12, 30, 17, 0, 0)
 
         next_day = get_next_trading_day(from_date=dec_30)
 
@@ -94,7 +94,7 @@ class TestGetNextTradingDay:
     def test_skip_multiple_holidays(self):
         """Test skipping multiple consecutive holidays."""
         # Wednesday, December 24, 2025 at 3:00 PM (before Christmas)
-        before_christmas = datetime(2025, 12, 24, 15, 0, 0)
+        before_christmas = datetime(2025, 12, 24, 17, 0, 0)
 
         next_day = get_next_trading_day(from_date=before_christmas)
 
@@ -112,92 +112,92 @@ class TestIsTradingDay:
     def test_weekday_is_trading_day(self):
         """Test that regular weekdays are trading days."""
         # Monday, October 13, 2025
-        monday = datetime(2025, 10, 13)
+        monday = date(2025, 10, 13)
         assert is_trading_day(monday) is True
 
         # Wednesday, October 15, 2025
-        wednesday = datetime(2025, 10, 15)
+        wednesday = date(2025, 10, 15)
         assert is_trading_day(wednesday) is True
 
     @pytest.mark.unit
     def test_saturday_not_trading_day(self):
         """Test that Saturday is not a trading day."""
         # Saturday, October 11, 2025
-        saturday = datetime(2025, 10, 11)
+        saturday = date(2025, 10, 11)
         assert is_trading_day(saturday) is False
 
     @pytest.mark.unit
     def test_sunday_not_trading_day(self):
         """Test that Sunday is not a trading day."""
         # Sunday, October 12, 2025
-        sunday = datetime(2025, 10, 12)
+        sunday = date(2025, 10, 12)
         assert is_trading_day(sunday) is False
 
     @pytest.mark.unit
     def test_holiday_not_trading_day(self):
         """Test that holidays are not trading days."""
         # Christmas Day 2025 (Thursday, December 25)
-        christmas = datetime(2025, 12, 25)
+        christmas = date(2025, 12, 25)
         assert is_trading_day(christmas) is False
 
         # Thanksgiving 2025 (Thursday, November 27)
-        thanksgiving = datetime(2025, 11, 27)
+        thanksgiving = date(2025, 11, 27)
         assert is_trading_day(thanksgiving) is False
 
     @pytest.mark.unit
     def test_new_years_day(self):
         """Test New Year's Day is not a trading day."""
         # January 1, 2025 (Wednesday)
-        new_years = datetime(2025, 1, 1)
+        new_years = date(2025, 1, 1)
         assert is_trading_day(new_years) is False
 
     @pytest.mark.unit
     def test_independence_day(self):
         """Test Independence Day is not a trading day."""
         # July 4, 2025 (Friday)
-        july_4 = datetime(2025, 7, 4)
+        july_4 = date(2025, 7, 4)
         assert is_trading_day(july_4) is False
 
     @pytest.mark.unit
     def test_memorial_day(self):
         """Test Memorial Day is not a trading day."""
         # Memorial Day 2025 (last Monday of May - May 26)
-        memorial_day = datetime(2025, 5, 26)
+        memorial_day = date(2025, 5, 26)
         # Check if this date is in MARKET_HOLIDAYS_2025
-        if memorial_day.strftime('%Y-%m-%d') in MARKET_HOLIDAYS_2025:
+        if memorial_day in MARKET_HOLIDAYS_2025:
             assert is_trading_day(memorial_day) is False
 
     @pytest.mark.unit
     def test_labor_day(self):
         """Test Labor Day is not a trading day."""
         # Labor Day 2025 (first Monday of September - Sept 1)
-        labor_day = datetime(2025, 9, 1)
+        labor_day = date(2025, 9, 1)
         # Check if this date is in MARKET_HOLIDAYS_2025
-        if labor_day.strftime('%Y-%m-%d') in MARKET_HOLIDAYS_2025:
+        if labor_day in MARKET_HOLIDAYS_2025:
             assert is_trading_day(labor_day) is False
 
     @pytest.mark.unit
     def test_multiple_consecutive_days(self):
         """Test multiple consecutive days for consistency."""
         # Week of October 13-17, 2025 (all weekdays, no holidays)
-        dates = [
-            datetime(2025, 10, 13),  # Monday
-            datetime(2025, 10, 14),  # Tuesday
-            datetime(2025, 10, 15),  # Wednesday
-            datetime(2025, 10, 16),  # Thursday
-            datetime(2025, 10, 17),  # Friday
+        test_dates = [
+            date(2025, 10, 13),  # Monday
+            date(2025, 10, 14),  # Tuesday
+            date(2025, 10, 15),  # Wednesday
+            date(2025, 10, 16),  # Thursday
+            date(2025, 10, 17),  # Friday
         ]
 
-        for date in dates:
-            assert is_trading_day(date) is True
+        for test_date in test_dates:
+            assert is_trading_day(test_date) is True
 
     @pytest.mark.unit
     def test_weekend_after_friday(self):
         """Test weekend days after Friday are not trading days."""
         # Friday, October 10, 2025
-        friday = datetime(2025, 10, 10)
-        saturday = datetime(2025, 10, 11)
-        sunday = datetime(2025, 10, 12)
+        friday = date(2025, 10, 10)
+        saturday = date(2025, 10, 11)
+        sunday = date(2025, 10, 12)
 
         assert is_trading_day(friday) is True
         assert is_trading_day(saturday) is False
