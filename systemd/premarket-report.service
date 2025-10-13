@@ -1,0 +1,16 @@
+[Unit]
+Description=Pre-Market Trading Report Generation Service
+After=network.target
+
+[Service]
+Type=oneshot
+User=trader
+WorkingDirectory=/home/trader/ai-stock-trading-bot
+Environment='TZ=America/New_York'
+EnvironmentFile=/home/trader/ai-stock-trading-bot/.env
+ExecStart=/usr/bin/python3 /home/trader/ai-stock-trading-bot/daily_premarket_report.py
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

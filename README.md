@@ -170,6 +170,23 @@ reports/premarket/
 schtasks /create /tn "PreMarket Report" /tr "python C:\path\to\daily_premarket_report.py" /sc daily /st 18:00
 ```
 
+**Linux Systemd** (Recommended):
+```bash
+# Professional systemd timer with logging and persistence
+# See systemd/INSTALL.md for detailed setup instructions
+sudo cp systemd/premarket-report.* /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable premarket-report.timer
+sudo systemctl start premarket-report.timer
+```
+
+Features:
+- Runs Monday-Friday at 6:00 PM ET (skips weekends)
+- Persistent execution (runs missed jobs after downtime)
+- Integrated logging with `journalctl`
+- Automatic timezone handling (America/New_York)
+- Service restart on failure
+
 **Linux/Mac Cron**:
 ```bash
 # Run daily at 6:00 PM ET

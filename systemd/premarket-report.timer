@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily Pre-Market Trading Report Generator
+Requires=premarket-report.service
+
+[Timer]
+OnCalendar=Mon-Fri *-*-* 18:00:00
+Persistent=true
+Unit=premarket-report.service
+
+[Install]
+WantedBy=timers.target
