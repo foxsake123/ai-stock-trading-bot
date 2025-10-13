@@ -164,11 +164,24 @@ reports/premarket/
 
 ### Scheduling
 
-**Windows Task Scheduler**:
-```bash
-# Run daily at 6:00 PM ET (generates report for next trading day)
+**Windows Task Scheduler** (Recommended):
+```cmd
+# Option 1: Import XML configuration (Monday-Friday only)
+# See systemd/INSTALL_WINDOWS.md for detailed setup instructions
+cd systemd
+# Edit premarket_report_task.xml with your paths first
+schtasks /create /tn "PreMarketReport" /xml premarket_report_task.xml
+
+# Option 2: Quick command-line setup (daily including weekends)
 schtasks /create /tn "PreMarket Report" /tr "python C:\path\to\daily_premarket_report.py" /sc daily /st 18:00
 ```
+
+Features (XML configuration):
+- Runs Monday-Friday at 6:00 PM ET (skips weekends)
+- 1-hour execution timeout
+- Task history logging
+- Network required check
+- Manual test: `systemd\run_report.bat`
 
 **Linux Systemd** (Recommended):
 ```bash
