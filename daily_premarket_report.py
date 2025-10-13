@@ -565,6 +565,91 @@ Now generate the comprehensive pre-market trading report for {trading_date_forma
 """
         return prompt
 
+    def generate_mock_report(self, market_data: Dict) -> str:
+        """
+        Generate a mock report for testing (without API call)
+
+        Args:
+            market_data: Dictionary of market indicators
+
+        Returns:
+            str: Mock report content
+        """
+        trading_date_formatted = self.trading_date.strftime('%B %d, %Y')
+        generation_time_formatted = self.generation_date.strftime('%B %d, %Y at %I:%M %p %Z')
+
+        # Get recommendation lists
+        shorgan_stocks = self.recommendations[self.recommendations['Strategy'] == 'SHORGAN']
+        dee_stocks = self.recommendations[self.recommendations['Strategy'] == 'DEE']
+
+        # Format market data
+        market_snapshot = ""
+        if market_data:
+            for symbol, data in market_data.items():
+                market_snapshot += f"- **{data['name']}**: ${data['current_price']:.2f} ({data['change_percent']:+.2f}%)\n"
+        else:
+            market_snapshot = "- Market data unavailable\n"
+
+        mock_report = f"""# Pre-Market Trading Report (TEST MODE)
+**Date:** {trading_date_formatted}
+**Generated:** {generation_time_formatted}
+**Portfolio Value:** ${self.portfolio_value:,}
+
+---
+
+## TEST MODE NOTICE
+This is a mock report generated for testing purposes. No AI analysis was performed.
+
+---
+
+## Market Data Snapshot
+{market_snapshot}
+
+## SHORGAN-BOT Recommendations ({len(shorgan_stocks)} positions)
+
+"""
+
+        for _, stock in shorgan_stocks.iterrows():
+            mock_report += f"""### {stock['Ticker']}
+- **Catalyst**: {stock['Catalyst']}
+- **Risk Score**: {stock['Risk']}/10
+- **Conviction Score**: {stock['Conviction']}/10
+- **Entry Price**: [Would be provided by AI analysis]
+- **Position Size**: [Would be calculated]
+- **Stop-Loss**: [Would be determined]
+- **Price Target**: [Would be analyzed]
+
+"""
+
+        mock_report += f"""## DEE-BOT Recommendations ({len(dee_stocks)} positions)
+
+"""
+
+        for _, stock in dee_stocks.iterrows():
+            mock_report += f"""### {stock['Ticker']}
+- **Strategy**: {stock['Catalyst']}
+- **Risk Score**: {stock['Risk']}/10
+- **Conviction Score**: {stock['Conviction']}/10
+- **Entry Price**: [Would be provided by AI analysis]
+- **Position Size**: [Would be calculated]
+- **Dividend Yield**: [Would be fetched]
+- **Beta**: [Would be analyzed]
+
+"""
+
+        mock_report += """## Execution Guidance
+[Would include detailed pre-market, open, and intraday strategies]
+
+## Risk Disclosures
+This is a test report. Not financial advice. For testing purposes only.
+
+---
+
+**Generated with Claude Code** - TEST MODE
+"""
+
+        return mock_report
+
     def call_claude_api(self, prompt: str) -> str:
         """
         Call Claude API to generate content
@@ -680,17 +765,79 @@ def main():
     logger.info("Starting Daily Pre-Market Report Generation")
     logger.info("=" * 80)
 
+    # Check if ANTHROPIC_API_KEY is set
+    if not os.environ.get('ANTHROPIC_API_KEY'):
+        error_msg = "Error: ANTHROPIC_API_KEY not set. Add to .env file"
+        logger.error(error_msg)
+        print(f"\n{error_msg}\n")
+        print("Create a .env file in the project root with:")
+        print("ANTHROPIC_API_KEY=your_api_key_here\n")
+        return 1
+
+    # Check for test mode flag
+    test_mode = '--test' in sys.argv
+    if test_mode:
+        logger.info("Running in TEST MODE (no API calls)")
+
     try:
         # Create generator instance
         generator = PreMarketReportGenerator()
 
+        # Check next trading day calculation
+        try:
+            trading_date_str = generator.trading_date.strftime('%B %d, %Y (%A)')
+            logger.info(f"Next trading day calculated: {trading_date_str}")
+        except Exception as e:
+            logger.error(f"Error calculating next trading day: {e}")
+            raise
+
+        # Fetch market data
+        logger.info("Fetching market data...")
+        market_data = generator.fetch_market_data()
+        market_data_status = "SUCCESS" if market_data else "FAILED"
+
+        # Get recommendation counts
+        shorgan_count = len(generator.recommendations[generator.recommendations['Strategy'] == 'SHORGAN'])
+        dee_count = len(generator.recommendations[generator.recommendations['Strategy'] == 'DEE'])
+
+        # Print summary before generating report
+        print("\n" + "=" * 80)
+        print("PRE-GENERATION SUMMARY")
+        print("=" * 80)
+        print(f"Trading Date:        {trading_date_str}")
+        print(f"Generation Time:     {generator.generation_date.strftime('%B %d, %Y at %I:%M %p %Z')}")
+        print(f"SHORGAN Positions:   {shorgan_count}")
+        print(f"DEE-BOT Positions:   {dee_count}")
+        print(f"Market Data Status:  {market_data_status} ({len(market_data)}/6 indicators)")
+        print(f"Test Mode:           {'YES' if test_mode else 'NO'}")
+        print("=" * 80 + "\n")
+
         # Generate report
-        logger.info("Step 1: Generating report content")
-        report = generator.generate_report()
+        if test_mode:
+            logger.info("Step 1: Generating mock report (test mode)")
+            report = generator.generate_mock_report(market_data)
+            print("\nTEST MODE: Mock report generated successfully\n")
+        else:
+            logger.info("Step 1: Generating report content")
+            try:
+                prompt = generator.generate_comprehensive_prompt(market_data)
+                report = generator.call_claude_api(prompt)
+                logger.info(f"Report generated successfully ({len(report)} characters)")
+            except Exception as e:
+                error_msg = f"Error calling Claude API: {str(e)}"
+                logger.error(error_msg, exc_info=True)
+                print(f"\n{error_msg}\n")
+                raise
 
         # Save report
         logger.info("Step 2: Saving report to files")
-        filepath = generator.save_report(report)
+        try:
+            filepath = generator.save_report(report)
+        except Exception as e:
+            error_msg = f"Error saving report: {str(e)}"
+            logger.error(error_msg, exc_info=True)
+            print(f"\n{error_msg}\n")
+            raise
 
         # Generate and save metadata
         logger.info("Step 3: Saving metadata")
@@ -707,6 +854,11 @@ def main():
 
         return 0
 
+    except ValueError as e:
+        logger.error("=" * 80)
+        logger.error(f"CONFIGURATION ERROR: {str(e)}")
+        logger.error("=" * 80)
+        return 1
     except Exception as e:
         logger.error("=" * 80)
         logger.error(f"FATAL ERROR: Report generation failed")
