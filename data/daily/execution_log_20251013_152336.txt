@@ -1,0 +1,14 @@
+Execution Log - 2025-10-13 15:23:36.885170
+================================================================================
+
+Successful: 1
+Failed: 4
+
+EXECUTED:
+SHORGAN: BUY 47 ARWR @ $36.94 (ID: 762a291d-5c5a-4564-aa68-496369e0ba48)
+
+FAILED:
+SHORGAN: ARWR - potential wash trade detected. use complex orders
+DEE: ED - unauthorized.
+DEE: WMT - unauthorized.
+DEE: COST - unauthorized.
