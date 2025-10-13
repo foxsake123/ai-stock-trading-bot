@@ -73,6 +73,12 @@ ANTHROPIC_API_KEY=your_anthropic_api_key_here
 ALPACA_API_KEY=your_alpaca_api_key
 ALPACA_SECRET_KEY=your_alpaca_secret_key
 ALPACA_BASE_URL=https://paper-api.alpaca.markets
+
+# Email notifications (optional)
+EMAIL_ENABLED=true
+EMAIL_SENDER=your_email@gmail.com
+EMAIL_PASSWORD=your_gmail_app_password
+EMAIL_RECIPIENT=recipient@example.com
 ```
 
 2. **Install dependencies** (if not already installed):
@@ -167,6 +173,47 @@ schtasks /create /tn "PreMarket Report" /tr "python C:\path\to\daily_premarket_r
 0 18 * * * cd /path/to/project && python daily_premarket_report.py
 ```
 
+### Email Notifications
+
+The report generator can automatically email reports with attachments.
+
+#### Setting up Gmail App Password
+
+1. **Enable 2-Factor Authentication** on your Gmail account
+   - Go to https://myaccount.google.com/security
+   - Turn on 2-Step Verification
+
+2. **Generate App Password**:
+   - Go to https://myaccount.google.com/apppasswords
+   - Select "Mail" and "Other (Custom name)"
+   - Name it "AI Trading Bot"
+   - Click "Generate"
+   - Copy the 16-character password (format: xxxx xxxx xxxx xxxx)
+
+3. **Add to .env file**:
+```bash
+EMAIL_ENABLED=true
+EMAIL_SENDER=your_email@gmail.com
+EMAIL_PASSWORD=abcd efgh ijkl mnop  # Your 16-character app password
+EMAIL_RECIPIENT=recipient@example.com
+```
+
+4. **Test email notification**:
+```bash
+python daily_premarket_report.py --test
+# Check your inbox for "Pre-Market Report for..." email
+```
+
+#### Email Features
+- **Attachment**: Full markdown report file
+- **Summary**: First 500 characters of report in email body
+- **Stats**: SHORGAN/DEE-BOT position counts
+- **File path**: Local path to saved report
+- **Auto-retry**: Graceful failure (doesn't stop report generation)
+
+#### Disabling Email
+Set `EMAIL_ENABLED=false` or remove from `.env` file
+
 ### Troubleshooting
 
 **Error: ANTHROPIC_API_KEY not set**
@@ -181,6 +228,17 @@ schtasks /create /tn "PreMarket Report" /tr "python C:\path\to\daily_premarket_r
 **Error: Trading date calculation failed**
 - Check `schedule_config.py` for market holidays
 - Update holidays list for new year
+
+**Error: Email authentication failed**
+- Use Gmail App Password, not regular password
+- Follow Gmail App Password setup instructions above
+- Check EMAIL_SENDER matches Gmail account
+- Ensure 2FA is enabled on Gmail account
+
+**Error: Email configuration incomplete**
+- Verify all three variables set: EMAIL_SENDER, EMAIL_PASSWORD, EMAIL_RECIPIENT
+- Check .env file loaded correctly
+- Restart script after updating .env
 
 ## System Architecture
 

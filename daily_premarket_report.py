@@ -7,9 +7,14 @@ import os
 import sys
 import json
 import logging
+import smtplib
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 
 import pytz
 import pandas as pd
@@ -756,6 +761,155 @@ This is a test report. Not financial advice. For testing purposes only.
         logger.info(f"Metadata saved to: {filepath}")
         return filepath
 
+    def extract_summary(self, report: str) -> str:
+        """
+        Extract summary from report for email body
+
+        Args:
+            report: Full report content
+
+        Returns:
+            str: Summary text (max 500 chars)
+        """
+        lines = report.split('\n')
+        summary_lines = []
+        char_count = 0
+
+        # Extract first 20 lines or until first ## heading after initial content
+        for i, line in enumerate(lines[:30]):
+            # Stop at second ## heading (after title)
+            if i > 0 and line.startswith('##'):
+                break
+
+            summary_lines.append(line)
+            char_count += len(line)
+
+            # Stop at 500 characters
+            if char_count > 500:
+                break
+
+        summary = '\n'.join(summary_lines[:20])
+
+        # Truncate to 500 chars if needed
+        if len(summary) > 500:
+            summary = summary[:497] + '...'
+
+        return summary
+
+    def send_email_notification(self, report: str, filepath: Path) -> None:
+        """
+        Send email notification with report attachment
+
+        Args:
+            report: Report content
+            filepath: Path to saved report file
+        """
+        # Check if email is enabled
+        if os.getenv('EMAIL_ENABLED', '').lower() != 'true':
+            logger.info("Email notifications disabled (EMAIL_ENABLED != 'true')")
+            return
+
+        logger.info("Preparing email notification...")
+
+        try:
+            # Get email configuration from environment
+            sender_email = os.getenv('EMAIL_SENDER')
+            sender_password = os.getenv('EMAIL_PASSWORD')
+            recipient_email = os.getenv('EMAIL_RECIPIENT')
+
+            # Validate email configuration
+            if not sender_email or not sender_password or not recipient_email:
+                logger.error("Email configuration incomplete. Required: EMAIL_SENDER, EMAIL_PASSWORD, EMAIL_RECIPIENT")
+                return
+
+            # Format trading date for subject
+            trading_date_str = self.trading_date.strftime('%B %d, %Y')
+
+            # Create message
+            msg = MIMEMultipart()
+            msg['From'] = sender_email
+            msg['To'] = recipient_email
+            msg['Subject'] = f'Pre-Market Report for {trading_date_str} - Generated at 6pm ET'
+
+            # Extract summary and create email body
+            summary = self.extract_summary(report)
+
+            # Get recommendation counts
+            shorgan_count = len(self.recommendations[self.recommendations['Strategy'] == 'SHORGAN'])
+            dee_count = len(self.recommendations[self.recommendations['Strategy'] == 'DEE'])
+
+            body = f"""Pre-Market Trading Report
+
+Trading Date: {trading_date_str}
+Generated: {self.generation_date.strftime('%B %d, %Y at %I:%M %p %Z')}
+Portfolio Value: ${self.portfolio_value:,}
+
+SHORGAN-BOT Positions: {shorgan_count}
+DEE-BOT Positions: {dee_count}
+
+Report Summary:
+{summary}
+
+---
+
+The full report is attached as a markdown file.
+
+You can also find the report at:
+{filepath.absolute()}
+
+Best regards,
+AI Trading Bot
+"""
+
+            # Attach body as text
+            msg.attach(MIMEText(body, 'plain'))
+
+            # Attach report file
+            try:
+                with open(filepath, 'rb') as f:
+                    attachment = MIMEBase('application', 'octet-stream')
+                    attachment.set_payload(f.read())
+                    encoders.encode_base64(attachment)
+                    attachment.add_header(
+                        'Content-Disposition',
+                        f'attachment; filename={filepath.name}'
+                    )
+                    msg.attach(attachment)
+                logger.info(f"Attached report file: {filepath.name}")
+            except Exception as e:
+                logger.error(f"Failed to attach report file: {e}")
+
+            # Send email via Gmail SMTP
+            logger.info(f"Sending email to {recipient_email}...")
+
+            with smtplib.SMTP('smtp.gmail.com', 587) as server:
+                server.starttls()
+                server.login(sender_email, sender_password)
+                server.send_message(msg)
+
+            logger.info("Email notification sent successfully!")
+
+        except smtplib.SMTPAuthenticationError as e:
+            logger.error(f"Email authentication failed: {e}")
+            logger.error("Check EMAIL_PASSWORD (use Gmail App Password, not regular password)")
+        except Exception as e:
+            logger.error(f"Failed to send email notification: {e}", exc_info=True)
+
+    def send_notifications(self, report: str, filepath: Path) -> None:
+        """
+        Send all notifications (email, etc.)
+
+        Args:
+            report: Report content
+            filepath: Path to saved report file
+        """
+        logger.info("Sending notifications...")
+
+        # Send email notification
+        self.send_email_notification(report, filepath)
+
+        logger.info("Notification process completed")
+
 
 def main():
     """
@@ -839,8 +993,16 @@ def main():
             print(f"\n{error_msg}\n")
             raise
 
+        # Send notifications
+        logger.info("Step 3: Sending notifications")
+        try:
+            generator.send_notifications(report, filepath)
+        except Exception as e:
+            logger.warning(f"Failed to send notifications: {e}")
+            # Don't fail the entire process if notifications fail
+
         # Generate and save metadata
-        logger.info("Step 3: Saving metadata")
+        logger.info("Step 4: Saving metadata")
         metadata = generator.generate_metadata()
         metadata_path = generator.save_metadata(metadata)
 
