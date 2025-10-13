@@ -61,7 +61,121 @@ python daily_premarket_report.py --test   # Test mode (no API calls)
 
 # Start web dashboard (NEW!)
 python web_dashboard.py                   # Web interface on http://localhost:5000
+
+# Run system health check (NEW!)
+python health_check.py                    # Quick health check
+python health_check.py --verbose          # Detailed diagnostics
 ```
+
+## System Health Monitoring
+
+Monitor system health, API connectivity, and file operations with the built-in health check tool.
+
+### Health Check Features
+
+- **Research Generation**: Verify reports are being generated on schedule
+- **API Connectivity**: Test Anthropic and Alpaca API connections
+- **File Permissions**: Verify write access to required directories
+- **Exit Codes**: Returns 0 if all checks pass, 1 if any fail
+
+### Running Health Check
+
+**Basic check:**
+```bash
+python health_check.py
+```
+
+Example output:
+```
+================================================================================
+AI Trading Bot - System Health Check
+Timestamp: 2025-10-13 17:52:59
+================================================================================
+
+1. Research Generation:
+   [PASS] Latest report exists (2969 bytes, 0.4h old)
+
+2. API Connectivity:
+   [PASS] Anthropic API: Connected successfully
+   [PASS] Alpaca API: Connected (Portfolio: $102,332.98)
+
+3. File Permissions:
+   [PASS] Write permissions OK for 2 directories
+
+================================================================================
+Summary: 4/4 checks passed
+Status: [PASS] ALL SYSTEMS OPERATIONAL
+================================================================================
+```
+
+**Verbose mode (detailed diagnostics):**
+```bash
+python health_check.py --verbose
+# or
+python health_check.py -v
+```
+
+Shows additional debug information:
+- File paths being checked
+- API response details
+- Directory creation attempts
+- Write test results
+
+### When to Run Health Check
+
+**Recommended:**
+- After initial setup (verify configuration)
+- Daily monitoring (add to cron/Task Scheduler)
+- After system updates or changes
+- When troubleshooting issues
+- Before production deployments
+
+**Automated Monitoring (Linux):**
+```bash
+# Add to crontab - run daily at 7:00 PM ET
+0 19 * * * cd /path/to/project && python health_check.py || mail -s "Health Check Failed" admin@example.com
+```
+
+**Automated Monitoring (Windows Task Scheduler):**
+```cmd
+# Create scheduled task
+schtasks /create /tn "HealthCheck" /tr "python C:\path\to\health_check.py" /sc daily /st 19:00
+```
+
+### Exit Codes
+
+- **0**: All checks passed - system operational
+- **1**: One or more checks failed - requires attention
+
+Use in scripts:
+```bash
+python health_check.py
+if [ $? -eq 0 ]; then
+    echo "All systems operational"
+else
+    echo "Health check failed - investigate"
+    exit 1
+fi
+```
+
+### Troubleshooting
+
+**Research Generation Failed:**
+- Check if reports/ directory exists
+- Verify scheduled task is running
+- Run `python daily_premarket_report.py --test` to generate test report
+
+**API Connectivity Failed:**
+- Verify API keys are set in `.env` file
+- Check internet connection
+- Verify API key validity at provider websites
+- Check if required packages installed: `pip install anthropic alpaca-py`
+
+**File Permissions Failed:**
+- Check directory ownership and permissions
+- On Linux: `chmod 755 reports logs`
+- On Windows: Right-click → Properties → Security tab
+- Try running as administrator/sudo (if appropriate)
 
 ## Pre-Market Report Generator
 
