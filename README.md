@@ -214,6 +214,82 @@ python daily_premarket_report.py --test
 #### Disabling Email
 Set `EMAIL_ENABLED=false` or remove from `.env` file
 
+### Slack Notifications
+
+Send real-time notifications to Slack channels or DMs.
+
+#### Setting up Slack Webhook
+
+1. **Create Incoming Webhook**:
+   - Go to https://api.slack.com/apps
+   - Click "Create New App" → "From scratch"
+   - Name: "AI Trading Bot", select workspace
+   - Click "Incoming Webhooks" → Enable
+   - Click "Add New Webhook to Workspace"
+   - Select channel (e.g., #trading-alerts)
+   - Copy the webhook URL
+
+2. **Add to .env file**:
+```bash
+SLACK_WEBHOOK=https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXX
+```
+
+3. **Test Slack notification**:
+```bash
+python daily_premarket_report.py --test
+# Check your Slack channel for notification
+```
+
+#### Slack Notification Format
+- **Header**: "Pre-Market Report for {date}"
+- **Fields**: Generated time, Portfolio value, SHORGAN/DEE positions
+- **Summary**: First 1000 characters (code block format)
+- **Footer**: "AI Trading Research System"
+
+### Discord Notifications
+
+Send notifications to Discord servers or DMs.
+
+#### Setting up Discord Webhook
+
+1. **Create Webhook**:
+   - Open Discord server settings
+   - Go to "Integrations" → "Webhooks"
+   - Click "New Webhook"
+   - Name: "AI Trading Bot"
+   - Select channel (e.g., #trading-reports)
+   - Copy webhook URL
+
+2. **Add to .env file**:
+```bash
+DISCORD_WEBHOOK=https://discord.com/api/webhooks/1234567890/abcdefghijklmnopqrstuvwxyz
+```
+
+3. **Test Discord notification**:
+```bash
+python daily_premarket_report.py --test
+# Check your Discord channel for notification
+```
+
+#### Discord Notification Format
+- **Title**: "📊 Pre-Market Report for {date}"
+- **Description**: Summary (code block, max 1500 chars)
+- **Fields**: Generated time, Portfolio value, SHORGAN/DEE positions
+- **Color**: Blue (#3447003)
+- **Footer**: "AI Trading Research System"
+
+### Multiple Notification Channels
+
+You can enable all notification methods simultaneously:
+```bash
+# .env file
+EMAIL_ENABLED=true
+SLACK_WEBHOOK=https://hooks.slack.com/services/...
+DISCORD_WEBHOOK=https://discord.com/api/webhooks/...
+```
+
+All notifications are optional and independent - failure of one doesn't affect others.
+
 ### Troubleshooting
 
 **Error: ANTHROPIC_API_KEY not set**
@@ -239,6 +315,18 @@ Set `EMAIL_ENABLED=false` or remove from `.env` file
 - Verify all three variables set: EMAIL_SENDER, EMAIL_PASSWORD, EMAIL_RECIPIENT
 - Check .env file loaded correctly
 - Restart script after updating .env
+
+**Error: Failed to send Slack notification**
+- Verify SLACK_WEBHOOK URL is correct
+- Check webhook is still active (webhooks can be deleted/revoked)
+- Test webhook with curl: `curl -X POST -H 'Content-type: application/json' --data '{"text":"Test"}' YOUR_WEBHOOK_URL`
+- Check Slack app permissions
+
+**Error: Failed to send Discord notification**
+- Verify DISCORD_WEBHOOK URL is correct
+- Check webhook hasn't been deleted in Discord server
+- Test webhook with curl: `curl -X POST -H 'Content-Type: application/json' -d '{"content":"Test"}' YOUR_WEBHOOK_URL`
+- Ensure bot has permissions to post in channel
 
 ## System Architecture
 

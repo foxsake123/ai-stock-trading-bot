@@ -8,6 +8,7 @@ import sys
 import json
 import logging
 import smtplib
+import requests
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict
@@ -895,9 +896,178 @@ AI Trading Bot
         except Exception as e:
             logger.error(f"Failed to send email notification: {e}", exc_info=True)
 
+    def send_slack_notification(self, report: str) -> None:
+        """
+        Send Slack webhook notification
+
+        Args:
+            report: Report content
+        """
+        # Check if Slack webhook is configured
+        slack_webhook = os.getenv('SLACK_WEBHOOK')
+        if not slack_webhook:
+            logger.info("Slack notifications disabled (SLACK_WEBHOOK not set)")
+            return
+
+        logger.info("Preparing Slack notification...")
+
+        try:
+            # Format trading date for header
+            trading_date_str = self.trading_date.strftime('%B %d, %Y')
+
+            # Extract summary (truncate to 1000 chars for Slack limit)
+            summary = self.extract_summary(report)
+            if len(summary) > 1000:
+                summary = summary[:997] + '...'
+
+            # Get recommendation counts
+            shorgan_count = len(self.recommendations[self.recommendations['Strategy'] == 'SHORGAN'])
+            dee_count = len(self.recommendations[self.recommendations['Strategy'] == 'DEE'])
+
+            # Create Slack blocks payload
+            blocks = [
+                {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": f"Pre-Market Report for {trading_date_str}",
+                        "emoji": True
+                    }
+                },
+                {
+                    "type": "section",
+                    "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": f"*Generated:*\n{self.generation_date.strftime('%B %d, %Y at %I:%M %p %Z')}"
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": f"*Portfolio Value:*\n${self.portfolio_value:,}"
+                        }
+                    ]
+                },
+                {
+                    "type": "section",
+                    "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": f"*SHORGAN Positions:*\n{shorgan_count}"
+                        },
+                        {
+                            "type": "mrkdwn",
+                            "text": f"*DEE-BOT Positions:*\n{dee_count}"
+                        }
+                    ]
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"*Report Summary:*\n```{summary}```"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "AI Trading Research System"
+                        }
+                    ]
+                }
+            ]
+
+            # Send to Slack webhook
+            payload = {"blocks": blocks}
+            response = requests.post(slack_webhook, json=payload, timeout=10)
+            response.raise_for_status()
+
+            logger.info("Slack notification sent successfully!")
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Failed to send Slack notification: {e}")
+        except Exception as e:
+            logger.error(f"Error preparing Slack notification: {e}", exc_info=True)
+
+    def send_discord_notification(self, report: str) -> None:
+        """
+        Send Discord webhook notification
+
+        Args:
+            report: Report content
+        """
+        # Check if Discord webhook is configured
+        discord_webhook = os.getenv('DISCORD_WEBHOOK')
+        if not discord_webhook:
+            logger.info("Discord notifications disabled (DISCORD_WEBHOOK not set)")
+            return
+
+        logger.info("Preparing Discord notification...")
+
+        try:
+            # Format trading date for title
+            trading_date_str = self.trading_date.strftime('%B %d, %Y')
+
+            # Extract summary (truncate to 1500 chars for Discord limit)
+            summary = self.extract_summary(report)
+            if len(summary) > 1500:
+                summary = summary[:1497] + '...'
+
+            # Get recommendation counts
+            shorgan_count = len(self.recommendations[self.recommendations['Strategy'] == 'SHORGAN'])
+            dee_count = len(self.recommendations[self.recommendations['Strategy'] == 'DEE'])
+
+            # Create Discord embed payload
+            embed = {
+                "title": f"Pre-Market Report for {trading_date_str}",
+                "description": f"```\n{summary}\n```",
+                "color": 3447003,  # Blue color
+                "fields": [
+                    {
+                        "name": "Generated",
+                        "value": self.generation_date.strftime('%B %d, %Y at %I:%M %p %Z'),
+                        "inline": True
+                    },
+                    {
+                        "name": "Portfolio Value",
+                        "value": f"${self.portfolio_value:,}",
+                        "inline": True
+                    },
+                    {
+                        "name": "SHORGAN Positions",
+                        "value": str(shorgan_count),
+                        "inline": True
+                    },
+                    {
+                        "name": "DEE-BOT Positions",
+                        "value": str(dee_count),
+                        "inline": True
+                    }
+                ],
+                "footer": {
+                    "text": "AI Trading Research System"
+                }
+            }
+
+            # Send to Discord webhook
+            payload = {"embeds": [embed]}
+            response = requests.post(discord_webhook, json=payload, timeout=10)
+            response.raise_for_status()
+
+            logger.info("Discord notification sent successfully!")
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Failed to send Discord notification: {e}")
+        except Exception as e:
+            logger.error(f"Error preparing Discord notification: {e}", exc_info=True)
+
     def send_notifications(self, report: str, filepath: Path) -> None:
         """
-        Send all notifications (email, etc.)
+        Send all notifications (email, Slack, Discord)
 
         Args:
             report: Report content
@@ -907,6 +1077,12 @@ AI Trading Bot
 
         # Send email notification
         self.send_email_notification(report, filepath)
+
+        # Send Slack notification
+        self.send_slack_notification(report)
+
+        # Send Discord notification
+        self.send_discord_notification(report)
 
         logger.info("Notification process completed")
 
