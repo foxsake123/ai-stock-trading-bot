@@ -1,9 +1,183 @@
 # AI Trading Bot - Session Continuity Documentation
-## Last Updated: October 14, 2025 - LIVE TRADING DOCUMENTATION COMPLETE ✅
+## Last Updated: October 14, 2025 - DUAL-AI RESEARCH WORKFLOW COMPLETE ✅
 
 ---
 
-## 🎯 CURRENT SESSION (Oct 14, 2025 - Continuation: Live Trading Documentation)
+## 🎯 CURRENT SESSION (Oct 14, 2025 - Final: Research Repository Reorganization)
+
+### Session Overview ✅ **DUAL-AI RESEARCH WORKFLOW & REPOSITORY CLEANUP COMPLETE**
+**Duration**: 2 hours (final continuation session)
+**Focus**: Research repository reorganization, dual-AI comparison workflow, comprehensive cleanup
+
+**Major Deliverables:**
+- ✅ **Dual-AI research workflow** implemented (Claude + ChatGPT side-by-side)
+- ✅ **Consensus comparison report** created (13KB synthesis)
+- ✅ **Executable trades file** created (12KB ready-to-trade format)
+- ✅ **Repository cleanup**: 20.4MB freed (archived + removed redundant)
+- ✅ **New clean structure**: reports/premarket/YYYY-MM-DD/
+- ✅ **1 major git commit** and pushed to GitHub
+
+### Files Created/Updated This Session
+
+**Research Reorganization (Clean Structure):**
+1. `reports/premarket/2025-10-15/claude_research.md` (46KB)
+   - PTGX (M&A arbitrage, HIGH conviction)
+   - SMMT (short thesis)
+   - VKTX (obesity partnership play)
+   - DEE-BOT: 7 ultra-defensive positions (beta 0.41)
+
+2. `reports/premarket/2025-10-15/chatgpt_research.md` (5KB)
+   - ARQT, GKOS, SNDX, RKLB, ACAD (FDA catalysts)
+   - DEE-BOT: 5 defensive + SPY overlay (beta ~1.0)
+   - Auto-trim rules for >10% gaps
+
+3. `reports/premarket/2025-10-15/consensus.md` (13KB) ⭐ **KEY FILE**
+   - Side-by-side AI comparison
+   - Overlap analysis (JNJ, PG agreed upon)
+   - Divergence analysis (zero SHORGAN overlap = diversification)
+   - Synthesis recommendations (5-8 SHORGAN, 7 DEE-BOT)
+   - Execution priority and timing
+   - Scenario planning for tomorrow
+
+4. `reports/premarket/2025-10-15/trades.md` (12KB) 🎯 **EXECUTABLE**
+   - Specific entry prices, stop losses, targets
+   - Position sizing with risk calculations
+   - Execution priority order (CPI-dependent)
+   - Phase-by-phase execution guide
+   - Ready for copy/paste to Alpaca
+
+5. `reports/README.md` (comprehensive workflow guide)
+   - New directory structure explained
+   - When to use Claude vs ChatGPT
+   - Daily workflow (evening research → morning execution)
+   - Quick reference commands
+
+**Latest/ Directory (Always Current):**
+- Symlinked/copied all 4 files to `reports/premarket/latest/`
+- Single source of truth for "what to trade tomorrow"
+
+### Repository Cleanup Completed
+
+**Archived to reports/archive/2025-10/ (18MB)**:
+- All Sept-Oct reports from `data/daily/reports/`
+- All research from `data/research/claude/` and `data/research/chatgpt/`
+- Preserved but organized
+
+**Removed Redundant Directories (2.4MB)**:
+- `research/` directory (47 files, old pipeline)
+- Empty `data/daily/reports/` subdirectories
+- Empty `data/research/` subdirectories
+
+**Total Space Freed**: 20.4MB
+
+**New Clean Structure**:
+```
+reports/
+├── premarket/
+│   ├── 2025-10-15/          # Date-specific
+│   │   ├── claude_research.md
+│   │   ├── chatgpt_research.md
+│   │   ├── consensus.md     ⭐ Start here
+│   │   └── trades.md        🎯 Execute from here
+│   └── latest/              # Always current
+├── execution/2025-10-15/    # For logging
+├── performance/2025-10-15/  # For P&L tracking
+└── archive/2025-10/         # Old reports
+```
+
+### Dual-AI Research Comparison (Oct 15, 2025)
+
+**SHORGAN-BOT Picks**:
+- **Claude**: PTGX (M&A), SMMT (short), VKTX (partnership)
+- **ChatGPT**: ARQT, GKOS, SNDX, RKLB, ACAD (FDA/launch events)
+- **Overlap**: ZERO (100% diversification!)
+- **Consensus Recommendation**: Execute PTGX + GKOS + SNDX (top picks from both)
+
+**DEE-BOT Picks**:
+- **Claude**: JNJ, PG, KO, ABBV, VZ, DUK, NEE (beta 0.41, ultra-defensive)
+- **ChatGPT**: WMT, COST, MRK, JNJ, PG, SPY (beta ~1.0, market-matching)
+- **Overlap**: JNJ, PG (both AIs agree = high conviction)
+- **Consensus Recommendation**: Hybrid approach (7 stocks, beta ~0.6-0.7)
+
+**Key Insight**: Different AI perspectives provide complementary coverage:
+- Claude: Longer-term catalysts, M&A, ultra-defensive
+- ChatGPT: Imminent catalysts, tactical entries, risk-defined
+- Consensus: Best of both = diversified opportunity set
+
+### Git Commits Made (1 total)
+
+1. `6a13131` - feat: reorganize research reports structure with dual-AI workflow
+   - 79 files changed (2,990 insertions, 13,311 deletions)
+   - Created new clean directory structure
+   - Moved Oct 15 reports
+   - Created consensus + trades files
+   - Archived 18MB old reports
+   - Removed 2.4MB redundant research/ directory
+
+All changes pushed to `origin/master` successfully ✅
+
+### Benefits of New Structure
+
+**For Trading**:
+- Single source of truth: `latest/` always points to current reports
+- Compare AIs side-by-side in `consensus.md`
+- Execute directly from `trades.md` (specific prices, sizes)
+- Track performance in organized date folders
+
+**For Development**:
+- Clean separation of concerns (research / execution / performance)
+- Historical data preserved in archive
+- Easy to backtest (all reports date-stamped)
+- Scalable for automated generation
+
+**For Analysis**:
+- Can compare Claude vs ChatGPT win rates over time
+- Identify which AI performs better in different conditions
+- Adjust weighting based on historical accuracy
+- Continuous improvement feedback loop
+
+### Tomorrow's Trading Plan (October 15, 2025)
+
+**Pre-Market**:
+1. **8:30 AM**: CPI release - WAIT for this critical data
+2. **8:35 AM**: Assess market reaction (5-10 minutes)
+3. **8:45 AM**: Decide allocation based on CPI:
+   - Hot CPI (>3.1%): Reduce SHORGAN 25%, increase DEE 65%
+   - Cool CPI (<2.7%): Increase SHORGAN 45%, keep DEE 50%
+   - In-line (2.8-3.0%): Execute consensus plan
+
+**Execution Priority** (from `latest/trades.md`):
+1. **PTGX** @ $75-78 (15% allocation, M&A arbitrage, HIGH priority)
+2. **GKOS** @ $83 (5% allocation, PDUFA Oct 20 in 6 days)
+3. **SNDX** @ $15.50 (5% allocation, PDUFA Oct 25 in 11 days)
+4. **JNJ, PG, VZ, ABBV, MRK, COST, WMT** (DEE-BOT 80-90%)
+
+**Day 1 of 30-day paper trading validation begins!**
+
+### System Status: ✅ PRODUCTION READY (Dual-AI Research)
+
+**Research Pipeline**:
+- Claude Deep Research: Operational
+- ChatGPT Deep Research: Operational
+- Consensus synthesis: Manual (automated workflow planned)
+- Execution file generation: Manual (ready for automation)
+
+**Reports Available**:
+- reports/premarket/latest/consensus.md (synthesis)
+- reports/premarket/latest/trades.md (executable)
+- reports/premarket/latest/claude_research.md (detailed)
+- reports/premarket/latest/chatgpt_research.md (tactical)
+
+**Next Action Items**:
+1. Execute trades tomorrow after CPI (Day 1 of 30-day validation)
+2. Log execution in reports/execution/2025-10-15/
+3. Track daily P&L in reports/performance/2025-10-15/
+4. Compare AI recommendations vs actual performance
+5. Refine consensus methodology based on results
+
+---
+
+## 📁 PREVIOUS SESSION (Oct 14, 2025 - Live Trading Documentation)
 
 ### Session Overview ✅ **LIVE TRADING DOCUMENTATION & REPO CLEANUP COMPLETE**
 **Duration**: 1 hour (continuation session)
