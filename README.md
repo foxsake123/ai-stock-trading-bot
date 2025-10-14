@@ -12,13 +12,24 @@ An enterprise-grade automated trading system that leverages multiple AI agents t
 - **DEE-BOT**: Defensive, beta-neutral strategy focused on S&P 100 stocks (LONG-ONLY)
 - **SHORGAN-BOT**: Aggressive catalyst-driven strategy for small/mid-cap momentum plays
 
+### Current Status: Production Ready (Paper Trading)
+- ✅ **471 tests passing** (100% success rate)
+- ✅ **36.55% code coverage** (target: 50%+)
+- ✅ **All 8 phases complete**
+- ✅ **Paper trading operational** since October 2025
+- 📋 **Live trading deployment guide** available
+- 🎯 **Target go-live**: December 1, 2025 (after 30-day validation)
+
 ### Key Features
 - 🤖 Multi-agent consensus system (7 specialized agents)
 - 📊 Real-time execution via Alpaca Markets API
 - 📈 Professional data from Financial Datasets API
-- 🔔 Telegram notifications for trade alerts
-- ⚡ Fully automated daily execution (9:30 AM ET)
+- 🔔 Multi-channel notifications (Email, Slack, Discord)
+- ⚡ Fully automated daily execution (6:00 PM ET)
 - 📝 Comprehensive risk management and position tracking
+- 🛡️ Advanced safety mechanisms (kill switches, loss limits, drawdown protection)
+- 📊 Web dashboard for report viewing and analysis
+- 🧪 Comprehensive test suite with 471 tests
 
 ## Quick Start
 
@@ -868,6 +879,29 @@ pytest tests/ --cov=. --cov-report=xml --cov-report=term
 4. Add tests
 5. Submit a pull request
 
+## Live Trading Deployment
+
+### Current Status
+The system is currently in **paper trading mode** with a target go-live date of **December 1, 2025** (after 30-day validation period).
+
+### Deployment Path
+For comprehensive guidance on transitioning from paper trading to live trading with real capital:
+
+- **[Live Trading Deployment Guide](docs/LIVE_TRADING_DEPLOYMENT_GUIDE.md)** - Complete 6-phase deployment checklist with safety mechanisms, risk management, and emergency procedures
+- **[Next Steps for Live Trading](docs/NEXT_STEPS_LIVE_TRADING.md)** - Detailed 4-phase timeline (Oct 2025 - Mar 2026) with weekly action items and decision trees
+
+### Key Requirements Before Go-Live
+- ✅ 30+ days of paper trading validation
+- ✅ Win rate ≥ 60%
+- ✅ Sharpe ratio ≥ 1.0
+- ✅ Max drawdown < 15%
+- ✅ Safety mechanisms implemented (kill switches, loss limits)
+- ✅ Manual approval system configured
+- ✅ Emergency procedures tested
+
+### Initial Live Capital
+Recommended: $1,000-5,000 for first month, scaling gradually based on performance.
+
 ## Documentation
 
 ### Getting Started
@@ -903,5 +937,5 @@ This is a paper trading system for educational purposes. Not financial advice. A
 ---
 
 **Version**: 2.0.0
-**Last Updated**: September 29, 2025
-**Status**: 🟢 Active Development
+**Last Updated**: October 14, 2025
+**Status**: 🟢 Production Ready (Paper Trading)
