@@ -19,27 +19,36 @@ The AI Trading Bot Pre-Market Report Generator is **complete and production-read
 
 ## 🆕 Recent Improvements (October 13-14, 2025)
 
-### ✨ October 14: Test Coverage Expansion ✅
+### ✨ October 14: Live Trading Documentation & Test Coverage ✅
 
-1. **Alternative Data Agent Tests** ✅
+1. **Live Trading Deployment Guides** ✅
+   - Created comprehensive 802-line deployment guide
+   - Created detailed 679-line next steps timeline
+   - 6-phase deployment checklist with safety mechanisms
+   - 4-phase timeline (Oct 2025 - Mar 2026)
+   - Emergency procedures and risk management
+   - Updated README.md with live trading section
+
+2. **Alternative Data Agent Tests** ✅
    - Created 52 comprehensive tests
    - Coverage: 13% → 60% (+361% improvement)
    - All core functionality tested
 
-2. **Fundamental Analyst Tests** ✅
+3. **Fundamental Analyst Tests** ✅
    - Created 44 comprehensive tests
    - Coverage: 10.92% → 88.51% (+710% improvement)
    - Financial analysis fully validated
 
-3. **Overall Coverage Achievement** ✅
+4. **Overall Coverage Achievement** ✅
    - Total tests: 471 passing (+96 new)
    - Coverage: 30.60% → 36.55% (+19.4%)
    - Agent module coverage: 38.31%
 
-4. **Git Organization** ✅
-   - 10 professional semantic commits
-   - All changes pushed to remote
-   - Clean commit history maintained
+5. **Documentation Updates** ✅
+   - Updated README.md with current status
+   - Added live trading deployment section
+   - Updated CLAUDE.md with Oct 14 session
+   - 5 git commits pushed to GitHub
 
 ### ✨ October 13: Repository Organization ✅
 
@@ -250,6 +259,52 @@ python web_dashboard.py
 python backtest_recommendations.py
 python generate_performance_graph.py
 ```
+
+---
+
+## 🚀 Live Trading Deployment Roadmap
+
+### Current Status: Paper Trading Mode
+**Target Go-Live**: December 1, 2025 (after 30-day validation)
+
+### Phase 1: Extended Paper Trading (Oct 15 - Nov 14, 2025)
+**Status**: In Progress
+- ✅ System operational and generating daily reports
+- 🔄 Accumulating 30+ consecutive days of trading data
+- 🎯 Target metrics: Win rate ≥60%, Sharpe ≥1.0, Max drawdown <15%
+
+### Phase 2: Live Trading Preparation (Nov 15-30, 2025)
+**Status**: Pending
+
+**Week 1 Tasks**:
+- Create `config/live_trading_config.py` with master kill switch
+- Implement `scripts/emergency/halt_all_trading.py`
+- Implement `scripts/emergency/close_all_positions.py`
+- Add daily loss limit monitoring (2% circuit breaker)
+- Add portfolio drawdown protection (10% max drawdown)
+
+**Week 2 Tasks**:
+- Open Alpaca live brokerage account
+- Fund account with $1,000-5,000 initial capital
+- Generate live API keys (stored securely in .env)
+- Test all emergency procedures in paper trading
+- Create manual approval system for trades
+
+### Phase 3: Initial Live Trading (Dec 1-31, 2025)
+**Status**: Pending (conditional on Phase 1 success)
+
+**Week 1**: Execute ONE low-risk trade manually ($500-1,000 max)
+**Week 2-4**: Execute 1-2 trades per week with manual approval
+
+### Phase 4: Gradual Scaling (Jan-Mar 2026)
+**Status**: Pending (conditional on Phase 3 success)
+
+**Month 2**: Increase to $10,000-25,000 if profitable
+**Month 3**: If consistent, scale to $50,000-100,000
+
+### Documentation
+- **[Live Trading Deployment Guide](LIVE_TRADING_DEPLOYMENT_GUIDE.md)** - Complete checklist
+- **[Next Steps for Live Trading](NEXT_STEPS_LIVE_TRADING.md)** - Detailed timeline
 
 ---
 
@@ -626,6 +681,6 @@ The AI Trading Bot Pre-Market Report Generator is **complete and ready for produ
 ---
 
 **Version**: 2.0.0
-**Last Updated**: October 13, 2025
+**Last Updated**: October 14, 2025
 **Maintained By**: AI Trading Bot Team
 **License**: Private Repository - All Rights Reserved
