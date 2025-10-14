@@ -104,6 +104,8 @@ class EnhancedPostMarketReport:
         
         try:
             # TODO: Connect to Alpaca API to get actual positions
+            # See GitHub Issue: Connect post-market report generator to Alpaca API
+            # Issue template: .github/ISSUE_TEMPLATE/alpaca-api-integration.md
             # api = self.get_alpaca_connection()
             # positions = api.list_positions()
             pass
@@ -135,6 +137,8 @@ class EnhancedPostMarketReport:
         
         try:
             # TODO: Connect to Alpaca API to get actual positions
+            # See GitHub Issue: Connect post-market report generator to Alpaca API
+            # Issue template: .github/ISSUE_TEMPLATE/alpaca-api-integration.md
             # api = self.get_alpaca_connection()
             # positions = api.list_positions()
             pass
