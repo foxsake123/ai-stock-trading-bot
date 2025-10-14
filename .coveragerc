@@ -1,27 +1,82 @@
+# Coverage.py configuration for AI Trading Bot
+
 [run]
+# Source code to measure
 source = .
-omit = 
+
+# Omit specific files/directories from coverage
+omit =
     */tests/*
     */test_*.py
     */__pycache__/*
     */venv/*
     */env/*
+    */.venv/*
+    */site-packages/*
     setup.py
+    */scripts/windows/*
+    */chrome_profile/*
+    */htmlcov/*
+    */docs/*
+    */examples/*
     */migrations/*
 
 [report]
+# Show missing line numbers
+show_missing = True
+
+# Precision for coverage percentage
+precision = 2
+
+# Skip covered files
+skip_covered = False
+
+# Skip empty files
+skip_empty = True
+
+# Exclude lines with these patterns
 exclude_lines =
+    # Standard pragma
     pragma: no cover
+
+    # Don't complain about missing debug code
     def __repr__
-    if self.debug:
-    if settings.DEBUG
+    def __str__
+
+    # Don't complain if tests don't hit defensive assertion code
     raise AssertionError
     raise NotImplementedError
-    if 0:
+
+    # Don't complain if non-runnable code isn't run
     if __name__ == .__main__.:
+    if __name__ == "__main__":
+
+    # Don't complain about abstract methods
+    @abstractmethod
+    @abc.abstractmethod
+
+    # Type checking
     if TYPE_CHECKING:
+    if typing.TYPE_CHECKING:
+
+    # Debug code
+    if self.debug:
+    if settings.DEBUG
+    if 0:
+
+    # Protocol classes
     class .*\bProtocol\):
-    @(abc\.)?abstractmethod
+
+    # Pass statements
+    pass
 
 [html]
+# Directory for HTML coverage report
 directory = htmlcov
+
+# Title for HTML report
+title = AI Trading Bot - Coverage Report
+
+[xml]
+# Output file for XML coverage report
+output = coverage.xml
