@@ -269,14 +269,22 @@ class AutomatedTradeGeneratorV2:
         portfolio_value = self.dee_bot_capital if bot_name == "DEE-BOT" else self.shorgan_bot_capital
 
         for rec in recommendations:
-            validation = self.validator.validate_recommendation(rec, portfolio_value)
+            try:
+                validation = self.validator.validate_recommendation(rec, portfolio_value)
 
-            if validation['approved']:
-                approved.append(validation)
-                print(f"    [✓] {rec.ticker} APPROVED (confidence: {validation['combined_confidence']:.2f})")
-            else:
-                rejected.append(validation)
-                print(f"    [✗] {rec.ticker} REJECTED - {validation.get('rejection_reason', 'Unknown')}")
+                if validation['approved']:
+                    approved.append(validation)
+                    print(f"    [OK] {rec.ticker} APPROVED (confidence: {validation['combined_confidence']:.2f})")
+                else:
+                    rejected.append(validation)
+                    print(f"    [X] {rec.ticker} REJECTED - {validation.get('rejection_reason', 'Unknown')}")
+            except Exception as e:
+                print(f"    [ERROR] {rec.ticker} validation failed: {str(e)[:80]}")
+                rejected.append({
+                    'recommendation': rec,
+                    'approved': False,
+                    'rejection_reason': f'Validation error: {str(e)[:100]}'
+                })
 
         print(f"\n[*] Results: {len(approved)} approved, {len(rejected)} rejected")
 
