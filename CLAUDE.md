@@ -156,21 +156,123 @@ python scripts/automation/execute_daily_trades.py
 # → Executes approved trades
 ```
 
-### Next Steps for Full Automation
+### Next Steps - Tomorrow Morning (Oct 15, 2025)
 
-1. **Add to Windows Task Scheduler** (or systemd on Linux):
-   - 6:00 PM: `daily_claude_research.py`
-   - 8:30 AM: `generate_todays_trades_v2.py`
-   - 9:30 AM: `execute_daily_trades.py`
+**IMMEDIATE (Before Market Open)**:
+1. **Test the pipeline** with your Oct 15 research:
+   ```bash
+   python scripts/automation/generate_todays_trades_v2.py --date 2025-10-15
+   ```
+   Expected output: `docs/TODAYS_TRADES_2025-10-15.md`
 
-2. **Optional: Automate ChatGPT Research**:
-   - Use Selenium/Playwright to save ChatGPT Deep Research automatically
-   - Or use ChatGPT API if available
+2. **Review the generated file**:
+   - Check which trades were approved by agents
+   - Review rejection reasons (e.g., "Risk Manager Veto: Position too large")
+   - Verify combined confidence scores (should be >55% for approved)
+   - Check execution checklist and timing
 
-3. **Monitoring**:
-   - Set up email/Telegram notifications for each step
-   - Alert if validation rejects all trades (manual review needed)
-   - Alert if execution fails
+3. **If satisfied, execute trades**:
+   ```bash
+   python scripts/automation/execute_daily_trades.py
+   ```
+   Or wait for 9:30 AM automated execution
+
+4. **Monitor execution**:
+   ```bash
+   python scripts/performance/get_portfolio_status.py
+   ```
+
+### Next Steps - Automation Setup (This Week)
+
+**Priority 1: Schedule Automation** (1 hour)
+Create Windows Task Scheduler tasks:
+
+```batch
+# Task 1: Evening Research (6:00 PM daily)
+schtasks /create /tn "AI Trading - Evening Research" ^
+  /tr "python C:\Users\shorg\ai-stock-trading-bot\scripts\automation\daily_claude_research.py" ^
+  /sc daily /st 18:00
+
+# Task 2: Morning Validation (8:30 AM daily)
+schtasks /create /tn "AI Trading - Morning Validation" ^
+  /tr "python C:\Users\shorg\ai-stock-trading-bot\scripts\automation\generate_todays_trades_v2.py" ^
+  /sc daily /st 08:30
+
+# Task 3: Trade Execution (9:30 AM daily)
+schtasks /create /tn "AI Trading - Trade Execution" ^
+  /tr "python C:\Users\shorg\ai-stock-trading-bot\scripts\automation\execute_daily_trades.py" ^
+  /sc daily /st 09:30
+```
+
+**Priority 2: Add Notifications** (2 hours)
+Enhance each script with Telegram/email alerts:
+
+- `daily_claude_research.py`: Send report summary when complete
+- `generate_todays_trades_v2.py`: Alert with approved/rejected count
+- `execute_daily_trades.py`: Alert with execution summary (fills/failures)
+
+**Priority 3: ChatGPT Automation** (3-4 hours, optional)
+Create `scripts/automation/automated_chatgpt_research.py`:
+- Use Playwright/Selenium to interact with ChatGPT
+- Submit same prompt as Claude research
+- Parse and save response automatically
+- Schedule for 7:00 PM (after Claude completes)
+
+**Priority 4: Monitoring Dashboard** (4-6 hours, optional)
+Enhance web dashboard with:
+- Daily validation results (approved vs rejected)
+- Agent vote breakdown (which agents voted for/against each trade)
+- Historical accuracy tracking (which agent predictions were correct)
+- Combined confidence vs actual performance correlation
+
+### Next Steps - Enhancements (This Month)
+
+**Agent Performance Tracking** (6-8 hours):
+- Log each agent's recommendation + confidence for every trade
+- Track actual trade outcomes (win/loss/return)
+- Calculate agent accuracy scores over time
+- Dynamically adjust agent voting weights based on historical accuracy
+- Example: If FundamentalAnalyst has 75% accuracy but TechnicalAnalyst has 55%, weight fundamental higher
+
+**Audit Trail & Backtesting** (8-10 hours):
+- Save complete validation results to JSON:
+  ```json
+  {
+    "date": "2025-10-15",
+    "ticker": "PTGX",
+    "external_rec": {"source": "claude", "conviction": "HIGH"},
+    "agent_votes": {
+      "fundamental": {"vote": "BUY", "confidence": 0.75},
+      "technical": {"vote": "BUY", "confidence": 0.65},
+      "risk": {"vote": "HOLD", "veto": false}
+    },
+    "consensus": {"action": "BUY", "confidence": 0.68},
+    "outcome": {"executed": true, "return": 0.12, "days_held": 7}
+  }
+  ```
+- Backtest: "What if we only traded when ALL agents agreed?"
+- Backtest: "What if we ignored bear researcher?"
+- Find optimal confidence threshold (currently 55%)
+
+**Multi-Source Research Integration** (10-12 hours):
+- Add more external research sources beyond Claude + ChatGPT
+- Parse Bloomberg terminal data (if available)
+- Parse SeekingAlpha analyst ratings
+- Parse Finviz screener results
+- Weight by historical accuracy of each source
+
+**Options Strategy Generator** (12-15 hours):
+- For high-conviction catalyst trades, suggest options strategies
+- Example: PTGX M&A → Call debit spread (75/90 Jan 2026)
+- Example: SMMT earnings short → Put debit spread (22/17 Nov)
+- Calculate max risk, max profit, breakeven
+- Compare to stock position risk/reward
+
+**Real-Time Monitoring** (15-20 hours):
+- Dashboard showing live P&L by position
+- Alert if stop loss triggered
+- Alert if catalyst news breaks (FDA approval, M&A announcement)
+- Suggest profit-taking levels (e.g., "PTGX up 15%, consider trimming 50%")
 
 ### Architecture Principle (CONFIRMED CORRECT)
 
@@ -180,6 +282,12 @@ python scripts/automation/execute_daily_trades.py
 > **execute_daily_trades.py executes only validated trades.**
 
 This architecture is now correctly implemented and tested ✅
+
+### Git Status
+
+**Last Commit**: `230656e` - External research parser + multi-agent validation pipeline
+**Files Changed**: 5 files, 1275 insertions, 77 deletions
+**Status**: All changes committed and pushed to origin/master ✅
 
 ---
 
