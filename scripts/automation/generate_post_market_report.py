@@ -1,19 +1,25 @@
 """
 Generate Post-Market Report for Both Trading Bots
-September 18, 2025 - 4:30 PM ET
+Runs daily at 4:15 PM ET to send Telegram summary
 """
 
 from alpaca.trading.client import TradingClient
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
 import json
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 
-# API credentials for both bots
-DEE_BOT_KEY = "PK6FZK4DAQVTD7DYVH78"
-DEE_BOT_SECRET = "JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt"
+# Load environment variables
+load_dotenv()
 
-SHORGAN_BOT_KEY = "PKJRLSB2MFEJUSK6UK2E"
-SHORGAN_BOT_SECRET = "QBpREJmZ7HgHS1tHptvHgwjH4MtjFSoEcQ0wmGic"
+# API credentials for both bots (from environment variables)
+DEE_BOT_KEY = os.getenv("ALPACA_API_KEY_DEE")
+DEE_BOT_SECRET = os.getenv("ALPACA_SECRET_KEY_DEE")
+
+SHORGAN_BOT_KEY = os.getenv("ALPACA_API_KEY_SHORGAN")
+SHORGAN_BOT_SECRET = os.getenv("ALPACA_SECRET_KEY_SHORGAN")
 
 def get_bot_positions(api_key, secret_key, bot_name):
     """Get current positions for a bot"""
@@ -131,19 +137,41 @@ def generate_report():
     print("="*70)
     print(f"Total Portfolio Value: ${total_portfolio:,.2f}")
     print(f"Total Unrealized P&L: ${total_unrealized:,.2f}")
-    print(f"Total Positions: {len(dee_data['positions']) + len(shorgan_data['positions'])}")
 
-    # Tomorrow's Focus
+    total_positions = 0
+    if dee_data:
+        total_positions += len(dee_data['positions'])
+    if shorgan_data:
+        total_positions += len(shorgan_data['positions'])
+    print(f"Total Positions: {total_positions}")
+
+    # Tomorrow's Focus - Dynamic based on current holdings
     print("\n" + "-"*70)
-    print("[TOMORROW] FOCUS (Sept 19)")
+    tomorrow_date = (datetime.now() + timedelta(days=1)).strftime("%b %d")
+    print(f"[TOMORROW] FOCUS ({tomorrow_date})")
     print("-"*70)
-    print("[CRITICAL] EVENT: INCY FDA Decision")
-    print("   - Position: 61 shares @ $83.97")
-    print("   - Stop Loss: $77.25")
-    print("   - Binary Event: Opzelura pediatric approval")
-    print("\n[WARNING] ACTIVE STOP LOSSES:")
-    print("   - KSS: Stop at $15.18")
-    print("   - INCY: Stop at $77.25")
+
+    # Find positions with upcoming catalysts or near stop losses
+    if shorgan_data:
+        catalyst_positions = []
+        stop_loss_warnings = []
+
+        for pos in shorgan_data['positions']:
+            # Warn if position is down >10%
+            if pos['unrealized_pnl_pct'] < -10:
+                stop_loss_warnings.append(f"   - {pos['symbol']}: Down {pos['unrealized_pnl_pct']:.1f}%")
+
+        if stop_loss_warnings:
+            print("[WARNING] POSITIONS NEAR STOP LOSS:")
+            for warning in stop_loss_warnings[:5]:
+                print(warning)
+
+    print("\n[INFO] Review Claude research for tomorrow's trade plan")
+
+    # Only save and send if we have data
+    if not dee_data or not shorgan_data:
+        print("\n[ERROR] Failed to fetch portfolio data - cannot generate report")
+        return None
 
     # Save report
     report_data = {
@@ -153,15 +181,35 @@ def generate_report():
         "combined": {
             "total_portfolio": total_portfolio,
             "total_unrealized_pnl": total_unrealized,
-            "total_positions": len(dee_data['positions']) + len(shorgan_data['positions'])
+            "total_positions": total_positions
         }
     }
 
-    filename = f"../../daily-reports/post_market_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    with open(filename, 'w') as f:
+    # Save to daily reports directory
+    date_str = datetime.now().strftime('%Y-%m-%d')
+    report_dir = Path(f"docs/reports/post-market")
+    report_dir.mkdir(parents=True, exist_ok=True)
+
+    json_filename = report_dir / f"post_market_report_{date_str}.json"
+    txt_filename = report_dir / f"post_market_report_{date_str}.txt"
+
+    # Save JSON version
+    with open(json_filename, 'w') as f:
         json.dump(report_data, f, indent=2)
 
-    print(f"\n[SAVED] Report saved to: {filename}")
+    # Save text version (for easy viewing)
+    with open(txt_filename, 'w') as f:
+        f.write(f"POST-MARKET REPORT\n")
+        f.write(f"{datetime.now().strftime('%A, %B %d, %Y - %I:%M %p ET')}\n")
+        f.write("="*70 + "\n\n")
+        f.write(f"DEE-BOT Portfolio: ${report_data['dee_bot']['portfolio_value']:,.2f}\n")
+        f.write(f"SHORGAN-BOT Portfolio: ${report_data['shorgan_bot']['portfolio_value']:,.2f}\n")
+        f.write(f"Combined Total: ${report_data['combined']['total_portfolio']:,.2f}\n")
+        f.write(f"Total P/L: ${report_data['combined']['total_unrealized_pnl']:,.2f}\n")
+
+    print(f"\n[SAVED] Reports saved:")
+    print(f"   JSON: {json_filename}")
+    print(f"   TXT: {txt_filename}")
     print("="*70)
 
     return report_data
@@ -170,30 +218,37 @@ def send_telegram_report(report_data):
     """Send report via Telegram"""
     import requests
 
-    TELEGRAM_BOT_TOKEN = "7526351226:AAHQz1PV-4OdNmCgLdgzPJ8emHxIeGdPW6Q"
-    CHAT_ID = "7769365988"
+    TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "7526351226:AAHQz1PV-4OdNmCgLdgzPJ8emHxIeGdPW6Q")
+    CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7769365988")
+
+    # Calculate P/L percentages
+    dee_total = report_data['dee_bot']['portfolio_value']
+    dee_pnl_pct = (report_data['dee_bot']['total_unrealized_pnl'] / (dee_total - report_data['dee_bot']['total_unrealized_pnl'])) * 100 if dee_total else 0
+
+    shorgan_total = report_data['shorgan_bot']['portfolio_value']
+    shorgan_pnl_pct = (report_data['shorgan_bot']['total_unrealized_pnl'] / (shorgan_total - report_data['shorgan_bot']['total_unrealized_pnl'])) * 100 if shorgan_total else 0
+
+    combined_pnl_pct = (report_data['combined']['total_unrealized_pnl'] / (report_data['combined']['total_portfolio'] - report_data['combined']['total_unrealized_pnl'])) * 100
 
     # Format message
     msg = f"""📊 *POST-MARKET REPORT*
-{datetime.now().strftime('%B %d, %Y - %I:%M %p ET')}
+{datetime.now().strftime('%A, %B %d, %Y - %I:%M %p ET')}
 
 *DEE-BOT (Beta-Neutral)*
 Portfolio: ${report_data['dee_bot']['portfolio_value']:,.2f}
-P&L: ${report_data['dee_bot']['total_unrealized_pnl']:,.2f}
+P&L: ${report_data['dee_bot']['total_unrealized_pnl']:,.2f} ({dee_pnl_pct:+.2f}%)
 Positions: {len(report_data['dee_bot']['positions'])}
 
 *SHORGAN-BOT (Catalyst)*
 Portfolio: ${report_data['shorgan_bot']['portfolio_value']:,.2f}
-P&L: ${report_data['shorgan_bot']['total_unrealized_pnl']:,.2f}
+P&L: ${report_data['shorgan_bot']['total_unrealized_pnl']:,.2f} ({shorgan_pnl_pct:+.2f}%)
 Positions: {len(report_data['shorgan_bot']['positions'])}
 
 *COMBINED TOTAL*
 Portfolio: ${report_data['combined']['total_portfolio']:,.2f}
-Total P&L: ${report_data['combined']['total_unrealized_pnl']:,.2f}
+Total P&L: ${report_data['combined']['total_unrealized_pnl']:,.2f} ({combined_pnl_pct:+.2f}%)
 
-🚨 *TOMORROW: INCY FDA Decision*
-Position: 61 shares @ $83.97
-Stop Loss: $77.25
+📈 Review Claude research for tomorrow's trade plan
 """
 
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"

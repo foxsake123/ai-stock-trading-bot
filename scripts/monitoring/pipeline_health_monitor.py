@@ -71,13 +71,16 @@ This is an automated alert from your AI trading bot pipeline monitor.
             print(f"\n[{severity}] {title}\n{message}\n")
 
     def check_evening_research(self, date_str: str = None):
-        """Check if evening research files exist"""
+        """Check if evening research files exist (daily structure)"""
         if date_str is None:
             # Check for tomorrow's date
             tomorrow = datetime.now() + timedelta(days=1)
             date_str = tomorrow.strftime('%Y-%m-%d')
 
+        # Check combined research file (created by daily_claude_research.py)
         claude_file = project_root / f"reports/premarket/{date_str}/claude_research.md"
+
+        # ChatGPT research is manual, saved in same directory
         chatgpt_file = project_root / f"reports/premarket/{date_str}/chatgpt_research.md"
 
         issues = []
