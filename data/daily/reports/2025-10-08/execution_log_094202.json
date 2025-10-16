@@ -1,0 +1,72 @@
+{
+  "execution_date": "2025-10-08",
+  "execution_time": "2025-10-16T09:42:02.655713",
+  "executed_orders": [],
+  "failed_orders": [
+    {
+      "bot": "DEE-BOT",
+      "symbol": "WMT",
+      "shares": 93,
+      "error": "HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/orders (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001E2613FC050>: Failed to resolve 'paper-api.alpaca.markets' ([Errno 11001] getaddrinfo failed)\"))",
+      "timestamp": "2025-10-16T09:41:53.591297"
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "UNH",
+      "shares": 22,
+      "error": "HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/orders (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001E2613FC690>: Failed to resolve 'paper-api.alpaca.markets' ([Errno 11001] getaddrinfo failed)\"))",
+      "timestamp": "2025-10-16T09:41:54.595953"
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "NEE",
+      "shares": 95,
+      "error": "HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/orders (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001E2613FCB90>: Failed to resolve 'paper-api.alpaca.markets' ([Errno 11001] getaddrinfo failed)\"))",
+      "timestamp": "2025-10-16T09:41:55.600621"
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "COST",
+      "shares": 11,
+      "error": "HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/orders (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001E2613FD090>: Failed to resolve 'paper-api.alpaca.markets' ([Errno 11001] getaddrinfo failed)\"))",
+      "timestamp": "2025-10-16T09:41:56.606086"
+    },
+    {
+      "bot": "DEE-BOT",
+      "symbol": "MRK",
+      "shares": 110,
+      "error": "HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/orders (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001E2613FD590>: Failed to resolve 'paper-api.alpaca.markets' ([Errno 11001] getaddrinfo failed)\"))",
+      "timestamp": "2025-10-16T09:41:57.612492"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "ARQT",
+      "shares": 150,
+      "error": "HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/orders (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001E2613FDA90>: Failed to resolve 'paper-api.alpaca.markets' ([Errno 11001] getaddrinfo failed)\"))",
+      "timestamp": "2025-10-16T09:41:58.629532"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "HIMS",
+      "shares": 37,
+      "error": "HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/orders (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001E2613FDF90>: Failed to resolve 'paper-api.alpaca.markets' ([Errno 11001] getaddrinfo failed)\"))",
+      "timestamp": "2025-10-16T09:41:59.636850"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "WOLF",
+      "shares": 96,
+      "error": "HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/orders (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001E2613FE490>: Failed to resolve 'paper-api.alpaca.markets' ([Errno 11001] getaddrinfo failed)\"))",
+      "timestamp": "2025-10-16T09:42:00.641103"
+    },
+    {
+      "bot": "SHORGAN-BOT",
+      "symbol": "PLUG",
+      "shares": 500,
+      "error": "HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/orders (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001E2613FE990>: Failed to resolve 'paper-api.alpaca.markets' ([Errno 11001] getaddrinfo failed)\"))",
+      "timestamp": "2025-10-16T09:42:01.647829"
+    }
+  ],
+  "stop_orders": [],
+  "success_rate": "0/9"
+}

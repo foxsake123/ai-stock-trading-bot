@@ -71,13 +71,20 @@ def get_next_market_day():
     return None
 
 
-def should_generate_report():
+def should_generate_report(force=False):
     """
     Determine if we should generate a report tonight
+
+    Args:
+        force: If True, bypass all time checks and generate report immediately
 
     Returns:
         tuple: (should_run: bool, next_trading_day: datetime, reason: str)
     """
+    if force:
+        tomorrow = datetime.now() + timedelta(days=1)
+        return True, tomorrow, "FORCED GENERATION (--force flag)"
+
     et_tz = pytz.timezone('America/New_York')
     now_et = datetime.now(et_tz)
 
@@ -101,20 +108,30 @@ def should_generate_report():
 
 def main():
     """Main execution function"""
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Generate daily Claude research for tomorrow\'s trading')
+    parser.add_argument('--force', action='store_true',
+                       help='Force generation regardless of time/date (bypass all checks)')
+    args = parser.parse_args()
+
     print("="*70)
     print("DAILY CLAUDE RESEARCH AUTOMATION")
     print("="*70)
     print(f"Current Time: {datetime.now().strftime('%Y-%m-%d %I:%M %p ET')}")
+    if args.force:
+        print("[FORCE MODE] Bypassing all time/date checks")
     print()
 
     # Check if we should run
-    should_run, next_trading_day, reason = should_generate_report()
+    should_run, next_trading_day, reason = should_generate_report(force=args.force)
 
     print(f"[*] {reason}")
 
     if not should_run:
         print(f"\n[!] Skipping report generation")
         print(f"[!] Next scheduled run: Tomorrow at 6:00 PM ET")
+        print(f"[!] To force generation now, use: python {sys.argv[0]} --force")
         return
 
     print(f"\n[+] Generating research for: {next_trading_day.strftime('%A, %B %d, %Y')}")
