@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+    #!/usr/bin/env python3
 """
 Flask Web Dashboard for Pre-Market Reports
 Provides web interface for viewing, downloading, and listing trading reports.

@@ -431,16 +431,18 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         Returns:
             Tuple of (markdown_path, pdf_path)
         """
-        # Create directory structure
-        report_dir = Path("scripts-and-data/data/reports/weekly/claude-research")
+        # Create directory structure for tomorrow's trading date
+        today = datetime.now()
+        tomorrow = today + timedelta(days=1)
+        date_str = tomorrow.strftime("%Y-%m-%d")
+
+        report_dir = Path(f"reports/premarket/{date_str}")
         report_dir.mkdir(parents=True, exist_ok=True)
 
-        # Generate filenames
-        timestamp = datetime.now().strftime("%Y-%m-%d")
+        # Generate filenames - save individual bot reports for debugging
         bot_slug = bot_name.lower().replace("-", "_")
-
-        md_filename = f"claude_research_{bot_slug}_{timestamp}.md"
-        pdf_filename = f"claude_research_{bot_slug}_{timestamp}.pdf"
+        md_filename = f"claude_research_{bot_slug}_{today.strftime('%Y-%m-%d')}.md"
+        pdf_filename = f"claude_research_{bot_slug}_{today.strftime('%Y-%m-%d')}.pdf"
 
         md_filepath = report_dir / md_filename
         pdf_filepath = report_dir / pdf_filename if export_pdf else None
@@ -456,6 +458,10 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                 print(f"[*] Generating PDF report...")
                 self._generate_pdf(report, pdf_filepath, bot_name)
                 print(f"[+] PDF report saved: {pdf_filepath}")
+
+                # Send Instagram notification with PDF
+                self._send_instagram_notification(pdf_filepath, bot_name, date_str)
+
             except Exception as e:
                 print(f"[-] PDF generation failed: {e}")
                 pdf_filepath = None
@@ -597,6 +603,47 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
         # Build PDF
         doc.build(story)
+
+    def _send_instagram_notification(self, pdf_path: Path, bot_name: str, trade_date: str):
+        """
+        Send Instagram notification with PDF attachment
+
+        Args:
+            pdf_path: Path to PDF file
+            bot_name: "DEE-BOT" or "SHORGAN-BOT"
+            trade_date: Trading date (YYYY-MM-DD)
+        """
+        try:
+            # NOTE: Instagram doesn't have an official API for sending DMs with attachments
+            # This is a placeholder for future implementation
+            #
+            # Possible approaches:
+            # 1. Use Instagram Graph API (business accounts only, limited DM support)
+            # 2. Use third-party automation tools (like Instagrapi)
+            # 3. Use email-to-Instagram forwarding service
+            # 4. Manual notification via mobile app
+
+            # For now, print notification details
+            print(f"\n[*] Instagram Notification:")
+            print(f"    Bot: {bot_name}")
+            print(f"    Trade Date: {trade_date}")
+            print(f"    PDF: {pdf_path}")
+            print(f"    Status: [MANUAL] Please share PDF via Instagram manually")
+            print(f"\n    NOTE: Automated Instagram PDF sharing requires:")
+            print(f"          1. Instagram Business account")
+            print(f"          2. Facebook Developer App setup")
+            print(f"          3. Graph API access token")
+            print(f"          See: https://developers.facebook.com/docs/instagram-api/")
+
+            # Optional: Save notification to log file for manual processing
+            notification_log = Path("reports/instagram_notifications.log")
+            with open(notification_log, 'a', encoding='utf-8') as f:
+                f.write(f"{datetime.now().isoformat()} | {bot_name} | {trade_date} | {pdf_path}\n")
+
+            print(f"[+] Notification logged to: {notification_log}")
+
+        except Exception as e:
+            print(f"[-] Instagram notification failed: {e}")
 
 
 def main():

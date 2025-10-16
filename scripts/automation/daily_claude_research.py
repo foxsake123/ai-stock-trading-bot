@@ -149,6 +149,7 @@ def main():
 
     # Generate reports for both bots
     bots = ["DEE-BOT", "SHORGAN-BOT"]
+    report_paths = []
 
     for bot_name in bots:
         try:
@@ -163,6 +164,7 @@ def main():
             )
 
             md_path, pdf_path = generator.save_report(report, bot_name, export_pdf=True)
+            report_paths.append(md_path)
 
             print(f"\n[+] {bot_name} report complete!")
             print(f"    Markdown: {md_path}")
@@ -174,6 +176,36 @@ def main():
             import traceback
             traceback.print_exc()
             continue
+
+    # Combine both bot reports into single claude_research.md file
+    if len(report_paths) == 2:
+        try:
+            print(f"\n{'-'*70}")
+            print(f"COMBINING REPORTS INTO SINGLE FILE")
+            print(f"{'-'*70}")
+
+            # Determine target directory (tomorrow's date)
+            tomorrow = datetime.now() + timedelta(days=1)
+            date_str = tomorrow.strftime("%Y-%m-%d")
+            combined_dir = Path(f"reports/premarket/{date_str}")
+            combined_path = combined_dir / "claude_research.md"
+
+            # Read both reports
+            combined_content = ""
+            for md_path in report_paths:
+                with open(md_path, 'r', encoding='utf-8') as f:
+                    combined_content += f.read() + "\n"
+
+            # Write combined report
+            with open(combined_path, 'w', encoding='utf-8') as f:
+                f.write(combined_content)
+
+            print(f"[+] Combined report saved: {combined_path}")
+            print(f"    This file combines DEE-BOT and SHORGAN-BOT research")
+            print(f"    Individual bot files preserved for debugging")
+
+        except Exception as e:
+            print(f"[-] Error combining reports: {e}")
 
     print(f"\n{'='*70}")
     print(f"[+] DAILY RESEARCH GENERATION COMPLETE")
