@@ -7,10 +7,10 @@
 
 ## Overview
 
-An enterprise-grade automated trading system that leverages multiple AI agents to make intelligent trading decisions. The system manages two distinct portfolios with different strategies:
+An enterprise-grade automated trading system powered by **Claude Opus 4.1 with Extended Thinking** that leverages multiple AI agents to make intelligent trading decisions. The system manages two distinct portfolios with different strategies:
 
 - **DEE-BOT**: Defensive, beta-neutral strategy focused on S&P 100 stocks (LONG-ONLY)
-- **SHORGAN-BOT**: Aggressive catalyst-driven strategy for small/mid-cap momentum plays
+- **SHORGAN-BOT**: Aggressive catalyst-driven strategy for small/mid-cap (supports LONG, SHORT, and OPTIONS)
 
 ### Current Status: Production Ready (Paper Trading)
 - ✅ **471 tests passing** (100% success rate)

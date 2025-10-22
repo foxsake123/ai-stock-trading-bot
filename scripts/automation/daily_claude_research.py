@@ -157,13 +157,18 @@ def main():
             print(f"GENERATING {bot_name} RESEARCH REPORT")
             print(f"{'-'*70}")
 
-            report = generator.generate_research_report(
+            report, portfolio_data = generator.generate_research_report(
                 bot_name=bot_name,
                 week_number=week_number,
                 include_market_data=True
             )
 
-            md_path, pdf_path = generator.save_report(report, bot_name, export_pdf=True)
+            md_path, pdf_path = generator.save_report(
+                report=report,
+                bot_name=bot_name,
+                portfolio_data=portfolio_data,
+                export_pdf=True
+            )
             report_paths.append(md_path)
 
             print(f"\n[+] {bot_name} report complete!")

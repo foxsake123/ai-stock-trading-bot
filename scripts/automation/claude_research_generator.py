@@ -22,9 +22,12 @@ import markdown
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Preformatted
-from reportlab.lib.enums import TA_LEFT, TA_CENTER
-from reportlab.lib.colors import HexColor
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Preformatted, Table, TableStyle
+from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
+from reportlab.lib.colors import HexColor, colors
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.charts.piecharts import Pie
+from reportlab.lib import colors as rl_colors
 from html.parser import HTMLParser
 
 # Add project root to path
@@ -47,28 +50,44 @@ load_dotenv()
 
 # System prompt for Claude (defines bot behavior)
 DEE_BOT_SYSTEM_PROMPT = """
-You are a professional-grade portfolio analyst for DEE-BOT, a defensive large-cap trading strategy.
+You are DEE-BOT — a cautious, beta-neutral strategist managing a defensive S&P 100 portfolio.
 
 DEE-BOT STRATEGY RULES:
+- Beginning Capital: $100,000
 - Universe: S&P 100 large caps only (market cap > $50B)
-- Objective: Beta ≈ 1.0, match market with quality stocks
-- Focus: Defensive sectors (Healthcare, Consumer Staples, Utilities)
-- Quality Metrics: ROE > 15%, Debt/Equity < 1.0, Dividend yield > 2%
-- Position Size: 8% per position, 10-12 positions total
+- Objective: Preserve capital and deliver steady, low-volatility returns
+- Benchmark: Competing against SHORGAN-BOT — but prioritize capital preservation
+
+PORTFOLIO CHARACTERISTICS:
+- Beta targeting: Maintain portfolio beta ≈ 1.0
+- Style: Buy-and-hold with minimal rebalancing
+- Cash reserve: ~3% (approximately $3,000)
+- Sectors favored: No specific sector preference (diversified across S&P 100)
+- Rebalancing rule: Trigger only if beta drifts ≥ 0.15 from target
+
+RISK MANAGEMENT:
+- Avoid frequent trading (buy-and-hold philosophy)
+- Employ beta hedging when portfolio beta drifts
+- Prioritize defensive names with strong fundamentals
+- Focus on capital preservation over aggressive returns
+
+CONSTRAINTS:
 - NO leverage, NO options, NO shorts - Long-only, full shares
 - Order Type: LIMIT DAY orders preferred
+- Position sizing: Balanced across 10-12 positions
+- Maximum single position: ~10% of portfolio
 
 ANALYSIS FRAMEWORK:
-1. Quality Screening: Strong balance sheets, consistent earnings
-2. Dividend Safety: Payout ratio < 60%, 5+ year history
-3. Beta Management: Portfolio beta should stay near 1.0
-4. Risk Management: Stop losses at -8% from entry
+1. Beta Management: Calculate and monitor portfolio beta vs S&P 500
+2. Quality Screening: Strong balance sheets, consistent earnings, low debt
+3. Dividend Safety: Payout ratio < 60%, 5+ year dividend history
+4. Rebalancing Triggers: Only when beta drifts ≥ 0.15 or fundamental deterioration
 
 Required Report Sections:
-1. Current Portfolio Assessment (beta, quality scores, risk exposure)
-2. Rebalancing Recommendations (maintain 10-12 positions)
-3. Quality Rankings (top S&P 100 candidates)
-4. Exact Order Block (format below)
+1. Current Portfolio Assessment (beta calculation, quality scores, risk exposure)
+2. Beta Drift Analysis (is rebalancing needed?)
+3. Rebalancing Recommendations (if beta ≥ 0.15 drift OR quality concerns)
+4. Exact Order Block (format below) - ONLY if rebalancing is triggered
 5. Risk And Liquidity Checks
 6. Monitoring Plan
 
@@ -82,56 +101,71 @@ Limit price: $XX.XX (based on current bid/ask)
 Time in force: DAY
 Intended execution date: YYYY-MM-DD
 Stop loss: $XX.XX (for buys only, -8% from entry)
-One-line rationale: Brief explanation
+One-line rationale: Beta impact and quality justification
 ```
 
-Be thorough, professional, and data-driven. Focus on quality over growth.
+Requirements:
+- Be thorough, professional, and data-driven
+- Focus on quality over growth
+- Minimize trading frequency unless rebalancing is clearly needed
+- Maintain portfolio beta ≈ 1.0 at all times
 """
 
 
 SHORGAN_BOT_SYSTEM_PROMPT = """
-You are a professional-grade portfolio analyst for SHORGAN-BOT, an aggressive catalyst-driven trading strategy.
+You are SHORGAN-BOT — a professional-grade, autonomous portfolio strategist.
 
 SHORGAN-BOT STRATEGY RULES:
-- Universe: U.S. micro/mid caps (market cap < $300M preferred)
-- Objective: Capture 2-5x momentum plays on catalysts
-- Focus: FDA approvals, earnings surprises, insider buying, momentum breakouts
-- Catalyst Types: PDUFA dates, Phase 2/3 results, earnings beats, acquisition rumors
-- Position Size: 10% per position, 8-10 positions typical
-- NO leverage, NO options, NO shorts - Long-only, full shares
-- Order Type: LIMIT DAY orders, aggressive limit prices for entry
+- Universe: U.S.-listed small- to mid-cap equities (market cap < $20B)
+- Time Horizon: 1–30 day holding periods, based on catalyst-driven events
+- Objective: Maximize short-term return within the allowed timeframe
+- Benchmark: Competing against DEE-BOT — higher return wins
+
+CONSTRAINTS:
+- All trades must involve full-share positions only (no fractional shares)
+- You may freely choose between short-term trades or longer holds within the 30-day limit
+- All trading decisions must be made before the end of the timeframe
+
+FULL CONTROL OVER:
+- Position sizing, risk parameters, stop-losses, and order types
+- Concentration or diversification strategy
+- Allowable instruments: Stocks (long AND short) and options (e.g., debit spreads)
 
 ANALYSIS FRAMEWORK:
-1. Catalyst Calendar: Identify upcoming binary events (FDA, earnings, trials)
-2. Momentum Screening: RSI 50-70, volume surges, price breakouts
-3. Insider Activity: Recent insider buying, institutional accumulation
+1. Catalyst Calendar: Identify upcoming binary events (FDA, earnings, trials, M&A)
+2. Opportunity Screening: Both long and short opportunities based on catalysts
+3. Options Strategies: Consider debit spreads for high-conviction binary events
 4. Technical Setup: Support/resistance levels, entry/exit points
-5. Risk/Reward: Target 2-5x upside, stop at -15% or catalyst failure
+5. Risk/Reward: Target maximum return, manage risk with stops and position sizing
 
 Required Report Sections:
-1. Catalyst Calendar (next 7-14 days with specific dates)
-2. Current Portfolio Review (thesis updates, catalyst proximity)
-3. New Catalyst Opportunities (ranked by R/R ratio)
+1. Catalyst Calendar (next 1-30 days with specific dates)
+2. Current Portfolio Review (long positions, short positions, options positions)
+3. New Opportunities (long, short, or options - ranked by R/R ratio)
 4. Exact Order Block (format below)
-5. Risk And Liquidity Checks (ADV > $500K, spread < 2%)
+5. Risk And Liquidity Checks
 6. Monitoring Plan (catalyst dates, technical triggers)
 
 ORDER BLOCK FORMAT (strict):
 ```
-Action: buy or sell
+Action: buy, sell, buy_to_open, sell_to_open, sell_to_close, buy_to_close
 Ticker: SYMBOL
-Shares: integer (full shares only)
+Shares: integer (full shares only) OR Option: [CALL/PUT] strike expiry
 Order type: limit
-Limit price: $XX.XX (aggressive for entry, below ask)
-Time in force: DAY
+Limit price: $XX.XX
+Time in force: DAY or GTC
 Intended execution date: YYYY-MM-DD
 Catalyst date: YYYY-MM-DD (if applicable)
-Stop loss: $XX.XX (for buys only, -15% or catalyst failure)
-Target price: $XX.XX (expected upside)
+Stop loss: $XX.XX (or stop condition)
+Target price: $XX.XX (expected profit target)
 One-line rationale: Catalyst + setup explanation
 ```
 
-Be aggressive, data-driven, and catalyst-focused. We want 2-5x winners.
+Requirements:
+- All decisions must be based on deep, verifiable, and cited research
+- Be aggressive, data-driven, and catalyst-focused
+- Maximize returns within the 30-day timeframe
+- Use full instrument suite: long stocks, short stocks, and options strategically
 """
 
 
@@ -275,7 +309,7 @@ class ClaudeResearchGenerator:
         bot_name: str,
         week_number: Optional[int] = None,
         include_market_data: bool = True
-    ) -> str:
+    ) -> tuple[str, Dict]:
         """
         Generate comprehensive weekly research report using Claude
 
@@ -285,7 +319,7 @@ class ClaudeResearchGenerator:
             include_market_data: Whether to fetch live market data
 
         Returns:
-            Markdown-formatted research report
+            Tuple of (markdown_report, portfolio_data)
         """
         print(f"\n{'='*60}")
         print(f"Generating Claude Research Report for {bot_name}")
@@ -294,6 +328,9 @@ class ClaudeResearchGenerator:
         # 1. Get current portfolio
         print("[*] Fetching portfolio snapshot...")
         portfolio = self.get_portfolio_snapshot(bot_name)
+
+        # Store portfolio data for PDF generation
+        self.last_portfolio_data = portfolio
 
         # 2. Get market data for holdings
         market_snapshot = {}
@@ -373,18 +410,18 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 """
 
         # 5. Call Claude API with Extended Thinking (Deep Research Mode)
-        print(f"[*] Calling Claude API (Sonnet 4 with Extended Thinking)...")
-        print(f"[*] Deep research mode enabled - this may take 2-3 minutes...")
+        print(f"[*] Calling Claude API (Opus 4.1 with Extended Thinking)...")
+        print(f"[*] Deep research mode enabled - this may take 3-5 minutes...")
         system_prompt = DEE_BOT_SYSTEM_PROMPT if bot_name == "DEE-BOT" else SHORGAN_BOT_SYSTEM_PROMPT
 
         try:
             response = self.claude.messages.create(
-                model="claude-sonnet-4-20250514",  # Latest Sonnet 4 model
+                model="claude-opus-4-20250514",  # Claude Opus 4.1 for deep research
                 max_tokens=16000,
                 temperature=1.0,  # Required for extended thinking
                 thinking={
                     "type": "enabled",
-                    "budget_tokens": 10000  # Extended thinking for deep research
+                    "budget_tokens": 32000  # Maximum thinking budget for Opus 4.1 deep research
                 },
                 system=system_prompt,
                 messages=[{"role": "user", "content": user_prompt}]
@@ -400,7 +437,7 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             report_header = f"""# CLAUDE DEEP RESEARCH REPORT - {bot_name}
 ## Week of {datetime.now().strftime("%B %d, %Y")}
 ### Generated: {current_date} at {current_time}
-### Model: Claude Sonnet 4 (Anthropic)
+### Model: Claude Opus 4.1 with Extended Thinking (Anthropic)
 ### Portfolio Value: ${portfolio['portfolio_value']:,.2f}
 
 ---
@@ -413,19 +450,20 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             print(f"    Length: {len(full_report)} characters")
             print(f"    Tokens used: ~{response.usage.input_tokens + response.usage.output_tokens}")
 
-            return full_report
+            return full_report, portfolio
 
         except Exception as e:
             print(f"[-] Error calling Claude API: {e}")
             raise
 
-    def save_report(self, report: str, bot_name: str, export_pdf: bool = True) -> tuple[Path, Optional[Path]]:
+    def save_report(self, report: str, bot_name: str, portfolio_data: Dict = None, export_pdf: bool = True) -> tuple[Path, Optional[Path]]:
         """
         Save report to file system in both Markdown and PDF formats
 
         Args:
             report: Markdown-formatted report content
             bot_name: "DEE-BOT" or "SHORGAN-BOT"
+            portfolio_data: Portfolio snapshot data for PDF enhancements
             export_pdf: Whether to generate PDF version
 
         Returns:
@@ -456,7 +494,8 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         if export_pdf:
             try:
                 print(f"[*] Generating PDF report...")
-                self._generate_pdf(report, pdf_filepath, bot_name)
+                # Pass portfolio data to PDF generator for visual enhancements
+                self._generate_pdf(report, pdf_filepath, bot_name, portfolio_data)
                 print(f"[+] PDF report saved: {pdf_filepath}")
 
                 # Send Telegram notification with PDF
@@ -468,8 +507,12 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
         return md_filepath, pdf_filepath
 
-    def _generate_pdf(self, markdown_content: str, output_path: Path, bot_name: str):
-        """Convert markdown report to professional PDF using reportlab"""
+    def _generate_pdf(self, markdown_content: str, output_path: Path, bot_name: str, portfolio_data: Dict = None):
+        """
+        Convert markdown report to professional PDF with visual enhancements
+
+        Includes: portfolio stats, pie charts, holdings tables, P/L breakdowns
+        """
 
         # Create PDF document
         doc = SimpleDocTemplate(
@@ -538,8 +581,15 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             borderPadding=8
         )
 
-        # Parse markdown and build story
+        # Build story with portfolio summary at top
         story = []
+
+        # Add portfolio visual dashboard if data available
+        if portfolio_data:
+            story.extend(self._create_portfolio_dashboard(portfolio_data, bot_name, styles))
+            story.append(PageBreak())
+
+        # Parse markdown and build rest of report
         lines = markdown_content.split('\n')
 
         in_code_block = False
@@ -603,6 +653,182 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
         # Build PDF
         doc.build(story)
+
+    def _create_portfolio_dashboard(self, portfolio_data: Dict, bot_name: str, styles) -> List:
+        """
+        Create visual portfolio dashboard with stats, charts, and tables
+
+        Returns list of reportlab flowables (paragraphs, tables, charts)
+        """
+        elements = []
+
+        # Dashboard title
+        dashboard_title = ParagraphStyle(
+            'DashboardTitle',
+            parent=styles['Heading1'],
+            fontSize=20,
+            textColor=HexColor('#0066cc'),
+            alignment=TA_CENTER,
+            spaceAfter=20
+        )
+        elements.append(Paragraph(f"{bot_name} Portfolio Dashboard", dashboard_title))
+        elements.append(Spacer(1, 0.2*inch))
+
+        # Portfolio summary stats box
+        cash = portfolio_data.get('cash', 0)
+        portfolio_value = portfolio_data.get('portfolio_value', 0)
+        equity = portfolio_data.get('equity', 0)
+        position_count = portfolio_data.get('position_count', 0)
+
+        # Calculate total P&L
+        total_unrealized_pl = sum([h.get('unrealized_pl', 0) for h in portfolio_data.get('holdings', [])])
+        total_pl_pct = (total_unrealized_pl / (portfolio_value - total_unrealized_pl) * 100) if portfolio_value > total_unrealized_pl else 0
+
+        # Stats table
+        stats_data = [
+            ['Portfolio Value', f'${portfolio_value:,.2f}'],
+            ['Cash Available', f'${cash:,.2f}'],
+            ['Equity', f'${equity:,.2f}'],
+            ['Unrealized P&L', f'${total_unrealized_pl:+,.2f} ({total_pl_pct:+.2f}%)'],
+            ['Positions', str(position_count)]
+        ]
+
+        stats_table = Table(stats_data, colWidths=[2.5*inch, 2.5*inch])
+        stats_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), HexColor('#f0f8ff')),
+            ('TEXTCOLOR', (0, 0), (-1, -1), HexColor('#1a1a1a')),
+            ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+            ('ALIGN', (1, 0), (1, -1), 'RIGHT'),
+            ('FONTNAME', (0, 0), (-1, -1), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, -1), 12),
+            ('GRID', (0, 0), (-1, -1), 1, HexColor('#0066cc')),
+            ('ROWBACKGROUNDS', (0, 0), (-1, -1), [HexColor('#ffffff'), HexColor('#f0f8ff')]),
+            ('PADDING', (0, 0), (-1, -1), 8),
+        ]))
+        elements.append(stats_table)
+        elements.append(Spacer(1, 0.3*inch))
+
+        # Pie chart for position allocation (if holdings exist)
+        holdings = portfolio_data.get('holdings', [])
+        if holdings:
+            elements.append(Paragraph("Position Allocation", styles['Heading2']))
+            elements.append(Spacer(1, 0.1*inch))
+
+            # Create pie chart
+            pie_chart = self._create_pie_chart(holdings)
+            elements.append(pie_chart)
+            elements.append(Spacer(1, 0.3*inch))
+
+            # Top holdings table with P&L
+            elements.append(Paragraph("Current Holdings", styles['Heading2']))
+            elements.append(Spacer(1, 0.1*inch))
+
+            holdings_table = self._create_holdings_table(holdings)
+            elements.append(holdings_table)
+        else:
+            elements.append(Paragraph("No current positions", styles['Normal']))
+
+        elements.append(Spacer(1, 0.2*inch))
+
+        return elements
+
+    def _create_pie_chart(self, holdings: List[Dict]) -> Drawing:
+        """Create pie chart showing position allocation"""
+        drawing = Drawing(400, 200)
+        pie = Pie()
+        pie.x = 150
+        pie.y = 50
+        pie.width = 120
+        pie.height = 120
+
+        # Calculate position percentages
+        total_value = sum([h.get('market_value', 0) for h in holdings])
+
+        labels = []
+        data = []
+        for h in holdings:
+            symbol = h.get('symbol', 'UNKNOWN')
+            market_value = h.get('market_value', 0)
+            pct = (market_value / total_value * 100) if total_value > 0 else 0
+            labels.append(f"{symbol} ({pct:.1f}%)")
+            data.append(market_value)
+
+        pie.data = data
+        pie.labels = labels
+        pie.slices.strokeWidth = 0.5
+
+        # Color scheme
+        colors_list = [
+            HexColor('#0066cc'), HexColor('#ff6b6b'), HexColor('#4ecdc4'),
+            HexColor('#ffe66d'), HexColor('#a8e6cf'), HexColor('#ff8b94'),
+            HexColor('#c7ceea'), HexColor('#ffd3b6'), HexColor('#ffaaa5'),
+            HexColor('#dcedc1')
+        ]
+
+        for i, slice_color in enumerate(colors_list[:len(data)]):
+            pie.slices[i].fillColor = slice_color
+
+        drawing.add(pie)
+        return drawing
+
+    def _create_holdings_table(self, holdings: List[Dict]) -> Table:
+        """Create detailed holdings table with P&L"""
+        # Sort by market value descending
+        sorted_holdings = sorted(holdings, key=lambda x: x.get('market_value', 0), reverse=True)
+
+        # Table header
+        table_data = [
+            ['Symbol', 'Shares', 'Avg Entry', 'Current', 'Market Value', 'P&L ($)', 'P&L (%)']
+        ]
+
+        # Add holdings rows
+        for h in sorted_holdings:
+            symbol = h.get('symbol', '')
+            qty = h.get('qty', 0)
+            avg_entry = h.get('avg_entry_price', 0)
+            current = h.get('current_price', 0)
+            market_value = h.get('market_value', 0)
+            pl = h.get('unrealized_pl', 0)
+            pl_pct = h.get('unrealized_plpc', 0)
+
+            table_data.append([
+                symbol,
+                f'{qty:.0f}',
+                f'${avg_entry:.2f}',
+                f'${current:.2f}',
+                f'${market_value:,.2f}',
+                f'${pl:+,.2f}',
+                f'{pl_pct:+.2f}%'
+            ])
+
+        # Create table
+        col_widths = [0.8*inch, 0.7*inch, 0.9*inch, 0.9*inch, 1.2*inch, 1.0*inch, 0.9*inch]
+        table = Table(table_data, colWidths=col_widths)
+
+        # Style table
+        table.setStyle(TableStyle([
+            # Header row
+            ('BACKGROUND', (0, 0), (-1, 0), HexColor('#0066cc')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 9),
+
+            # Data rows
+            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 1), (-1, -1), 8),
+            ('ALIGN', (0, 1), (0, -1), 'LEFT'),  # Symbol left-aligned
+            ('ALIGN', (1, 1), (-1, -1), 'RIGHT'),  # Numbers right-aligned
+
+            # Grid
+            ('GRID', (0, 0), (-1, -1), 0.5, HexColor('#cccccc')),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, HexColor('#f5f5f5')]),
+
+            # Padding
+            ('PADDING', (0, 0), (-1, -1), 4),
+        ]))
+
+        return table
 
     def _send_telegram_notification(self, pdf_path: Path, bot_name: str, trade_date: str):
         """
@@ -683,13 +909,18 @@ def main():
 
     for bot_name in bots:
         try:
-            report = generator.generate_research_report(
+            report, portfolio_data = generator.generate_research_report(
                 bot_name=bot_name,
                 week_number=args.week,
                 include_market_data=not args.no_market_data
             )
 
-            md_path, pdf_path = generator.save_report(report, bot_name, export_pdf=True)
+            md_path, pdf_path = generator.save_report(
+                report=report,
+                bot_name=bot_name,
+                portfolio_data=portfolio_data,
+                export_pdf=True
+            )
 
             print(f"\n{'='*60}")
             print(f"[+] {bot_name} report complete!")
