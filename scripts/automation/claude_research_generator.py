@@ -439,10 +439,10 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         report_dir = Path(f"reports/premarket/{date_str}")
         report_dir.mkdir(parents=True, exist_ok=True)
 
-        # Generate filenames - save individual bot reports for debugging
+        # Generate filenames - use trading date (tomorrow) for consistency
         bot_slug = bot_name.lower().replace("-", "_")
-        md_filename = f"claude_research_{bot_slug}_{today.strftime('%Y-%m-%d')}.md"
-        pdf_filename = f"claude_research_{bot_slug}_{today.strftime('%Y-%m-%d')}.pdf"
+        md_filename = f"claude_research_{bot_slug}_{date_str}.md"
+        pdf_filename = f"claude_research_{bot_slug}_{date_str}.pdf"
 
         md_filepath = report_dir / md_filename
         pdf_filepath = report_dir / pdf_filename if export_pdf else None
@@ -459,8 +459,8 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                 self._generate_pdf(report, pdf_filepath, bot_name)
                 print(f"[+] PDF report saved: {pdf_filepath}")
 
-                # Send Instagram notification with PDF
-                self._send_instagram_notification(pdf_filepath, bot_name, date_str)
+                # Send Telegram notification with PDF
+                self._send_telegram_notification(pdf_filepath, bot_name, date_str)
 
             except Exception as e:
                 print(f"[-] PDF generation failed: {e}")
@@ -604,9 +604,9 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         # Build PDF
         doc.build(story)
 
-    def _send_instagram_notification(self, pdf_path: Path, bot_name: str, trade_date: str):
+    def _send_telegram_notification(self, pdf_path: Path, bot_name: str, trade_date: str):
         """
-        Send Instagram notification with PDF attachment
+        Send Telegram notification with PDF attachment
 
         Args:
             pdf_path: Path to PDF file
@@ -614,36 +614,35 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             trade_date: Trading date (YYYY-MM-DD)
         """
         try:
-            # NOTE: Instagram doesn't have an official API for sending DMs with attachments
-            # This is a placeholder for future implementation
-            #
-            # Possible approaches:
-            # 1. Use Instagram Graph API (business accounts only, limited DM support)
-            # 2. Use third-party automation tools (like Instagrapi)
-            # 3. Use email-to-Instagram forwarding service
-            # 4. Manual notification via mobile app
+            import requests
 
-            # For now, print notification details
-            print(f"\n[*] Instagram Notification:")
-            print(f"    Bot: {bot_name}")
-            print(f"    Trade Date: {trade_date}")
-            print(f"    PDF: {pdf_path}")
-            print(f"    Status: [MANUAL] Please share PDF via Instagram manually")
-            print(f"\n    NOTE: Automated Instagram PDF sharing requires:")
-            print(f"          1. Instagram Business account")
-            print(f"          2. Facebook Developer App setup")
-            print(f"          3. Graph API access token")
-            print(f"          See: https://developers.facebook.com/docs/instagram-api/")
+            TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "7526351226:AAHQz1PV-4OdNmCgLdgzPJ8emHxIeGdPW6Q")
+            CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7769365988")
 
-            # Optional: Save notification to log file for manual processing
-            notification_log = Path("reports/instagram_notifications.log")
-            with open(notification_log, 'a', encoding='utf-8') as f:
-                f.write(f"{datetime.now().isoformat()} | {bot_name} | {trade_date} | {pdf_path}\n")
+            # Send PDF as document
+            url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendDocument"
 
-            print(f"[+] Notification logged to: {notification_log}")
+            caption = f"📊 *{bot_name} Research Report*\nTrade Date: {trade_date}\nGenerated: {datetime.now().strftime('%I:%M %p ET')}"
+
+            with open(pdf_path, 'rb') as pdf_file:
+                files = {'document': pdf_file}
+                data = {
+                    'chat_id': CHAT_ID,
+                    'caption': caption,
+                    'parse_mode': 'Markdown'
+                }
+
+                response = requests.post(url, data=data, files=files)
+
+                if response.status_code == 200:
+                    print(f"\n[+] Telegram PDF sent: {bot_name}")
+                    print(f"    Trade Date: {trade_date}")
+                    print(f"    File: {pdf_path.name}")
+                else:
+                    print(f"\n[-] Telegram send failed: {response.text}")
 
         except Exception as e:
-            print(f"[-] Instagram notification failed: {e}")
+            print(f"\n[-] Telegram notification failed: {e}")
 
 
 def main():
