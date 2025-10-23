@@ -1,0 +1,51 @@
+{
+  "timestamp": "2025-10-23T12:01:45.168840",
+  "benchmarks": [],
+  "comparisons": [
+    {
+      "approach_a_name": "Weighted Voting",
+      "approach_b_name": "Debate Mechanism",
+      "approach_a_time": 0.51108717918396,
+      "approach_b_time": 0.0013014316558837891,
+      "speedup": 392.7115011175026,
+      "approach_a_quality": 0.7,
+      "approach_b_quality": 0.85,
+      "quality_improvement": 21.428571428571434,
+      "winner": "Debate Mechanism"
+    },
+    {
+      "approach_a_name": "Without Alt Data",
+      "approach_b_name": "With Alt Data",
+      "approach_a_time": 0.0004740238189697266,
+      "approach_b_time": 0.0004519939422607422,
+      "speedup": 1.048739318493512,
+      "approach_a_quality": 0.65,
+      "approach_b_quality": 0.78,
+      "quality_improvement": 20.0,
+      "winner": "With Alt Data"
+    },
+    {
+      "approach_a_name": "Sequential",
+      "approach_b_name": "Concurrent",
+      "approach_a_time": 7.955233256022136e-05,
+      "approach_b_time": 0.00030740102132161457,
+      "speedup": 0.25879007238883145,
+      "approach_a_quality": 1.0,
+      "approach_b_quality": 1.0,
+      "quality_improvement": 0.0,
+      "winner": "Sequential"
+    }
+  ],
+  "summary": {
+    "total_benchmarks": 0,
+    "successful_benchmarks": 0,
+    "failed_benchmarks": 0,
+    "avg_duration_seconds": 0,
+    "max_duration_seconds": 0,
+    "avg_memory_mb": 0,
+    "max_memory_mb": 0,
+    "total_comparisons": 3
+  },
+  "bottlenecks": [],
+  "recommendations": []
+}

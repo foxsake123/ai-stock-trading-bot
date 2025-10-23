@@ -17,6 +17,7 @@ An enterprise-grade automated trading system powered by **Claude Opus 4.1 with E
 - ✅ **36.55% code coverage** (target: 50%+)
 - ✅ **All 8 phases complete**
 - ✅ **Paper trading operational** since October 2025
+- ✅ **Enhanced Telegram reports** integrated (Oct 23, 2025)
 - 📋 **Live trading deployment guide** available
 - 🎯 **Target go-live**: December 1, 2025 (after 30-day validation)
 
@@ -24,7 +25,8 @@ An enterprise-grade automated trading system powered by **Claude Opus 4.1 with E
 - 🤖 Multi-agent consensus system (7 specialized agents)
 - 📊 Real-time execution via Alpaca Markets API
 - 📈 Professional data from Financial Datasets API
-- 🔔 Multi-channel notifications (Email, Slack, Discord)
+- 📱 **Enhanced Telegram reports** with portfolio overview, top performers, and visual indicators
+- 🔔 Multi-channel notifications (Email, Slack, Discord, Telegram)
 - ⚡ Fully automated daily execution (6:00 PM ET)
 - 📝 Comprehensive risk management and position tracking
 - 🛡️ Advanced safety mechanisms (kill switches, loss limits, drawdown protection)
@@ -61,22 +63,138 @@ python scripts/automation/execute_daily_trades.py
 python scripts/automation/update_all_bot_positions.py
 
 # Generate reports
-python scripts/automation/generate-post-market-report.py
+python scripts/automation/generate_post_market_report.py
 
-# Generate performance graph (NEW!)
+# Generate performance graph
 python generate_performance_graph.py
 
-# Generate daily pre-market report (NEW!)
+# Enhanced Telegram Reports (NEW - Oct 23, 2025!) ⭐
+python scripts/automation/send_enhanced_morning_report.py    # Enhanced morning report (recommended)
+python scripts/automation/send_morning_trade_report.py       # Basic morning report (legacy)
+python scripts/automation/send_research_pdfs.py              # Send Claude research PDFs
+
+# Generate daily pre-market report
 python daily_premarket_report.py          # Production mode
 python daily_premarket_report.py --test   # Test mode (no API calls)
 
-# Start web dashboard (NEW!)
+# Start web dashboard
 python web_dashboard.py                   # Web interface on http://localhost:5000
 
-# Run system health check (NEW!)
+# Run system health check
 python health_check.py                    # Quick health check
 python health_check.py --verbose          # Detailed diagnostics
 ```
+
+## Phase 2 Enhancements 🚀 NEW
+
+The system now includes four major enhancements for improved decision-making:
+
+### 1. Alternative Data Consolidation
+Integrates non-traditional data sources for better insights:
+- **Insider Trading**: Tracks SEC Form 4 filings (buys/sells by executives)
+- **Google Trends**: Monitors search interest and momentum
+- **Options Flow**: Analyzes unusual options activity (>$100k trades, sweeps)
+- **Composite Scoring**: Weighted combination (30% insider, 30% trends, 40% options)
+
+```python
+from src.integration.phase2_integration import Phase2IntegrationEngine
+
+engine = Phase2IntegrationEngine()
+await engine.initialize()
+
+# Analyze with alternative data
+decision = await engine.analyze_ticker("AAPL", market_data, fundamental_data, technical_data)
+print(f"Signal: {decision['action']} (Confidence: {decision['confidence']:.1%})")
+```
+
+### 2. Bull/Bear Debate Mechanism
+Replaces simple voting with structured 3-round debates:
+- **Round 1**: Opening arguments (bull vs bear perspectives)
+- **Round 2**: Rebuttals (respond to opponent's arguments)
+- **Round 3**: Closing arguments (final case)
+- **Moderator**: Evaluates both sides and reaches consensus
+- **Benefits**: Higher accuracy, balanced decisions, transparent reasoning
+
+**When debates are used:**
+- Medium-confidence trades (50-70% from simple voting)
+- Significant alternative data signals
+- Can be enabled for all trades via `config.yaml`
+
+### 3. Intraday Catalyst Monitor
+Real-time monitoring of market-moving events:
+- **FDA decisions**, earnings releases, M&A announcements, product launches
+- **Priority routing**: CRITICAL → all channels, HIGH → email + primary
+- **News sentiment**: Tracks breaking news and sentiment changes
+- **Event calendar**: Maintains schedule of upcoming catalysts
+- **Automatic alerts**: Telegram/email notifications during market hours
+
+```python
+# Catalyst monitoring runs automatically in background
+# Add positions to monitor:
+await engine.monitor_positions(["PTGX", "GKOS", "SNDX"])
+```
+
+### 4. Options Flow Analyzer
+Detects "smart money" activity in options markets:
+- **Put/Call ratios**: Identifies unusual bearish/bullish sentiment
+- **Flow imbalance**: Tracks net call buying vs put buying ($$)
+- **Large trades**: Detects >$100k premium trades (institutional)
+- **Sweep orders**: Identifies urgent multi-exchange orders
+- **Delta/gamma exposure**: Measures directional positioning
+- **Multi-leg strategies**: Detects spreads, straddles, iron condors
+
+**Key metrics:**
+- Put/Call ratio >1.5 = Bearish, <0.7 = Bullish
+- Flow imbalance >20% = Strong directional signal
+- Sweep orders = High-conviction smart money
+
+### Configuration
+
+Enable/disable features in `config.yaml`:
+
+```yaml
+phase2:
+  enable_alternative_data: true
+  enable_debate_system: true
+  enable_catalyst_monitor: true
+  enable_options_flow: true
+
+  # Weights and thresholds
+  alt_data_weight: 0.3
+  debate_min_confidence: 0.55
+  options_min_confidence: 0.6
+```
+
+### API Requirements
+
+**Free tier (basic functionality):**
+- Alpaca Markets (paper trading)
+- Yahoo Finance (options chains)
+- Anthropic Claude API (debates)
+
+**Paid tier (recommended for live trading):**
+- Financial Datasets API ($49-199/month) - Real-time options flow
+- SEC API ($10/month) - Insider trading data
+
+### Quick Test
+
+```bash
+# Test Phase 2 integration
+python -c "from src.integration.phase2_integration import Phase2IntegrationEngine; import asyncio; asyncio.run(Phase2IntegrationEngine().initialize())"
+
+# Run integration tests
+python src/integration/phase2_integration.py
+```
+
+### Documentation
+
+- **Alternative Data**: `docs/ALTERNATIVE_DATA_GUIDE.md`
+- **Debate System**: `docs/DEBATE_SYSTEM_GUIDE.md`
+- **Catalyst Monitor**: `docs/CATALYST_MONITORING_GUIDE.md`
+- **Options Flow**: `docs/OPTIONS_FLOW_GUIDE.md`
+- **Integration**: See `src/integration/phase2_integration.py`
+
+---
 
 ## System Health Monitoring
 

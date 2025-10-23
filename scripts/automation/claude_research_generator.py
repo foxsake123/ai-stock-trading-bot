@@ -24,10 +24,10 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Preformatted, Table, TableStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
-from reportlab.lib.colors import HexColor, colors
+from reportlab.lib.colors import HexColor
+from reportlab.lib import colors
 from reportlab.graphics.shapes import Drawing
 from reportlab.graphics.charts.piecharts import Pie
-from reportlab.lib import colors as rl_colors
 from html.parser import HTMLParser
 
 # Add project root to path
@@ -415,23 +415,28 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         system_prompt = DEE_BOT_SYSTEM_PROMPT if bot_name == "DEE-BOT" else SHORGAN_BOT_SYSTEM_PROMPT
 
         try:
-            response = self.claude.messages.create(
+            # Use streaming for Opus 4.1 (required for long-running operations >10 min)
+            # Opus 4.1 max output: 32K tokens, so thinking budget must be less
+            stream = self.claude.messages.stream(
                 model="claude-opus-4-20250514",  # Claude Opus 4.1 for deep research
-                max_tokens=16000,
+                max_tokens=32000,  # Maximum for Opus 4.1
                 temperature=1.0,  # Required for extended thinking
                 thinking={
                     "type": "enabled",
-                    "budget_tokens": 32000  # Maximum thinking budget for Opus 4.1 deep research
+                    "budget_tokens": 16000  # Thinking budget (must be < max_tokens)
                 },
                 system=system_prompt,
                 messages=[{"role": "user", "content": user_prompt}]
             )
 
-            # Extract text content (skip thinking blocks)
+            # Extract text content from stream (skip thinking blocks)
             report_content = ""
-            for block in response.content:
-                if hasattr(block, 'text'):
-                    report_content += block.text
+            with stream as event_stream:
+                for text in event_stream.text_stream:
+                    report_content += text
+
+            # Get final response for token usage stats
+            response = event_stream.get_final_message()
 
             # 6. Add header and metadata
             report_header = f"""# CLAUDE DEEP RESEARCH REPORT - {bot_name}

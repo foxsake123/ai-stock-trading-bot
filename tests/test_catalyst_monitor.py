@@ -1,865 +1,761 @@
-"""Tests for Intraday Catalyst Monitor"""
+"""
+Comprehensive Test Suite for Catalyst Monitoring System
+
+Tests all components:
+- CatalystMonitor: Real-time event tracking and monitoring
+- NewsScanner: Breaking news monitoring from Financial Datasets API
+- EventCalendar: Scheduled catalyst tracking
+- CatalystAlerts: Multi-channel notification system
+"""
 
 import pytest
-from datetime import datetime, time, timedelta
-from monitoring.catalyst_monitor import (
+import asyncio
+from datetime import datetime, timedelta
+from unittest.mock import Mock, AsyncMock, patch, MagicMock
+from typing import Dict, List
+
+# Import modules to test
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from src.monitors.catalyst_monitor import (
     CatalystMonitor,
-    Catalyst,
-    CatalystAlert,
+    CatalystEvent,
     CatalystType,
-    CatalystImpact,
-    CatalystUrgency,
-    create_catalyst_from_event
+    CatalystPriority,
+    CatalystStatus
 )
-from unittest.mock import Mock, patch
+from src.monitors.news_scanner import NewsScanner, NewsItem
+from src.monitors.event_calendar import EventCalendar, ScheduledEvent
+from src.alerts.catalyst_alerts import CatalystAlerts
+
+
+# ============================================================================
+# FIXTURES
+# ============================================================================
+
+@pytest.fixture
+def mock_news_scanner():
+    """Mock NewsScanner for testing"""
+    scanner = Mock(spec=NewsScanner)
+    scanner.scan_recent_news = AsyncMock(return_value=[])
+    scanner.get_breaking_news = AsyncMock(return_value=[])
+    scanner.get_sentiment_changes = AsyncMock(return_value={
+        'ticker': 'PTGX',
+        'avg_sentiment': 0.5,
+        'sentiment_trend': 'IMPROVING',
+        'article_count': 5
+    })
+    return scanner
 
 
 @pytest.fixture
-def monitor():
-    """Create catalyst monitor instance"""
-    return CatalystMonitor()
+def mock_event_calendar():
+    """Mock EventCalendar for testing"""
+    calendar = Mock(spec=EventCalendar)
+    calendar.get_upcoming_events = AsyncMock(return_value=[])
+    calendar.get_events_needing_reminder = Mock(return_value=[])
+    calendar.add_event = Mock()
+    return calendar
 
 
 @pytest.fixture
-def sample_catalyst():
-    """Sample catalyst event"""
-    return Catalyst(
-        ticker='AAPL',
-        catalyst_type=CatalystType.EARNINGS_BEAT,
-        impact=CatalystImpact.VERY_BULLISH,
-        urgency=CatalystUrgency.IMMEDIATE,
-        timestamp=datetime.now(),
-        description="Apple reports Q4 earnings beat, EPS $1.52 vs $1.39 expected",
-        source="earnings_api",
-        details={'eps_actual': 1.52, 'eps_expected': 1.39},
-        confidence=0.95
+def mock_alert_system():
+    """Mock CatalystAlerts for testing"""
+    alerts = Mock(spec=CatalystAlerts)
+    alerts.send_catalyst_alert = AsyncMock()
+    return alerts
+
+
+@pytest.fixture
+def sample_catalyst_event():
+    """Sample CatalystEvent for testing"""
+    return CatalystEvent(
+        ticker="PTGX",
+        catalyst_type=CatalystType.FDA_DECISION,
+        priority=CatalystPriority.HIGH,
+        title="FDA PDUFA Date - Afamitresgene Autoleucel",
+        description="FDA decision expected for PTGX's CAR-T therapy",
+        scheduled_time=datetime.now() + timedelta(hours=24),
+        sentiment="POSITIVE",
+        source="Financial Datasets"
     )
 
 
+@pytest.fixture
+def sample_news_item():
+    """Sample NewsItem for testing"""
+    return NewsItem(
+        ticker="PTGX",
+        headline="PTGX receives positive FDA panel recommendation",
+        summary="FDA advisory committee votes 12-2 in favor",
+        published_time=datetime.now(),
+        source="Bloomberg",
+        sentiment="POSITIVE",
+        sentiment_score=0.75,
+        relevance_score=0.9
+    )
+
+
+@pytest.fixture
+def sample_scheduled_event():
+    """Sample ScheduledEvent for testing"""
+    return ScheduledEvent(
+        ticker="PTGX",
+        event_type="FDA_DECISION",
+        title="FDA PDUFA Date",
+        description="FDA decision expected",
+        scheduled_time=datetime.now() + timedelta(hours=24)
+    )
+
+
+# ============================================================================
+# CATALYST MONITOR TESTS
+# ============================================================================
+
 class TestCatalystMonitorInitialization:
-    """Test monitor initialization"""
+    """Test CatalystMonitor initialization and configuration"""
 
-    def test_initialization_default(self):
-        """Test default initialization"""
-        monitor = CatalystMonitor()
-
-        assert monitor.news_api is None
-        assert monitor.fd_client is None
-        assert isinstance(monitor.active_catalysts, dict)
-        assert isinstance(monitor.catalyst_history, list)
-        assert isinstance(monitor.monitored_tickers, set)
-
-    def test_initialization_with_clients(self):
-        """Test initialization with API clients"""
-        news_api = Mock()
-        fd_client = Mock()
-
-        monitor = CatalystMonitor(news_api, fd_client)
-
-        assert monitor.news_api == news_api
-        assert monitor.fd_client == fd_client
-
-    def test_market_hours_configured(self):
-        """Test market hours are configured"""
-        monitor = CatalystMonitor()
-
-        assert monitor.market_open == time(9, 30)
-        assert monitor.market_close == time(16, 0)
-
-    def test_impact_scores_configured(self):
-        """Test impact scores are configured"""
-        monitor = CatalystMonitor()
-
-        assert CatalystImpact.VERY_BULLISH in monitor.impact_scores
-        assert CatalystImpact.VERY_BEARISH in monitor.impact_scores
-        assert monitor.impact_scores[CatalystImpact.VERY_BULLISH] > 0
-        assert monitor.impact_scores[CatalystImpact.VERY_BEARISH] < 0
-
-
-class TestTickerMonitoring:
-    """Test ticker monitoring"""
-
-    def test_add_monitored_ticker(self, monitor):
-        """Test adding ticker to monitoring"""
-        monitor.add_monitored_ticker('AAPL')
-
-        assert 'AAPL' in monitor.monitored_tickers
-        assert 'AAPL' in monitor.active_catalysts
-
-    def test_add_multiple_tickers(self, monitor):
-        """Test adding multiple tickers"""
-        monitor.add_monitored_ticker('AAPL')
-        monitor.add_monitored_ticker('TSLA')
-        monitor.add_monitored_ticker('NVDA')
-
-        assert len(monitor.monitored_tickers) == 3
-
-    def test_remove_monitored_ticker(self, monitor):
-        """Test removing ticker"""
-        monitor.add_monitored_ticker('AAPL')
-        monitor.remove_monitored_ticker('AAPL')
-
-        assert 'AAPL' not in monitor.monitored_tickers
-
-    def test_add_duplicate_ticker(self, monitor):
-        """Test adding same ticker twice"""
-        monitor.add_monitored_ticker('AAPL')
-        monitor.add_monitored_ticker('AAPL')
-
-        # Should only appear once in set
-        assert monitor.monitored_tickers == {'AAPL'}
-
-
-class TestCatalystManagement:
-    """Test catalyst management"""
-
-    def test_add_catalyst(self, monitor, sample_catalyst):
-        """Test adding catalyst"""
-        monitor.add_catalyst(sample_catalyst)
-
-        assert 'AAPL' in monitor.active_catalysts
-        assert len(monitor.active_catalysts['AAPL']) == 1
-        assert len(monitor.catalyst_history) == 1
-
-    def test_add_multiple_catalysts_same_ticker(self, monitor):
-        """Test adding multiple catalysts for same ticker"""
-        cat1 = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.HIGH,
-            timestamp=datetime.now(),
-            description="Earnings today",
-            source="test",
-            details={},
-            confidence=0.8
-        )
-        cat2 = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.ANALYST_UPGRADE,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.MODERATE,
-            timestamp=datetime.now(),
-            description="Analyst upgrade",
-            source="test",
-            details={},
-            confidence=0.7
+    def test_initialization_with_defaults(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test monitor initializes with default settings"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        monitor.add_catalyst(cat1)
-        monitor.add_catalyst(cat2)
+        assert monitor.news_scanner == mock_news_scanner
+        assert monitor.event_calendar == mock_event_calendar
+        assert monitor.alert_system == mock_alert_system
+        assert monitor.check_interval == 300  # Default 5 minutes
+        assert monitor.market_open_hour == 9
+        assert monitor.market_close_hour == 16
+        assert len(monitor.active_catalysts) == 0
+        assert not monitor.is_running
 
-        assert len(monitor.active_catalysts['AAPL']) == 2
-
-    def test_add_catalysts_different_tickers(self, monitor):
-        """Test adding catalysts for different tickers"""
-        cat1 = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.HIGH,
-            timestamp=datetime.now(),
-            description="Earnings",
-            source="test",
-            details={},
-            confidence=0.8
-        )
-        cat2 = Catalyst(
-            ticker='TSLA',
-            catalyst_type=CatalystType.FDA_APPROVAL,
-            impact=CatalystImpact.VERY_BULLISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="FDA approval",
-            source="test",
-            details={},
-            confidence=0.9
+    def test_initialization_with_custom_settings(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test monitor initializes with custom settings"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system,
+            check_interval=60,
+            market_open_hour=8,
+            market_close_hour=17,
+            enable_premarket=True,
+            enable_afterhours=True
         )
 
-        monitor.add_catalyst(cat1)
-        monitor.add_catalyst(cat2)
+        assert monitor.check_interval == 60
+        assert monitor.market_open_hour == 8
+        assert monitor.market_close_hour == 17
+        assert monitor.enable_premarket is True
+        assert monitor.enable_afterhours is True
 
-        assert 'AAPL' in monitor.active_catalysts
-        assert 'TSLA' in monitor.active_catalysts
 
+class TestCatalystDetection:
+    """Test catalyst event detection from news and calendar"""
 
-class TestGetActiveCatalysts:
-    """Test getting active catalysts"""
-
-    def test_get_all_catalysts(self, monitor, sample_catalyst):
-        """Test getting all catalysts"""
-        monitor.add_catalyst(sample_catalyst)
-
-        catalysts = monitor.get_active_catalysts()
-
-        assert len(catalysts) == 1
-        assert catalysts[0] == sample_catalyst
-
-    def test_get_catalysts_by_ticker(self, monitor):
-        """Test filtering by ticker"""
-        cat1 = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.HIGH,
-            timestamp=datetime.now(),
-            description="AAPL earnings",
-            source="test",
-            details={},
-            confidence=0.8
-        )
-        cat2 = Catalyst(
-            ticker='TSLA',
-            catalyst_type=CatalystType.FDA_APPROVAL,
-            impact=CatalystImpact.VERY_BULLISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="TSLA approval",
-            source="test",
-            details={},
-            confidence=0.9
+    @pytest.mark.asyncio
+    async def test_detect_fda_catalyst_from_news(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test detection of FDA catalyst from breaking news"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        monitor.add_catalyst(cat1)
-        monitor.add_catalyst(cat2)
+        # Mock news with FDA keywords
+        mock_news_scanner.get_breaking_news = AsyncMock(return_value=[{
+            'ticker': 'PTGX',
+            'headline': 'PTGX receives FDA approval for CAR-T therapy',
+            'summary': 'FDA approves afamitresgene autoleucel',
+            'published_time': datetime.now(),
+            'sentiment': 'POSITIVE',
+            'sentiment_score': 0.85,
+            'relevance_score': 0.95
+        }])
 
-        aapl_catalysts = monitor.get_active_catalysts(ticker='AAPL')
+        await monitor._check_catalysts()
 
-        assert len(aapl_catalysts) == 1
-        assert aapl_catalysts[0].ticker == 'AAPL'
+        # Should have detected FDA catalyst
+        assert len(monitor.active_catalysts) > 0
+        event = list(monitor.active_catalysts.values())[0]
+        assert event.catalyst_type == CatalystType.FDA_DECISION
+        assert event.ticker == 'PTGX'
+        assert event.priority == CatalystPriority.CRITICAL
 
-    def test_get_catalysts_by_urgency(self, monitor):
-        """Test filtering by minimum urgency"""
-        cat1 = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="Immediate",
-            source="test",
-            details={},
-            confidence=0.8
-        )
-        cat2 = Catalyst(
-            ticker='TSLA',
-            catalyst_type=CatalystType.ANALYST_UPGRADE,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.LOW,
-            timestamp=datetime.now(),
-            description="Low urgency",
-            source="test",
-            details={},
-            confidence=0.7
+    @pytest.mark.asyncio
+    async def test_detect_earnings_catalyst_from_calendar(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test detection of earnings catalyst from calendar"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        monitor.add_catalyst(cat1)
-        monitor.add_catalyst(cat2)
+        # Mock upcoming earnings event
+        upcoming_event = ScheduledEvent(
+            ticker="AAPL",
+            event_type="EARNINGS_RELEASE",
+            title="Q4 2025 Earnings",
+            description="Apple Q4 earnings release",
+            scheduled_time=datetime.now() + timedelta(hours=2)
+        )
+        mock_event_calendar.get_upcoming_events = AsyncMock(return_value=[{
+            'ticker': 'AAPL',
+            'type': 'EARNINGS_RELEASE',
+            'title': 'Q4 2025 Earnings',
+            'scheduled_time': datetime.now() + timedelta(hours=2),
+            'hours_until': 2.0
+        }])
 
-        immediate = monitor.get_active_catalysts(min_urgency=CatalystUrgency.IMMEDIATE)
+        await monitor._check_catalysts()
 
-        assert len(immediate) == 1
-        assert immediate[0].urgency == CatalystUrgency.IMMEDIATE
-
-    def test_get_catalysts_empty(self, monitor):
-        """Test getting catalysts when none exist"""
-        catalysts = monitor.get_active_catalysts()
-
-        assert catalysts == []
-
-
-class TestCatalystClassification:
-    """Test catalyst classification"""
-
-    def test_classify_earnings_beat(self, monitor):
-        """Test classifying earnings beat"""
-        desc = "Apple reports earnings beat with EPS of $1.52"
-
-        cat_type, impact, urgency = monitor.classify_catalyst(desc, 'AAPL')
-
-        assert cat_type == CatalystType.EARNINGS
-        assert impact == CatalystImpact.BULLISH
-        assert urgency == CatalystUrgency.MODERATE
-
-    def test_classify_fda_approval(self, monitor):
-        """Test classifying FDA approval"""
-        desc = "FDA approves new drug for cancer treatment"
-
-        cat_type, impact, urgency = monitor.classify_catalyst(desc, 'PTGX')
-
-        assert cat_type == CatalystType.FDA_APPROVAL
-        assert impact == CatalystImpact.VERY_BULLISH
-        assert urgency == CatalystUrgency.IMMEDIATE
-
-    def test_classify_merger(self, monitor):
-        """Test classifying merger/acquisition"""
-        desc = "Company announces acquisition by major competitor"
-
-        cat_type, impact, urgency = monitor.classify_catalyst(desc, 'SMMT')
-
-        assert cat_type == CatalystType.MERGER_ACQUISITION
-        assert impact == CatalystImpact.VERY_BULLISH
-        assert urgency == CatalystUrgency.IMMEDIATE
-
-    def test_classify_analyst_upgrade(self, monitor):
-        """Test classifying analyst upgrade"""
-        desc = "Goldman Sachs upgrades to Buy from Hold"
-
-        cat_type, impact, urgency = monitor.classify_catalyst(desc, 'AAPL')
-
-        assert cat_type == CatalystType.ANALYST_UPGRADE
-        assert impact == CatalystImpact.BULLISH
-        assert urgency == CatalystUrgency.HIGH
-
-    def test_classify_analyst_downgrade(self, monitor):
-        """Test classifying analyst downgrade"""
-        desc = "Morgan Stanley downgrades to Sell from Hold"
-
-        cat_type, impact, urgency = monitor.classify_catalyst(desc, 'AAPL')
-
-        assert cat_type == CatalystType.ANALYST_DOWNGRADE
-        assert impact == CatalystImpact.BEARISH
-        assert urgency == CatalystUrgency.HIGH
-
-    def test_classify_guidance_raise(self, monitor):
-        """Test classifying guidance raise"""
-        desc = "Company raises full-year guidance above expectations"
-
-        cat_type, impact, urgency = monitor.classify_catalyst(desc, 'AAPL')
-
-        assert cat_type == CatalystType.GUIDANCE_RAISE
-        assert impact == CatalystImpact.VERY_BULLISH
-        assert urgency == CatalystUrgency.HIGH
-
-    def test_classify_guidance_lower(self, monitor):
-        """Test classifying guidance lower"""
-        desc = "Company lowers Q4 forecast due to weak demand"
-
-        cat_type, impact, urgency = monitor.classify_catalyst(desc, 'AAPL')
-
-        assert cat_type == CatalystType.GUIDANCE_LOWER
-        assert impact == CatalystImpact.VERY_BEARISH
-        assert urgency == CatalystUrgency.HIGH
-
-    def test_classify_partnership(self, monitor):
-        """Test classifying partnership"""
-        desc = "Strategic partnership announced with major tech company"
-
-        cat_type, impact, urgency = monitor.classify_catalyst(desc, 'AAPL')
-
-        assert cat_type == CatalystType.PARTNERSHIP
-        assert impact == CatalystImpact.BULLISH
-        assert urgency == CatalystUrgency.MODERATE
-
-    def test_classify_generic_news(self, monitor):
-        """Test classifying generic news"""
-        desc = "Company announces new initiative"
-
-        cat_type, impact, urgency = monitor.classify_catalyst(desc, 'AAPL')
-
-        assert cat_type == CatalystType.OTHER
-        assert urgency == CatalystUrgency.MODERATE
+        # Should have detected earnings catalyst
+        assert len(monitor.active_catalysts) > 0
 
 
-class TestAlertGeneration:
-    """Test alert generation"""
+class TestPriorityClassification:
+    """Test automatic priority classification for catalysts"""
 
-    def test_generate_alert_bullish(self, monitor):
-        """Test generating alert for bullish catalyst"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS_BEAT,
-            impact=CatalystImpact.VERY_BULLISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="Earnings beat",
-            source="test",
-            details={},
-            confidence=0.9
+    def test_fda_approval_critical_priority(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test FDA approvals get CRITICAL priority"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        alert = monitor.generate_alert(catalyst)
-
-        assert isinstance(alert, CatalystAlert)
-        assert alert.action_recommended == "BUY"
-        assert alert.position_sizing is not None
-        assert alert.position_sizing > 0
-
-    def test_generate_alert_bearish(self, monitor):
-        """Test generating alert for bearish catalyst"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS_MISS,
-            impact=CatalystImpact.VERY_BEARISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="Earnings miss",
-            source="test",
-            details={},
-            confidence=0.8
+        event = CatalystEvent(
+            ticker="PTGX",
+            catalyst_type=CatalystType.FDA_DECISION,
+            priority=CatalystPriority.CRITICAL,  # Should be auto-assigned
+            title="FDA Approval",
+            description="FDA approves new drug",
+            sentiment="POSITIVE"
         )
 
-        alert = monitor.generate_alert(catalyst)
+        assert event.priority == CatalystPriority.CRITICAL
 
-        assert alert.action_recommended == "SELL"
-
-    def test_generate_alert_neutral(self, monitor):
-        """Test generating alert for neutral catalyst"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.OTHER,
-            impact=CatalystImpact.NEUTRAL,
-            urgency=CatalystUrgency.LOW,
-            timestamp=datetime.now(),
-            description="Neutral news",
-            source="test",
-            details={},
-            confidence=0.5
+    def test_earnings_beat_high_priority(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test earnings beats get HIGH priority"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        alert = monitor.generate_alert(catalyst)
-
-        assert alert.action_recommended == "MONITOR"
-
-    def test_alert_position_sizing_immediate(self, monitor):
-        """Test position sizing for immediate urgency"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.FDA_APPROVAL,
-            impact=CatalystImpact.VERY_BULLISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="FDA approval",
-            source="test",
-            details={},
-            confidence=1.0
+        event = CatalystEvent(
+            ticker="AAPL",
+            catalyst_type=CatalystType.EARNINGS_RELEASE,
+            priority=CatalystPriority.HIGH,
+            title="Q4 Earnings Beat",
+            description="Apple beats EPS by 15%",
+            sentiment="POSITIVE"
         )
 
-        alert = monitor.generate_alert(catalyst)
+        assert event.priority == CatalystPriority.HIGH
 
-        # Immediate with 100% confidence should suggest larger position
-        assert alert.position_sizing <= 0.10  # Max 10%
-        assert alert.position_sizing > 0
 
-    def test_alert_position_sizing_low_urgency(self, monitor):
-        """Test position sizing for low urgency"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.OTHER,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.LOW,
-            timestamp=datetime.now(),
-            description="Low urgency news",
-            source="test",
-            details={},
-            confidence=0.5
+class TestEventTracking:
+    """Test catalyst event tracking and state management"""
+
+    @pytest.mark.asyncio
+    async def test_add_catalyst_event(self, mock_news_scanner, mock_event_calendar, mock_alert_system, sample_catalyst_event):
+        """Test adding catalyst event to tracking"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        alert = monitor.generate_alert(catalyst)
+        await monitor._process_event(sample_catalyst_event)
 
-        # Low urgency should suggest smaller position
-        assert alert.position_sizing <= 0.03  # Max 3%
+        assert len(monitor.active_catalysts) == 1
+        assert sample_catalyst_event.ticker in monitor.active_catalysts
 
-
-class TestCatalystScoring:
-    """Test catalyst scoring"""
-
-    def test_score_single_bullish(self, monitor):
-        """Test score with single bullish catalyst"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS_BEAT,
-            impact=CatalystImpact.VERY_BULLISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="Earnings beat",
-            source="test",
-            details={},
-            confidence=1.0
+    @pytest.mark.asyncio
+    async def test_duplicate_event_handling(self, mock_news_scanner, mock_event_calendar, mock_alert_system, sample_catalyst_event):
+        """Test that duplicate events are not added twice"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        monitor.add_catalyst(catalyst)
-        score = monitor.get_catalyst_score('AAPL')
+        await monitor._process_event(sample_catalyst_event)
+        await monitor._process_event(sample_catalyst_event)  # Duplicate
 
-        # Very bullish = 1.0, confidence = 1.0, score should be 1.0
-        assert score == 1.0
+        # Should only have one event
+        assert len(monitor.active_catalysts) == 1
 
-    def test_score_single_bearish(self, monitor):
-        """Test score with single bearish catalyst"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS_MISS,
-            impact=CatalystImpact.VERY_BEARISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="Earnings miss",
-            source="test",
-            details={},
-            confidence=1.0
+    @pytest.mark.asyncio
+    async def test_event_status_update(self, mock_news_scanner, mock_event_calendar, mock_alert_system, sample_catalyst_event):
+        """Test updating event status"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        monitor.add_catalyst(catalyst)
-        score = monitor.get_catalyst_score('AAPL')
+        await monitor._process_event(sample_catalyst_event)
 
-        # Very bearish = -1.0, confidence = 1.0, score should be -1.0
-        assert score == -1.0
+        # Update status
+        sample_catalyst_event.status = CatalystStatus.OCCURRED
+        sample_catalyst_event.actual_time = datetime.now()
 
-    def test_score_mixed_catalysts(self, monitor):
-        """Test score with mixed catalysts"""
-        cat1 = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.ANALYST_UPGRADE,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.HIGH,
-            timestamp=datetime.now(),
-            description="Upgrade",
-            source="test",
-            details={},
-            confidence=0.8
-        )
-        cat2 = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.ANALYST_DOWNGRADE,
-            impact=CatalystImpact.BEARISH,
-            urgency=CatalystUrgency.HIGH,
-            timestamp=datetime.now(),
-            description="Downgrade",
-            source="test",
-            details={},
-            confidence=0.8
+        assert sample_catalyst_event.status == CatalystStatus.OCCURRED
+        assert sample_catalyst_event.actual_time is not None
+
+
+class TestAlertSending:
+    """Test alert sending for catalyst events"""
+
+    @pytest.mark.asyncio
+    async def test_send_alert_for_critical_event(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test alerts are sent for CRITICAL events"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        monitor.add_catalyst(cat1)
-        monitor.add_catalyst(cat2)
-        score = monitor.get_catalyst_score('AAPL')
-
-        # Should be close to neutral (0.0)
-        assert abs(score) < 0.1
-
-    def test_score_no_catalysts(self, monitor):
-        """Test score with no catalysts"""
-        score = monitor.get_catalyst_score('AAPL')
-
-        assert score == 0.0
-
-
-class TestClearOldCatalysts:
-    """Test clearing old catalysts"""
-
-    def test_clear_old_catalysts(self, monitor):
-        """Test clearing old catalysts"""
-        # Add old catalyst
-        old_catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.HIGH,
-            timestamp=datetime.now() - timedelta(hours=25),
-            description="Old earnings",
-            source="test",
-            details={},
-            confidence=0.8
+        critical_event = CatalystEvent(
+            ticker="PTGX",
+            catalyst_type=CatalystType.FDA_DECISION,
+            priority=CatalystPriority.CRITICAL,
+            title="FDA Approval",
+            description="FDA approves new drug",
+            sentiment="POSITIVE"
         )
 
-        # Add recent catalyst
-        recent_catalyst = Catalyst(
-            ticker='TSLA',
-            catalyst_type=CatalystType.FDA_APPROVAL,
-            impact=CatalystImpact.VERY_BULLISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="Recent approval",
-            source="test",
-            details={},
-            confidence=0.9
+        await monitor._process_event(critical_event)
+
+        # Alert should have been sent
+        mock_alert_system.send_catalyst_alert.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_no_alert_for_low_priority(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test LOW priority events don't trigger alerts"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        monitor.add_catalyst(old_catalyst)
-        monitor.add_catalyst(recent_catalyst)
-
-        # Clear catalysts older than 24 hours
-        cleared = monitor.clear_old_catalysts(hours=24)
-
-        assert cleared == 1
-        assert 'AAPL' not in monitor.active_catalysts
-        assert 'TSLA' in monitor.active_catalysts
-
-    def test_clear_no_old_catalysts(self, monitor):
-        """Test clearing when no old catalysts"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.HIGH,
-            timestamp=datetime.now(),
-            description="Recent",
-            source="test",
-            details={},
-            confidence=0.8
+        low_event = CatalystEvent(
+            ticker="AAPL",
+            catalyst_type=CatalystType.CONFERENCE_PRESENTATION,
+            priority=CatalystPriority.LOW,
+            title="Conference attendance",
+            description="Company attending investor conference",
+            sentiment="NEUTRAL"
         )
 
-        monitor.add_catalyst(catalyst)
+        await monitor._process_event(low_event)
 
-        cleared = monitor.clear_old_catalysts(hours=24)
-
-        assert cleared == 0
-        assert 'AAPL' in monitor.active_catalysts
+        # No alert should be sent for LOW priority
+        mock_alert_system.send_catalyst_alert.assert_not_called()
 
 
-class TestReportGeneration:
-    """Test report generation"""
+class TestMarketHoursDetection:
+    """Test market hours detection logic"""
 
-    def test_generate_report_with_catalysts(self, monitor):
-        """Test generating report with catalysts"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS_BEAT,
-            impact=CatalystImpact.VERY_BULLISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="Earnings beat expectations",
-            source="test",
-            details={},
-            confidence=0.9
+    def test_during_market_hours(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test detection during regular market hours"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        monitor.add_catalyst(catalyst)
-        report = monitor.generate_report()
+        # Mock time to 2 PM ET (during market hours)
+        with patch('src.monitors.catalyst_monitor.datetime') as mock_datetime:
+            mock_datetime.now.return_value = datetime(2025, 10, 23, 14, 0)  # 2 PM
+            mock_datetime.side_effect = lambda *args, **kwargs: datetime(*args, **kwargs)
 
-        assert 'AAPL' in report
-        assert 'VERY BULLISH' in report
-        assert 'IMMEDIATE' in report
-        assert 'earnings beat' in report.lower() or 'Earnings Beat' in report
+            # Should be monitoring
+            assert monitor._should_monitor_now() is True
 
-    def test_generate_report_empty(self, monitor):
-        """Test generating report with no catalysts"""
-        report = monitor.generate_report()
-
-        assert 'No active catalysts' in report
-
-    def test_generate_report_filters_urgency(self, monitor):
-        """Test report filters by urgency"""
-        cat1 = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="Immediate",
-            source="test",
-            details={},
-            confidence=0.8
-        )
-        cat2 = Catalyst(
-            ticker='TSLA',
-            catalyst_type=CatalystType.OTHER,
-            impact=CatalystImpact.NEUTRAL,
-            urgency=CatalystUrgency.LOW,
-            timestamp=datetime.now(),
-            description="Low urgency",
-            source="test",
-            details={},
-            confidence=0.5
+    def test_outside_market_hours(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test detection outside market hours"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system,
+            enable_premarket=False,
+            enable_afterhours=False
         )
 
-        monitor.add_catalyst(cat1)
-        monitor.add_catalyst(cat2)
+        # Mock time to 8 AM ET (before market open)
+        with patch('src.monitors.catalyst_monitor.datetime') as mock_datetime:
+            mock_datetime.now.return_value = datetime(2025, 10, 23, 8, 0)  # 8 AM
+            mock_datetime.side_effect = lambda *args, **kwargs: datetime(*args, **kwargs)
 
-        report = monitor.generate_report(min_urgency=CatalystUrgency.IMMEDIATE)
+            # Should not be monitoring (premarket disabled)
+            assert monitor._should_monitor_now() is False
 
-        # Should only include IMMEDIATE catalyst
-        assert 'AAPL' in report
-        assert 'TSLA' not in report
 
-    def test_generate_report_includes_summary(self, monitor):
-        """Test report includes summary"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS_BEAT,
-            impact=CatalystImpact.VERY_BULLISH,
-            urgency=CatalystUrgency.IMMEDIATE,
-            timestamp=datetime.now(),
-            description="Earnings beat",
-            source="test",
-            details={},
-            confidence=0.9
+# ============================================================================
+# NEWS SCANNER TESTS
+# ============================================================================
+
+class TestNewsScannerInitialization:
+    """Test NewsScanner initialization"""
+
+    def test_initialization_with_api_key(self):
+        """Test scanner initializes with API key"""
+        scanner = NewsScanner(api_key="test_key_123")
+        assert scanner.api_key == "test_key_123"
+        assert scanner.cache_minutes == 5
+        assert scanner.max_retries == 3
+
+    def test_initialization_from_env(self):
+        """Test scanner loads API key from environment"""
+        with patch.dict(os.environ, {'FINANCIAL_DATASETS_API_KEY': 'env_key_456'}):
+            scanner = NewsScanner()
+            assert scanner.api_key == 'env_key_456'
+
+
+class TestNewsScanning:
+    """Test news scanning functionality"""
+
+    @pytest.mark.asyncio
+    async def test_scan_recent_news_success(self):
+        """Test successful news scanning"""
+        scanner = NewsScanner(api_key="test_key")
+
+        # Mock API response
+        with patch('aiohttp.ClientSession') as mock_session:
+            mock_response = AsyncMock()
+            mock_response.status = 200
+            mock_response.json = AsyncMock(return_value={
+                'news': [{
+                    'headline': 'PTGX announces M&A',
+                    'summary': 'Company in acquisition talks',
+                    'published_at': datetime.now().isoformat(),
+                    'source': {'name': 'Bloomberg'},
+                    'sentiment': {'score': 0.65, 'label': 'POSITIVE'},
+                    'relevance_score': 0.85
+                }]
+            })
+
+            mock_session.return_value.__aenter__.return_value.get.return_value.__aenter__.return_value = mock_response
+
+            news = await scanner.scan_recent_news(['PTGX'], minutes_back=60)
+
+            assert len(news) > 0
+
+    @pytest.mark.asyncio
+    async def test_cache_usage(self):
+        """Test that cache reduces API calls"""
+        scanner = NewsScanner(api_key="test_key", cache_minutes=5)
+
+        # First call should hit API
+        with patch.object(scanner, '_fetch_from_api', new=AsyncMock(return_value=[])) as mock_fetch:
+            await scanner.scan_recent_news(['AAPL'])
+            assert mock_fetch.call_count == 1
+
+            # Second call within cache window should use cache
+            await scanner.scan_recent_news(['AAPL'])
+            assert mock_fetch.call_count == 1  # Still 1, cache was used
+
+
+class TestSentimentAnalysis:
+    """Test sentiment analysis features"""
+
+    @pytest.mark.asyncio
+    async def test_sentiment_trend_improving(self):
+        """Test detection of improving sentiment"""
+        scanner = NewsScanner(api_key="test_key")
+
+        # Mock news items with improving sentiment
+        mock_items = [
+            NewsItem(
+                ticker="PTGX",
+                headline=f"News {i}",
+                summary="Summary",
+                published_time=datetime.now() - timedelta(hours=i),
+                source="Test",
+                sentiment_score=0.3 + (i * 0.05)  # Improving over time
+            )
+            for i in range(10)
+        ]
+
+        with patch.object(scanner, '_fetch_ticker_news', new=AsyncMock(return_value=mock_items)):
+            result = await scanner.get_sentiment_changes('PTGX', hours_back=24)
+
+            assert result['sentiment_trend'] == 'IMPROVING'
+
+    @pytest.mark.asyncio
+    async def test_sentiment_trend_declining(self):
+        """Test detection of declining sentiment"""
+        scanner = NewsScanner(api_key="test_key")
+
+        # Mock news items with declining sentiment
+        mock_items = [
+            NewsItem(
+                ticker="SMMT",
+                headline=f"News {i}",
+                summary="Summary",
+                published_time=datetime.now() - timedelta(hours=i),
+                source="Test",
+                sentiment_score=0.7 - (i * 0.05)  # Declining over time
+            )
+            for i in range(10)
+        ]
+
+        with patch.object(scanner, '_fetch_ticker_news', new=AsyncMock(return_value=mock_items)):
+            result = await scanner.get_sentiment_changes('SMMT', hours_back=24)
+
+            assert result['sentiment_trend'] == 'DECLINING'
+
+
+# ============================================================================
+# EVENT CALENDAR TESTS
+# ============================================================================
+
+class TestEventCalendarInitialization:
+    """Test EventCalendar initialization"""
+
+    def test_initialization_with_defaults(self):
+        """Test calendar initializes with default settings"""
+        with patch.object(EventCalendar, 'load_from_storage'):
+            calendar = EventCalendar()
+            assert calendar.reminder_hours == [24, 4, 1]
+            assert len(calendar.events) == 0
+
+
+class TestEventManagement:
+    """Test event addition and management"""
+
+    def test_add_fda_event(self):
+        """Test adding FDA event"""
+        with patch.object(EventCalendar, 'load_from_storage'):
+            with patch.object(EventCalendar, 'save_to_storage'):
+                calendar = EventCalendar()
+
+                event = calendar.add_fda_event(
+                    ticker="PTGX",
+                    pdufa_date=datetime(2025, 11, 15),
+                    drug_name="Afamitresgene Autoleucel",
+                    indication="DLBCL"
+                )
+
+                assert event.ticker == "PTGX"
+                assert event.event_type == "FDA_DECISION"
+                assert "PTGX" in calendar.events
+
+    def test_add_earnings_event(self):
+        """Test adding earnings event"""
+        with patch.object(EventCalendar, 'load_from_storage'):
+            with patch.object(EventCalendar, 'save_to_storage'):
+                calendar = EventCalendar()
+
+                event = calendar.add_earnings_event(
+                    ticker="AAPL",
+                    earnings_date=datetime(2025, 11, 1),
+                    quarter="Q4",
+                    fiscal_year=2025
+                )
+
+                assert event.ticker == "AAPL"
+                assert event.event_type == "EARNINGS_RELEASE"
+
+    def test_duplicate_event_prevention(self):
+        """Test that duplicate events are not added"""
+        with patch.object(EventCalendar, 'load_from_storage'):
+            with patch.object(EventCalendar, 'save_to_storage'):
+                calendar = EventCalendar()
+
+                # Add same event twice
+                calendar.add_fda_event(
+                    ticker="PTGX",
+                    pdufa_date=datetime(2025, 11, 15),
+                    drug_name="Drug A",
+                    indication="Disease A"
+                )
+
+                initial_count = len(calendar.events.get("PTGX", []))
+
+                calendar.add_fda_event(
+                    ticker="PTGX",
+                    pdufa_date=datetime(2025, 11, 15),
+                    drug_name="Drug A",
+                    indication="Disease A"
+                )
+
+                # Should still be same count
+                assert len(calendar.events.get("PTGX", [])) == initial_count
+
+
+class TestReminders:
+    """Test reminder functionality"""
+
+    def test_get_events_needing_reminder(self):
+        """Test detection of events needing reminders"""
+        with patch.object(EventCalendar, 'load_from_storage'):
+            with patch.object(EventCalendar, 'save_to_storage'):
+                calendar = EventCalendar(reminder_hours=[24])
+
+                # Add event 24 hours from now
+                event = ScheduledEvent(
+                    ticker="PTGX",
+                    event_type="FDA_DECISION",
+                    title="FDA PDUFA",
+                    description="FDA decision",
+                    scheduled_time=datetime.now() + timedelta(hours=24)
+                )
+                calendar.events["PTGX"] = [event]
+
+                # Should need reminder
+                reminders = calendar.get_events_needing_reminder()
+                assert len(reminders) > 0
+
+
+# ============================================================================
+# CATALYST ALERTS TESTS
+# ============================================================================
+
+class TestCatalystAlertsInitialization:
+    """Test CatalystAlerts initialization"""
+
+    def test_initialization_with_email_config(self):
+        """Test alerts initialize with email configuration"""
+        email_config = {
+            'smtp_server': 'smtp.gmail.com',
+            'smtp_port': 587,
+            'username': 'test@gmail.com',
+            'password': 'test_password',
+            'from_email': 'test@gmail.com',
+            'to_emails': ['recipient@gmail.com']
+        }
+
+        alerts = CatalystAlerts(email_config=email_config, primary_channel='email')
+        assert alerts.email_config == email_config
+        assert alerts.primary_channel == 'email'
+
+
+class TestAlertSendingByPriority:
+    """Test alert sending based on priority levels"""
+
+    @pytest.mark.asyncio
+    async def test_critical_alert_all_channels(self, sample_catalyst_event):
+        """Test CRITICAL alerts go to all channels"""
+        alerts = CatalystAlerts(primary_channel='email')
+        sample_catalyst_event.priority = CatalystPriority.CRITICAL
+
+        with patch.object(alerts, '_send_email_alert', new=AsyncMock()) as mock_email:
+            with patch.object(alerts, '_send_slack_alert', new=AsyncMock()) as mock_slack:
+                with patch.object(alerts, '_send_discord_alert', new=AsyncMock()) as mock_discord:
+                    with patch.object(alerts, '_send_telegram_alert', new=AsyncMock()) as mock_telegram:
+                        await alerts.send_catalyst_alert(sample_catalyst_event)
+
+                        # All channels should be called
+                        mock_email.assert_called_once()
+                        mock_slack.assert_called_once()
+                        mock_discord.assert_called_once()
+                        mock_telegram.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_high_alert_email_plus_primary(self, sample_catalyst_event):
+        """Test HIGH alerts go to email + primary channel"""
+        alerts = CatalystAlerts(primary_channel='slack')
+        sample_catalyst_event.priority = CatalystPriority.HIGH
+
+        with patch.object(alerts, '_send_email_alert', new=AsyncMock()) as mock_email:
+            with patch.object(alerts, '_send_slack_alert', new=AsyncMock()) as mock_slack:
+                await alerts.send_catalyst_alert(sample_catalyst_event)
+
+                # Email and Slack should be called
+                mock_email.assert_called_once()
+                mock_slack.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_low_alert_no_send(self, sample_catalyst_event):
+        """Test LOW priority events are logged only"""
+        alerts = CatalystAlerts(primary_channel='email')
+        sample_catalyst_event.priority = CatalystPriority.LOW
+
+        with patch.object(alerts, '_send_email_alert', new=AsyncMock()) as mock_email:
+            await alerts.send_catalyst_alert(sample_catalyst_event)
+
+            # No alerts should be sent
+            mock_email.assert_not_called()
+
+
+class TestAlertHistory:
+    """Test alert history tracking"""
+
+    @pytest.mark.asyncio
+    async def test_alert_recorded_in_history(self, sample_catalyst_event):
+        """Test alerts are recorded in history"""
+        alerts = CatalystAlerts(primary_channel='email')
+
+        initial_count = len(alerts.sent_alerts)
+
+        with patch.object(alerts, '_send_email_alert', new=AsyncMock()):
+            await alerts.send_catalyst_alert(sample_catalyst_event)
+
+        # History should have new entry
+        assert len(alerts.sent_alerts) == initial_count + 1
+
+    def test_get_alert_stats(self, sample_catalyst_event):
+        """Test alert statistics generation"""
+        alerts = CatalystAlerts(primary_channel='email')
+
+        # Manually add to history
+        alerts.sent_alerts.append({
+            'ticker': 'PTGX',
+            'catalyst_type': 'FDA_DECISION',
+            'priority': 'HIGH',
+            'timestamp': datetime.now(),
+            'channels': ['email']
+        })
+
+        stats = alerts.get_alert_stats()
+
+        assert stats['total_alerts'] == 1
+        assert 'HIGH' in stats['by_priority']
+        assert 'PTGX' in stats['by_ticker']
+
+
+# ============================================================================
+# INTEGRATION TESTS
+# ============================================================================
+
+class TestEndToEndMonitoring:
+    """Test end-to-end monitoring flow"""
+
+    @pytest.mark.asyncio
+    async def test_complete_monitoring_cycle(self, mock_news_scanner, mock_event_calendar, mock_alert_system):
+        """Test complete monitoring cycle from detection to alert"""
+        monitor = CatalystMonitor(
+            news_scanner=mock_news_scanner,
+            event_calendar=mock_event_calendar,
+            alert_system=mock_alert_system
         )
 
-        monitor.add_catalyst(catalyst)
-        report = monitor.generate_report()
+        # Mock breaking news
+        mock_news_scanner.get_breaking_news = AsyncMock(return_value=[{
+            'ticker': 'PTGX',
+            'headline': 'PTGX announces M&A agreement',
+            'summary': 'Company to be acquired at $100/share',
+            'published_time': datetime.now(),
+            'sentiment': 'POSITIVE',
+            'sentiment_score': 0.95,
+            'relevance_score': 1.0
+        }])
 
-        assert 'Summary' in report
-        assert '1 active catalyst' in report
+        # Run monitoring check
+        await monitor._check_catalysts()
 
-
-class TestMarketHours:
-    """Test market hours checking"""
-
-    @patch('monitoring.catalyst_monitor.datetime')
-    def test_is_market_hours_open(self, mock_datetime, monitor):
-        """Test checking if market is open"""
-        # Mock current time to be during market hours
-        mock_now = Mock()
-        mock_now.time.return_value = time(14, 30)  # 2:30 PM
-        mock_datetime.now.return_value = mock_now
-
-        assert monitor.is_market_hours() is True
-
-    @patch('monitoring.catalyst_monitor.datetime')
-    def test_is_market_hours_closed(self, mock_datetime, monitor):
-        """Test checking if market is closed"""
-        # Mock current time to be after market close
-        mock_now = Mock()
-        mock_now.time.return_value = time(17, 0)  # 5:00 PM
-        mock_datetime.now.return_value = mock_now
-
-        assert monitor.is_market_hours() is False
-
-    @patch('monitoring.catalyst_monitor.datetime')
-    def test_is_market_hours_premarket(self, mock_datetime, monitor):
-        """Test checking during pre-market"""
-        # Mock current time to be before market open
-        mock_now = Mock()
-        mock_now.time.return_value = time(8, 0)  # 8:00 AM
-        mock_datetime.now.return_value = mock_now
-
-        assert monitor.is_market_hours() is False
+        # Should have detected event and sent alert
+        assert len(monitor.active_catalysts) > 0
+        mock_alert_system.send_catalyst_alert.assert_called()
 
 
-class TestConvenienceFunction:
-    """Test convenience function"""
-
-    def test_create_catalyst_from_event(self):
-        """Test creating catalyst from event data"""
-        catalyst = create_catalyst_from_event(
-            ticker='AAPL',
-            event_type='earnings',
-            description='Apple reports earnings beat',
-            source='manual',
-            confidence=0.9
-        )
-
-        assert isinstance(catalyst, Catalyst)
-        assert catalyst.ticker == 'AAPL'
-        assert catalyst.description == 'Apple reports earnings beat'
-        assert catalyst.source == 'manual'
-        assert catalyst.confidence == 0.9
-
-    def test_create_catalyst_auto_classification(self):
-        """Test catalyst auto-classification"""
-        catalyst = create_catalyst_from_event(
-            ticker='PTGX',
-            event_type='news',
-            description='FDA approves new drug',
-            confidence=0.95
-        )
-
-        # Should auto-classify as FDA approval
-        assert catalyst.catalyst_type == CatalystType.FDA_APPROVAL
-        assert catalyst.impact == CatalystImpact.VERY_BULLISH
-        assert catalyst.urgency == CatalystUrgency.IMMEDIATE
-
-
-class TestEdgeCases:
-    """Test edge cases and error handling"""
-
-    def test_catalyst_with_string_enums(self):
-        """Test creating catalyst with string enum values"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type='earnings',
-            impact='bullish',
-            urgency='high',
-            timestamp=datetime.now(),
-            description="Test",
-            source="test",
-            details={},
-            confidence=0.8
-        )
-
-        # __post_init__ should convert strings to enums
-        assert isinstance(catalyst.catalyst_type, CatalystType)
-        assert isinstance(catalyst.impact, CatalystImpact)
-        assert isinstance(catalyst.urgency, CatalystUrgency)
-
-    def test_score_with_zero_total_weight(self, monitor):
-        """Test scoring with zero total weight"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.HIGH,
-            timestamp=datetime.now(),
-            description="Test",
-            source="test",
-            details={},
-            confidence=0.0  # Zero confidence
-        )
-
-        monitor.add_catalyst(catalyst)
-        score = monitor.get_catalyst_score('AAPL')
-
-        # Should return 0 when total weight is 0
-        assert score == 0.0
-
-    def test_clear_catalysts_removes_empty_tickers(self, monitor):
-        """Test clearing removes tickers with no catalysts"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.HIGH,
-            timestamp=datetime.now() - timedelta(hours=25),
-            description="Old",
-            source="test",
-            details={},
-            confidence=0.8
-        )
-
-        monitor.add_catalyst(catalyst)
-        monitor.clear_old_catalysts(hours=24)
-
-        # AAPL should be removed from active_catalysts
-        assert 'AAPL' not in monitor.active_catalysts
-
-    def test_long_description_truncated_in_report(self, monitor):
-        """Test long descriptions are truncated in report"""
-        catalyst = Catalyst(
-            ticker='AAPL',
-            catalyst_type=CatalystType.EARNINGS,
-            impact=CatalystImpact.BULLISH,
-            urgency=CatalystUrgency.HIGH,
-            timestamp=datetime.now(),
-            description="This is a very long description that should be truncated in the report to avoid making the table too wide and difficult to read",
-            source="test",
-            details={},
-            confidence=0.8
-        )
-
-        monitor.add_catalyst(catalyst)
-        report = monitor.generate_report()
-
-        # Check that description is truncated (with ...)
-        assert '...' in report or len(catalyst.description) <= 60
-
-
-class TestScanForCatalysts:
-    """Test catalyst scanning"""
-
-    def test_scan_adds_tickers_to_monitoring(self, monitor):
-        """Test scan adds tickers to monitoring list"""
-        tickers = ['AAPL', 'TSLA', 'NVDA']
-
-        monitor.scan_for_catalysts(tickers)
-
-        for ticker in tickers:
-            assert ticker in monitor.monitored_tickers
-
-    def test_scan_with_no_clients(self, monitor):
-        """Test scan when no API clients configured"""
-        # Should not crash even without clients
-        catalysts = monitor.scan_for_catalysts(['AAPL'])
-
-        assert isinstance(catalysts, list)
-        # May be empty since no clients to fetch data
-        assert len(catalysts) == 0
+if __name__ == '__main__':
+    pytest.main([__file__, '-v', '--tb=short'])

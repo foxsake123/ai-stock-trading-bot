@@ -385,7 +385,7 @@ class TestReportGeneration:
 
         report = insider_monitor.generate_summary_report(transactions)
 
-        assert '[BUY] **BULLISH**' in report
+        assert '[BULLISH] (2 buys vs 0 sells' in report
         assert '2 buys vs 0 sells' in report
 
     def test_generate_summary_report_net_bearish(self, insider_monitor):
@@ -421,7 +421,7 @@ class TestReportGeneration:
 
         report = insider_monitor.generate_summary_report(transactions)
 
-        assert '[SELL] **BEARISH**' in report
+        assert '[BEARISH] (2 sells vs 0 buys' in report
         assert '2 sells vs 0 buys' in report
 
 class TestConvenienceFunction:

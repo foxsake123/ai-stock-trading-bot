@@ -207,11 +207,11 @@ class InsiderMonitor:
             report += "|------|---------|-------|------|--------|-------|--------|\n"
 
             for t in trans_list:
-                signal_emoji = "[BUY]" if t.signal == "BULLISH" else "[SELL]" if t.signal == "BEARISH" else "[HOLD]"
+                signal_indicator = "[BULL]" if t.signal == "BULLISH" else "[BEAR]" if t.signal == "BEARISH" else "[NEUT]"
                 report += f"| {t.filing_date.strftime('%m/%d')} | "
                 report += f"{t.insider_name[:20]} | {t.title[:15]} | "
                 report += f"**{t.transaction_type}** | {t.shares:,} | "
-                report += f"${t.value:,.0f} | {signal_emoji} {t.signal} |\n"
+                report += f"${t.value:,.0f} | {signal_indicator} {t.signal} |\n"
 
             # Summary for ticker
             bullish_count = sum(1 for t in trans_list if t.signal == 'BULLISH')
@@ -220,11 +220,11 @@ class InsiderMonitor:
 
             report += f"\n**Net Signal:** "
             if bullish_count > bearish_count:
-                report += f"[BUY] **BULLISH** ({bullish_count} buys vs {bearish_count} sells, "
+                report += f"[BULLISH] ({bullish_count} buys vs {bearish_count} sells, "
             elif bearish_count > bullish_count:
-                report += f"[SELL] **BEARISH** ({bearish_count} sells vs {bullish_count} buys, "
+                report += f"[BEARISH] ({bearish_count} sells vs {bullish_count} buys, "
             else:
-                report += f"[HOLD] **MIXED** ({bullish_count} buys, {bearish_count} sells, "
+                report += f"[MIXED] ({bullish_count} buys, {bearish_count} sells, "
 
             report += f"Net: ${net_value:,.0f})\n\n"
 
