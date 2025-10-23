@@ -151,9 +151,11 @@ Both bots are competing head-to-head:
 
 ### Research Engine
 - **Model:** Claude Opus 4.1 (`claude-opus-4-20250514`)
-- **Mode:** Extended Thinking with 32,000 token thinking budget
+- **Mode:** Extended Thinking with 16,000 token thinking budget
+- **Max Output:** 32,000 tokens (Opus 4.1 limit)
+- **Streaming:** Required for long operations (>10 minutes)
 - **Generation Time:** 3-5 minutes per bot (deep research)
-- **Cost:** ~$0.45 per report (higher quality than Sonnet 4)
+- **Cost:** ~$0.45-0.60 per report (higher quality than Sonnet 4)
 
 ### System Architecture
 - Both strategies implemented in `scripts/automation/claude_research_generator.py`
