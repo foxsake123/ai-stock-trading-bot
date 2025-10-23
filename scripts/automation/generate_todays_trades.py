@@ -12,15 +12,15 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from agents.fundamental_analyst import FundamentalAnalyst
-from agents.technical_analyst import TechnicalAnalyst
-from agents.news_analyst import NewsAnalyst
-from agents.sentiment_analyst import SentimentAnalyst
-from agents.bull_agent import BullAgent
-from agents.bear_agent import BearAgent
-from agents.risk_manager import RiskManager
-from agents.catalyst_hunter import CatalystHunter
-from communication.coordinator import Coordinator
+from src.agents.fundamental_analyst import FundamentalAnalyst
+from src.agents.technical_analyst import TechnicalAnalyst
+from src.agents.news_analyst import NewsAnalyst
+from src.agents.sentiment_analyst import SentimentAnalyst
+from src.agents.bull_agent import BullAgent
+from src.agents.bear_agent import BearAgent
+from src.agents.risk_manager import RiskManager
+from src.agents.catalyst_hunter import CatalystHunter
+from src.agents.communication.coordinator import Coordinator
 
 class AutomatedTradeGenerator:
     def __init__(self):

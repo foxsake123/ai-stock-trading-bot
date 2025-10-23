@@ -39,9 +39,9 @@ def test_chatgpt_research():
 def test_multi_agent_system():
     """Test multi-agent imports"""
     try:
-        from agents.alternative_data_agent import AlternativeDataAgent
-        from agents.fundamental_analyst import FundamentalAnalystAgent
-        from agents.technical_analyst import TechnicalAnalystAgent
+        from src.agents.alternative_data_agent import AlternativeDataAgent
+        from src.agents.fundamental_analyst import FundamentalAnalystAgent
+        from src.agents.technical_analyst import TechnicalAnalystAgent
         print("  All agents importable")
         return True
     except ImportError as e:

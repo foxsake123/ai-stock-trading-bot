@@ -2,7 +2,7 @@
 
 import pytest
 from datetime import datetime
-from agents.debate_system import (
+from src.agents.debate_system import (
     DebateSystem,
     Argument,
     DebateResult,

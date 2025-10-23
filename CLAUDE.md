@@ -2521,3 +2521,4 @@ python web_dashboard.py                    # Start dashboard
 *Version: 2.0.0*
 *Last Updated: October 14, 2025*
 - update claude as needed
+- no unicode or emojis, please go ahead and execute

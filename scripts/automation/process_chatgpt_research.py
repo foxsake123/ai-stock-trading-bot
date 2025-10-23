@@ -11,14 +11,14 @@ import pandas as pd
 import sys
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from agents.fundamental_analyst import FundamentalAnalystAgent
-from agents.technical_analyst import TechnicalAnalystAgent
-from agents.sentiment_analyst import SentimentAnalystAgent
-from agents.news_analyst import NewsAnalystAgent
-from agents.risk_manager import RiskManagerAgent
-from agents.bull_researcher import BullResearcherAgent
-from agents.bear_researcher import BearResearcherAgent
-from agents.alternative_data_agent import AlternativeDataAgent
+from src.agents.fundamental_analyst import FundamentalAnalystAgent
+from src.agents.technical_analyst import TechnicalAnalystAgent
+from src.agents.sentiment_analyst import SentimentAnalystAgent
+from src.agents.news_analyst import NewsAnalystAgent
+from src.agents.risk_manager import RiskManagerAgent
+from src.agents.bull_researcher import BullResearcherAgent
+from src.agents.bear_researcher import BearResearcherAgent
+from src.agents.alternative_data_agent import AlternativeDataAgent
 
 class ChatGPTResearchProcessor:
     """Process ChatGPT research through multi-agent consensus"""

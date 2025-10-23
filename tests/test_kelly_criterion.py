@@ -4,7 +4,7 @@ Comprehensive tests for Kelly Criterion position sizing
 
 import pytest
 from datetime import datetime
-from risk.kelly_criterion import (
+from src.risk.kelly_criterion import (
     KellyPositionSizer,
     KellyParameters,
     PositionSizeRecommendation,

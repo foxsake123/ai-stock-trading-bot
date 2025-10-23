@@ -31,16 +31,16 @@ from unittest.mock import Mock, patch, AsyncMock, mock_open
 from src.integration.phase2_integration import Phase2IntegrationEngine, Phase2Config
 
 # Core components
-from agents.fundamental_analyst import FundamentalAnalyst
-from agents.technical_analyst import TechnicalAnalyst
-from agents.news_analyst import NewsAnalyst
-from agents.sentiment_analyst import SentimentAnalyst
-from agents.bull_researcher import BullResearcher
-from agents.bear_researcher import BearResearcher
-from agents.risk_manager import RiskManager
+from src.agents.fundamental_analyst import FundamentalAnalyst
+from src.agents.technical_analyst import TechnicalAnalyst
+from src.agents.news_analyst import NewsAnalyst
+from src.agents.sentiment_analyst import SentimentAnalyst
+from src.agents.bull_researcher import BullResearcher
+from src.agents.bear_researcher import BearResearcher
+from src.agents.risk_manager import RiskManager
 
 # Alternative data
-from agents.alternative_data_agent import AlternativeDataAgent
+from src.agents.alternative_data_agent import AlternativeDataAgent
 
 # Debate system
 from debate.debate_coordinator import DebateCoordinator

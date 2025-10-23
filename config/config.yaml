@@ -1,0 +1,252 @@
+# AI Trading Bot Configuration
+# ============================================================================
+# Phase 2 Enhancements Configuration
+# ============================================================================
+
+# Phase 2 Feature Flags and Settings
+phase2:
+  # ==========================================
+  # Feature Toggles
+  # ==========================================
+
+  # Enable/disable each Phase 2 component
+  enable_alternative_data: true     # Insider trades + Google Trends + Options Flow
+  enable_debate_system: true        # Bull/Bear debate mechanism
+  enable_catalyst_monitor: true     # Real-time catalyst tracking
+  enable_options_flow: true         # Options flow analysis
+
+  # ==========================================
+  # Alternative Data Settings
+  # ==========================================
+
+  # Weight of alternative data in final decision (0-1)
+  alt_data_weight: 0.3
+
+  # Insider trading lookback period (days)
+  insider_lookback_days: 90
+
+  # Google Trends lookback period (days)
+  trends_lookback_days: 30
+
+  # ==========================================
+  # Debate System Settings
+  # ==========================================
+
+  # Maximum time for debate (seconds)
+  debate_timeout_seconds: 30
+
+  # Minimum confidence to accept debate result
+  debate_min_confidence: 0.55
+
+  # Run debates for all trades (false = only for medium-confidence trades)
+  use_debates_for_all: false
+
+  # Anthropic API settings
+  anthropic_api_key_env: "ANTHROPIC_API_KEY"  # Environment variable name
+  anthropic_model: "claude-sonnet-4-20250514"
+  anthropic_max_tokens: 500
+
+  # ==========================================
+  # Catalyst Monitor Settings
+  # ==========================================
+
+  # How often to check for catalysts (seconds)
+  catalyst_check_interval: 300  # 5 minutes
+
+  # Alert channels (email, slack, discord, telegram)
+  catalyst_alert_channels:
+    - telegram
+    - email
+
+  # Primary alert channel for MEDIUM priority
+  catalyst_primary_channel: telegram
+
+  # Only monitor during market hours
+  monitor_market_hours_only: true
+
+  # Market hours (US Eastern Time)
+  market_open_hour: 9    # 9:30 AM (will add 30 min in code)
+  market_close_hour: 16  # 4:00 PM
+
+  # Enable pre-market monitoring
+  enable_premarket: true
+
+  # Enable after-hours monitoring
+  enable_afterhours: true
+
+  # ==========================================
+  # Options Flow Settings
+  # ==========================================
+
+  # How far back to analyze options flow (minutes)
+  options_lookback_minutes: 60
+
+  # Minimum confidence to use options signal
+  options_min_confidence: 0.6
+
+  # Weight of options flow in alternative data composite
+  options_weight: 0.4
+
+  # Large trade threshold (USD premium)
+  large_trade_threshold: 100000  # $100k
+
+  # Unusual volume multiplier (vs average)
+  unusual_volume_multiplier: 3.0  # 3x average
+
+  # ==========================================
+  # Backwards Compatibility
+  # ==========================================
+
+  # Fallback to simple voting if Phase 2 fails
+  fallback_to_simple_voting: true
+
+  # Preserve existing report format
+  preserve_existing_reports: true
+
+  # ==========================================
+  # Logging
+  # ==========================================
+
+  # Enable verbose logging for Phase 2
+  verbose_logging: false
+
+  # Log file location
+  log_file: "logs/phase2_integration.log"
+
+
+# ============================================================================
+# API Keys (loaded from environment variables)
+# ============================================================================
+
+api_keys:
+  # Alpaca Trading
+  alpaca_api_key_env: "ALPACA_API_KEY"
+  alpaca_secret_key_env: "ALPACA_SECRET_KEY"
+  alpaca_base_url_env: "ALPACA_BASE_URL"
+
+  # Anthropic Claude (for debates)
+  anthropic_api_key_env: "ANTHROPIC_API_KEY"
+
+  # Financial Datasets (for options flow)
+  financial_datasets_api_key_env: "FINANCIAL_DATASETS_API_KEY"
+
+  # Notification channels
+  email_username_env: "EMAIL_USERNAME"
+  email_password_env: "EMAIL_PASSWORD"
+  telegram_bot_token_env: "TELEGRAM_BOT_TOKEN"
+  telegram_chat_id_env: "TELEGRAM_CHAT_ID"
+  slack_webhook_env: "SLACK_WEBHOOK_URL"
+  discord_webhook_env: "DISCORD_WEBHOOK_URL"
+
+
+# ============================================================================
+# Trading Strategy Settings
+# ============================================================================
+
+trading:
+  # Portfolio allocation
+  max_position_size: 0.10  # 10% per position
+  max_portfolio_exposure: 0.60  # 60% total deployed
+
+  # Risk management
+  stop_loss_pct: 0.08  # 8% stop loss
+  take_profit_pct: 0.20  # 20% take profit
+
+  # Confidence thresholds
+  min_confidence_to_trade: 0.60  # 60% minimum
+  high_confidence_threshold: 0.75  # 75% = high conviction
+
+  # Position sizing based on confidence
+  use_confidence_sizing: true
+
+  # Use Kelly Criterion for sizing
+  use_kelly_criterion: false  # Set to true if Phase 3C implemented
+
+
+# ============================================================================
+# Bot Strategies
+# ============================================================================
+
+bots:
+  # DEE-BOT (Beta-Neutral)
+  dee_bot:
+    enabled: true
+    target_beta: 0.5
+    max_positions: 15
+    rebalance_frequency_days: 7
+
+  # SHORGAN-BOT (Catalyst)
+  shorgan_bot:
+    enabled: true
+    catalyst_types:
+      - FDA_DECISION
+      - EARNINGS_RELEASE
+      - M&A_ANNOUNCEMENT
+      - PRODUCT_LAUNCH
+    max_positions: 20
+    holding_period_days: 30
+
+
+# ============================================================================
+# Reporting
+# ============================================================================
+
+reports:
+  # Report generation
+  generate_daily_report: true
+  report_output_dir: "reports/premarket"
+
+  # Include Phase 2 sections
+  include_alternative_data: true
+  include_debate_results: true
+  include_options_flow: true
+  include_catalyst_calendar: true
+
+  # Report format
+  format: "markdown"  # markdown, html, pdf
+
+  # Email reports
+  email_reports: true
+  email_recipients_env: "EMAIL_TO"
+
+  # Telegram reports
+  telegram_reports: true
+
+
+# ============================================================================
+# Monitoring & Alerts
+# ============================================================================
+
+monitoring:
+  # Health checks
+  enable_health_monitoring: true
+  health_check_interval: 3600  # 1 hour
+
+  # Performance tracking
+  track_signal_accuracy: true
+  accuracy_lookback_days: 30
+
+  # Alert thresholds
+  alert_on_large_loss: true
+  large_loss_threshold: 0.10  # 10% loss
+
+  alert_on_drawdown: true
+  drawdown_threshold: 0.15  # 15% drawdown
+
+
+# ============================================================================
+# Development & Testing
+# ============================================================================
+
+development:
+  # Testing mode (paper trading)
+  paper_trading: true
+
+  # Test with smaller position sizes
+  test_position_multiplier: 0.1  # 10% of normal size
+
+  # Enable integration tests on startup
+  run_integration_tests: true
+
+  # Mock external APIs for testing
+  mock_apis: false

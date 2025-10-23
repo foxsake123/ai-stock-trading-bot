@@ -5,7 +5,7 @@ Tests the abstract base agent functionality
 
 import pytest
 from datetime import datetime
-from agents.base_agent import BaseAgent
+from src.agents.base_agent import BaseAgent
 
 
 class ConcreteAgent(BaseAgent):

@@ -15,7 +15,7 @@ sys.path.append(str(Path(__file__).parent))
 from data_sources.alternative_data_aggregator import AlternativeDataAggregator, RealTimeAlertSystem
 from data_sources.reddit_wsb_scanner import RedditWSBScanner
 from data_sources.options_flow_tracker import OptionsFlowTracker, OptionsAlertSystem
-from agents.alternative_data_agent import AlternativeDataAgent, EnhancedMultiAgentSystem
+from src.agents.alternative_data_agent import AlternativeDataAgent, EnhancedMultiAgentSystem
 
 # Telegram configuration (from your existing setup)
 TELEGRAM_TOKEN = "8093845586:AAEqytNDQ_dVzVp6ZbDyveMTx7MZMtG6N0c"
