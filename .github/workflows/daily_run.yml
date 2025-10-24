@@ -1,0 +1,500 @@
+# AI Trading Bot - Daily Execution Workflow
+# Last Updated: 2025-10-23
+# Runs daily pipeline automatically Mon-Fri at 6:00 AM ET
+
+name: Daily Trading Pipeline
+
+# ============================================================================
+# TRIGGERS
+# ============================================================================
+
+on:
+  # Scheduled execution: Mon-Fri at 6:00 AM ET (10:00 AM UTC during EST, 11:00 AM UTC during EDT)
+  schedule:
+    # Winter (EST - Nov to Mar): 6 AM ET = 11:00 AM UTC
+    - cron: '0 11 * * 1-5'  # Mon-Fri 11:00 UTC (6 AM EST)
+    # Summer (EDT - Mar to Nov): 6 AM ET = 10:00 AM UTC
+    - cron: '0 10 * * 1-5'  # Mon-Fri 10:00 UTC (6 AM EDT)
+
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      skip_market_check:
+        description: 'Skip market hours check (for testing)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      test_mode:
+        description: 'Run in test mode (no real trades)'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+# ============================================================================
+# ENVIRONMENT VARIABLES
+# ============================================================================
+
+env:
+  PYTHON_VERSION: '3.11'
+  CACHE_KEY_PREFIX: 'trading-bot-v1'
+  TZ: 'America/New_York'
+
+# ============================================================================
+# PERMISSIONS
+# ============================================================================
+
+permissions:
+  contents: read
+  actions: write
+
+# ============================================================================
+# JOBS
+# ============================================================================
+
+jobs:
+
+  # --------------------------------------------------------------------------
+  # Pre-Flight Checks
+  # --------------------------------------------------------------------------
+  pre_flight:
+    name: Pre-Flight Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    outputs:
+      should_run: ${{ steps.market_check.outputs.should_run }}
+      reason: ${{ steps.market_check.outputs.reason }}
+      market_date: ${{ steps.market_check.outputs.market_date }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install minimal dependencies
+        run: |
+          pip install --quiet pytz pandas
+
+      - name: Check if market is open
+        id: market_check
+        continue-on-error: false
+        run: |
+          python - <<'EOF'
+          import os
+          import sys
+          from datetime import datetime
+          import pytz
+
+          # Get current time in ET
+          et_tz = pytz.timezone('America/New_York')
+          now = datetime.now(et_tz)
+
+          # Manual override for testing
+          skip_check = "${{ github.event.inputs.skip_market_check }}" == "true"
+
+          if skip_check:
+              print("should_run=true", file=open(os.environ['GITHUB_OUTPUT'], 'a'))
+              print("reason=Manual override - market check skipped", file=open(os.environ['GITHUB_OUTPUT'], 'a'))
+              print("market_date=" + now.strftime('%Y-%m-%d'), file=open(os.environ['GITHUB_OUTPUT'], 'a'))
+              sys.exit(0)
+
+          # Check if weekday
+          if now.weekday() >= 5:  # Saturday=5, Sunday=6
+              print("should_run=false", file=open(os.environ['GITHUB_OUTPUT'], 'a'))
+              print("reason=Weekend - market closed", file=open(os.environ['GITHUB_OUTPUT'], 'a'))
+              sys.exit(0)
+
+          # US Market Holidays 2025
+          holidays = [
+              "2025-01-01", "2025-01-20", "2025-02-17",
+              "2025-04-18", "2025-05-26", "2025-07-03",
+              "2025-09-01", "2025-11-27", "2025-12-25"
+          ]
+
+          date_str = now.strftime('%Y-%m-%d')
+          if date_str in holidays:
+              print("should_run=false", file=open(os.environ['GITHUB_OUTPUT'], 'a'))
+              print("reason=Market holiday", file=open(os.environ['GITHUB_OUTPUT'], 'a'))
+              sys.exit(0)
+
+          # Pipeline should run
+          print("should_run=true", file=open(os.environ['GITHUB_OUTPUT'], 'a'))
+          print("reason=Market day - pipeline authorized", file=open(os.environ['GITHUB_OUTPUT'], 'a'))
+          print("market_date=" + date_str, file=open(os.environ['GITHUB_OUTPUT'], 'a'))
+          EOF
+
+      - name: Market Check Result
+        run: |
+          echo "Should Run: ${{ steps.market_check.outputs.should_run }}"
+          echo "Reason: ${{ steps.market_check.outputs.reason }}"
+          echo "Market Date: ${{ steps.market_check.outputs.market_date }}"
+
+  # --------------------------------------------------------------------------
+  # Run Daily Pipeline
+  # --------------------------------------------------------------------------
+  run_pipeline:
+    name: Execute Daily Pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: pre_flight
+
+    # Only run if market check passed
+    if: needs.pre_flight.outputs.should_run == 'true'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: 'requirements.txt'
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            venv
+          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+
+      - name: Create necessary directories
+        run: |
+          mkdir -p data/{cache,historical,watchlists,positions,state}
+          mkdir -p logs/{app,trades,errors,performance}
+          mkdir -p reports/{daily,weekly,monthly}
+          mkdir -p configs
+
+      - name: Configure environment
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TEST_MODE: ${{ github.event.inputs.test_mode || 'true' }}
+        run: |
+          # Create .env file
+          cat > configs/.env <<EOF
+          ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+          ALPACA_API_KEY=${ALPACA_API_KEY}
+          ALPACA_SECRET_KEY=${ALPACA_SECRET_KEY}
+          TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+          TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+
+          # Trading Configuration
+          TRADING_ENV=production
+          TEST_MODE=${TEST_MODE}
+
+          # Timezone
+          TZ=America/New_York
+
+          # Logging
+          LOG_LEVEL=INFO
+          EOF
+
+          echo "Environment configured for ${{ needs.pre_flight.outputs.market_date }}"
+
+      - name: Run daily pipeline
+        id: pipeline
+        continue-on-error: true
+        timeout-minutes: 40
+        run: |
+          echo "Starting daily pipeline for ${{ needs.pre_flight.outputs.market_date }}..."
+          python scripts/daily_pipeline.py 2>&1 | tee logs/app/github_actions_run.log
+
+          # Capture exit code
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+
+      - name: Check pipeline status
+        id: status_check
+        run: |
+          if [ "${{ steps.pipeline.outputs.exit_code }}" == "0" ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=Daily pipeline completed successfully" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "message=Daily pipeline failed with exit code ${{ steps.pipeline.outputs.exit_code }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Collect metrics
+        if: always()
+        id: metrics
+        continue-on-error: true
+        run: |
+          # Extract metrics from pipeline output
+          if [ -f "data/state/last_run_metrics.json" ]; then
+            echo "Metrics available:"
+            cat data/state/last_run_metrics.json
+
+            # Parse key metrics
+            TOTAL_TIME=$(jq -r '.total_time_seconds // "N/A"' data/state/last_run_metrics.json)
+            PHASES=$(jq -r '.phases_completed // 0' data/state/last_run_metrics.json)
+            ERRORS=$(jq -r '.errors // 0' data/state/last_run_metrics.json)
+
+            echo "total_time=${TOTAL_TIME}" >> $GITHUB_OUTPUT
+            echo "phases_completed=${PHASES}" >> $GITHUB_OUTPUT
+            echo "error_count=${ERRORS}" >> $GITHUB_OUTPUT
+          else
+            echo "No metrics file found"
+            echo "total_time=N/A" >> $GITHUB_OUTPUT
+            echo "phases_completed=0" >> $GITHUB_OUTPUT
+            echo "error_count=unknown" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload generated reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trading-reports-${{ needs.pre_flight.outputs.market_date }}
+          path: |
+            reports/**/*.md
+            reports/**/*.json
+            reports/**/*.pdf
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-logs-${{ needs.pre_flight.outputs.market_date }}
+          path: |
+            logs/app/*.log
+            logs/errors/*.log
+          retention-days: 7
+          if-no-files-found: warn
+
+      - name: Upload metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metrics-${{ needs.pre_flight.outputs.market_date }}
+          path: |
+            data/state/last_run_metrics.json
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Send Slack notification on failure
+        if: failure() && steps.pipeline.outputs.exit_code != '0'
+        continue-on-error: true
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          curl -X POST $SLACK_WEBHOOK \
+            -H 'Content-Type: application/json' \
+            -d @- <<EOF
+          {
+            "text": "🚨 *Trading Pipeline Failed*",
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "🚨 Daily Pipeline Failure"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Date:*\n${{ needs.pre_flight.outputs.market_date }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Status:*\nFailed ❌"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Exit Code:*\n${{ steps.pipeline.outputs.exit_code }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Duration:*\n${{ steps.metrics.outputs.total_time }}s"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Workflow:* <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Logs>"
+                }
+              }
+            ]
+          }
+          EOF
+
+      - name: Send Telegram notification on failure
+        if: failure() && steps.pipeline.outputs.exit_code != '0'
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          MESSAGE="🚨 *Daily Pipeline Failed*\n\n"
+          MESSAGE+="Date: ${{ needs.pre_flight.outputs.market_date }}\n"
+          MESSAGE+="Exit Code: ${{ steps.pipeline.outputs.exit_code }}\n"
+          MESSAGE+="Duration: ${{ steps.metrics.outputs.total_time }}s\n"
+          MESSAGE+="Phases Completed: ${{ steps.metrics.outputs.phases_completed }}/7\n\n"
+          MESSAGE+="[View Logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d text="${MESSAGE}" \
+            -d parse_mode="Markdown"
+
+  # --------------------------------------------------------------------------
+  # Summary and Cleanup
+  # --------------------------------------------------------------------------
+  summary:
+    name: Workflow Summary
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [pre_flight, run_pipeline]
+    if: always()
+
+    steps:
+      - name: Generate summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY <<EOF
+          # 📊 Daily Trading Pipeline Summary
+
+          **Date:** ${{ needs.pre_flight.outputs.market_date }}
+          **Trigger:** ${{ github.event_name }}
+          **Workflow:** [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          ## Market Check
+          - **Should Run:** ${{ needs.pre_flight.outputs.should_run }}
+          - **Reason:** ${{ needs.pre_flight.outputs.reason }}
+
+          ## Pipeline Execution
+          EOF
+
+          if [ "${{ needs.pre_flight.outputs.should_run }}" == "true" ]; then
+            cat >> $GITHUB_STEP_SUMMARY <<EOF
+          - **Status:** ${{ needs.run_pipeline.result }}
+          - **Duration:** ${{ needs.run_pipeline.outputs.total_time }}s
+          - **Phases Completed:** ${{ needs.run_pipeline.outputs.phases_completed }}/7
+          - **Errors:** ${{ needs.run_pipeline.outputs.error_count }}
+
+          ## Artifacts
+          - [Trading Reports](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)
+          - [Pipeline Logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)
+          - [Metrics Data](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)
+          EOF
+          else
+            cat >> $GITHUB_STEP_SUMMARY <<EOF
+          - **Status:** Skipped (market closed)
+
+          Pipeline execution was skipped because the market is not open.
+          EOF
+          fi
+
+      - name: Cleanup
+        if: always()
+        continue-on-error: true
+        run: |
+          echo "Workflow completed. Cleanup finished."
+
+# ============================================================================
+# USAGE NOTES
+# ============================================================================
+#
+# Automatic Execution:
+#   - Runs Mon-Fri at 6:00 AM ET
+#   - Accounts for EST/EDT timezone changes
+#   - Checks market holidays before running
+#   - Skips weekends automatically
+#
+# Manual Trigger:
+#   1. Go to Actions tab in GitHub
+#   2. Select "Daily Trading Pipeline"
+#   3. Click "Run workflow"
+#   4. Choose options:
+#      - skip_market_check: 'true' to bypass market hours
+#      - test_mode: 'true' for paper trading, 'false' for live
+#
+# Required Secrets:
+#   - ANTHROPIC_API_KEY: Claude API key
+#   - ALPACA_API_KEY: Alpaca trading API key
+#   - ALPACA_SECRET_KEY: Alpaca secret key
+#   - TELEGRAM_BOT_TOKEN: Telegram bot token (for notifications)
+#   - TELEGRAM_CHAT_ID: Telegram chat ID
+#   - SLACK_WEBHOOK: Slack webhook URL (for failure alerts)
+#
+# Artifacts:
+#   - Trading reports: Retained for 30 days
+#   - Pipeline logs: Retained for 7 days
+#   - Metrics data: Retained for 30 days
+#
+# Notifications:
+#   - Slack: Sent on pipeline failure
+#   - Telegram: Sent on pipeline failure
+#   - GitHub: Job summaries always generated
+#
+# Timezone Handling:
+#   - Workflow uses UTC (GitHub Actions default)
+#   - Pipeline runs in America/New_York timezone
+#   - Schedule adjusted for EST (11:00 UTC) and EDT (10:00 UTC)
+#
+# Security:
+#   - All API keys stored as GitHub Secrets
+#   - .env file created at runtime (not committed)
+#   - Secrets never logged or exposed
+#   - Permissions limited to contents:read, actions:write
+#
+# Troubleshooting:
+#   1. Check "Actions" tab for workflow runs
+#   2. Download artifacts for detailed logs
+#   3. Review market check output if skipped
+#   4. Verify secrets are configured correctly
+#   5. Check pipeline logs for specific errors
+#
+# Cost Considerations:
+#   - GitHub Actions: ~2,000 free minutes/month
+#   - Pipeline runs: ~10-15 minutes each
+#   - Monthly usage: ~20 days × 15 min = ~300 minutes/month
+#   - Well within free tier limits
+#
+# ============================================================================
+# MAINTENANCE
+# ============================================================================
+#
+# Update market holidays for 2026:
+#   - Edit holidays list in pre_flight job
+#   - Add new holidays to array
+#
+# Update timezone schedule:
+#   - DST changes 2nd Sunday in March, 1st Sunday in November
+#   - Adjust cron schedules if needed
+#
+# Increase timeout:
+#   - Edit timeout-minutes in run_pipeline job
+#   - Default: 45 minutes (should be sufficient)
+#
+# Add more notifications:
+#   - Copy Slack/Telegram notification steps
+#   - Add new secrets for additional services
+#
