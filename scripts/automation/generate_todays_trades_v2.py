@@ -68,7 +68,70 @@ class MultiAgentTradeValidator:
             print(f"[WARNING] Could not initialize Financial Datasets API: {e}")
             self.fd_api = None
 
-    def validate_recommendation(self, rec: StockRecommendation, portfolio_value: float) -> Dict:
+    # S&P 100 ticker list (OEX components)
+    SP100_TICKERS = {
+        'AAPL', 'ABBV', 'ABT', 'ACN', 'ADBE', 'AIG', 'AMD', 'AMGN', 'AMT', 'AMZN',
+        'AVGO', 'AXP', 'BA', 'BAC', 'BK', 'BKNG', 'BLK', 'BMY', 'BRK.B', 'C',
+        'CAT', 'CHTR', 'CL', 'CMCSA', 'COF', 'COP', 'COST', 'CRM', 'CSCO', 'CVS',
+        'CVX', 'DD', 'DHR', 'DIS', 'DOW', 'DUK', 'EMR', 'EXC', 'F', 'FDX',
+        'GD', 'GE', 'GILD', 'GM', 'GOOG', 'GOOGL', 'GS', 'HD', 'HON', 'IBM',
+        'INTC', 'JNJ', 'JPM', 'KHC', 'KO', 'LIN', 'LLY', 'LMT', 'LOW', 'MA',
+        'MCD', 'MDLZ', 'MDT', 'MET', 'META', 'MMM', 'MO', 'MRK', 'MS', 'MSFT',
+        'NEE', 'NFLX', 'NKE', 'NVDA', 'ORCL', 'PEP', 'PFE', 'PG', 'PM', 'PYPL',
+        'QCOM', 'RTX', 'SBUX', 'SCHW', 'SO', 'SPG', 'T', 'TGT', 'TMO', 'TMUS',
+        'TSLA', 'TXN', 'UNH', 'UNP', 'UPS', 'USB', 'V', 'VZ', 'WBA', 'WFC',
+        'WMT', 'XOM'
+    }
+
+    def _check_dee_bot_filters(self, rec: StockRecommendation) -> tuple[bool, str]:
+        """
+        Check if DEE-BOT recommendation meets filter requirements
+
+        Requirements:
+        - Must be S&P 100 stock (defensive, large-cap)
+
+        Returns:
+            (passes_filters, rejection_reason)
+        """
+        if rec.ticker not in self.SP100_TICKERS:
+            return False, f"{rec.ticker} not in S&P 100 (DEE-BOT only trades S&P 100 stocks)"
+
+        return True, ""
+
+    def _check_shorgan_filters(self, rec: StockRecommendation, market_data: Dict) -> tuple[bool, str]:
+        """
+        Check if SHORGAN-BOT recommendation meets filter requirements
+
+        Requirements:
+        - Market cap: $500M - $50B
+        - Daily volume: >$250K avg daily dollar volume
+        - Catalyst-driven events (earnings, product news, M&A, FDA, etc)
+
+        Returns:
+            (passes_filters, rejection_reason)
+        """
+        market_cap = market_data.get('market_cap', 0)
+        price = market_data.get('price', 0)
+        volume = market_data.get('volume', 0)
+
+        # Check market cap ($500M - $50B)
+        if market_cap < 500_000_000:
+            return False, f"Market cap ${market_cap/1e6:.1f}M below $500M minimum"
+        if market_cap > 50_000_000_000:
+            return False, f"Market cap ${market_cap/1e9:.1f}B above $50B maximum"
+
+        # Check daily dollar volume (>$250K)
+        daily_dollar_volume = price * volume
+        if daily_dollar_volume < 250_000:
+            return False, f"Daily dollar volume ${daily_dollar_volume/1e3:.0f}K below $250K minimum"
+
+        # Check for catalyst (optional but preferred)
+        if not rec.catalyst or rec.catalyst == 'Event catalyst':
+            print(f"    [WARNING] {rec.ticker} missing specific catalyst, allowing anyway")
+
+        return True, ""
+
+    def validate_recommendation(self, rec: StockRecommendation, portfolio_value: float, bot_name: str = None) -> Dict:
         """
         Validate external recommendation through multi-agent consensus
 
@@ -81,8 +144,36 @@ class MultiAgentTradeValidator:
         """
         print(f"  [*] Validating {rec.ticker} ({rec.source.upper()})...")
 
+        # Apply DEE-BOT filters if applicable
+        if bot_name == "DEE-BOT":
+            passes_filters, filter_reason = self._check_dee_bot_filters(rec)
+            if not passes_filters:
+                print(f"    [X] {rec.ticker} REJECTED - {filter_reason}")
+                return {
+                    'recommendation': rec,
+                    'approved': False,
+                    'rejection_reason': filter_reason,
+                    'combined_confidence': 0.0,
+                    'external_confidence': 0.0,
+                    'internal_confidence': 0.0
+                }
+
         # Fetch real market data using Financial Datasets API
         market_data = self._fetch_market_data(rec, portfolio_value)
+
+        # Apply SHORGAN-BOT filters if applicable
+        if bot_name == "SHORGAN-BOT":
+            passes_filters, filter_reason = self._check_shorgan_filters(rec, market_data)
+            if not passes_filters:
+                print(f"    [X] {rec.ticker} REJECTED - {filter_reason}")
+                return {
+                    'recommendation': rec,
+                    'approved': False,
+                    'rejection_reason': filter_reason,
+                    'combined_confidence': 0.0,
+                    'external_confidence': 0.0,
+                    'internal_confidence': 0.0
+                }
 
         # Prepare supplemental data (external research context)
         supplemental_data = {
@@ -361,7 +452,7 @@ class AutomatedTradeGeneratorV2:
 
         for rec in recommendations:
             try:
-                validation = self.validator.validate_recommendation(rec, portfolio_value)
+                validation = self.validator.validate_recommendation(rec, portfolio_value, bot_name)
 
                 if validation['approved']:
                     approved.append(validation)
