@@ -1,0 +1,651 @@
+# AI Trading Bot - Data Sources Configuration
+# Last Updated: 2025-10-23
+# Version: 2.0.0
+#
+# This file configures all external data sources including:
+# - API endpoints and authentication
+# - Rate limits and quotas
+# - Retry policies and circuit breakers
+# - Cache settings and TTLs
+# - Fallback configurations
+
+# ============================================================================
+# FINANCIAL DATA SOURCES
+# ============================================================================
+
+financial_datasets:
+  enabled: true
+  priority: 1  # Primary source (lowest number = highest priority)
+
+  endpoints:
+    base_url: "https://api.financialdatasets.ai"
+    financials: "/financials/"
+    prices: "/prices/"
+    news: "/news/"
+    insider: "/insider-trades/"
+    sec_filings: "/sec-filings/"
+
+  authentication:
+    method: header  # Options: header, query_param, oauth
+    header_name: "X-API-KEY"
+    key_env_var: "FINANCIAL_DATASETS_API_KEY"
+
+  rate_limits:
+    requests_per_minute: 60
+    requests_per_hour: 3600
+    requests_per_day: unlimited
+    concurrent_requests: 10
+
+  retry_policy:
+    max_attempts: 3
+    backoff_strategy: exponential  # Options: fixed, exponential, random
+    base_delay_seconds: 1
+    max_delay_seconds: 30
+    retry_on_status_codes:
+      - 429  # Too Many Requests
+      - 500  # Internal Server Error
+      - 502  # Bad Gateway
+      - 503  # Service Unavailable
+      - 504  # Gateway Timeout
+
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    recovery_timeout_seconds: 60
+    half_open_max_calls: 3
+
+  cache:
+    enabled: true
+    backend: redis  # Options: redis, file, memory
+    ttl_by_endpoint:
+      financials: 14400      # 4 hours
+      prices: 300            # 5 minutes
+      news: 900              # 15 minutes
+      insider: 3600          # 1 hour
+      sec_filings: 86400     # 24 hours
+
+  timeout:
+    connect_seconds: 5
+    read_seconds: 30
+    total_seconds: 45
+
+  fallback:
+    on_failure: yahoo_finance
+    on_rate_limit: cache_only
+
+
+# ----------------------------------------------------------------------------
+
+alpaca:
+  enabled: true
+  priority: 1  # Primary for trading execution
+
+  endpoints:
+    base_url_paper: "https://paper-api.alpaca.markets"
+    base_url_live: "https://api.alpaca.markets"
+    data_url: "https://data.alpaca.markets"
+
+  authentication:
+    method: headers
+    key_env_var: "ALPACA_API_KEY"
+    secret_env_var: "ALPACA_SECRET_KEY"
+
+  api_version: v2
+
+  rate_limits:
+    orders_per_minute: 200
+    data_requests_per_minute: 200
+    account_requests_per_minute: 60
+
+  retry_policy:
+    max_attempts: 3
+    backoff_strategy: exponential
+    base_delay_seconds: 1
+    max_delay_seconds: 10
+
+  timeout:
+    connect_seconds: 3
+    read_seconds: 10
+    total_seconds: 15
+
+  data_feed:
+    subscription: iex  # Options: iex, sip
+    real_time: true
+    delayed_minutes: 15  # If real_time=false
+
+
+# ----------------------------------------------------------------------------
+
+yahoo_finance:
+  enabled: true
+  priority: 2  # Fallback source
+
+  endpoints:
+    base_url: "https://query1.finance.yahoo.com"
+    quote: "/v7/finance/quote"
+    chart: "/v8/finance/chart"
+    options: "/v7/finance/options"
+
+  rate_limits:
+    requests_per_minute: 60
+    requests_per_hour: 2000
+    concurrent_requests: 5
+
+  retry_policy:
+    max_attempts: 5
+    backoff_strategy: exponential
+    base_delay_seconds: 2
+    max_delay_seconds: 60
+
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 10
+    recovery_timeout_seconds: 300
+
+  cache:
+    enabled: true
+    ttl_seconds: 300  # 5 minutes
+
+  timeout:
+    total_seconds: 30
+
+  fallback:
+    on_failure: null  # No fallback for fallback source
+
+
+# ============================================================================
+# NEWS & SENTIMENT DATA SOURCES
+# ============================================================================
+
+newsapi:
+  enabled: true
+  priority: 1
+
+  endpoints:
+    base_url: "https://newsapi.org/v2"
+    top_headlines: "/top-headlines"
+    everything: "/everything"
+
+  authentication:
+    method: query_param
+    param_name: "apiKey"
+    key_env_var: "NEWSAPI_KEY"
+
+  rate_limits:
+    requests_per_day: 1000  # Free tier
+    requests_per_minute: 60
+    concurrent_requests: 3
+
+  configuration:
+    sources:
+      - bloomberg
+      - cnbc
+      - financial-times
+      - reuters
+      - wall-street-journal
+    language: en
+    country: us
+    categories:
+      - business
+      - technology
+    max_articles_per_query: 100
+
+  cache:
+    enabled: true
+    ttl_seconds: 900  # 15 minutes
+
+  timeout:
+    total_seconds: 20
+
+
+# ----------------------------------------------------------------------------
+
+reddit:
+  enabled: true
+  priority: 2
+
+  endpoints:
+    base_url: "https://www.reddit.com"
+    oauth_url: "https://oauth.reddit.com"
+
+  authentication:
+    method: oauth
+    client_id_env_var: "REDDIT_CLIENT_ID"
+    client_secret_env_var: "REDDIT_CLIENT_SECRET"
+    user_agent: "TradingBot/2.0"
+
+  rate_limits:
+    requests_per_minute: 60
+    concurrent_requests: 5
+
+  configuration:
+    subreddits:
+      - wallstreetbets
+      - stocks
+      - investing
+      - options
+      - stockmarket
+    min_upvotes: 50
+    max_age_hours: 24
+    fetch_comments: true
+    max_comments_per_post: 100
+
+  cache:
+    enabled: true
+    ttl_seconds: 600  # 10 minutes
+
+  timeout:
+    total_seconds: 30
+
+
+# ----------------------------------------------------------------------------
+
+twitter:
+  enabled: false  # Disabled by default (requires paid API)
+  priority: 3
+
+  endpoints:
+    base_url: "https://api.twitter.com/2"
+
+  authentication:
+    method: bearer_token
+    token_env_var: "TWITTER_BEARER_TOKEN"
+
+  rate_limits:
+    requests_per_15_min: 450  # Standard tier
+    concurrent_requests: 5
+
+  configuration:
+    track_keywords:
+      - "$"  # Stock ticker mentions
+      - "earnings"
+      - "FDA"
+      - "merger"
+      - "acquisition"
+    exclude_keywords:
+      - "crypto"
+      - "bitcoin"
+    max_tweets_per_query: 100
+
+  cache:
+    enabled: true
+    ttl_seconds: 300  # 5 minutes
+
+
+# ----------------------------------------------------------------------------
+
+stocktwits:
+  enabled: true
+  priority: 3
+
+  endpoints:
+    base_url: "https://api.stocktwits.com/api/2"
+    streams: "/streams"
+    trending: "/trending"
+
+  rate_limits:
+    requests_per_hour: 200
+    concurrent_requests: 3
+
+  configuration:
+    min_user_followers: 100
+    sentiment_filter: true
+
+  cache:
+    enabled: true
+    ttl_seconds: 600  # 10 minutes
+
+  timeout:
+    total_seconds: 15
+
+
+# ============================================================================
+# ALTERNATIVE DATA SOURCES
+# ============================================================================
+
+unusual_whales:
+  enabled: false  # Requires paid subscription
+  priority: 1
+
+  endpoints:
+    base_url: "https://api.unusualwhales.com"
+    options_flow: "/api/options-flow"
+    dark_pool: "/api/darkpool"
+
+  authentication:
+    method: header
+    header_name: "Authorization"
+    key_env_var: "UNUSUAL_WHALES_API_KEY"
+
+  rate_limits:
+    requests_per_minute: 60
+
+  cache:
+    enabled: true
+    ttl_seconds: 300
+
+  timeout:
+    total_seconds: 20
+
+
+# ----------------------------------------------------------------------------
+
+polygon:
+  enabled: true
+  priority: 2
+
+  endpoints:
+    base_url: "https://api.polygon.io"
+    stocks: "/v2/aggs/ticker"
+    options: "/v2/aggs/grouped/locale/us/market/stocks"
+
+  authentication:
+    method: query_param
+    param_name: "apiKey"
+    key_env_var: "POLYGON_API_KEY"
+
+  rate_limits:
+    requests_per_minute: 5  # Free tier (very limited)
+    unlimited_tier: false
+
+  cache:
+    enabled: true
+    ttl_seconds: 300
+
+  timeout:
+    total_seconds: 30
+
+
+# ----------------------------------------------------------------------------
+
+sec_edgar:
+  enabled: true
+  priority: 1
+
+  endpoints:
+    base_url: "https://data.sec.gov"
+    submissions: "/submissions"
+    company_facts: "/api/xbrl/companyfacts.json"
+
+  authentication:
+    method: header
+    header_name: "User-Agent"
+    user_agent: "TradingBot support@example.com"
+
+  rate_limits:
+    requests_per_second: 10  # SEC limit
+    concurrent_requests: 1  # SEC requirement
+
+  retry_policy:
+    max_attempts: 3
+    backoff_strategy: fixed
+    base_delay_seconds: 1
+
+  cache:
+    enabled: true
+    ttl_seconds: 86400  # 24 hours (filings don't change)
+
+  timeout:
+    total_seconds: 30
+
+
+# ============================================================================
+# MARKET DATA SOURCES
+# ============================================================================
+
+alpha_vantage:
+  enabled: true
+  priority: 3  # Backup source
+
+  endpoints:
+    base_url: "https://www.alphavantage.co/query"
+
+  authentication:
+    method: query_param
+    param_name: "apikey"
+    key_env_var: "ALPHA_VANTAGE_API_KEY"
+
+  rate_limits:
+    requests_per_minute: 5  # Free tier (very limited)
+    requests_per_day: 500
+
+  cache:
+    enabled: true
+    ttl_seconds: 300
+
+  timeout:
+    total_seconds: 30
+
+
+# ----------------------------------------------------------------------------
+
+fred:
+  enabled: true
+  priority: 1  # Primary for economic data
+
+  endpoints:
+    base_url: "https://api.stlouisfed.org/fred"
+    series: "/series/observations"
+
+  authentication:
+    method: query_param
+    param_name: "api_key"
+    key_env_var: "FRED_API_KEY"
+
+  rate_limits:
+    requests_per_day: unlimited  # No limit
+    requests_per_minute: 120
+
+  configuration:
+    series:
+      - GDP
+      - UNRATE  # Unemployment rate
+      - CPIAUCSL  # CPI
+      - DFF  # Fed funds rate
+      - T10Y2Y  # 10Y-2Y spread
+
+  cache:
+    enabled: true
+    ttl_seconds: 86400  # 24 hours (economic data updates daily)
+
+  timeout:
+    total_seconds: 20
+
+
+# ============================================================================
+# GLOBAL CACHE CONFIGURATION
+# ============================================================================
+
+cache:
+  global_settings:
+    enabled: true
+    backend: redis  # Options: redis, file, memory
+    compression: true
+    compression_min_size_bytes: 1024
+
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    db: 0
+    password: ${REDIS_PASSWORD:}
+    ssl: false
+    socket_timeout: 5
+    connection_pool_size: 10
+
+  file_cache:
+    directory: data/cache
+    max_size_mb: 1000
+    cleanup_interval_hours: 24
+
+  memory_cache:
+    max_size_mb: 256
+    eviction_policy: lru  # Options: lru, lfu, fifo
+
+
+# ============================================================================
+# GLOBAL RETRY & CIRCUIT BREAKER DEFAULTS
+# ============================================================================
+
+defaults:
+  retry:
+    max_attempts: 3
+    backoff_strategy: exponential
+    base_delay_seconds: 1
+    max_delay_seconds: 30
+    jitter: true
+    jitter_max_seconds: 5
+
+  circuit_breaker:
+    enabled: true
+    failure_threshold: 5
+    recovery_timeout_seconds: 60
+    half_open_max_calls: 3
+    excluded_exceptions:
+      - ValueError
+      - KeyError
+
+  timeout:
+    connect_seconds: 5
+    read_seconds: 30
+    total_seconds: 45
+
+  rate_limiting:
+    strategy: sliding_window  # Options: fixed_window, sliding_window, token_bucket
+    burst_allowance: 1.2  # Allow 20% burst
+
+
+# ============================================================================
+# HEALTH MONITORING FOR DATA SOURCES
+# ============================================================================
+
+health_checks:
+  enabled: true
+  interval_seconds: 300  # 5 minutes
+
+  checks:
+    - name: api_connectivity
+      sources:
+        - financial_datasets
+        - alpaca
+        - newsapi
+
+    - name: data_freshness
+      max_age_minutes: 15
+      sources:
+        - financial_datasets
+        - alpaca
+
+    - name: rate_limit_headroom
+      min_remaining_pct: 0.20  # Alert if <20% remaining
+
+  alerts:
+    on_failure: true
+    on_recovery: true
+    channels:
+      - telegram
+      - slack
+
+
+# ============================================================================
+# FALLBACK CHAIN CONFIGURATION
+# ============================================================================
+
+fallback_chains:
+  stock_prices:
+    - alpaca
+    - financial_datasets
+    - yahoo_finance
+    - alpha_vantage
+
+  company_financials:
+    - financial_datasets
+    - yahoo_finance
+    - sec_edgar
+
+  news:
+    - newsapi
+    - financial_datasets
+
+  sentiment:
+    - reddit
+    - stocktwits
+    - twitter
+
+  options_data:
+    - alpaca
+    - polygon
+    - unusual_whales
+
+  insider_trades:
+    - financial_datasets
+    - sec_edgar
+
+
+# ============================================================================
+# DATA QUALITY CONFIGURATION
+# ============================================================================
+
+data_quality:
+  validation:
+    enabled: true
+
+    rules:
+      price_data:
+        - name: positive_price
+          check: value > 0
+
+        - name: reasonable_spread
+          check: (ask - bid) / bid < 0.05  # <5% spread
+
+        - name: price_movement
+          check: abs((close - prev_close) / prev_close) < 0.30  # <30% daily move
+
+      volume_data:
+        - name: positive_volume
+          check: value >= 0
+
+        - name: reasonable_volume
+          check: value < 10 * avg_volume  # <10x average
+
+      fundamentals:
+        - name: valid_metrics
+          check: not isnan(value)
+
+        - name: reasonable_ranges
+          metrics:
+            pe_ratio: [-100, 1000]
+            debt_to_equity: [0, 10]
+            roe: [-1, 2]
+
+  outlier_detection:
+    enabled: true
+    method: iqr  # Options: iqr, zscore, isolation_forest
+    threshold: 3.0
+
+  missing_data:
+    strategy: forward_fill  # Options: forward_fill, interpolate, drop, use_fallback
+    max_forward_fill_periods: 5
+
+
+# ============================================================================
+# USAGE QUOTAS & COST TRACKING
+# ============================================================================
+
+cost_tracking:
+  enabled: true
+
+  api_costs:
+    financial_datasets: 0.0  # $49/month flat (unlimited requests)
+    alpaca: 0.0  # Free for paper trading
+    newsapi: 0.0  # Free tier (up to 1000 req/day)
+    alpha_vantage: 0.0  # Free tier (limited)
+    unusual_whales: 50.0  # $50/month if enabled
+    polygon: 0.0  # Free tier
+
+  alerts:
+    daily_cost_threshold: 10.0  # Alert if daily cost > $10
+    monthly_cost_threshold: 200.0  # Alert if projected monthly > $200
+
+  reporting:
+    daily_summary: true
+    monthly_report: true

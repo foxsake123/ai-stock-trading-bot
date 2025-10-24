@@ -1,10 +1,32 @@
-# AI Trading Bot - Production Configuration
+# AI Trading Bot - Main Configuration
 # Last Updated: 2025-10-23
+# Version: 2.0.0
+#
+# This is the master configuration file for the AI Trading Bot.
+# All settings can be overridden via environment variables using the format:
+#   TRADING_BOT_<SECTION>_<KEY>
+#
+# Example: TRADING_BOT_TRADING_MODE=live
+#
+# For sensitive values (API keys), use environment variables or .env file
+# instead of hardcoding them here.
 
 # ============================================================================
 # ENVIRONMENT SETTINGS
 # ============================================================================
 environment: production  # Options: development, staging, production
+
+# Feature flags - Enable/disable major features
+feature_flags:
+  multi_agent_system: true
+  bull_bear_debates: true
+  alternative_data: true
+  monte_carlo_backtest: true
+  kelly_position_sizing: true
+  portfolio_attribution: true
+  health_monitoring: true
+  telegram_notifications: true
+  email_notifications: true
 
 # ============================================================================
 # TRADING CONFIGURATION

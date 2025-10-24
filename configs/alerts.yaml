@@ -1,0 +1,675 @@
+# AI Trading Bot - Alerts & Notifications Configuration
+# Last Updated: 2025-10-23
+# Version: 2.0.0
+#
+# This file configures the alert and notification system including:
+# - Notification channels (Telegram, Email, Slack, Discord)
+# - Alert priority levels and routing rules
+# - Message formatting and templates
+# - Delivery schedules and throttling
+# - Escalation procedures
+
+# ============================================================================
+# NOTIFICATION CHANNELS
+# ============================================================================
+
+channels:
+  telegram:
+    enabled: true
+    priority: 1  # Primary channel
+
+    authentication:
+      bot_token_env_var: "TELEGRAM_BOT_TOKEN"
+      chat_id_env_var: "TELEGRAM_CHAT_ID"
+
+    configuration:
+      parse_mode: Markdown  # Options: Markdown, HTML, None
+      disable_web_page_preview: true
+      disable_notification: false  # Sound/vibration for messages
+
+    rate_limiting:
+      max_messages_per_minute: 20
+      max_messages_per_hour: 100
+      burst_allowance: 5
+
+    retry:
+      max_attempts: 3
+      backoff_seconds: 2
+
+    message_limits:
+      max_length: 4096  # Telegram limit
+      truncate_strategy: summarize  # Options: summarize, split, truncate
+
+    delivery_hours:
+      enabled: false  # Send 24/7
+      # start: "07:00"
+      # end: "22:00"
+      # timezone: America/New_York
+
+
+  # --------------------------------------------------------------------------
+
+  email:
+    enabled: true
+    priority: 2  # Secondary channel
+
+    smtp:
+      host: ${SMTP_HOST:smtp.gmail.com}
+      port: ${SMTP_PORT:587}
+      use_tls: true
+      username_env_var: "SMTP_USERNAME"
+      password_env_var: "SMTP_PASSWORD"
+
+    configuration:
+      from_address: ${EMAIL_FROM:trading-bot@example.com}
+      to_addresses:
+        - ${EMAIL_TO:your-email@example.com}
+      cc_addresses: []
+      bcc_addresses: []
+
+      subject_prefix: "[Trading Bot]"
+      html_enabled: true
+      include_logo: true
+      include_charts: true
+
+    rate_limiting:
+      max_emails_per_hour: 20
+      max_emails_per_day: 100
+
+    retry:
+      max_attempts: 3
+      backoff_seconds: 5
+
+    delivery_hours:
+      enabled: false  # Send 24/7
+
+
+  # --------------------------------------------------------------------------
+
+  slack:
+    enabled: false  # Disabled by default
+    priority: 3
+
+    authentication:
+      webhook_url_env_var: "SLACK_WEBHOOK_URL"
+      # OR use OAuth:
+      # token_env_var: "SLACK_BOT_TOKEN"
+      # channel: "#trading-bot"
+
+    configuration:
+      username: "Trading Bot"
+      icon_emoji: ":chart_with_upwards_trend:"
+      link_names: true
+
+    message_format:
+      use_blocks: true  # Rich formatting
+      include_attachments: true
+
+    rate_limiting:
+      max_messages_per_minute: 1  # Slack has strict limits
+
+    retry:
+      max_attempts: 3
+      backoff_seconds: 1
+
+
+  # --------------------------------------------------------------------------
+
+  discord:
+    enabled: false  # Disabled by default
+    priority: 4
+
+    authentication:
+      webhook_url_env_var: "DISCORD_WEBHOOK_URL"
+
+    configuration:
+      username: "Trading Bot"
+      avatar_url: null
+
+    rate_limiting:
+      max_messages_per_minute: 5
+
+    retry:
+      max_attempts: 3
+      backoff_seconds: 1
+
+
+# ============================================================================
+# ALERT PRIORITY LEVELS
+# ============================================================================
+
+priority_levels:
+  critical:
+    icon: "🔴"
+    label: "CRITICAL"
+    channels:
+      - telegram
+      - email
+      - slack
+    delivery_method: immediate
+    retry_aggressively: true
+    escalate_after_minutes: 15
+    escalation_channels:
+      - email  # Escalate via email if not acknowledged
+
+  high:
+    icon: "🟠"
+    label: "HIGH"
+    channels:
+      - telegram
+      - email
+    delivery_method: immediate
+    retry_aggressively: true
+
+  medium:
+    icon: "🟡"
+    label: "MEDIUM"
+    channels:
+      - telegram
+    delivery_method: immediate
+    retry_aggressively: false
+
+  low:
+    icon: "🟢"
+    label: "LOW"
+    channels:
+      - telegram
+    delivery_method: batched  # Batch low priority alerts
+    batch_interval_minutes: 30
+
+  info:
+    icon: "ℹ️"
+    label: "INFO"
+    channels:
+      - telegram
+    delivery_method: batched
+    batch_interval_minutes: 60
+
+
+# ============================================================================
+# ALERT CATEGORIES & ROUTING RULES
+# ============================================================================
+
+alert_categories:
+  trading_execution:
+    description: "Trade execution events"
+    default_priority: high
+
+    rules:
+      - condition: event_type == "order_filled"
+        priority: medium
+        message_template: order_filled
+
+      - condition: event_type == "order_rejected"
+        priority: high
+        message_template: order_rejected
+
+      - condition: event_type == "order_cancelled"
+        priority: medium
+        message_template: order_cancelled
+
+      - condition: event_type == "execution_error"
+        priority: critical
+        message_template: execution_error
+
+    throttling:
+      enabled: true
+      max_alerts_per_hour: 20
+      cooldown_minutes: 5
+
+
+  # --------------------------------------------------------------------------
+
+  portfolio_performance:
+    description: "Portfolio P&L and position changes"
+    default_priority: medium
+
+    rules:
+      - condition: daily_pnl_pct < -2.0
+        priority: critical
+        message_template: daily_loss_limit
+        throttling_cooldown_minutes: 60
+
+      - condition: daily_pnl_pct > 5.0
+        priority: high
+        message_template: daily_gain
+        throttling_cooldown_minutes: 120
+
+      - condition: position_pnl_pct < -10.0
+        priority: high
+        message_template: position_loss
+        throttling_cooldown_minutes: 30
+
+      - condition: position_pnl_pct > 20.0
+        priority: medium
+        message_template: position_gain
+        throttling_cooldown_minutes: 60
+
+      - condition: drawdown_pct > 10.0
+        priority: critical
+        message_template: max_drawdown
+        throttling_cooldown_minutes: 30
+
+
+  # --------------------------------------------------------------------------
+
+  system_health:
+    description: "System health and operational issues"
+    default_priority: high
+
+    rules:
+      - condition: health_score < 60
+        priority: critical
+        message_template: system_critical
+
+      - condition: health_score < 80
+        priority: high
+        message_template: system_degraded
+
+      - condition: api_failure == true
+        priority: high
+        message_template: api_failure
+        throttling_cooldown_minutes: 15
+
+      - condition: data_source_failure == true
+        priority: medium
+        message_template: data_source_failure
+        throttling_cooldown_minutes: 30
+
+      - condition: disk_space_pct > 90
+        priority: high
+        message_template: disk_space
+        throttling_cooldown_minutes: 60
+
+      - condition: memory_usage_pct > 90
+        priority: high
+        message_template: memory_usage
+        throttling_cooldown_minutes: 30
+
+
+  # --------------------------------------------------------------------------
+
+  pipeline_events:
+    description: "Daily pipeline execution events"
+    default_priority: medium
+
+    rules:
+      - condition: event_type == "pipeline_started"
+        priority: low
+        message_template: pipeline_started
+
+      - condition: event_type == "pipeline_completed"
+        priority: medium
+        message_template: pipeline_completed
+
+      - condition: event_type == "pipeline_failed"
+        priority: critical
+        message_template: pipeline_failed
+
+      - condition: event_type == "phase_failed"
+        priority: high
+        message_template: phase_failed
+
+
+  # --------------------------------------------------------------------------
+
+  market_events:
+    description: "Market and catalyst events"
+    default_priority: medium
+
+    rules:
+      - condition: event_type == "fda_decision"
+        priority: high
+        message_template: catalyst_event
+
+      - condition: event_type == "earnings_release"
+        priority: medium
+        message_template: catalyst_event
+
+      - condition: event_type == "merger_announcement"
+        priority: high
+        message_template: catalyst_event
+
+      - condition: event_type == "halt_triggered"
+        priority: critical
+        message_template: halt_event
+
+
+  # --------------------------------------------------------------------------
+
+  risk_events:
+    description: "Risk management alerts"
+    default_priority: high
+
+    rules:
+      - condition: event_type == "stop_loss_triggered"
+        priority: high
+        message_template: stop_loss
+
+      - condition: event_type == "position_limit_exceeded"
+        priority: high
+        message_template: position_limit
+
+      - condition: event_type == "concentration_limit"
+        priority: high
+        message_template: concentration_limit
+
+      - condition: event_type == "kill_switch_activated"
+        priority: critical
+        message_template: kill_switch
+
+
+# ============================================================================
+# SCHEDULED NOTIFICATIONS
+# ============================================================================
+
+scheduled_notifications:
+  morning_report:
+    enabled: true
+    schedule:
+      time: "07:30"
+      timezone: America/New_York
+      days: [1, 2, 3, 4, 5]  # Monday-Friday
+    channels:
+      - telegram
+      - email
+    priority: medium
+    template: morning_report
+    include_sections:
+      - market_overview
+      - agent_recommendations
+      - consensus_decisions
+      - risk_metrics
+      - execution_plan
+
+  midday_update:
+    enabled: true
+    schedule:
+      time: "12:00"
+      days: [1, 2, 3, 4, 5]
+    channels:
+      - telegram
+    priority: low
+    template: midday_update
+    include_sections:
+      - current_positions
+      - intraday_pnl
+      - catalyst_updates
+
+  close_report:
+    enabled: true
+    schedule:
+      time: "16:15"
+      days: [1, 2, 3, 4, 5]
+    channels:
+      - telegram
+      - email
+    priority: medium
+    template: close_report
+    include_sections:
+      - daily_pnl
+      - position_summary
+      - fills_and_executions
+      - upcoming_catalysts
+
+  evening_summary:
+    enabled: true
+    schedule:
+      time: "18:00"
+      days: [1, 2, 3, 4, 5]
+    channels:
+      - telegram
+    priority: low
+    template: evening_summary
+    include_sections:
+      - research_summary
+      - tomorrow_watchlist
+      - portfolio_status
+
+  weekend_summary:
+    enabled: true
+    schedule:
+      time: "17:00"
+      days: [5]  # Friday only
+    channels:
+      - email
+    priority: low
+    template: weekend_summary
+    include_sections:
+      - week_performance
+      - active_positions
+      - next_week_catalysts
+
+
+# ============================================================================
+# MESSAGE TEMPLATES
+# ============================================================================
+
+message_templates:
+  order_filled:
+    subject: "Order Filled: {ticker} {action}"
+    body: |
+      ✅ **Order Filled**
+
+      **Ticker:** {ticker}
+      **Action:** {action}
+      **Quantity:** {shares} shares
+      **Price:** ${fill_price:.2f}
+      **Total:** ${total_value:,.2f}
+      **Strategy:** {strategy}
+      **Time:** {timestamp}
+
+  order_rejected:
+    subject: "Order Rejected: {ticker} {action}"
+    body: |
+      ❌ **Order Rejected**
+
+      **Ticker:** {ticker}
+      **Action:** {action}
+      **Quantity:** {shares} shares
+      **Reason:** {rejection_reason}
+      **Strategy:** {strategy}
+      **Time:** {timestamp}
+
+  daily_loss_limit:
+    subject: "⚠️ Daily Loss Limit Alert"
+    body: |
+      🔴 **DAILY LOSS LIMIT ALERT**
+
+      **Portfolio:** {bot_name}
+      **Daily P&L:** {daily_pnl:+,.2f} ({daily_pnl_pct:+.2f}%)
+      **Threshold:** -2.00%
+
+      **Action Required:**
+      Review positions and consider reducing exposure.
+
+      **Current Status:**
+      - Cash: ${cash:,.2f}
+      - Positions: {position_count}
+      - Portfolio Value:** ${portfolio_value:,.2f}
+
+  system_critical:
+    subject: "🔴 CRITICAL: System Health Alert"
+    body: |
+      🔴 **CRITICAL SYSTEM ALERT**
+
+      **Health Score:** {health_score:.1f}%
+      **Status:** {status}
+      **Timestamp:** {timestamp}
+
+      **Issues ({issue_count}):**
+      {issues}
+
+      **Action Required:**
+      Immediate attention needed. Check logs and health dashboard.
+
+  pipeline_completed:
+    subject: "Pipeline Complete: {date}"
+    body: |
+      ✅ **Daily Pipeline Completed**
+
+      **Date:** {date}
+      **Duration:** {duration_minutes:.1f} min
+      **Status:** {status}
+
+      **Summary:**
+      - Stocks Analyzed: {stocks_analyzed}
+      - Recommendations: {recommendations_count}
+      - Approved Trades: {approved_trades}
+      - Rejected Trades: {rejected_trades}
+
+      **Consensus Confidence:** {avg_confidence:.1f}%
+
+  catalyst_event:
+    subject: "Catalyst Alert: {ticker} - {event_type}"
+    body: |
+      📢 **Catalyst Event**
+
+      **Ticker:** {ticker}
+      **Event:** {event_type}
+      **Date:** {event_date}
+      **Impact:** {expected_impact}
+
+      **Details:**
+      {event_description}
+
+      **Current Position:**
+      {position_status}
+
+  stop_loss:
+    subject: "Stop Loss Triggered: {ticker}"
+    body: |
+      🛑 **Stop Loss Triggered**
+
+      **Ticker:** {ticker}
+      **Entry Price:** ${entry_price:.2f}
+      **Stop Price:** ${stop_price:.2f}
+      **Current Price:** ${current_price:.2f}
+      **Loss:** {loss_pct:.2f}%
+
+      **Order Status:** {order_status}
+
+
+# ============================================================================
+# THROTTLING & DEDUPLICATION
+# ============================================================================
+
+throttling:
+  global:
+    enabled: true
+    max_alerts_per_minute: 10
+    max_alerts_per_hour: 100
+    max_alerts_per_day: 500
+
+  per_category:
+    enabled: true
+    cooldown_minutes: 5
+    exceptions:
+      - critical  # Never throttle critical alerts
+
+  deduplication:
+    enabled: true
+    window_minutes: 60
+    similarity_threshold: 0.85  # 85% similar messages are considered duplicates
+    fields_to_compare:
+      - category
+      - ticker
+      - event_type
+
+
+# ============================================================================
+# QUIET HOURS
+# ============================================================================
+
+quiet_hours:
+  enabled: false  # Disabled for 24/7 trading
+
+  # If enabled:
+  schedule:
+    start: "22:00"
+    end: "07:00"
+    timezone: America/New_York
+    days: [1, 2, 3, 4, 5, 6, 7]  # All days
+
+  exceptions:
+    # Always send critical alerts
+    priority_levels:
+      - critical
+
+    # Always send these categories
+    categories:
+      - trading_execution
+      - risk_events
+
+
+# ============================================================================
+# ALERT HISTORY & LOGGING
+# ============================================================================
+
+history:
+  enabled: true
+
+  storage:
+    backend: database  # Options: database, file, both
+    table_name: alert_history
+    retention_days: 90
+
+  metrics_tracking:
+    - delivery_success_rate
+    - delivery_latency_ms
+    - throttled_count
+    - deduplicated_count
+    - failed_deliveries
+
+  reporting:
+    daily_summary: true
+    weekly_report: true
+
+
+# ============================================================================
+# EMERGENCY PROCEDURES
+# ============================================================================
+
+emergency:
+  kill_switch_alerts:
+    enabled: true
+    channels:
+      - telegram
+      - email
+      - slack
+    priority: critical
+    immediate_delivery: true
+
+  escalation:
+    enabled: true
+    no_response_timeout_minutes: 15
+
+    levels:
+      - channels: [telegram]
+        timeout_minutes: 5
+
+      - channels: [telegram, email]
+        timeout_minutes: 10
+
+      - channels: [telegram, email, slack]
+        timeout_minutes: 15
+
+  fallback:
+    # If all channels fail
+    log_to_file: true
+    log_path: logs/alerts/emergency.log
+    display_console: true
+
+
+# ============================================================================
+# TESTING & DEBUGGING
+# ============================================================================
+
+testing:
+  dry_run_mode: false  # If true, don't actually send alerts
+  test_recipients:
+    telegram: ${TELEGRAM_TEST_CHAT_ID:}
+    email: ${EMAIL_TEST_ADDRESS:}
+
+  verbose_logging: false
+  include_stack_trace: false  # Include in error alerts
