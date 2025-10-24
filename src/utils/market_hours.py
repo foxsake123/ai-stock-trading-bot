@@ -318,3 +318,115 @@ def get_market_status() -> Dict:
 def should_run_pipeline() -> Tuple[bool, str]:
     """Check if daily pipeline should run now"""
     return MarketHours().should_run_daily_pipeline()
+
+
+def get_market_schedule(dt: Optional[datetime] = None) -> Dict:
+    """
+    Get market schedule for a given date
+
+    Args:
+        dt: Date to check (default: today)
+
+    Returns:
+        Dict with market schedule times
+    """
+    mh = MarketHours()
+    if dt is None:
+        dt = mh.get_current_time_et()
+
+    return {
+        'date': dt.strftime('%Y-%m-%d'),
+        'is_market_day': mh.is_market_day(dt),
+        'is_early_close': mh.is_early_close_day(dt),
+        'pre_market_start': mh.PRE_MARKET_START.strftime('%H:%M'),
+        'market_open': mh.MARKET_OPEN.strftime('%H:%M'),
+        'market_close': mh.get_market_close_time(dt).strftime('%H:%M'),
+        'after_hours_end': mh.AFTER_HOURS_END.strftime('%H:%M'),
+    }
+
+
+def is_trading_hours(dt: Optional[datetime] = None) -> bool:
+    """
+    Check if currently in regular trading hours (9:30 AM - 4:00 PM ET)
+
+    Args:
+        dt: Time to check (default: current time)
+
+    Returns:
+        bool: True if in regular trading hours
+    """
+    return MarketHours().is_market_open(dt)
+
+
+def get_next_market_open(dt: Optional[datetime] = None) -> datetime:
+    """
+    Get the next market open datetime
+
+    Args:
+        dt: Starting datetime (default: current time)
+
+    Returns:
+        datetime: Next market open time in ET
+    """
+    mh = MarketHours()
+    if dt is None:
+        dt = mh.get_current_time_et()
+
+    # Start with current date
+    check_date = dt
+
+    # If market is already open today, return today's open
+    if mh.is_market_open(check_date):
+        return check_date.replace(
+            hour=mh.MARKET_OPEN.hour,
+            minute=mh.MARKET_OPEN.minute,
+            second=0,
+            microsecond=0
+        )
+
+    # If before market open today and it's a market day, return today's open
+    if mh.is_market_day(check_date) and check_date.time() < mh.MARKET_OPEN:
+        return check_date.replace(
+            hour=mh.MARKET_OPEN.hour,
+            minute=mh.MARKET_OPEN.minute,
+            second=0,
+            microsecond=0
+        )
+
+    # Otherwise, find next market day
+    from datetime import timedelta
+    max_days_ahead = 10  # Safety limit
+
+    for days_ahead in range(1, max_days_ahead):
+        next_date = check_date + timedelta(days=days_ahead)
+
+        if mh.is_market_day(next_date):
+            return next_date.replace(
+                hour=mh.MARKET_OPEN.hour,
+                minute=mh.MARKET_OPEN.minute,
+                second=0,
+                microsecond=0
+            )
+
+    # Fallback: return next Monday at market open
+    days_until_monday = (7 - check_date.weekday()) % 7
+    if days_until_monday == 0:
+        days_until_monday = 7
+
+    next_monday = check_date + timedelta(days=days_until_monday)
+    return next_monday.replace(
+        hour=mh.MARKET_OPEN.hour,
+        minute=mh.MARKET_OPEN.minute,
+        second=0,
+        microsecond=0
+    )
+
+
+def is_market_open_today() -> bool:
+    """
+    Check if US market is open today (not necessarily right now)
+
+    Returns:
+        bool: True if market is open sometime today
+    """
+    return MarketHours().is_market_day()
