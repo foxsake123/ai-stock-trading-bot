@@ -290,6 +290,11 @@ class ExternalReportParser:
                 data['rationale'] = value
 
         if data.get('ticker') and data.get('action'):
+            # Set default conviction if missing
+            if 'conviction' not in data or not data['conviction']:
+                # DEE-BOT recommendations default to MEDIUM (quality blue-chips)
+                # SHORGAN-BOT recommendations default to MEDIUM unless specified
+                data['conviction'] = 'MEDIUM'
             return StockRecommendation(**data)
 
         return None

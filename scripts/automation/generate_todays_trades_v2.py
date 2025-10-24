@@ -107,16 +107,43 @@ class MultiAgentTradeValidator:
             decision = self.coordinator.make_decision(rec.ticker, analyses)
 
             # Calculate combined confidence (external + internal)
-            external_confidence = 0.7 if rec.conviction == 'HIGH' else 0.5 if rec.conviction == 'MEDIUM' else 0.3
+            # When FD API data is available, trust Claude Opus 4.1 recommendations more
+            has_fd_data = market_data.get('price', 100) != 100  # Check if we got real data
+
+            if has_fd_data and rec.conviction in ['HIGH', 'MEDIUM']:
+                # Boost external confidence when we have real data verification
+                external_confidence = 0.9 if rec.conviction == 'HIGH' else 0.75
+                # Weight external research heavily (80% external, 20% internal)
+                combined_confidence = (external_confidence * 0.8 + decision.confidence * 0.2)
+                print(f"    [DEBUG] FD-verified, conviction={rec.conviction}, ext={external_confidence:.2f}, int={decision.confidence:.2f}, combined={combined_confidence:.2f}")
+            else:
+                # Standard confidence and weighting
+                external_confidence = 0.7 if rec.conviction == 'HIGH' else 0.5 if rec.conviction == 'MEDIUM' else 0.3
+                combined_confidence = (external_confidence * 0.4 + decision.confidence * 0.6)
+                print(f"    [DEBUG] Standard weighting, ext={external_confidence:.2f}, int={decision.confidence:.2f}, combined={combined_confidence:.2f}")
+
             internal_confidence = decision.confidence
-            combined_confidence = (external_confidence * 0.4 + internal_confidence * 0.6)
 
             # Check if approved
-            approved = (
-                decision.action.value == 'BUY' and
-                combined_confidence >= 0.55 and
-                rec.action in ['BUY', 'LONG']
-            )
+            # When we have FD-verified data and high external confidence,
+            # trust Claude Opus 4.1 research even if internal agents disagree
+            # Accept all valid trading actions (longs, shorts, exits, covers)
+            valid_actions = ['BUY', 'LONG', 'SELL', 'SHORT', 'sell', 'buy',
+                           'SELL_TO_OPEN', 'BUY_TO_CLOSE', 'BUY_TO_OPEN', 'SELL_TO_CLOSE',
+                           'sell_to_open', 'buy_to_close', 'buy_to_open', 'sell_to_close']
+
+            if has_fd_data and external_confidence >= 0.75 and combined_confidence >= 0.60:
+                # FD-verified path: Trust external research for all action types
+                approved = (rec.action in valid_actions)
+                print(f"    [DEBUG] FD-verified approval path: action={rec.action}, ext={external_confidence:.2f}, combined={combined_confidence:.2f}, approved={approved}")
+            else:
+                # Standard path: Require agent consensus
+                approved = (
+                    decision.action.value == 'BUY' and
+                    combined_confidence >= 0.55 and
+                    rec.action in valid_actions
+                )
+                print(f"    [DEBUG] Standard approval path: agent_action={decision.action.value}, rec_action={rec.action}, combined={combined_confidence:.2f}, approved={approved}")
 
             return {
                 'recommendation': rec,
@@ -399,7 +426,8 @@ class AutomatedTradeGeneratorV2:
             for val in dee_results['approved']:
                 rec = val['recommendation']
                 shares = rec.shares or int((rec.position_size_pct or 5) * dee_results['portfolio_value'] / 100 / (rec.entry_price or 100))
-                content += f"\n| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${rec.stop_loss:.2f if rec.stop_loss else rec.entry_price * 0.92:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
+                stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.92 if rec.entry_price else 0)
+                content += f"\n| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
         else:
             content += "\n| No buy orders today | - | - | - | - | - | Market conditions unfavorable |\n"
 
@@ -436,7 +464,8 @@ class AutomatedTradeGeneratorV2:
                 rec = val['recommendation']
                 shares = rec.shares or int((rec.position_size_pct or 10) * shorgan_results['portfolio_value'] / 100 / (rec.entry_price or 100))
                 catalyst_short = (rec.catalyst or 'Event catalyst')[:40]
-                content += f"| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${rec.stop_loss:.2f if rec.stop_loss else rec.entry_price * 0.85:.2f} | {val['combined_confidence']:.0%} | {catalyst_short} | {rec.source.upper()} |\n"
+                stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.85 if rec.entry_price else 0)
+                content += f"| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {catalyst_short} | {rec.source.upper()} |\n"
         else:
             content += "| No buy orders today | - | - | - | - | - | - |\n"
 
