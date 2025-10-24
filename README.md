@@ -808,7 +808,8 @@ DEE Win Rate: 55.0%
 
 ```
 ai-stock-trading-bot/
-├── agents/                 # Multi-agent trading system
+├── src/
+│   └── agents/            # Multi-agent trading system (canonical location)
 ├── scripts/
 │   ├── automation/        # Core trading scripts
 │   ├── utilities/         # Helper utilities
@@ -820,11 +821,14 @@ ai-stock-trading-bot/
 ├── docs/
 │   ├── strategies/        # Trading strategies
 │   ├── reports/           # Daily/weekly reports
-│   ├── archive/           # Archived documentation
+│   ├── archive/           # Archived documentation (including legacy agents/)
 │   └── session-summaries/ # Development logs
 ├── configs/               # Configuration files
 ├── tests/                 # Test suite
 └── main.py               # Entry point
+
+Note: All agent code is in src/agents/. Legacy agents/ directory was
+consolidated on Oct 23, 2025 (see docs/archive/legacy-agents-2025-10-23/).
 ```
 
 ## Risk Management
