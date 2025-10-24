@@ -79,6 +79,7 @@ trade_history/
 *secret*
 *token*
 bot_credentials.md
+config/api_keys.yaml
 
 # Temporary files
 *.tmp
