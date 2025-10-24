@@ -1,76 +1,179 @@
-# AI Stock Trading Bot - Production Dependencies
+# AI Trading Bot - Production Dependencies
+# Last Updated: 2025-10-23
 # Install with: pip install -r requirements.txt
 
-# Core Trading APIs
-alpaca-trade-api>=3.0.0
-python-dotenv>=1.0.0
-
-# Market Data
-yfinance>=0.2.28
-alpha-vantage>=2.3.1
-
-# Data Processing
-pandas>=2.0.0
-numpy>=1.24.0
-scipy>=1.10.0
-
-# HTTP Requests
-requests>=2.31.0
-aiohttp>=3.8.5
-
-# Visualization
-plotly>=5.17.0
-matplotlib>=3.7.0
-
-# Utilities
-pytz>=2023.3
-schedule>=1.2.0
-
-# Technical Analysis
-pandas-ta>=0.3.14b0
-
-# Google Trends
-pytrends==4.9.2
-
-# Telegram Integration
-python-telegram-bot>=20.0
-
-# Database (Optional)
-sqlalchemy>=2.0.0
-
-# Date/Time
-python-dateutil>=2.8.2
-
-# Alternative Data Aggregator
-tabulate>=0.9.0  # Required for pandas DataFrame markdown export
-
 # ============================================================================
-# Phase 2 Enhancements (New Dependencies)
+# CORE DEPENDENCIES
 # ============================================================================
 
-# Anthropic Claude API (for debate system)
-anthropic>=0.18.0
+# Python version requirement: >=3.9,<3.13
+python-dotenv>=1.0.0          # Environment variable management
+pyyaml>=6.0                   # YAML configuration parsing
+pytz>=2023.3                  # Timezone handling
+python-dateutil>=2.8.2        # Date utilities
 
-# Configuration Management
-pyyaml>=6.0.1
+# ============================================================================
+# AI & LLM
+# ============================================================================
 
-# Async Support
-asyncio>=3.4.3  # For async operations in Phase 2
+anthropic>=0.18.1             # Claude API client
+openai>=1.12.0                # OpenAI API (optional backup)
 
-# Testing
-pytest>=7.4.0
-pytest-asyncio>=0.21.0
-pytest-cov>=4.1.0
+# ============================================================================
+# TRADING & MARKET DATA
+# ============================================================================
 
-# Options Analysis (scipy already included above)
-# Note: yfinance already included for options chain data
+alpaca-trade-api>=3.0.0       # Alpaca trading API
+alpaca-py>=0.16.0             # New Alpaca Python SDK
+yfinance>=0.2.36              # Yahoo Finance data (fallback)
+alpha-vantage>=2.3.1          # Alpha Vantage API (optional)
+pandas>=2.0.0                 # Data manipulation
+numpy>=1.24.0                 # Numerical computing
+scipy>=1.10.0                 # Scientific computing
+pandas-ta>=0.3.14b            # Technical analysis indicators
 
-# Insider Trading Data
-sec-api>=1.0.17  # SEC EDGAR API for insider trades (optional)
+# ============================================================================
+# WEB & API
+# ============================================================================
 
-# Financial Datasets API (optional but recommended for real-time options flow)
-# No package needed - uses aiohttp for API calls
+requests>=2.31.0              # HTTP requests
+aiohttp>=3.8.5                # Async HTTP client
+httpx>=0.26.0                 # Modern HTTP client
+beautifulsoup4>=4.12.3        # HTML parsing
+lxml>=5.1.0                   # XML/HTML processing
 
-# Additional utilities for Phase 2
-tqdm>=4.66.0  # Progress bars for batch operations
-colorama>=0.4.6  # Colored terminal output
+# ============================================================================
+# DATA SOURCES
+# ============================================================================
+
+# News & sentiment
+newsapi-python>=0.2.7         # News API client
+praw>=7.7.1                   # Reddit API (PRAW)
+tweepy>=4.14.0                # Twitter API (optional)
+
+# Alternative data
+pytrends>=4.9.2               # Google Trends
+sec-api>=1.0.17               # SEC EDGAR API for insider trades (optional)
+
+# ============================================================================
+# DATABASE & CACHING
+# ============================================================================
+
+redis>=5.0.1                  # Redis client for caching
+hiredis>=2.3.2                # High-performance Redis parser
+sqlalchemy>=2.0.0             # SQL toolkit and ORM
+alembic>=1.13.1               # Database migrations
+
+# ============================================================================
+# ASYNC & CONCURRENCY
+# ============================================================================
+
+asyncio>=3.4.3                # Async I/O
+aiofiles>=23.2.1              # Async file operations
+aiocache>=0.12.2              # Async caching
+
+# ============================================================================
+# NOTIFICATIONS & ALERTS
+# ============================================================================
+
+python-telegram-bot>=20.0     # Telegram bot API
+slack-sdk>=3.26.2             # Slack notifications
+discord.py>=2.3.2             # Discord notifications (optional)
+
+# Email
+secure-smtplib>=0.1.1         # Secure SMTP
+
+# ============================================================================
+# MONITORING & LOGGING
+# ============================================================================
+
+loguru>=0.7.2                 # Advanced logging
+sentry-sdk>=1.40.0            # Error tracking (optional)
+prometheus-client>=0.19.0     # Metrics export (optional)
+
+# ============================================================================
+# REPORTING
+# ============================================================================
+
+markdown>=3.5.2               # Markdown generation
+jinja2>=3.1.3                 # Template engine
+reportlab>=4.0.9              # PDF generation
+matplotlib>=3.7.0             # Plotting and charts
+seaborn>=0.13.2               # Statistical visualizations
+plotly>=5.17.0                # Interactive charts
+
+# ============================================================================
+# TESTING & QUALITY
+# ============================================================================
+
+pytest>=7.4.0                 # Test framework
+pytest-asyncio>=0.21.0        # Async test support
+pytest-cov>=4.1.0             # Coverage plugin
+pytest-mock>=3.12.0           # Mocking utilities
+pytest-timeout>=2.2.0         # Test timeouts
+hypothesis>=6.96.4            # Property-based testing
+
+# Code quality
+black>=24.1.1                 # Code formatter
+flake8>=7.0.0                 # Linting
+mypy>=1.8.0                   # Type checking
+isort>=5.13.2                 # Import sorting
+pylint>=3.0.3                 # Code analysis
+
+# ============================================================================
+# UTILITIES
+# ============================================================================
+
+tqdm>=4.66.0                  # Progress bars
+colorama>=0.4.6               # Colored terminal output
+tabulate>=0.9.0               # Table formatting
+click>=8.1.7                  # CLI framework
+rich>=13.7.0                  # Rich terminal output
+schedule>=1.2.0               # Job scheduling
+
+# File operations
+pathlib>=1.0.1                # Path handling
+filelock>=3.13.1              # File locking
+
+# ============================================================================
+# SCIENTIFIC & NUMERICAL
+# ============================================================================
+
+scikit-learn>=1.4.0           # Machine learning utilities
+statsmodels>=0.14.1           # Statistical models
+
+# ============================================================================
+# SERIALIZATION
+# ============================================================================
+
+orjson>=3.9.12                # Fast JSON serialization
+msgpack>=1.0.7                # MessagePack serialization
+
+# ============================================================================
+# SCHEDULING
+# ============================================================================
+
+apscheduler>=3.10.4           # Advanced scheduling
+
+# ============================================================================
+# SECURITY
+# ============================================================================
+
+cryptography>=42.0.2          # Encryption
+pyjwt>=2.8.0                  # JWT tokens
+bcrypt>=4.1.2                 # Password hashing
+
+# ============================================================================
+# PERFORMANCE
+# ============================================================================
+
+uvloop>=0.19.0                # Fast event loop (Unix only)
+
+# ============================================================================
+# WEB DASHBOARD (OPTIONAL)
+# ============================================================================
+
+flask>=3.0.1                  # Web framework
+flask-cors>=4.0.0             # CORS support
+gunicorn>=21.2.0              # WSGI server
+websockets>=12.0              # WebSocket support

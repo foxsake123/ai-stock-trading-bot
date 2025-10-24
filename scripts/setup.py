@@ -508,11 +508,24 @@ class SetupManager:
             required=True
         )
 
-        # Alpaca API Keys (required for trading)
-        print_info("\n📈 Alpaca API Keys (Required for trading execution)")
+        # Alpaca API Keys - DEE-BOT (required for trading)
+        print_info("\n📈 DEE-BOT Alpaca API Keys (Paper Trading Account 1)")
         print(f"{Colors.DIM}Get your keys at: https://app.alpaca.markets/paper/dashboard/overview{Colors.RESET}")
-        api_keys['ALPACA_API_KEY'] = prompt_input("Enter Alpaca API key", required=True)
-        api_keys['ALPACA_SECRET_KEY'] = prompt_input("Enter Alpaca secret key", required=True)
+        print(f"{Colors.DIM}DEE-BOT uses beta-neutral defensive strategies{Colors.RESET}")
+        api_keys['ALPACA_API_KEY_DEE'] = prompt_input("Enter DEE-BOT Alpaca API key", required=True)
+        api_keys['ALPACA_SECRET_KEY_DEE'] = prompt_input("Enter DEE-BOT Alpaca secret key", required=True)
+
+        # Alpaca API Keys - SHORGAN-BOT (required for trading)
+        print_info("\n📊 SHORGAN-BOT Alpaca API Keys (Paper Trading Account 2)")
+        print(f"{Colors.DIM}Get your keys at: https://app.alpaca.markets/paper/dashboard/overview{Colors.RESET}")
+        print(f"{Colors.DIM}SHORGAN-BOT uses catalyst-driven strategies{Colors.RESET}")
+        api_keys['ALPACA_API_KEY_SHORGAN'] = prompt_input("Enter SHORGAN-BOT Alpaca API key", required=True)
+        api_keys['ALPACA_SECRET_KEY_SHORGAN'] = prompt_input("Enter SHORGAN-BOT Alpaca secret key", required=True)
+
+        # Set primary/default Alpaca keys (use DEE-BOT by default)
+        api_keys['ALPACA_API_KEY'] = api_keys['ALPACA_API_KEY_DEE']
+        api_keys['ALPACA_SECRET_KEY'] = api_keys['ALPACA_SECRET_KEY_DEE']
+        api_keys['ALPACA_BASE_URL'] = 'https://paper-api.alpaca.markets'
 
         # Financial Datasets API Key (required for data)
         print_info("\n💹 Financial Datasets API Key (Required for market data)")
@@ -795,24 +808,43 @@ class SetupManager:
             print(f"{Colors.BRIGHT_RED}✗{Colors.RESET}")
             api_tests.append(('Anthropic', False, str(e)))
 
-        # Test Alpaca API
-        print(f"{Colors.DIM}  Testing Alpaca API...{Colors.RESET}", end=" ", flush=True)
+        # Test DEE-BOT Alpaca API
+        print(f"{Colors.DIM}  Testing DEE-BOT Alpaca API...{Colors.RESET}", end=" ", flush=True)
         try:
             from alpaca.trading.client import TradingClient
-            api_key = os.getenv('ALPACA_API_KEY')
-            secret_key = os.getenv('ALPACA_SECRET_KEY')
+            api_key_dee = os.getenv('ALPACA_API_KEY_DEE')
+            secret_key_dee = os.getenv('ALPACA_SECRET_KEY_DEE')
 
-            if api_key and secret_key:
-                client = TradingClient(api_key, secret_key, paper=True)
-                account = client.get_account()
-                print(f"{Colors.BRIGHT_GREEN}✓{Colors.RESET}")
-                api_tests.append(('Alpaca', True, None))
+            if api_key_dee and secret_key_dee:
+                client_dee = TradingClient(api_key_dee, secret_key_dee, paper=True)
+                account_dee = client_dee.get_account()
+                print(f"{Colors.BRIGHT_GREEN}✓ (${float(account_dee.equity):,.2f}){Colors.RESET}")
+                api_tests.append(('Alpaca DEE-BOT', True, None))
             else:
                 print(f"{Colors.BRIGHT_YELLOW}⚠ (no keys){Colors.RESET}")
-                api_tests.append(('Alpaca', False, "No API keys"))
+                api_tests.append(('Alpaca DEE-BOT', False, "No API keys"))
         except Exception as e:
-            print(f"{Colors.BRIGHT_RED}✗{Colors.RESET}")
-            api_tests.append(('Alpaca', False, str(e)))
+            print(f"{Colors.BRIGHT_RED}✗ ({str(e)[:40]}...){Colors.RESET}")
+            api_tests.append(('Alpaca DEE-BOT', False, str(e)))
+
+        # Test SHORGAN-BOT Alpaca API
+        print(f"{Colors.DIM}  Testing SHORGAN-BOT Alpaca API...{Colors.RESET}", end=" ", flush=True)
+        try:
+            from alpaca.trading.client import TradingClient
+            api_key_shorgan = os.getenv('ALPACA_API_KEY_SHORGAN')
+            secret_key_shorgan = os.getenv('ALPACA_SECRET_KEY_SHORGAN')
+
+            if api_key_shorgan and secret_key_shorgan:
+                client_shorgan = TradingClient(api_key_shorgan, secret_key_shorgan, paper=True)
+                account_shorgan = client_shorgan.get_account()
+                print(f"{Colors.BRIGHT_GREEN}✓ (${float(account_shorgan.equity):,.2f}){Colors.RESET}")
+                api_tests.append(('Alpaca SHORGAN-BOT', True, None))
+            else:
+                print(f"{Colors.BRIGHT_YELLOW}⚠ (no keys){Colors.RESET}")
+                api_tests.append(('Alpaca SHORGAN-BOT', False, "No API keys"))
+        except Exception as e:
+            print(f"{Colors.BRIGHT_RED}✗ ({str(e)[:40]}...){Colors.RESET}")
+            api_tests.append(('Alpaca SHORGAN-BOT', False, str(e)))
 
         # Test Financial Datasets API
         print(f"{Colors.DIM}  Testing Financial Datasets API...{Colors.RESET}", end=" ", flush=True)
