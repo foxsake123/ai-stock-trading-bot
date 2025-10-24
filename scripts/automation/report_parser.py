@@ -76,9 +76,9 @@ class ExternalReportParser:
 
         recommendations = []
 
-        # Try parsing ORDER BLOCK section first (old format)
-        order_block_pattern = r'## 4\. EXACT ORDER BLOCK(.*?)(?=\n## [^#]|$)'
-        match = re.search(order_block_pattern, content, re.DOTALL)
+        # Try parsing ORDER BLOCK section first (various formats)
+        order_block_pattern = r'## 4\. (?:EXACT |Exact )?ORDER BLOCK(.*?)(?=\n## [^#]|$)'
+        match = re.search(order_block_pattern, content, re.DOTALL | re.IGNORECASE)
 
         if match:
             order_block = match.group(1)
@@ -412,9 +412,16 @@ def main():
 
     base_dir = Path(f"reports/premarket/{date}")
 
-    claude_dee = base_dir / "claude_research.md"  # Or specific bot file
-    claude_shorgan = base_dir / "claude_research.md"
+    # Use bot-specific files
+    claude_dee = base_dir / f"claude_research_dee_bot_{date}.md"
+    claude_shorgan = base_dir / f"claude_research_shorgan_bot_{date}.md"
     chatgpt = base_dir / "chatgpt_research.md"
+
+    # Fall back to combined file if bot-specific don't exist
+    if not claude_dee.exists():
+        claude_dee = base_dir / "claude_research.md"
+    if not claude_shorgan.exists():
+        claude_shorgan = base_dir / "claude_research.md"
 
     parser = ExternalReportParser()
 

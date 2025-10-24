@@ -195,11 +195,22 @@ class AutomatedTradeGeneratorV2:
         if not date_str:
             date_str = datetime.now().strftime('%Y-%m-%d')
 
-        # Check new structure first
+        # Check new structure first (bot-specific files)
         new_reports_dir = Path("reports/premarket") / date_str
         if new_reports_dir.exists():
+            # Look for bot-specific files first
+            claude_dee = new_reports_dir / f"claude_research_dee_bot_{date_str}.md"
+            claude_shorgan = new_reports_dir / f"claude_research_shorgan_bot_{date_str}.md"
+
+            # Fall back to combined file if bot-specific don't exist
+            if not claude_dee.exists():
+                claude_dee = new_reports_dir / "claude_research.md"
+            if not claude_shorgan.exists():
+                claude_shorgan = new_reports_dir / "claude_research.md"
+
             return {
-                'claude': new_reports_dir / "claude_research.md",
+                'claude_dee': claude_dee,
+                'claude_shorgan': claude_shorgan,
                 'chatgpt': new_reports_dir / "chatgpt_research.md",
                 'location': 'new'
             }
@@ -242,15 +253,22 @@ class AutomatedTradeGeneratorV2:
             return {'approved': [], 'rejected': []}
 
         # Get external recommendations
-        if reports.get('location') == 'new':
-            recommendations = self.parser.get_recommendations_for_bot(
-                bot_name,
-                reports['claude'],
-                reports['chatgpt']
-            )
+        # Determine which Claude file to use
+        if bot_name == "DEE-BOT":
+            claude_path = reports.get('claude_dee')
+        elif bot_name == "SHORGAN-BOT":
+            claude_path = reports.get('claude_shorgan')
         else:
-            # Old structure - separate files
-            claude_path = reports.get(f'claude_{bot_name.lower().replace("-", "_")}')
+            claude_path = reports.get('claude')
+
+        recommendations = self.parser.get_recommendations_for_bot(
+            bot_name,
+            claude_path,
+            reports.get('chatgpt', Path("nonexistent.md"))
+        )
+
+        if not recommendations:
+            # Old structure fallback
             recommendations = []
             if claude_path and claude_path.exists():
                 recommendations = self.parser.parse_claude_report(claude_path, bot_name)
