@@ -20,15 +20,15 @@ from communication.coordinator import Coordinator
 from communication.protocols import AgentMessage
 
 # Import all agents
-from agents.fundamental_analyst import FundamentalAnalystAgent
-from agents.technical_analyst import TechnicalAnalystAgent
-from agents.news_analyst import NewsAnalystAgent
-from agents.sentiment_analyst import SentimentAnalystAgent
-from agents.bull_researcher import BullResearcherAgent
-from agents.bear_researcher import BearResearcherAgent
-from agents.risk_manager import RiskManagerAgent
-from agents.shorgan_catalyst_agent import ShorganCatalystAgent
-from agents.options_strategy_agent import OptionsStrategyAgent
+from src.agents.fundamental_analyst import FundamentalAnalystAgent
+from src.agents.technical_analyst import TechnicalAnalystAgent
+from src.agents.news_analyst import NewsAnalystAgent
+from src.agents.sentiment_analyst import SentimentAnalystAgent
+from src.agents.bull_researcher import BullResearcherAgent
+from src.agents.bear_researcher import BearResearcherAgent
+from src.agents.risk_manager import RiskManagerAgent
+from src.agents.shorgan_catalyst_agent import ShorganCatalystAgent
+from src.agents.options_strategy_agent import OptionsStrategyAgent
 
 # Configure logging
 logging.basicConfig(

@@ -11,14 +11,14 @@ import sys
 sys.path.append(str(Path(__file__).parent))
 
 # Import agents
-from agents.fundamental_analyst import FundamentalAnalyst
-from agents.technical_analyst import TechnicalAnalyst
-from agents.sentiment_analyst import SentimentAnalyst
-from agents.news_analyst import NewsAnalyst
-from agents.risk_manager import RiskManager
-from agents.alternative_data_agent import AlternativeDataAgent
-from agents.bull_researcher import BullResearcher
-from agents.bear_researcher import BearResearcher
+from src.agents.fundamental_analyst import FundamentalAnalyst
+from src.agents.technical_analyst import TechnicalAnalyst
+from src.agents.sentiment_analyst import SentimentAnalyst
+from src.agents.news_analyst import NewsAnalyst
+from src.agents.risk_manager import RiskManager
+from src.agents.alternative_data_agent import AlternativeDataAgent
+from src.agents.bull_researcher import BullResearcher
+from src.agents.bear_researcher import BearResearcher
 
 # Import data sources
 from data_sources.options_flow_tracker import OptionsFlowTracker

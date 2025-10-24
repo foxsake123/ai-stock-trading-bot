@@ -13,13 +13,13 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from agents.fundamental_analyst import FundamentalAnalyst
-from agents.technical_analyst import TechnicalAnalyst
-from agents.news_analyst import NewsAnalyst
-from agents.sentiment_analyst import SentimentAnalyst
-from agents.bull_agent import BullAgent
-from agents.bear_agent import BearAgent
-from agents.risk_manager import RiskManager
+from src.agents.fundamental_analyst import FundamentalAnalyst
+from src.agents.technical_analyst import TechnicalAnalyst
+from src.agents.news_analyst import NewsAnalyst
+from src.agents.sentiment_analyst import SentimentAnalyst
+from src.agents.bull_analyst import BullAgent  # Updated from bull_agent
+from src.agents.bear_analyst import BearAgent  # Updated from bear_agent
+from src.agents.risk_manager import RiskManager
 
 class Coordinator:
     """Coordinates multiple trading agents to reach consensus"""

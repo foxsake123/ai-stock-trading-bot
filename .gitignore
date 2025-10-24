@@ -118,3 +118,7 @@ cancel_old_orders.py
 
 # Legacy duplicate directory (removed except locked PDF)
 scripts-and-data/
+
+# Legacy agent directory (consolidated to src/agents/ on 2025-10-23)
+# Archived to docs/archive/legacy-agents-2025-10-23/
+agents/
