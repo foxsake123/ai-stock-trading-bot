@@ -1,0 +1,339 @@
+# AI Trading Bot - Production Configuration
+# Last Updated: 2025-10-23
+
+# ============================================================================
+# ENVIRONMENT SETTINGS
+# ============================================================================
+environment: production  # Options: development, staging, production
+
+# ============================================================================
+# TRADING CONFIGURATION
+# ============================================================================
+trading:
+  mode: paper  # Options: paper, live
+
+  bots:
+    dee_bot:
+      enabled: true
+      strategy: beta_neutral
+      initial_capital: 100000
+      max_position_size: 0.10  # 10% max per position
+      max_portfolio_exposure: 0.90  # 90% max total exposure
+      target_beta: 0.0
+      rebalance_threshold: 0.15
+
+    shorgan_bot:
+      enabled: true
+      strategy: catalyst_driven
+      initial_capital: 100000
+      max_position_size: 0.15  # 15% max per position
+      max_portfolio_exposure: 0.60  # 60% max total exposure
+      min_catalyst_confidence: 0.65
+      catalyst_timeframe_days: 45
+
+  execution:
+    market_hours_only: true
+    pre_market_start: "04:00"  # ET
+    market_open: "09:30"       # ET
+    market_close: "16:00"      # ET
+    after_hours_end: "20:00"   # ET
+
+    order_defaults:
+      time_in_force: day
+      extended_hours: false
+
+  risk_limits:
+    max_daily_loss_pct: 0.02      # 2% daily loss limit
+    max_drawdown_pct: 0.10         # 10% max drawdown
+    position_concentration_limit: 0.20  # Max 20% in single position
+    sector_concentration_limit: 0.30    # Max 30% in single sector
+
+# ============================================================================
+# PIPELINE SCHEDULE (All times in ET)
+# ============================================================================
+pipeline:
+  daily_schedule:
+    data_collection:
+      start_time: "06:00"
+      duration_minutes: 15
+
+    agent_analysis:
+      start_time: "06:15"
+      duration_minutes: 30
+      phases:
+        - fundamental_analysis
+        - technical_analysis
+        - sentiment_analysis
+        - news_analysis
+        - alternative_data
+
+    debate_phase:
+      start_time: "06:45"
+      duration_minutes: 15
+      min_confidence_for_debate: 0.60
+
+    strategy_allocation:
+      start_time: "07:00"
+      duration_minutes: 15
+
+    report_generation:
+      start_time: "07:15"
+      duration_minutes: 15
+
+    notifications:
+      start_time: "07:30"
+      duration_minutes: 5
+
+    trade_execution:
+      start_time: "09:30"
+      pre_market_validation: "09:15"
+
+  monitoring:
+    health_check_interval_minutes: 30
+    position_check_interval_minutes: 15
+    alert_check_interval_minutes: 5
+
+# ============================================================================
+# MULTI-AGENT SYSTEM
+# ============================================================================
+agents:
+  enabled: true
+
+  consensus:
+    min_agents_required: 5
+    approval_threshold: 0.55  # 55% weighted consensus needed
+    debate_threshold: 0.60    # Trigger bull/bear debate if confidence >= 60%
+
+  weights:
+    fundamental_analyst: 0.20
+    technical_analyst: 0.15
+    news_analyst: 0.15
+    sentiment_analyst: 0.10
+    alternative_data: 0.10
+    bull_researcher: 0.15
+    bear_researcher: 0.15
+
+  individual_agents:
+    fundamental_analyst:
+      enabled: true
+      data_sources:
+        - financial_datasets
+        - yahoo_finance
+      min_metrics_required: 10
+
+    technical_analyst:
+      enabled: true
+      indicators:
+        - rsi
+        - macd
+        - bollinger_bands
+        - volume_profile
+        - support_resistance
+
+    news_analyst:
+      enabled: true
+      sources:
+        - financial_datasets_news
+        - newsapi
+      sentiment_threshold: 0.3
+
+    sentiment_analyst:
+      enabled: true
+      sources:
+        - reddit
+        - twitter
+        - stocktwits
+
+    alternative_data:
+      enabled: true
+      sources:
+        - options_flow
+        - dark_pool
+        - insider_trading
+
+    bull_researcher:
+      enabled: true
+      focus: upside_catalysts
+
+    bear_researcher:
+      enabled: true
+      focus: downside_risks
+
+# ============================================================================
+# DATA SOURCES
+# ============================================================================
+data_sources:
+  financial_datasets:
+    enabled: true
+    api_base_url: "https://api.financialdatasets.ai"
+    rate_limit_per_minute: 60
+    cache_duration_hours: 4
+
+  alpaca:
+    enabled: true
+    api_version: v2
+    data_feed: iex  # Options: iex, sip
+
+  yahoo_finance:
+    enabled: true
+    fallback_only: true  # Use as fallback if primary fails
+
+  newsapi:
+    enabled: true
+    categories:
+      - business
+      - technology
+    max_articles_per_query: 100
+
+  reddit:
+    enabled: true
+    subreddits:
+      - wallstreetbets
+      - stocks
+      - investing
+    min_upvotes: 50
+
+# ============================================================================
+# ALERTS & NOTIFICATIONS
+# ============================================================================
+alerts:
+  channels:
+    telegram:
+      enabled: true
+      priority_levels:
+        - critical
+        - high
+        - medium
+
+    email:
+      enabled: true
+      priority_levels:
+        - critical
+        - high
+
+    slack:
+      enabled: false
+
+  notification_schedule:
+    morning_report: "07:30"
+    mid_day_update: "12:00"
+    close_report: "16:15"
+    evening_summary: "18:00"
+
+  alert_triggers:
+    position_loss_pct: 0.05     # Alert if position down 5%
+    position_gain_pct: 0.10     # Alert if position up 10%
+    portfolio_loss_pct: 0.02    # Alert if portfolio down 2%
+    execution_failure: true
+    api_error: true
+    data_source_failure: true
+
+# ============================================================================
+# MONITORING & HEALTH
+# ============================================================================
+monitoring:
+  health_checks:
+    enabled: true
+    interval_minutes: 30
+
+    checks:
+      - api_connectivity
+      - data_freshness
+      - disk_space
+      - memory_usage
+      - position_sync
+
+  performance_tracking:
+    enabled: true
+    metrics:
+      - daily_pnl
+      - win_rate
+      - sharpe_ratio
+      - max_drawdown
+      - position_count
+      - execution_rate
+
+  logging:
+    level: INFO  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+    rotation: daily
+    retention_days: 90
+
+    destinations:
+      - file
+      - console
+
+# ============================================================================
+# REPORTING
+# ============================================================================
+reports:
+  daily:
+    enabled: true
+    generation_time: "07:15"
+    formats:
+      - markdown
+      - pdf
+      - json
+    include_sections:
+      - market_overview
+      - agent_recommendations
+      - consensus_decisions
+      - risk_metrics
+      - execution_plan
+
+  weekly:
+    enabled: true
+    generation_day: friday
+    generation_time: "17:00"
+
+  monthly:
+    enabled: true
+    generation_day: last
+    generation_time: "17:00"
+
+  distribution:
+    telegram: true
+    email: true
+    archive: true
+
+# ============================================================================
+# BACKTESTING & ANALYSIS
+# ============================================================================
+backtesting:
+  enabled: true
+  historical_data_years: 2
+  monte_carlo_simulations: 1000
+  confidence_intervals:
+    - 0.50
+    - 0.75
+    - 0.95
+
+# ============================================================================
+# SYSTEM SETTINGS
+# ============================================================================
+system:
+  timezone: America/New_York
+
+  concurrency:
+    max_workers: 10
+    async_enabled: true
+
+  caching:
+    enabled: true
+    backend: redis  # Options: redis, file
+    default_ttl_seconds: 3600
+
+  database:
+    type: sqlite  # Options: sqlite, postgresql
+    path: data/trading_bot.db
+    backup_enabled: true
+    backup_interval_hours: 24
+
+  security:
+    api_key_rotation_days: 90
+    encrypt_credentials: true
+    audit_logging: true
+
+  emergency:
+    kill_switch_enabled: true
+    auto_close_on_error: false
+    max_consecutive_errors: 5

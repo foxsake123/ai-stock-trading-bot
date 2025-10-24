@@ -1,0 +1,308 @@
+# AI Trading Bot - Docker Ignore File
+# Excludes files/directories from Docker build context
+# Last Updated: 2025-10-23
+
+# ============================================================================
+# VIRTUAL ENVIRONMENTS
+# ============================================================================
+venv/
+env/
+ENV/
+.venv/
+.env/
+virtualenv/
+*.egg-info/
+.Python
+
+# ============================================================================
+# PYTHON CACHE & BYTECODE
+# ============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.dist-info/
+
+# ============================================================================
+# TESTING
+# ============================================================================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+nosetests.xml
+test-results/
+
+# ============================================================================
+# LOGS
+# ============================================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ============================================================================
+# DATA & REPORTS (exclude from image, mount as volumes)
+# ============================================================================
+data/cache/
+data/historical/
+data/state/
+reports/daily/
+reports/weekly/
+reports/monthly/
+backups/
+
+# Keep data structure but not contents
+# (Directories are created in Dockerfile)
+
+# ============================================================================
+# CONFIGURATION (sensitive - use volumes or env vars)
+# ============================================================================
+configs/.env
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.p12
+secrets/
+
+# ============================================================================
+# VERSION CONTROL
+# ============================================================================
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# ============================================================================
+# IDE & EDITORS
+# ============================================================================
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.#*
+
+# ============================================================================
+# OPERATING SYSTEM
+# ============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ============================================================================
+# DOCUMENTATION (include only essentials)
+# ============================================================================
+docs/_build/
+docs/.doctrees/
+*.md~
+
+# Keep these docs
+!README.md
+!deployment/docker/README.md
+
+# ============================================================================
+# DOCKER (avoid recursive Docker builds)
+# ============================================================================
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# ============================================================================
+# CI/CD
+# ============================================================================
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+Jenkinsfile
+
+# ============================================================================
+# NODE/NPM (if any frontend)
+# ============================================================================
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ============================================================================
+# TEMPORARY FILES
+# ============================================================================
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# ============================================================================
+# LARGE FILES (should be downloaded or mounted)
+# ============================================================================
+*.tar
+*.tar.gz
+*.zip
+*.rar
+*.7z
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+
+# ============================================================================
+# JUPYTER NOTEBOOKS (if any)
+# ============================================================================
+.ipynb_checkpoints/
+*.ipynb
+
+# ============================================================================
+# DEPLOYMENT (don't include in image)
+# ============================================================================
+deployment/systemd/
+deployment/aws/
+deployment/kubernetes/
+*.service
+*.timer
+
+# ============================================================================
+# PROJECT-SPECIFIC
+# ============================================================================
+# Session summaries (development only)
+docs/session-summaries/
+
+# Performance test results
+tests/performance/results/
+
+# Exploratory notebooks
+notebooks/
+
+# Local development scripts
+scripts/dev/
+scripts/local/
+
+# ============================================================================
+# NOTES
+# ============================================================================
+#
+# Why exclude these files:
+#
+# 1. venv/ - Virtual environments are platform-specific
+#    Created fresh in Dockerfile instead
+#
+# 2. __pycache__/ - Python bytecode is regenerated
+#    Not portable across Python versions
+#
+# 3. logs/ - Runtime logs should use volumes
+#    Not part of the image
+#
+# 4. .git/ - Version control not needed in image
+#    Makes image smaller and faster to build
+#
+# 5. configs/.env - Secrets should use env vars or volumes
+#    Never bake secrets into images
+#
+# 6. data/ - Data should use volumes
+#    Allows persistence and backup
+#
+# 7. .idea/, .vscode/ - IDE files not needed in production
+#    Reduces image size
+#
+# 8. docs/ - Most docs not needed at runtime
+#    Keep only essential docs
+#
+# ============================================================================
+# BEST PRACTICES
+# ============================================================================
+#
+# 1. Keep .dockerignore minimal but complete
+# 2. Exclude anything not needed at runtime
+# 3. Use volumes for data, logs, configs
+# 4. Never include secrets in image
+# 5. Exclude VCS directories (.git)
+# 6. Exclude build artifacts
+# 7. Test with: docker build --progress=plain .
+#
+# ============================================================================
+# TESTING THIS FILE
+# ============================================================================
+#
+# View what's included in build context:
+#   docker build --progress=plain -f deployment/docker/Dockerfile . 2>&1 | grep "COPY"
+#
+# Check context size:
+#   docker build -f deployment/docker/Dockerfile . 2>&1 | grep "context"
+#
+# List files in context (debug):
+#   DOCKER_BUILDKIT=0 docker build --no-cache -f deployment/docker/Dockerfile . 2>&1 | grep "^Step"
+#
+# Build and verify image size:
+#   docker build -t ai-trading-bot:test -f deployment/docker/Dockerfile .
+#   docker images ai-trading-bot:test
+#
+# ============================================================================
+# TROUBLESHOOTING
+# ============================================================================
+#
+# Build context too large:
+#   - Add more patterns to this file
+#   - Check for large files: du -sh * | sort -h
+#   - Move large files outside project or add to .dockerignore
+#
+# Missing files in image:
+#   - Check if pattern is too broad
+#   - Use ! prefix to include specific files
+#   - Test: docker run --rm image ls -la /app
+#
+# Secrets leaked into image:
+#   - Verify .env files are excluded
+#   - Use: docker history --no-trunc image
+#   - Use: docker dive image (tool to inspect layers)

@@ -1,0 +1,204 @@
+# AI Trading Bot - Systemd Service
+# Last Updated: 2025-10-23
+#
+# INSTALLATION INSTRUCTIONS:
+# ==========================
+#
+# 1. Copy this file to systemd directory:
+#    sudo cp deployment/systemd/trading-bot.service /etc/systemd/system/
+#
+# 2. Edit the paths below to match your installation:
+#    - WorkingDirectory: Your project directory
+#    - ExecStart: Path to your venv python and script
+#    - User: Your username
+#
+# 3. Create log directory:
+#    sudo mkdir -p /var/log/trading-bot
+#    sudo chown trader:trader /var/log/trading-bot
+#
+# 4. Reload systemd:
+#    sudo systemctl daemon-reload
+#
+# 5. Enable the service:
+#    sudo systemctl enable trading-bot.service
+#
+# 6. Start the service:
+#    sudo systemctl start trading-bot.service
+#
+# 7. Check status:
+#    sudo systemctl status trading-bot.service
+#
+# 8. View logs:
+#    sudo journalctl -u trading-bot -f
+#    tail -f /var/log/trading-bot/pipeline.log
+#
+# MANAGEMENT COMMANDS:
+# ====================
+#
+# Start:    sudo systemctl start trading-bot
+# Stop:     sudo systemctl stop trading-bot
+# Restart:  sudo systemctl restart trading-bot
+# Status:   sudo systemctl status trading-bot
+# Logs:     sudo journalctl -u trading-bot -f
+# Disable:  sudo systemctl disable trading-bot
+#
+
+[Unit]
+# Service description
+Description=AI Trading Bot - Daily Pipeline Service
+Documentation=https://github.com/your-repo/ai-trading-bot
+
+# Start after network is available
+After=network-online.target
+Wants=network-online.target
+
+# Start before timer (if using timer)
+Before=trading-bot.timer
+
+[Service]
+# Service type: oneshot means service runs once and exits
+Type=oneshot
+
+# Execution settings
+# IMPORTANT: Update these paths to match your installation
+WorkingDirectory=/home/trader/ai-stock-trading-bot
+ExecStart=/home/trader/ai-stock-trading-bot/venv/bin/python /home/trader/ai-stock-trading-bot/scripts/daily_pipeline.py
+
+# User and group to run as
+# IMPORTANT: Change to your username
+User=trader
+Group=trader
+
+# Environment variables
+Environment="PYTHONUNBUFFERED=1"
+Environment="TRADING_ENV=production"
+
+# Standard output and error to journal and file
+StandardOutput=append:/var/log/trading-bot/pipeline.log
+StandardError=append:/var/log/trading-bot/error.log
+
+# Restart policy
+# Restart on failure with delay
+Restart=on-failure
+RestartSec=60s
+
+# Timeout settings
+# Allow 10 minutes for pipeline to complete
+TimeoutStartSec=600s
+TimeoutStopSec=30s
+
+# Resource limits
+# Memory limit: 2GB
+MemoryLimit=2G
+MemoryHigh=1800M
+MemoryMax=2G
+
+# CPU quota: 80% of one CPU core
+CPUQuota=80%
+
+# I/O weight (default: 100, range: 10-1000)
+IOWeight=500
+
+# Process limits
+# Limit number of tasks (threads/processes)
+TasksMax=100
+
+# Limit number of file descriptors
+LimitNOFILE=4096
+
+# Security settings
+# Run with restricted permissions
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+NoNewPrivileges=true
+
+# Allow writing to these directories
+ReadWritePaths=/home/trader/ai-stock-trading-bot/data
+ReadWritePaths=/home/trader/ai-stock-trading-bot/logs
+ReadWritePaths=/home/trader/ai-stock-trading-bot/reports
+ReadWritePaths=/var/log/trading-bot
+
+# Network access required for API calls
+PrivateNetwork=false
+
+# Hardening options
+# Prevent privilege escalation
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+# System call filtering (optional - may need adjustment)
+# SystemCallFilter=@system-service
+# SystemCallErrorNumber=EPERM
+
+# Kill all processes in service's cgroup on stop
+KillMode=control-group
+KillSignal=SIGTERM
+
+# Send SIGKILL after 10 seconds if processes don't stop
+TimeoutStopFailureMode=kill
+FinalKillSignal=SIGKILL
+
+[Install]
+# Start this service when system reaches multi-user mode
+WantedBy=multi-user.target
+
+# NOTES:
+# ======
+#
+# 1. This service is designed to be triggered by trading-bot.timer
+#    or run manually with: sudo systemctl start trading-bot
+#
+# 2. The service runs as 'oneshot' which means:
+#    - It runs once when started
+#    - systemd waits for it to complete
+#    - It does not remain running
+#
+# 3. Resource limits prevent runaway processes:
+#    - Memory capped at 2GB
+#    - CPU usage limited to 80% of one core
+#    - File descriptors limited to 4096
+#
+# 4. Restart=on-failure means:
+#    - Service restarts if it exits with error code
+#    - Waits 60 seconds before restarting
+#    - Does NOT restart if it exits successfully
+#
+# 5. Security features:
+#    - Runs as non-root user (trader)
+#    - Limited file system access
+#    - Cannot elevate privileges
+#    - Private /tmp directory
+#
+# 6. Logs are written to:
+#    - systemd journal: journalctl -u trading-bot
+#    - /var/log/trading-bot/pipeline.log (stdout)
+#    - /var/log/trading-bot/error.log (stderr)
+#
+# 7. To use a different installation path:
+#    - Update WorkingDirectory
+#    - Update ExecStart paths (both python and script)
+#    - Update User and Group
+#    - Update ReadWritePaths
+#
+# TROUBLESHOOTING:
+# ================
+#
+# Service won't start:
+#   - Check paths in WorkingDirectory and ExecStart
+#   - Verify User exists and has permissions
+#   - Check logs: journalctl -u trading-bot -n 50
+#
+# Permission denied errors:
+#   - Verify file ownership: ls -la /home/trader/ai-stock-trading-bot
+#   - Check ReadWritePaths includes needed directories
+#   - Verify log directory exists and is writable
+#
+# Memory/CPU errors:
+#   - Adjust MemoryLimit and CPUQuota as needed
+#   - Monitor with: systemctl status trading-bot
+#
+# Service doesn't run at scheduled time:
+#   - Check timer is enabled: systemctl list-timers
+#   - Verify timer is active: systemctl status trading-bot.timer
+#   - Check system timezone: timedatectl

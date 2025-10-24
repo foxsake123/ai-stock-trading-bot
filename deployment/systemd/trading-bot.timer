@@ -1,0 +1,210 @@
+# AI Trading Bot - Systemd Timer
+# Last Updated: 2025-10-23
+#
+# INSTALLATION INSTRUCTIONS:
+# ==========================
+#
+# 1. Copy this file to systemd directory:
+#    sudo cp deployment/systemd/trading-bot.timer /etc/systemd/system/
+#
+# 2. Set system timezone to ET:
+#    sudo timedatectl set-timezone America/New_York
+#    (Verify with: timedatectl)
+#
+# 3. Reload systemd:
+#    sudo systemctl daemon-reload
+#
+# 4. Enable the timer (this will start it on boot):
+#    sudo systemctl enable trading-bot.timer
+#
+# 5. Start the timer now:
+#    sudo systemctl start trading-bot.timer
+#
+# 6. Check timer status:
+#    sudo systemctl status trading-bot.timer
+#
+# 7. List all active timers:
+#    systemctl list-timers --all
+#
+# 8. View next scheduled run:
+#    systemctl list-timers trading-bot.timer
+#
+# MANAGEMENT COMMANDS:
+# ====================
+#
+# Start timer:   sudo systemctl start trading-bot.timer
+# Stop timer:    sudo systemctl stop trading-bot.timer
+# Enable timer:  sudo systemctl enable trading-bot.timer
+# Disable timer: sudo systemctl disable trading-bot.timer
+# Status:        sudo systemctl status trading-bot.timer
+# List timers:   systemctl list-timers
+#
+
+[Unit]
+# Timer description
+Description=AI Trading Bot - Daily Pipeline Timer (6:00 AM ET Mon-Fri)
+Documentation=https://github.com/your-repo/ai-trading-bot
+
+# Require the service to exist
+Requires=trading-bot.service
+
+# Start after time sync
+After=time-sync.target
+
+[Timer]
+# Schedule: Monday-Friday at 6:00 AM ET
+# DayOfWeek format: Mon..Fri or Mon,Tue,Wed,Thu,Fri
+# OnCalendar uses systemd calendar format
+
+# Run at 6:00 AM on weekdays
+OnCalendar=Mon..Fri *-*-* 06:00:00
+
+# Timezone: America/New_York (Eastern Time)
+# Note: System timezone must be set to America/New_York
+# Or specify in each OnCalendar event (not all systemd versions support this)
+
+# Alternative scheduling formats (commented out):
+# OnCalendar=Mon,Tue,Wed,Thu,Fri 06:00:00
+# OnCalendar=weekdays 06:00:00
+
+# Run missed timers on boot
+# If timer was supposed to run while system was off, run it now
+Persistent=true
+
+# Accuracy: How much the timer can be delayed for power saving
+# Default is 1 minute, set to 5 minutes for power efficiency
+AccuracySec=5min
+
+# Randomize execution time slightly to avoid thundering herd
+# Adds random delay of 0-300 seconds (0-5 minutes)
+# Uncomment if running multiple instances
+# RandomizedDelaySec=300s
+
+# Wake system from suspend to run timer (requires hardware support)
+# Uncomment if needed
+# WakeSystem=true
+
+# Unit to activate (defaults to service with same name)
+Unit=trading-bot.service
+
+[Install]
+# Enable timer when multi-user target is reached (normal system boot)
+WantedBy=timers.target
+
+# NOTES:
+# ======
+#
+# 1. Timer Schedule Details:
+#    - Runs Monday through Friday (Mon..Fri)
+#    - Executes at 6:00 AM
+#    - Uses system timezone (should be America/New_York)
+#
+# 2. Persistent=true behavior:
+#    - If system is off at 6:00 AM, timer runs when system boots
+#    - Missed runs are caught up on next boot
+#    - Prevents missing trading days due to system downtime
+#
+# 3. AccuracySec=5min:
+#    - Timer may run up to 5 minutes late for power saving
+#    - Acceptable for non-critical scheduling
+#    - Reduces wake-ups on battery-powered systems
+#
+# 4. Timezone configuration:
+#    - System timezone MUST be America/New_York (ET)
+#    - Check with: timedatectl
+#    - Set with: sudo timedatectl set-timezone America/New_York
+#
+# 5. Timer activates trading-bot.service:
+#    - Service must exist in /etc/systemd/system/
+#    - Service will be started by timer
+#    - Service runs once and exits (Type=oneshot)
+#
+# 6. The timer itself stays running:
+#    - Timer is always active (waiting for next trigger)
+#    - Service runs only when triggered
+#    - Check timer status: systemctl list-timers
+#
+# SCHEDULE EXAMPLES:
+# ==================
+#
+# Every day at 6:00 AM:
+#   OnCalendar=*-*-* 06:00:00
+#
+# Weekdays at 6:00 AM (multiple formats):
+#   OnCalendar=Mon..Fri *-*-* 06:00:00
+#   OnCalendar=Mon,Tue,Wed,Thu,Fri 06:00:00
+#   OnCalendar=weekdays 06:00:00
+#
+# Multiple times per day:
+#   OnCalendar=Mon..Fri 06:00:00
+#   OnCalendar=Mon..Fri 16:00:00
+#
+# Every 4 hours on weekdays:
+#   OnCalendar=Mon..Fri *-*-* 00/4:00:00
+#
+# VERIFYING SCHEDULE:
+# ===================
+#
+# Test OnCalendar syntax:
+#   systemd-analyze calendar "Mon..Fri *-*-* 06:00:00"
+#
+# View next scheduled run:
+#   systemctl list-timers trading-bot.timer
+#
+# Check last run time:
+#   journalctl -u trading-bot.timer
+#
+# TROUBLESHOOTING:
+# ================
+#
+# Timer doesn't run at expected time:
+#   - Check system timezone: timedatectl
+#   - Should be America/New_York for ET
+#   - Verify timer is enabled: systemctl is-enabled trading-bot.timer
+#   - Check timer status: systemctl status trading-bot.timer
+#
+# Timer shows as inactive:
+#   - Start it: sudo systemctl start trading-bot.timer
+#   - Enable it: sudo systemctl enable trading-bot.timer
+#   - Reload daemon: sudo systemctl daemon-reload
+#
+# Service doesn't run when timer triggers:
+#   - Check service exists: ls /etc/systemd/system/trading-bot.service
+#   - Check service status: systemctl status trading-bot.service
+#   - View service logs: journalctl -u trading-bot.service
+#
+# Missed runs not executing:
+#   - Verify Persistent=true is set
+#   - Check journal for errors: journalctl -u trading-bot.timer
+#   - Ensure system clock is synchronized
+#
+# Wrong timezone:
+#   - Current TZ: timedatectl | grep "Time zone"
+#   - Set TZ: sudo timedatectl set-timezone America/New_York
+#   - Restart timer: sudo systemctl restart trading-bot.timer
+#
+# MARKET HOLIDAYS:
+# ================
+#
+# This timer does NOT automatically skip market holidays.
+# The daily_pipeline.py script should check if market is open.
+#
+# To manually skip specific dates, use drop-in files:
+#
+# 1. Create override directory:
+#    sudo mkdir -p /etc/systemd/system/trading-bot.timer.d
+#
+# 2. Create override file for specific date:
+#    sudo nano /etc/systemd/system/trading-bot.timer.d/skip-2025-12-25.conf
+#
+# 3. Add:
+#    [Timer]
+#    OnCalendar=
+#    OnCalendar=Mon..Fri *-*-* 06:00:00
+#    OnCalendar=!2025-12-25
+#
+# 4. Reload:
+#    sudo systemctl daemon-reload
+#
+# Better approach: Handle holidays in Python script
+# (Check src/utils/market_hours.py for holiday detection)

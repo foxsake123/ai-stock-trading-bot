@@ -1,0 +1,471 @@
+# AI Trading Bot - Docker Compose Configuration
+# Last Updated: 2025-10-23
+# Version: 3.8 (Docker Compose file format)
+
+version: '3.8'
+
+# ============================================================================
+# SERVICES
+# ============================================================================
+
+services:
+
+  # --------------------------------------------------------------------------
+  # Main Trading Bot Service
+  # --------------------------------------------------------------------------
+  trading-bot:
+    container_name: ai-trading-bot
+    build:
+      context: ../..
+      dockerfile: deployment/docker/Dockerfile
+      args:
+        - PYTHONUNBUFFERED=1
+    image: ai-trading-bot:latest
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Environment variables
+    env_file:
+      - ../../configs/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=America/New_York
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DATABASE_URL=postgresql://trader:trading123@postgres:5432/trading_bot
+      - TRADING_ENV=production
+
+    # Volume mounts
+    volumes:
+      # Data directories
+      - ../../data:/app/data
+      # Log directories
+      - ../../logs:/app/logs
+      # Report directories
+      - ../../reports:/app/reports
+      # Configuration (read-only)
+      - ../../configs:/app/configs:ro
+      # Source code (for development - remove in production)
+      - ../../src:/app/src
+      - ../../scripts:/app/scripts
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+    # Network
+    networks:
+      - trading-network
+
+    # Dependencies
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 5m
+      timeout: 30s
+      retries: 3
+      start_period: 1m
+
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # Command: Run daily pipeline (can override)
+    command: python scripts/daily_pipeline.py
+
+  # --------------------------------------------------------------------------
+  # Redis Service (Caching)
+  # --------------------------------------------------------------------------
+  redis:
+    container_name: ai-trading-bot-redis
+    image: redis:7-alpine
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Ports (expose only to internal network)
+    # ports:
+    #   - "6379:6379"  # Uncomment to expose externally
+
+    # Volume for persistence
+    volumes:
+      - redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+
+    # Command: Use custom config
+    command: redis-server /usr/local/etc/redis/redis.conf --appendonly yes
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+    # Network
+    networks:
+      - trading-network
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  # --------------------------------------------------------------------------
+  # PostgreSQL Service (Data Persistence)
+  # --------------------------------------------------------------------------
+  postgres:
+    container_name: ai-trading-bot-postgres
+    image: postgres:15-alpine
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Environment variables
+    environment:
+      - POSTGRES_DB=trading_bot
+      - POSTGRES_USER=trader
+      - POSTGRES_PASSWORD=trading123
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+    # Ports (expose only to internal network)
+    # ports:
+    #   - "5432:5432"  # Uncomment to expose externally
+
+    # Volume for persistence
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+    # Network
+    networks:
+      - trading-network
+
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U trader -d trading_bot"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "2"
+
+  # --------------------------------------------------------------------------
+  # Monitor Service (Health Checks & Monitoring)
+  # --------------------------------------------------------------------------
+  monitor:
+    container_name: ai-trading-bot-monitor
+    build:
+      context: ../..
+      dockerfile: deployment/docker/Dockerfile
+    image: ai-trading-bot:latest
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Environment variables
+    env_file:
+      - ../../configs/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=America/New_York
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DATABASE_URL=postgresql://trader:trading123@postgres:5432/trading_bot
+      - MONITORING_MODE=true
+
+    # Volume mounts (read-only where possible)
+    volumes:
+      - ../../data:/app/data:ro
+      - ../../logs:/app/logs
+      - ../../configs:/app/configs:ro
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+    # Network
+    networks:
+      - trading-network
+
+    # Dependencies
+    depends_on:
+      - trading-bot
+      - redis
+      - postgres
+
+    # Command: Run monitoring script
+    command: python scripts/monitoring/monitor.py
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  # --------------------------------------------------------------------------
+  # Web Dashboard (Optional)
+  # --------------------------------------------------------------------------
+  # dashboard:
+  #   container_name: ai-trading-bot-dashboard
+  #   build:
+  #     context: ../..
+  #     dockerfile: deployment/docker/Dockerfile
+  #   image: ai-trading-bot:latest
+  #
+  #   restart: unless-stopped
+  #
+  #   env_file:
+  #     - ../../configs/.env
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #     - FLASK_APP=src.dashboard.app
+  #     - FLASK_ENV=production
+  #
+  #   ports:
+  #     - "5000:5000"
+  #
+  #   volumes:
+  #     - ../../data:/app/data:ro
+  #     - ../../reports:/app/reports:ro
+  #     - ../../logs:/app/logs:ro
+  #
+  #   networks:
+  #     - trading-network
+  #
+  #   depends_on:
+  #     - trading-bot
+  #     - redis
+  #
+  #   command: python -m flask run --host=0.0.0.0 --port=5000
+
+# ============================================================================
+# NETWORKS
+# ============================================================================
+
+networks:
+  trading-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+# ============================================================================
+# VOLUMES
+# ============================================================================
+
+volumes:
+  # Redis persistent storage
+  redis-data:
+    driver: local
+
+  # PostgreSQL persistent storage
+  postgres-data:
+    driver: local
+
+# ============================================================================
+# USAGE INSTRUCTIONS
+# ============================================================================
+#
+# Start all services:
+#   docker-compose -f deployment/docker/docker-compose.yml up -d
+#
+# Start specific service:
+#   docker-compose -f deployment/docker/docker-compose.yml up -d trading-bot
+#
+# Stop all services:
+#   docker-compose -f deployment/docker/docker-compose.yml down
+#
+# Stop and remove volumes:
+#   docker-compose -f deployment/docker/docker-compose.yml down -v
+#
+# View logs:
+#   docker-compose -f deployment/docker/docker-compose.yml logs -f
+#   docker-compose -f deployment/docker/docker-compose.yml logs -f trading-bot
+#
+# Restart service:
+#   docker-compose -f deployment/docker/docker-compose.yml restart trading-bot
+#
+# Execute command in container:
+#   docker-compose -f deployment/docker/docker-compose.yml exec trading-bot bash
+#   docker-compose -f deployment/docker/docker-compose.yml exec trading-bot python scripts/monitoring/health_check.py
+#
+# View service status:
+#   docker-compose -f deployment/docker/docker-compose.yml ps
+#
+# Scale services:
+#   docker-compose -f deployment/docker/docker-compose.yml up -d --scale monitor=2
+#
+# Rebuild images:
+#   docker-compose -f deployment/docker/docker-compose.yml build
+#   docker-compose -f deployment/docker/docker-compose.yml build --no-cache
+#
+# ============================================================================
+# PRODUCTION DEPLOYMENT
+# ============================================================================
+#
+# 1. Create .env file with production credentials:
+#    cp .env.example configs/.env
+#    nano configs/.env
+#
+# 2. Update database password in docker-compose.yml
+#
+# 3. Build images:
+#    docker-compose -f deployment/docker/docker-compose.yml build
+#
+# 4. Start services in detached mode:
+#    docker-compose -f deployment/docker/docker-compose.yml up -d
+#
+# 5. Check logs:
+#    docker-compose -f deployment/docker/docker-compose.yml logs -f
+#
+# 6. Verify health:
+#    docker-compose -f deployment/docker/docker-compose.yml ps
+#
+# 7. Test trading bot:
+#    docker-compose -f deployment/docker/docker-compose.yml exec trading-bot python scripts/monitoring/health_check.py
+#
+# ============================================================================
+# SCHEDULED EXECUTION
+# ============================================================================
+#
+# Option 1: Cron on host machine
+#   0 6 * * 1-5 cd /path/to/repo && docker-compose -f deployment/docker/docker-compose.yml up trading-bot
+#
+# Option 2: Kubernetes CronJob (for k8s deployments)
+#
+# Option 3: Docker healthcheck + restart
+#   Services automatically restart on failure
+#
+# ============================================================================
+# MONITORING & MAINTENANCE
+# ============================================================================
+#
+# View resource usage:
+#   docker stats
+#
+# Clean up unused resources:
+#   docker system prune -a
+#
+# Backup database:
+#   docker-compose -f deployment/docker/docker-compose.yml exec postgres pg_dump -U trader trading_bot > backup.sql
+#
+# Restore database:
+#   cat backup.sql | docker-compose -f deployment/docker/docker-compose.yml exec -T postgres psql -U trader trading_bot
+#
+# Backup Redis:
+#   docker-compose -f deployment/docker/docker-compose.yml exec redis redis-cli SAVE
+#   docker cp ai-trading-bot-redis:/data/dump.rdb ./redis-backup.rdb
+#
+# ============================================================================
+# NETWORKING
+# ============================================================================
+#
+# Services communicate internally via:
+#   - redis:6379 (Redis)
+#   - postgres:5432 (PostgreSQL)
+#   - trading-bot (Main service)
+#
+# External access (uncomment ports in services):
+#   - Redis: localhost:6379
+#   - PostgreSQL: localhost:5432
+#   - Dashboard: localhost:5000
+#
+# ============================================================================
+# SECURITY NOTES
+# ============================================================================
+#
+# 1. Change default PostgreSQL password in production
+# 2. Use Docker secrets for sensitive data
+# 3. Don't expose database ports publicly
+# 4. Use read-only volumes where possible
+# 5. Keep base images updated
+# 6. Run containers as non-root user (already configured)
+# 7. Use private Docker registry for images
+# 8. Enable Docker Content Trust
+#
+# ============================================================================
+# TROUBLESHOOTING
+# ============================================================================
+#
+# Container won't start:
+#   - Check logs: docker-compose logs <service-name>
+#   - Verify .env file exists: ls -la configs/.env
+#   - Check disk space: df -h
+#
+# Database connection errors:
+#   - Check postgres is healthy: docker-compose ps
+#   - Verify DATABASE_URL is correct
+#   - Check network: docker network ls
+#
+# Redis connection errors:
+#   - Check redis is running: docker-compose ps redis
+#   - Test connection: docker-compose exec redis redis-cli ping
+#
+# Permission denied errors:
+#   - Check volume mount permissions: ls -la data/ logs/ reports/
+#   - Ensure directories are writable by UID 1000 (trader user)
+#
+# Out of memory errors:
+#   - Check limits: docker-compose config
+#   - Increase memory limits in deploy section
+#   - Monitor usage: docker stats
