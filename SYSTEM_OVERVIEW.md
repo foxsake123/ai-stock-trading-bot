@@ -167,7 +167,7 @@ The setup script will:
 ### Step 3: Verify Setup
 ```bash
 # Test both trading accounts
-python test_alpaca_dee_bot.py
+python tests/manual/test_alpaca_dee_bot.py
 
 # Expected output:
 # [SUCCESS] DEE-BOT Alpaca API connection working
@@ -545,7 +545,7 @@ python generate_performance_graph.py
 
 ```bash
 # Test both trading accounts
-python test_alpaca_dee_bot.py
+python tests/manual/test_alpaca_dee_bot.py
 
 # Run health check
 python scripts/health_check.py --verbose
@@ -650,7 +650,7 @@ The AI Trading Bot is a **production-ready automated trading system** that:
 
 **New users can**:
 1. Run `python scripts/setup.py` (5 minutes)
-2. Test with `python test_alpaca_dee_bot.py`
+2. Test with `python tests/manual/test_alpaca_dee_bot.py`
 3. Start automated trading same day
 
 **Current performance**: $206,912 (+3.46%) across both accounts

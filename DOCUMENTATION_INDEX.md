@@ -440,8 +440,18 @@ ai-stock-trading-bot/
 │   ├── unit/                       🔬 162 unit tests
 │   └── integration/                🔗 16 integration tests
 │
+├── tests/                          🧪 Test suite (471 tests)
+│   ├── agents/                     🤖 245 agent tests
+│   ├── unit/                       🔬 162 unit tests
+│   ├── integration/                🔗 16 integration tests
+│   └── manual/                     ✋ Manual test scripts
+│       ├── test_alpaca.py         ✅ Basic Alpaca test
+│       ├── test_alpaca_dee_bot.py ✅ Multi-account test
+│       └── test_fd_api.py         ✅ Financial Datasets test
+│
 ├── complete_setup.py               🪟 Windows-safe setup (294 lines)
-├── test_alpaca_dee_bot.py          ✅ Multi-account test (118 lines)
+├── main.py                         🚀 Main entry point
+├── web_dashboard.py                📊 Dashboard server
 └── .env                            🔐 API keys & secrets
 ```
 
@@ -460,12 +470,12 @@ ai-stock-trading-bot/
 
 **...troubleshoot setup issues**:
 → Read `SETUP_FIX_GUIDE.md`
-→ Run `python test_alpaca_dee_bot.py`
+→ Run `python tests/manual/test_alpaca_dee_bot.py`
 → Check `docs/MULTI_ACCOUNT_SETUP.md`
 
 **...understand multi-account trading**:
 → Read `docs/MULTI_ACCOUNT_SETUP.md` (450 lines)
-→ Read `QUICK_REFERENCE_MULTI_ACCOUNT.md` (166 lines)
+→ Read `docs/guides/QUICK_REFERENCE_MULTI_ACCOUNT.md` (166 lines)
 
 **...use utilities in my code**:
 → Read `docs/UTILS_DOCUMENTATION.md` (1,000 lines)
@@ -485,7 +495,7 @@ ai-stock-trading-bot/
 
 **...check portfolio status**:
 → Run `python scripts/performance/get_portfolio_status.py`
-→ Check `QUICK_REFERENCE_MULTI_ACCOUNT.md` for current status
+→ Check `docs/guides/QUICK_REFERENCE_MULTI_ACCOUNT.md` for current status
 
 **...run health checks**:
 → Run `python scripts/health_check.py --verbose`
