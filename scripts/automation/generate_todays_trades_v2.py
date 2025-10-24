@@ -27,6 +27,7 @@ from typing import List, Dict, Optional
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from scripts.automation.report_parser import ExternalReportParser, StockRecommendation
+from scripts.automation.financial_datasets_integration import FinancialDatasetsAPI
 from src.agents.fundamental_analyst import FundamentalAnalystAgent
 from src.agents.technical_analyst import TechnicalAnalystAgent
 from src.agents.news_analyst import NewsAnalystAgent
@@ -60,6 +61,13 @@ class MultiAgentTradeValidator:
         for agent_id, agent in self.agents.items():
             self.coordinator.register_agent(agent_id, agent)
 
+        # Initialize Financial Datasets API for real-time data
+        try:
+            self.fd_api = FinancialDatasetsAPI()
+        except Exception as e:
+            print(f"[WARNING] Could not initialize Financial Datasets API: {e}")
+            self.fd_api = None
+
     def validate_recommendation(self, rec: StockRecommendation, portfolio_value: float) -> Dict:
         """
         Validate external recommendation through multi-agent consensus
@@ -73,19 +81,8 @@ class MultiAgentTradeValidator:
         """
         print(f"  [*] Validating {rec.ticker} ({rec.source.upper()})...")
 
-        # Prepare market data for agents
-        market_data = {
-            'ticker': rec.ticker,
-            'price': rec.entry_price or 100,
-            'support_level': rec.stop_loss or (rec.entry_price * 0.92 if rec.entry_price else 90),
-            'resistance_level': rec.target_price or (rec.entry_price * 1.20 if rec.entry_price else 120),
-            'volume': 1000000,  # Would fetch real data in production
-            'avg_volume': 1000000,
-            'volatility': 0.3,
-            'beta': 1.0,
-            'proposed_position_size': (rec.position_size_pct or 5) * portfolio_value / 100,
-            'sector': 'unknown'
-        }
+        # Fetch real market data using Financial Datasets API
+        market_data = self._fetch_market_data(rec, portfolio_value)
 
         # Prepare supplemental data (external research context)
         supplemental_data = {
@@ -138,6 +135,55 @@ class MultiAgentTradeValidator:
                 'recommendation': rec,
                 'approved': False,
                 'rejection_reason': f"Validation error: {str(e)}"
+            }
+
+    def _fetch_market_data(self, rec: StockRecommendation, portfolio_value: float) -> Dict:
+        """
+        Fetch real market data using Financial Datasets API
+        Falls back to dummy data if API fails
+        """
+        ticker = rec.ticker
+
+        try:
+            if self.fd_api:
+                # Get real-time price
+                price_data = self.fd_api.get_snapshot_price(ticker)
+                current_price = price_data.get('price', rec.entry_price or 100)
+
+                # Get financial metrics for additional context
+                metrics = self.fd_api.get_financial_metrics(ticker)
+
+                return {
+                    'ticker': ticker,
+                    'price': current_price,
+                    'support_level': rec.stop_loss or (current_price * 0.92),
+                    'resistance_level': rec.target_price or (current_price * 1.20),
+                    'volume': price_data.get('volume', 1000000),
+                    'avg_volume': price_data.get('volume', 1000000),  # Would need historical data for real avg
+                    'volatility': 0.3,  # Would need historical returns for real volatility
+                    'beta': metrics.get('beta', 1.0) if metrics else 1.0,
+                    'proposed_position_size': (rec.position_size_pct or 5) * portfolio_value / 100,
+                    'sector': 'unknown',  # FD API doesn't provide sector directly
+                    'market_cap': price_data.get('market_cap', 1000000000) if price_data else 1000000000
+                }
+            else:
+                raise Exception("FD API not initialized")
+
+        except Exception as e:
+            print(f"[WARNING] Could not fetch market data for {ticker}: {e}")
+            # Fall back to dummy data based on recommendation
+            return {
+                'ticker': ticker,
+                'price': rec.entry_price or 100,
+                'support_level': rec.stop_loss or (rec.entry_price * 0.92 if rec.entry_price else 90),
+                'resistance_level': rec.target_price or (rec.entry_price * 1.20 if rec.entry_price else 120),
+                'volume': 1000000,
+                'avg_volume': 1000000,
+                'volatility': 0.3,
+                'beta': 1.0,
+                'proposed_position_size': (rec.position_size_pct or 5) * portfolio_value / 100,
+                'sector': 'unknown',
+                'market_cap': 1000000000
             }
 
     def _get_rejection_reason(self, decision, analyses: Dict) -> str:
