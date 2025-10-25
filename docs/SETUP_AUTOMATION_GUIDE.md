@@ -60,9 +60,9 @@ Python 3.13.0
 
 Creating Task Scheduler entries for trading automation...
 
-[1/4] Evening Research Generation (6:00 PM ET)...
-SUCCESS: The scheduled task "AI Trading - Evening Research" has successfully been created.
-SUCCESS: Evening Research task created
+[1/4] Weekend Research Generation (Saturday 12:00 PM ET)...
+SUCCESS: The scheduled task "AI Trading - Weekend Research" has successfully been created.
+SUCCESS: Weekend Research task created
 
 [2/4] Morning Trade Generation (8:30 AM ET)...
 SUCCESS: The scheduled task "AI Trading - Morning Trade Generation" has successfully been created.
@@ -81,22 +81,22 @@ SUCCESS: Performance Graph task created
 ========================================
 
 Scheduled Tasks:
-  1. Evening Research:      6:00 PM ET (daily)
+  1. Weekend Research:      12:00 PM ET (Saturdays)
   2. Trade Generation:      8:30 AM ET (weekdays)
   3. Trade Execution:       9:30 AM ET (weekdays)
   4. Performance Graph:     4:30 PM ET (weekdays)
 
-Next Trading Day Schedule:
-  6:00 PM (tonight):  Research generation for tomorrow
-  8:30 AM (tomorrow): Generate trades from research
-  9:30 AM (tomorrow): Execute approved trades
-  4:30 PM (tomorrow): Update performance graph
+Next Trading Week Schedule:
+  Saturday 12:00 PM:  Research generation for Monday
+  Monday 8:30 AM:     Generate trades from research
+  Monday 9:30 AM:     Execute approved trades
+  Monday 4:30 PM:     Update performance graph
 ```
 
 ### Step 4: Verify Tasks Created
 
 ```batch
-schtasks /query /tn "AI Trading - Evening Research"
+schtasks /query /tn "AI Trading - Weekend Research"
 schtasks /query /tn "AI Trading - Morning Trade Generation"
 schtasks /query /tn "AI Trading - Trade Execution"
 schtasks /query /tn "AI Trading - Daily Performance Graph"
@@ -107,7 +107,7 @@ schtasks /query /tn "AI Trading - Daily Performance Graph"
 Folder: \
 TaskName                                 Next Run Time          Status
 ======================================== ====================== ===============
-AI Trading - Evening Research            10/27/2025 6:00:00 PM  Ready
+AI Trading - Weekend Research            10/26/2025 12:00:00 PM Ready
 ```
 
 ### Step 5: Visual Verification (Optional)
@@ -121,7 +121,7 @@ AI Trading - Evening Research            10/27/2025 6:00:00 PM  Ready
 You should see:
 ```
 Name                                   Status    Triggers
-AI Trading - Evening Research          Ready     Daily at 6:00 PM
+AI Trading - Weekend Research          Ready     Weekly (Saturday) at 12:00 PM
 AI Trading - Morning Trade Generation  Ready     Weekly (M-F) at 8:30 AM
 AI Trading - Trade Execution           Ready     Weekly (M-F) at 9:30 AM
 AI Trading - Daily Performance Graph   Ready     Weekly (M-F) at 4:30 PM
@@ -131,9 +131,9 @@ AI Trading - Daily Performance Graph   Ready     Weekly (M-F) at 4:30 PM
 
 ## TASK DETAILS
 
-### Task 1: Evening Research
-**Name**: AI Trading - Evening Research
-**Schedule**: Daily at 6:00 PM ET
+### Task 1: Weekend Research
+**Name**: AI Trading - Weekend Research
+**Schedule**: Saturday at 12:00 PM ET
 **Script**: `scripts/automation/daily_claude_research.py`
 **Purpose**: Generate tomorrow's trade research using Claude Opus 4.1
 **Output**:

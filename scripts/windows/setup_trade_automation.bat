@@ -26,23 +26,24 @@ echo Creating Task Scheduler entries for trading automation...
 echo.
 
 REM =============================================================================
-REM TASK 1: Evening Research Generation (6:00 PM ET daily)
+REM TASK 1: Weekend Research Generation (Saturday 12:00 PM ET)
 REM =============================================================================
-echo [1/4] Evening Research Generation (6:00 PM ET)...
+echo [1/4] Weekend Research Generation (Saturday 12:00 PM ET)...
 schtasks /create ^
-    /tn "AI Trading - Evening Research" ^
+    /tn "AI Trading - Weekend Research" ^
     /tr "%PYTHON_PATH% %BOT_DIR%\scripts\automation\daily_claude_research.py" ^
-    /sc daily ^
-    /st 18:00 ^
+    /sc weekly ^
+    /d SAT ^
+    /st 12:00 ^
     /ru SYSTEM ^
     /f
 
 if errorlevel 1 (
-    echo ERROR: Failed to create Evening Research task
+    echo ERROR: Failed to create Weekend Research task
     pause
     exit /b 1
 )
-echo SUCCESS: Evening Research task created
+echo SUCCESS: Weekend Research task created
 
 echo.
 
@@ -116,25 +117,25 @@ echo  SUCCESS - All Tasks Created!
 echo ========================================
 echo.
 echo Scheduled Tasks:
-echo   1. Evening Research:      6:00 PM ET (daily)
+echo   1. Weekend Research:      12:00 PM ET (Saturdays)
 echo   2. Trade Generation:      8:30 AM ET (weekdays)
 echo   3. Trade Execution:       9:30 AM ET (weekdays)
 echo   4. Performance Graph:     4:30 PM ET (weekdays)
 echo.
-echo Next Trading Day Schedule:
-echo   6:00 PM (tonight):  Research generation for tomorrow
-echo   8:30 AM (tomorrow): Generate trades from research
-echo   9:30 AM (tomorrow): Execute approved trades
-echo   4:30 PM (tomorrow): Update performance graph
+echo Next Trading Week Schedule:
+echo   Saturday 12:00 PM:  Research generation for Monday
+echo   Monday 8:30 AM:     Generate trades from research
+echo   Monday 9:30 AM:     Execute approved trades
+echo   Monday 4:30 PM:     Update performance graph
 echo.
 echo To verify tasks:
-echo   schtasks /query /tn "AI Trading - Evening Research"
+echo   schtasks /query /tn "AI Trading - Weekend Research"
 echo   schtasks /query /tn "AI Trading - Morning Trade Generation"
 echo   schtasks /query /tn "AI Trading - Trade Execution"
 echo   schtasks /query /tn "AI Trading - Daily Performance Graph"
 echo.
 echo To run tasks manually now (testing):
-echo   schtasks /run /tn "AI Trading - Evening Research"
+echo   schtasks /run /tn "AI Trading - Weekend Research"
 echo   schtasks /run /tn "AI Trading - Morning Trade Generation"
 echo   schtasks /run /tn "AI Trading - Trade Execution"
 echo   schtasks /run /tn "AI Trading - Daily Performance Graph"

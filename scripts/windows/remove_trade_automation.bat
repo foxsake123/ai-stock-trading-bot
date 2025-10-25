@@ -13,11 +13,17 @@ echo.
 echo Removing scheduled tasks...
 echo.
 
-schtasks /delete /tn "AI Trading - Evening Research" /f 2>nul
+REM Try both old and new task names for research
+schtasks /delete /tn "AI Trading - Weekend Research" /f 2>nul
 if errorlevel 1 (
-    echo [SKIP] Evening Research task not found
+    schtasks /delete /tn "AI Trading - Evening Research" /f 2>nul
+    if errorlevel 1 (
+        echo [SKIP] Weekend/Evening Research task not found
+    ) else (
+        echo [DELETED] Evening Research task (old name)
+    )
 ) else (
-    echo [DELETED] Evening Research task
+    echo [DELETED] Weekend Research task
 )
 
 schtasks /delete /tn "AI Trading - Morning Trade Generation" /f 2>nul
