@@ -1,0 +1,61 @@
+{
+  "_comment": "Conservative risk limits for first week of live trading",
+  "_last_updated": "2025-10-26",
+
+  "daily_limits": {
+    "max_loss_dollars": 200.00,
+    "max_loss_pct": 0.02,
+    "max_trades": 5,
+    "comment": "VERY conservative for Week 1. Increase after proven success."
+  },
+
+  "position_limits": {
+    "max_position_size_pct": 0.05,
+    "max_total_exposure_pct": 0.40,
+    "min_cash_reserve_pct": 0.60,
+    "comment": "Start with 5% max per position, 40% max deployed, 60% cash"
+  },
+
+  "trade_limits": {
+    "max_single_trade_value": 5000.00,
+    "require_manual_approval_above": 2000.00,
+    "comment": "Manually approve any trade >$2K for first week"
+  },
+
+  "drawdown_limits": {
+    "max_drawdown_from_peak_pct": 0.10,
+    "stop_trading_if_below_balance": 18000.00,
+    "comment": "Halt if portfolio drops 10% from peak or below $18K"
+  },
+
+  "consecutive_loss_limits": {
+    "max_consecutive_losses": 3,
+    "halt_after_n_daily_losses": 2,
+    "comment": "Stop if 3 losses in a row or 2 losing days in a row"
+  },
+
+  "allowed_actions": {
+    "whitelist": ["BUY", "SELL"],
+    "blacklist": ["SELL_TO_OPEN", "BUY_TO_COVER"],
+    "comment": "Week 1: Only allow simple BUY/SELL. No shorting yet."
+  },
+
+  "time_restrictions": {
+    "allow_trading_before": "09:45:00",
+    "allow_trading_after": "15:30:00",
+    "comment": "Avoid first 15 min (high volatility) and last 30 min (close)"
+  },
+
+  "escalation": {
+    "week_2": {
+      "max_loss_dollars": 500.00,
+      "max_position_size_pct": 0.08,
+      "comment": "After 5 successful days, can loosen slightly"
+    },
+    "week_3_4": {
+      "max_loss_dollars": 1000.00,
+      "max_position_size_pct": 0.10,
+      "comment": "After 10 successful days"
+    }
+  }
+}

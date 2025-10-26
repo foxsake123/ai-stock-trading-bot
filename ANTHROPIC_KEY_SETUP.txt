@@ -1,0 +1,62 @@
+================================================================================
+HOW TO GET A WORKING ANTHROPIC API KEY
+================================================================================
+
+The current key (ending in -bigeEgAA) is INVALID and won't work.
+You need to create a BRAND NEW key.
+
+STEP-BY-STEP INSTRUCTIONS:
+--------------------------
+
+1. Go to: https://console.anthropic.com/settings/keys
+
+2. You'll see your existing keys listed. 
+   - The old key ending in -bigeEgAA is there but NOT WORKING
+   - You cannot view the full old key anymore
+
+3. Click "Create Key" button (top right)
+
+4. Give it a name: "AI Trading Bot - Oct 26 2025"
+
+5. Click "Create Key"
+
+6. **IMMEDIATELY COPY THE ENTIRE KEY** 
+   - It will start with: sk-ant-api03-XXXXXX (different from your old one)
+   - It will be ~108 characters long
+   - THIS IS THE ONLY TIME YOU CAN SEE IT!
+
+7. Open .env file:
+   notepad C:\Users\shorg\ai-stock-trading-bot\.env
+
+8. Find the line:
+   ANTHROPIC_API_KEY=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
+
+9. Replace ENTIRE value with your NEW key:
+   ANTHROPIC_API_KEY=sk-ant-api03-[YOUR_NEW_KEY_HERE]
+
+10. Save and close notepad
+
+11. Test it works:
+    cd C:\Users\shorg\ai-stock-trading-bot
+    python scripts/automation/daily_claude_research.py --force
+
+12. You should see:
+    [*] Calling Claude API (Opus 4.1 with Extended Thinking)...
+    [*] Deep research mode enabled - this may take 3-5 minutes...
+    [*] Generating report... (this means it's working!)
+
+IMPORTANT NOTES:
+----------------
+- The NEW key will have DIFFERENT characters after sk-ant-api03-
+- It will NOT start with "oOrO0cE" - that's the old broken key
+- Make sure NO "api_key " prefix at the beginning
+- Just: ANTHROPIC_API_KEY=sk-ant-api03-XXXXXXXXX
+
+BILLING CHECK:
+--------------
+While on https://console.anthropic.com:
+- Check "Billing" section
+- Make sure you have credits or a valid payment method
+- API keys won't work without billing set up
+
+================================================================================
