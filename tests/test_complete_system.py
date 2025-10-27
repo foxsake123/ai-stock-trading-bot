@@ -128,7 +128,7 @@ def test_alternative_data():
     try:
         from data_sources.options_flow_tracker import OptionsFlowTracker
         from data_sources.reddit_wsb_scanner import RedditWSBScanner
-        from data_sources.alternative_data_aggregator import AlternativeDataAggregator
+        from src.data.alternative_data_aggregator import AlternativeDataAggregator
         print("  Alternative data sources available")
         return True
     except ImportError as e:

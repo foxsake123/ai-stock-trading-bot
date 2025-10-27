@@ -12,7 +12,7 @@ from datetime import datetime
 # Add project to path
 sys.path.append(str(Path(__file__).parent))
 
-from data_sources.alternative_data_aggregator import AlternativeDataAggregator, RealTimeAlertSystem
+from src.data.alternative_data_aggregator import AlternativeDataAggregator, RealTimeAlertSystem
 from data_sources.reddit_wsb_scanner import RedditWSBScanner
 from data_sources.options_flow_tracker import OptionsFlowTracker, OptionsAlertSystem
 from src.agents.alternative_data_agent import AlternativeDataAgent, EnhancedMultiAgentSystem
