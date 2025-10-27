@@ -16,7 +16,7 @@ from financial_datasets_integration import FinancialDatasetsAPI
 
 # Import communication components
 from communication.message_bus import MessageBus
-from communication.coordinator import Coordinator
+from src.agents.communication.coordinator import Coordinator
 from communication.protocols import AgentMessage
 
 # Import all agents

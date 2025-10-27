@@ -2,7 +2,7 @@
 
 import pytest
 from datetime import datetime, time, timedelta
-from monitoring.catalyst_monitor import (
+from src.monitors.catalyst_monitor import (
     CatalystMonitor,
     Catalyst,
     CatalystAlert,
