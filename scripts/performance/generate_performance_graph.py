@@ -452,6 +452,50 @@ SHORGAN:     ${shorgan_indexed_final:.2f} ({metrics['shorgan_return_pct']:+.2f}%
 
     return fig, metrics
 
+def send_telegram_notification(metrics, graph_path):
+    """Send performance graph and metrics via Telegram"""
+    try:
+        import requests
+
+        TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "7526351226:AAHQz1PV-4OdNmCgLdgzPJ8emHxIeGdPW6Q")
+        CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "7870288896")
+
+        # Send performance graph as photo
+        url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
+
+        # Build caption with metrics
+        caption = "📊 *Daily Performance Update*\n\n"
+        caption += f"*Combined Portfolio*: ${metrics['combined_final_value']:,.2f} ({metrics['combined_return_pct']:+.2f}%)\n"
+        caption += f"*DEE-BOT*: ${metrics['dee_final_value']:,.2f} ({metrics['dee_return_pct']:+.2f}%)\n"
+        caption += f"*SHORGAN-BOT*: ${metrics['shorgan_final_value']:,.2f} ({metrics['shorgan_return_pct']:+.2f}%)\n"
+
+        if 'sp500_return_pct' in metrics:
+            caption += f"*S&P 500*: ${metrics['sp500_final_value']:,.2f} ({metrics['sp500_return_pct']:+.2f}%)\n"
+            caption += f"*Alpha*: {metrics['combined_return_pct'] - metrics['sp500_return_pct']:+.2f}%\n"
+
+        caption += f"\n_Updated: {datetime.now().strftime('%Y-%m-%d %I:%M %p ET')}_"
+
+        with open(graph_path, 'rb') as photo:
+            files = {'photo': photo}
+            data = {
+                'chat_id': CHAT_ID,
+                'caption': caption,
+                'parse_mode': 'Markdown'
+            }
+
+            response = requests.post(url, data=data, files=files)
+
+            if response.status_code == 200:
+                print(f"\n[+] Telegram notification sent successfully")
+                return True
+            else:
+                print(f"\n[-] Telegram send failed: {response.text}")
+                return False
+
+    except Exception as e:
+        print(f"\n[-] Telegram notification failed: {e}")
+        return False
+
 def main():
     """Main execution function"""
     print("Generating Performance Comparison Graph...")
@@ -495,6 +539,11 @@ def main():
 
     # Generate visualization
     fig, metrics = plot_performance_comparison(portfolio_df)
+
+    # Send Telegram notification
+    if metrics and RESULTS_PATH.exists():
+        print("\nSending Telegram notification...")
+        send_telegram_notification(metrics, RESULTS_PATH)
 
     print("\nPerformance analysis complete!")
 

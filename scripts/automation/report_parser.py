@@ -77,7 +77,8 @@ class ExternalReportParser:
         recommendations = []
 
         # Try parsing ORDER BLOCK section first (various formats)
-        order_block_pattern = r'## 4\. (?:EXACT |Exact )?ORDER BLOCK(.*?)(?=\n## [^#]|$)'
+        # Match any section number (## 4., ## 6., etc.) followed by EXACT/Exact ORDER BLOCK
+        order_block_pattern = r'## \d+\. (?:EXACT |Exact )?ORDER BLOCK(.*?)(?=\n## [^#]|$)'
         match = re.search(order_block_pattern, content, re.DOTALL | re.IGNORECASE)
 
         if match:
@@ -88,9 +89,23 @@ class ExternalReportParser:
             trade_blocks = re.findall(trade_pattern, order_block, re.DOTALL)
 
             for block in trade_blocks:
-                rec = self._parse_trade_block(block, 'claude', bot_name)
-                if rec:
-                    recommendations.append(rec)
+                # Check if this block contains multiple trades (SHORGAN-BOT format)
+                # by counting "Action:" occurrences
+                action_count = len(re.findall(r'^Action:', block, re.MULTILINE | re.IGNORECASE))
+
+                if action_count > 1:
+                    # Split into individual trades by "Action:" delimiter
+                    individual_trades = re.split(r'(?=^Action:)', block, flags=re.MULTILINE | re.IGNORECASE)
+                    for trade in individual_trades:
+                        if trade.strip():
+                            rec = self._parse_trade_block(trade, 'claude', bot_name)
+                            if rec:
+                                recommendations.append(rec)
+                else:
+                    # Single trade per block (DEE-BOT format)
+                    rec = self._parse_trade_block(block, 'claude', bot_name)
+                    if rec:
+                        recommendations.append(rec)
 
         # Also try parsing summary table format (new format)
         table_pattern = r'\| Rank \| Ticker.*?\n\|[-|]+\n((?:\|.+\n)+)'
