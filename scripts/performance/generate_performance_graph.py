@@ -26,52 +26,74 @@ RESULTS_PATH = Path("performance_results.png")
 # Alpaca API Configuration (from .env)
 DEE_BOT_API_KEY = os.getenv('ALPACA_API_KEY_DEE')
 DEE_BOT_SECRET = os.getenv('ALPACA_SECRET_KEY_DEE')
-# SHORGAN using LIVE keys
-SHORGAN_API_KEY = os.getenv('ALPACA_LIVE_API_KEY_SHORGAN')
-SHORGAN_SECRET = os.getenv('ALPACA_LIVE_SECRET_KEY_SHORGAN')
+# SHORGAN Paper (historical tracking)
+SHORGAN_PAPER_API_KEY = os.getenv('ALPACA_API_KEY_SHORGAN')
+SHORGAN_PAPER_SECRET = os.getenv('ALPACA_SECRET_KEY_SHORGAN')
+# SHORGAN Live (new $1K account)
+SHORGAN_LIVE_API_KEY = os.getenv('ALPACA_LIVE_API_KEY_SHORGAN')
+SHORGAN_LIVE_SECRET = os.getenv('ALPACA_LIVE_SECRET_KEY_SHORGAN')
+
 BASE_URL_DEE = 'https://paper-api.alpaca.markets'  # DEE on paper
-BASE_URL_SHORGAN = 'https://api.alpaca.markets'  # SHORGAN on LIVE
+BASE_URL_SHORGAN_PAPER = 'https://paper-api.alpaca.markets'  # SHORGAN paper
+BASE_URL_SHORGAN_LIVE = 'https://api.alpaca.markets'  # SHORGAN LIVE
 
 # Starting capital
 INITIAL_CAPITAL_DEE = 100000.0  # Paper trading
-INITIAL_CAPITAL_SHORGAN = 1000.0  # LIVE TRADING - $1K funded account
-INITIAL_CAPITAL_COMBINED = 101000.0  # DEE paper + SHORGAN live
+INITIAL_CAPITAL_SHORGAN_PAPER = 100000.0  # Paper trading
+INITIAL_CAPITAL_SHORGAN_LIVE = 1000.0  # LIVE TRADING - $1K funded account
+INITIAL_CAPITAL_COMBINED = 201000.0  # DEE paper + SHORGAN paper + SHORGAN live
 
 def get_current_portfolio_values():
-    """Fetch current portfolio values from Alpaca"""
+    """Fetch current portfolio values from Alpaca (3 accounts)"""
     try:
         dee_api = tradeapi.REST(DEE_BOT_API_KEY, DEE_BOT_SECRET, BASE_URL_DEE, api_version='v2')
-        shorgan_api = tradeapi.REST(SHORGAN_API_KEY, SHORGAN_SECRET, BASE_URL_SHORGAN, api_version='v2')
+        shorgan_paper_api = tradeapi.REST(SHORGAN_PAPER_API_KEY, SHORGAN_PAPER_SECRET, BASE_URL_SHORGAN_PAPER, api_version='v2')
+        shorgan_live_api = tradeapi.REST(SHORGAN_LIVE_API_KEY, SHORGAN_LIVE_SECRET, BASE_URL_SHORGAN_LIVE, api_version='v2')
 
         dee_account = dee_api.get_account()
-        shorgan_account = shorgan_api.get_account()
+        shorgan_paper_account = shorgan_paper_api.get_account()
+        shorgan_live_account = shorgan_live_api.get_account()
 
         dee_value = float(dee_account.portfolio_value)
-        shorgan_value = float(shorgan_account.portfolio_value)
+        shorgan_paper_value = float(shorgan_paper_account.portfolio_value)
+        shorgan_live_value = float(shorgan_live_account.portfolio_value)
 
         return {
             'dee_bot': dee_value,
-            'shorgan_bot': shorgan_value,
-            'combined': dee_value + shorgan_value
+            'shorgan_paper': shorgan_paper_value,
+            'shorgan_live': shorgan_live_value,
+            'combined': dee_value + shorgan_paper_value + shorgan_live_value
         }
     except Exception as e:
         print(f"Error fetching portfolio values: {e}")
         return None
 
 def load_performance_history():
-    """Load historical performance data from JSON file"""
+    """Load historical performance data from JSON file (supports both old and new schema)"""
     try:
         with open(PERFORMANCE_JSON, 'r') as f:
             data = json.load(f)
 
         records = []
         for record in data.get('daily_records', []):
-            records.append({
-                'date': pd.to_datetime(record['date']),
-                'dee_value': record['dee_bot']['value'],
-                'shorgan_value': record['shorgan_bot']['value'],
-                'combined_value': record['combined']['total_value']
-            })
+            # NEW SCHEMA (3 accounts: dee, shorgan_paper, shorgan_live)
+            if 'shorgan_paper' in record and 'shorgan_live' in record:
+                records.append({
+                    'date': pd.to_datetime(record['date']),
+                    'dee_value': record['dee_bot']['value'],
+                    'shorgan_paper_value': record['shorgan_paper']['value'],
+                    'shorgan_live_value': record['shorgan_live']['value'],
+                    'combined_value': record['combined']['total_value']
+                })
+            # OLD SCHEMA (2 accounts: dee, shorgan_bot) - backward compatibility
+            else:
+                records.append({
+                    'date': pd.to_datetime(record['date']),
+                    'dee_value': record['dee_bot']['value'],
+                    'shorgan_paper_value': record['shorgan_bot']['value'],  # Old data was paper
+                    'shorgan_live_value': INITIAL_CAPITAL_SHORGAN_LIVE,  # No live trades yet
+                    'combined_value': record['combined']['total_value']
+                })
 
         if not records:
             return None
@@ -88,7 +110,7 @@ def load_performance_history():
         return None
 
 def create_portfolio_dataframe():
-    """Create or load portfolio performance dataframe with baseline"""
+    """Create or load portfolio performance dataframe with baseline (3 accounts)"""
     df = load_performance_history()
 
     # Add baseline data point (starting capital)
@@ -103,7 +125,8 @@ def create_portfolio_dataframe():
     baseline_row = pd.DataFrame({
         'date': [baseline_date],
         'dee_value': [INITIAL_CAPITAL_DEE],
-        'shorgan_value': [INITIAL_CAPITAL_SHORGAN],
+        'shorgan_paper_value': [INITIAL_CAPITAL_SHORGAN_PAPER],
+        'shorgan_live_value': [INITIAL_CAPITAL_SHORGAN_LIVE],
         'combined_value': [INITIAL_CAPITAL_COMBINED]
     })
 
@@ -113,7 +136,8 @@ def create_portfolio_dataframe():
         today_row = pd.DataFrame({
             'date': [pd.Timestamp.now()],
             'dee_value': [current_values['dee_bot']],
-            'shorgan_value': [current_values['shorgan_bot']],
+            'shorgan_paper_value': [current_values['shorgan_paper']],
+            'shorgan_live_value': [current_values['shorgan_live']],
             'combined_value': [current_values['combined']]
         })
         df = pd.concat([df, today_row], ignore_index=True)
@@ -217,8 +241,8 @@ def download_sp500(start_date: pd.Timestamp, end_date: pd.Timestamp) -> pd.DataF
 
         # Use data client instead of trading client
         data_client = StockHistoricalDataClient(
-            api_key=SHORGAN_API_KEY,
-            secret_key=SHORGAN_SECRET
+            api_key=SHORGAN_PAPER_API_KEY,
+            secret_key=SHORGAN_PAPER_SECRET
         )
 
         # Request SPY bars with free IEX feed
@@ -383,7 +407,7 @@ def create_synthetic_sp500_benchmark(portfolio_df: pd.DataFrame) -> pd.DataFrame
     return sp500_df
 
 def calculate_performance_metrics(df):
-    """Calculate key performance metrics"""
+    """Calculate key performance metrics (3 accounts + benchmark)"""
     if df.empty:
         return None
 
@@ -394,10 +418,15 @@ def calculate_performance_metrics(df):
     metrics['dee_return_pct'] = dee_return
     metrics['dee_final_value'] = df['dee_value'].iloc[-1]
 
-    # SHORGAN-BOT metrics
-    shorgan_return = ((df['shorgan_value'].iloc[-1] - INITIAL_CAPITAL_SHORGAN) / INITIAL_CAPITAL_SHORGAN) * 100
-    metrics['shorgan_return_pct'] = shorgan_return
-    metrics['shorgan_final_value'] = df['shorgan_value'].iloc[-1]
+    # SHORGAN-PAPER metrics
+    shorgan_paper_return = ((df['shorgan_paper_value'].iloc[-1] - INITIAL_CAPITAL_SHORGAN_PAPER) / INITIAL_CAPITAL_SHORGAN_PAPER) * 100
+    metrics['shorgan_paper_return_pct'] = shorgan_paper_return
+    metrics['shorgan_paper_final_value'] = df['shorgan_paper_value'].iloc[-1]
+
+    # SHORGAN-LIVE metrics
+    shorgan_live_return = ((df['shorgan_live_value'].iloc[-1] - INITIAL_CAPITAL_SHORGAN_LIVE) / INITIAL_CAPITAL_SHORGAN_LIVE) * 100
+    metrics['shorgan_live_return_pct'] = shorgan_live_return
+    metrics['shorgan_live_final_value'] = df['shorgan_live_value'].iloc[-1]
 
     # Combined metrics
     combined_return = ((df['combined_value'].iloc[-1] - INITIAL_CAPITAL_COMBINED) / INITIAL_CAPITAL_COMBINED) * 100
@@ -413,31 +442,36 @@ def calculate_performance_metrics(df):
     return metrics
 
 def plot_performance_comparison(df):
-    """Generate performance comparison graph matching reference style"""
+    """Generate performance comparison graph with 3 separate strategies + benchmark"""
 
     # Create figure with professional styling
-    fig, ax = plt.subplots(figsize=(14, 8))
+    fig, ax = plt.subplots(figsize=(16, 9))
 
     # Calculate indexed values (starting at $100 for each)
     df['combined_indexed'] = (df['combined_value'] / df['combined_value'].iloc[0]) * 100
     df['dee_indexed'] = (df['dee_value'] / df['dee_value'].iloc[0]) * 100
-    df['shorgan_indexed'] = (df['shorgan_value'] / df['shorgan_value'].iloc[0]) * 100
+    df['shorgan_paper_indexed'] = (df['shorgan_paper_value'] / df['shorgan_paper_value'].iloc[0]) * 100
+    df['shorgan_live_indexed'] = (df['shorgan_live_value'] / df['shorgan_live_value'].iloc[0]) * 100
 
     if 'sp500_value' in df.columns:
         df['sp500_indexed'] = (df['sp500_value'] / df['sp500_value'].iloc[0]) * 100
 
     # Plot each portfolio (indexed)
     ax.plot(df['date'], df['combined_indexed'],
-            label='Combined Portfolio (DEE + SHORGAN)',
-            linewidth=2.5, color='#2E86AB', marker='o', markersize=4)
+            label='Combined Portfolio (All 3 Accounts)',
+            linewidth=3, color='#2E86AB', marker='o', markersize=5, zorder=5)
 
     ax.plot(df['date'], df['dee_indexed'],
-            label='DEE-BOT (Defensive)',
+            label='DEE-BOT (Paper $100K - Defensive)',
             linewidth=2, color='#06A77D', linestyle='--', marker='s', markersize=3)
 
-    ax.plot(df['date'], df['shorgan_indexed'],
-            label='SHORGAN-BOT (Aggressive)',
+    ax.plot(df['date'], df['shorgan_paper_indexed'],
+            label='SHORGAN-BOT Paper ($100K - Aggressive)',
             linewidth=2, color='#D62839', linestyle='--', marker='^', markersize=3)
+
+    ax.plot(df['date'], df['shorgan_live_indexed'],
+            label='SHORGAN-BOT Live ($1K - REAL MONEY)',
+            linewidth=2.5, color='#E63946', linestyle='-', marker='D', markersize=4, zorder=4)
 
     # Plot S&P 500 benchmark if available
     if 'sp500_indexed' in df.columns:
@@ -470,18 +504,20 @@ def plot_performance_comparison(df):
         # Calculate indexed final values
         combined_indexed_final = df['combined_indexed'].iloc[-1]
         dee_indexed_final = df['dee_indexed'].iloc[-1]
-        shorgan_indexed_final = df['shorgan_indexed'].iloc[-1]
+        shorgan_paper_indexed_final = df['shorgan_paper_indexed'].iloc[-1]
+        shorgan_live_indexed_final = df['shorgan_live_indexed'].iloc[-1]
 
         metrics_text = f"""
 Performance Summary (as of {df['date'].iloc[-1].strftime('%Y-%m-%d')}):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Combined:    ${combined_indexed_final:.2f} ({metrics['combined_return_pct']:+.2f}%)
-DEE-BOT:     ${dee_indexed_final:.2f} ({metrics['dee_return_pct']:+.2f}%)
-SHORGAN:     ${shorgan_indexed_final:.2f} ({metrics['shorgan_return_pct']:+.2f}%)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Combined:       ${combined_indexed_final:.2f} ({metrics['combined_return_pct']:+.2f}%)
+DEE Paper:      ${dee_indexed_final:.2f} ({metrics['dee_return_pct']:+.2f}%)
+SHORGAN Paper:  ${shorgan_paper_indexed_final:.2f} ({metrics['shorgan_paper_return_pct']:+.2f}%)
+SHORGAN Live:   ${shorgan_live_indexed_final:.2f} ({metrics['shorgan_live_return_pct']:+.2f}%)
 """
         if 'sp500_return_pct' in metrics and 'sp500_indexed' in df.columns:
             sp500_indexed_final = df['sp500_indexed'].iloc[-1]
-            metrics_text += f"S&P 500:     ${sp500_indexed_final:.2f} ({metrics['sp500_return_pct']:+.2f}%)"
+            metrics_text += f"S&P 500:        ${sp500_indexed_final:.2f} ({metrics['sp500_return_pct']:+.2f}%)"
 
         # Add text box with metrics
         ax.text(0.02, 0.98, metrics_text,
@@ -500,21 +536,22 @@ SHORGAN:     ${shorgan_indexed_final:.2f} ({metrics['shorgan_return_pct']:+.2f}%
 
     # Display metrics in console
     if metrics:
-        print("\n" + "="*60)
-        print("PERFORMANCE METRICS")
-        print("="*60)
-        print(f"Combined Portfolio:  ${metrics['combined_final_value']:,.2f} ({metrics['combined_return_pct']:+.2f}%)")
-        print(f"DEE-BOT (Defensive): ${metrics['dee_final_value']:,.2f} ({metrics['dee_return_pct']:+.2f}%)")
-        print(f"SHORGAN-BOT (Aggr.): ${metrics['shorgan_final_value']:,.2f} ({metrics['shorgan_return_pct']:+.2f}%)")
+        print("\n" + "="*70)
+        print("PERFORMANCE METRICS (3 Accounts)")
+        print("="*70)
+        print(f"Combined Portfolio:        ${metrics['combined_final_value']:,.2f} ({metrics['combined_return_pct']:+.2f}%)")
+        print(f"DEE-BOT Paper ($100K):     ${metrics['dee_final_value']:,.2f} ({metrics['dee_return_pct']:+.2f}%)")
+        print(f"SHORGAN Paper ($100K):     ${metrics['shorgan_paper_final_value']:,.2f} ({metrics['shorgan_paper_return_pct']:+.2f}%)")
+        print(f"SHORGAN Live ($1K):        ${metrics['shorgan_live_final_value']:,.2f} ({metrics['shorgan_live_return_pct']:+.2f}%)")
         if 'sp500_return_pct' in metrics:
-            print(f"S&P 500 Benchmark:   ${metrics['sp500_final_value']:,.2f} ({metrics['sp500_return_pct']:+.2f}%)")
-            print(f"\nAlpha vs S&P 500:    {metrics['combined_return_pct'] - metrics['sp500_return_pct']:+.2f}%")
-        print("="*60)
+            print(f"S&P 500 Benchmark:         ${metrics['sp500_final_value']:,.2f} ({metrics['sp500_return_pct']:+.2f}%)")
+            print(f"\nAlpha vs S&P 500:          {metrics['combined_return_pct'] - metrics['sp500_return_pct']:+.2f}%")
+        print("="*70)
 
     return fig, metrics
 
 def send_telegram_notification(metrics, graph_path):
-    """Send performance graph and metrics via Telegram"""
+    """Send performance graph and metrics via Telegram (3 accounts)"""
     try:
         import requests
 
@@ -525,13 +562,14 @@ def send_telegram_notification(metrics, graph_path):
         url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
 
         # Build caption with metrics
-        caption = "📊 *Daily Performance Update*\n\n"
-        caption += f"*Combined Portfolio*: ${metrics['combined_final_value']:,.2f} ({metrics['combined_return_pct']:+.2f}%)\n"
-        caption += f"*DEE-BOT*: ${metrics['dee_final_value']:,.2f} ({metrics['dee_return_pct']:+.2f}%)\n"
-        caption += f"*SHORGAN-BOT*: ${metrics['shorgan_final_value']:,.2f} ({metrics['shorgan_return_pct']:+.2f}%)\n"
+        caption = "📊 *Daily Performance Update (3 Accounts)*\n\n"
+        caption += f"*Combined*: ${metrics['combined_final_value']:,.2f} ({metrics['combined_return_pct']:+.2f}%)\n\n"
+        caption += f"*DEE Paper*: ${metrics['dee_final_value']:,.2f} ({metrics['dee_return_pct']:+.2f}%)\n"
+        caption += f"*SHORGAN Paper*: ${metrics['shorgan_paper_final_value']:,.2f} ({metrics['shorgan_paper_return_pct']:+.2f}%)\n"
+        caption += f"*SHORGAN Live* 💰: ${metrics['shorgan_live_final_value']:,.2f} ({metrics['shorgan_live_return_pct']:+.2f}%)\n"
 
         if 'sp500_return_pct' in metrics:
-            caption += f"*S&P 500*: ${metrics['sp500_final_value']:,.2f} ({metrics['sp500_return_pct']:+.2f}%)\n"
+            caption += f"\n*S&P 500*: ${metrics['sp500_final_value']:,.2f} ({metrics['sp500_return_pct']:+.2f}%)\n"
             caption += f"*Alpha*: {metrics['combined_return_pct'] - metrics['sp500_return_pct']:+.2f}%\n"
 
         caption += f"\n_Updated: {datetime.now().strftime('%Y-%m-%d %I:%M %p ET')}_"
