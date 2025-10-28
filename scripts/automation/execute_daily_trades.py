@@ -43,8 +43,8 @@ SHORGAN_CASH_BUFFER = 0.0  # No cash buffer (aggressive mode)
 SHORGAN_MAX_POSITIONS = 10  # Max 10 concurrent positions
 SHORGAN_MAX_DAILY_LOSS = 100.0  # Stop trading if lose $100 in one day (10%)
 SHORGAN_MAX_TRADES_PER_DAY = 5  # Execute top 5 highest-confidence trades only
-SHORGAN_ALLOW_SHORTS = True  # Enable short selling
-SHORGAN_ALLOW_OPTIONS = True  # Enable options trading
+SHORGAN_ALLOW_SHORTS = False  # DISABLED - Cash account (no margin approval)
+SHORGAN_ALLOW_OPTIONS = True  # Enable options trading (if approved)
 
 # Validate API keys are loaded
 if not DEE_BOT_CONFIG['API_KEY'] or not DEE_BOT_CONFIG['SECRET_KEY']:
@@ -628,12 +628,24 @@ class DailyTradeExecutor:
                     retry_queue.append(('shorgan', trade, 'buy'))
                 time.sleep(1)
 
-            # Execute shorts
-            for trade in shorgan_trades['short']:
-                result = self.execute_trade(self.shorgan_api, trade, 'sell')  # Short = sell
-                if result is None:
-                    retry_queue.append(('shorgan', trade, 'sell'))
-                time.sleep(1)
+            # Execute shorts (if enabled)
+            if SHORGAN_ALLOW_SHORTS:
+                for trade in shorgan_trades['short']:
+                    result = self.execute_trade(self.shorgan_api, trade, 'sell')  # Short = sell
+                    if result is None:
+                        retry_queue.append(('shorgan', trade, 'sell'))
+                    time.sleep(1)
+            elif shorgan_trades['short']:
+                print(f"\n⚠️  SKIPPING {len(shorgan_trades['short'])} SHORT TRADES (Shorting disabled - cash account)")
+                for trade in shorgan_trades['short']:
+                    print(f"   [SKIP] SHORT {trade['shares']} {trade['symbol']} @ ${trade.get('price', 'N/A')}")
+                    self.failed_trades.append({
+                        'symbol': trade['symbol'],
+                        'side': 'short',
+                        'shares': trade['shares'],
+                        'error': 'Shorting disabled - cash account (no margin)',
+                        'bot': 'SHORGAN-BOT'
+                    })
 
         # Retry failed trades if any
         if retry_queue and max_retries > 0:
