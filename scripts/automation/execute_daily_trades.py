@@ -24,20 +24,33 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 DEE_BOT_CONFIG = {
     'API_KEY': os.getenv('ALPACA_API_KEY_DEE'),
     'SECRET_KEY': os.getenv('ALPACA_SECRET_KEY_DEE'),
-    'BASE_URL': 'https://paper-api.alpaca.markets'
+    'BASE_URL': 'https://paper-api.alpaca.markets'  # Keep DEE on paper
 }
 
+# ⚠️ SHORGAN-BOT LIVE TRADING CONFIGURATION ⚠️
 SHORGAN_BOT_CONFIG = {
-    'API_KEY': os.getenv('ALPACA_API_KEY_SHORGAN'),
-    'SECRET_KEY': os.getenv('ALPACA_SECRET_KEY_SHORGAN'),
-    'BASE_URL': 'https://paper-api.alpaca.markets'
+    'API_KEY': os.getenv('ALPACA_LIVE_API_KEY_SHORGAN'),  # LIVE KEYS
+    'SECRET_KEY': os.getenv('ALPACA_LIVE_SECRET_KEY_SHORGAN'),  # LIVE KEYS
+    'BASE_URL': 'https://api.alpaca.markets'  # LIVE TRADING - REAL MONEY
 }
+
+# SHORGAN-BOT LIVE TRADING SETTINGS (User requested: Aggressive)
+SHORGAN_LIVE_TRADING = True  # Set to False to disable live trading
+SHORGAN_CAPITAL = 1000.0  # Live account capital
+SHORGAN_MAX_POSITION_SIZE = 100.0  # $100 max per position (10% of capital)
+SHORGAN_MIN_POSITION_SIZE = 30.0  # $30 minimum position size (3%)
+SHORGAN_CASH_BUFFER = 0.0  # No cash buffer (aggressive mode)
+SHORGAN_MAX_POSITIONS = 10  # Max 10 concurrent positions
+SHORGAN_MAX_DAILY_LOSS = 100.0  # Stop trading if lose $100 in one day (10%)
+SHORGAN_MAX_TRADES_PER_DAY = 5  # Execute top 5 highest-confidence trades only
+SHORGAN_ALLOW_SHORTS = True  # Enable short selling
+SHORGAN_ALLOW_OPTIONS = True  # Enable options trading
 
 # Validate API keys are loaded
 if not DEE_BOT_CONFIG['API_KEY'] or not DEE_BOT_CONFIG['SECRET_KEY']:
     raise ValueError("DEE-BOT API keys not found in environment variables. Check your .env file.")
 if not SHORGAN_BOT_CONFIG['API_KEY'] or not SHORGAN_BOT_CONFIG['SECRET_KEY']:
-    raise ValueError("SHORGAN-BOT API keys not found in environment variables. Check your .env file.")
+    raise ValueError("SHORGAN-BOT LIVE API keys not found in environment variables. Check your .env file.")
 
 class DailyTradeExecutor:
     def __init__(self):
@@ -60,6 +73,82 @@ class DailyTradeExecutor:
 
         # DEE-BOT is LONG-ONLY - no shorting allowed
         self.dee_bot_long_only = True
+
+        # Track SHORGAN daily performance for circuit breaker
+        self.shorgan_starting_equity = None
+        if SHORGAN_LIVE_TRADING:
+            try:
+                account = self.shorgan_api.get_account()
+                self.shorgan_starting_equity = float(account.last_equity)
+                print(f"\n💰 SHORGAN-BOT LIVE TRADING ACTIVE")
+                print(f"Starting Equity: ${self.shorgan_starting_equity:,.2f}")
+                print(f"Daily Loss Limit: ${SHORGAN_MAX_DAILY_LOSS:.2f}")
+                print(f"Max Trades Today: {SHORGAN_MAX_TRADES_PER_DAY}")
+            except Exception as e:
+                print(f"[ERROR] Could not get SHORGAN starting equity: {e}")
+
+    def check_shorgan_daily_loss_limit(self):
+        """Circuit breaker: Stop trading if daily loss exceeds limit"""
+        if not SHORGAN_LIVE_TRADING or self.shorgan_starting_equity is None:
+            return True
+
+        try:
+            account = self.shorgan_api.get_account()
+            current_equity = float(account.equity)
+            daily_pnl = current_equity - self.shorgan_starting_equity
+
+            if daily_pnl < -SHORGAN_MAX_DAILY_LOSS:
+                print(f"\n⛔ CIRCUIT BREAKER TRIGGERED - SHORGAN-BOT")
+                print(f"Daily Loss: ${-daily_pnl:.2f}")
+                print(f"Loss Limit: ${SHORGAN_MAX_DAILY_LOSS:.2f}")
+                print(f"🚨 STOPPING ALL SHORGAN TRADING FOR TODAY")
+                return False
+
+            print(f"✅ Daily P&L Check: ${daily_pnl:+.2f} (Limit: -${SHORGAN_MAX_DAILY_LOSS:.2f})")
+            return True
+        except Exception as e:
+            print(f"[ERROR] Could not check daily loss limit: {e}")
+            return False  # Err on side of caution
+
+    def check_shorgan_position_count_limit(self):
+        """Don't exceed max concurrent positions"""
+        if not SHORGAN_LIVE_TRADING:
+            return True
+
+        try:
+            positions = self.shorgan_api.list_positions()
+            position_count = len(positions)
+
+            if position_count >= SHORGAN_MAX_POSITIONS:
+                print(f"\n⚠️ Position limit reached: {position_count}/{SHORGAN_MAX_POSITIONS}")
+                print(f"Cannot open new positions until existing ones close")
+                return False
+
+            print(f"✅ Position Count: {position_count}/{SHORGAN_MAX_POSITIONS}")
+            return True
+        except Exception as e:
+            print(f"[ERROR] Could not check position count: {e}")
+            return False
+
+    def calculate_shorgan_position_size(self, price, shares_recommended):
+        """Calculate safe position size for $1,000 live account"""
+        if not SHORGAN_LIVE_TRADING:
+            return shares_recommended  # Use recommended size for paper
+
+        # Calculate affordable shares based on position size limit
+        max_shares = int(SHORGAN_MAX_POSITION_SIZE / price)
+
+        # Don't buy if position would be too small
+        if max_shares * price < SHORGAN_MIN_POSITION_SIZE:
+            print(f"[SKIP] Position too small: ${max_shares * price:.2f} < ${SHORGAN_MIN_POSITION_SIZE}")
+            return 0
+
+        # Use the smaller of recommended or max affordable
+        final_shares = min(shares_recommended, max_shares)
+        position_value = final_shares * price
+
+        print(f"📊 Position Size: {final_shares} shares @ ${price:.2f} = ${position_value:.2f}")
+        return final_shares
 
     def find_todays_trades_file(self):
         """Find today's trades file"""

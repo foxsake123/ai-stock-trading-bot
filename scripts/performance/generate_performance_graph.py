@@ -26,20 +26,22 @@ RESULTS_PATH = Path("performance_results.png")
 # Alpaca API Configuration (from .env)
 DEE_BOT_API_KEY = os.getenv('ALPACA_API_KEY_DEE')
 DEE_BOT_SECRET = os.getenv('ALPACA_SECRET_KEY_DEE')
-SHORGAN_API_KEY = os.getenv('ALPACA_API_KEY_SHORGAN')
-SHORGAN_SECRET = os.getenv('ALPACA_SECRET_KEY_SHORGAN')
-BASE_URL = 'https://paper-api.alpaca.markets'
+# SHORGAN using LIVE keys
+SHORGAN_API_KEY = os.getenv('ALPACA_LIVE_API_KEY_SHORGAN')
+SHORGAN_SECRET = os.getenv('ALPACA_LIVE_SECRET_KEY_SHORGAN')
+BASE_URL_DEE = 'https://paper-api.alpaca.markets'  # DEE on paper
+BASE_URL_SHORGAN = 'https://api.alpaca.markets'  # SHORGAN on LIVE
 
 # Starting capital
-INITIAL_CAPITAL_DEE = 100000.0
-INITIAL_CAPITAL_SHORGAN = 100000.0
-INITIAL_CAPITAL_COMBINED = 200000.0
+INITIAL_CAPITAL_DEE = 100000.0  # Paper trading
+INITIAL_CAPITAL_SHORGAN = 1000.0  # LIVE TRADING - $1K funded account
+INITIAL_CAPITAL_COMBINED = 101000.0  # DEE paper + SHORGAN live
 
 def get_current_portfolio_values():
     """Fetch current portfolio values from Alpaca"""
     try:
-        dee_api = tradeapi.REST(DEE_BOT_API_KEY, DEE_BOT_SECRET, BASE_URL, api_version='v2')
-        shorgan_api = tradeapi.REST(SHORGAN_API_KEY, SHORGAN_SECRET, BASE_URL, api_version='v2')
+        dee_api = tradeapi.REST(DEE_BOT_API_KEY, DEE_BOT_SECRET, BASE_URL_DEE, api_version='v2')
+        shorgan_api = tradeapi.REST(SHORGAN_API_KEY, SHORGAN_SECRET, BASE_URL_SHORGAN, api_version='v2')
 
         dee_account = dee_api.get_account()
         shorgan_account = shorgan_api.get_account()
