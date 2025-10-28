@@ -549,16 +549,28 @@ class AutomatedTradeGeneratorV2:
 
         # Add SHORGAN-BOT buy orders
         if shorgan_results['approved']:
-            content += "| Symbol | Shares | Limit Price | Stop Loss | Confidence | Catalyst | Source |\n"
-            content += "|--------|--------|-------------|-----------|------------|----------|--------|\n"
+            content += "| Symbol | Shares | Limit Price | Stop Loss | Confidence | Source |\n"
+            content += "|--------|--------|-------------|-----------|------------|--------|\n"
             for val in shorgan_results['approved']:
                 rec = val['recommendation']
                 shares = rec.shares or int((rec.position_size_pct or 10) * shorgan_results['portfolio_value'] / 100 / (rec.entry_price or 100))
-                catalyst_short = (rec.catalyst or 'Event catalyst')[:40]
                 stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.85 if rec.entry_price else 0)
-                content += f"| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {catalyst_short} | {rec.source.upper()} |\n"
+                content += f"| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
+
+            # Add detailed rationale section for each trade
+            content += "\n### 📋 TRADE RATIONALE (Event-Driven Analysis)\n\n"
+            for val in shorgan_results['approved']:
+                rec = val['recommendation']
+                catalyst_str = rec.catalyst or 'Market catalyst'
+                catalyst_date_str = f" ({rec.catalyst_date})" if rec.catalyst_date else ""
+                rationale_str = rec.rationale or "Multi-agent approved based on technical and fundamental analysis"
+
+                content += f"**{rec.ticker}** - {rec.action}\n"
+                content += f"- **Catalyst**: {catalyst_str}{catalyst_date_str}\n"
+                content += f"- **Rationale**: {rationale_str}\n"
+                content += f"- **Confidence**: {val['combined_confidence']:.0%} (External: {val.get('external_confidence', 0):.0%}, Internal: {val.get('internal_confidence', 0):.0%})\n\n"
         else:
-            content += "| No buy orders today | - | - | - | - | - | - |\n"
+            content += "| No buy orders today | - | - | - | - | - |\n"
 
         content += f"""
 
