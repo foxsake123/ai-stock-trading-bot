@@ -1,6 +1,6 @@
 # Today's AI-Generated Trade Recommendations
 ## Monday, October 27, 2025
-## Generated: 02:34 PM ET
+## Generated: 02:45 PM ET
 
 ---
 
@@ -22,13 +22,13 @@
 ### BUY ORDERS
 | Symbol | Shares | Limit Price | Stop Loss | Confidence | Source | Rationale |
 |--------|--------|-------------|-----------|------------|--------|-----------|
-| VZ | 25 | $38.90 | $35.79 | 65% | CLAUDE | Exit weak telecom position to redeploy capital |
-| PG | 4 | $152.60 | $140.39 | 65% | CLAUDE | Position too small; consolidate into larger holdings |
-| MSFT | 28 | $413.50 | $380.42 | 65% | CLAUDE | Add tech quality leader with 1.10 beta to increase portfolio |
-| NVDA | 70 | $133.25 | $122.59 | 65% | CLAUDE | High-beta AI leader (1.70) to significantly boost portfolio  |
-| BRK.B | 25 | $370.50 | $340.86 | 65% | CLAUDE | Buffett's conglomerate adds quality diversification at 0.90  |
-| JNJ | 65 | $147.25 | $135.47 | 65% | CLAUDE | Healthcare defensive aristocrat with 0.70 beta for stability |
-| AAPL | 10 | $263.00 | $241.96 | 65% | CLAUDE | Increase existing position in quality tech leader |
+| VZ | 25 | $38.90 | $35.79 | 63% | CLAUDE | Exit weak telecom position to redeploy capital |
+| PG | 4 | $152.60 | $140.39 | 63% | CLAUDE | Position too small; consolidate into larger holdings |
+| MSFT | 28 | $413.50 | $380.42 | 63% | CLAUDE | Add tech quality leader with 1.10 beta to increase portfolio |
+| NVDA | 70 | $133.25 | $122.59 | 63% | CLAUDE | High-beta AI leader (1.70) to significantly boost portfolio  |
+| BRK.B | 25 | $370.50 | $340.86 | 63% | CLAUDE | Buffett's conglomerate adds quality diversification at 0.90  |
+| JNJ | 65 | $147.25 | $135.47 | 63% | CLAUDE | Healthcare defensive aristocrat with 0.70 beta for stability |
+| AAPL | 10 | $263.00 | $241.96 | 63% | CLAUDE | Increase existing position in quality tech leader |
 
 ### REJECTED RECOMMENDATIONS (for transparency)
 *All recommendations approved*
@@ -44,44 +44,44 @@
 ### BUY ORDERS
 | Symbol | Shares | Limit Price | Stop Loss | Confidence | Source |
 |--------|--------|-------------|-----------|------------|--------|
-| GKOS | 144 | $74.50 | $63.32 | 65% | CLAUDE |
-| SNDX | 420 | $13.55 | $11.52 | 65% | CLAUDE |
-| RGTI | 27 | $38.50 | $32.73 | 65% | CLAUDE |
-| NCNO | 348 | $26.15 | $22.23 | 65% | CLAUDE |
-| RXRX | 1500 | $8.65 | $7.80 | 65% | CLAUDE |
-| SMCI | 250 | $48.50 | $52.00 | 65% | CLAUDE |
+| GKOS | 144 | $74.50 | $63.32 | 63% | CLAUDE |
+| SNDX | 420 | $13.55 | $11.52 | 63% | CLAUDE |
+| RGTI | 27 | $38.50 | $32.73 | 63% | CLAUDE |
+| NCNO | 348 | $26.15 | $22.23 | 63% | CLAUDE |
+| RXRX | 1500 | $8.65 | $7.80 | 63% | CLAUDE |
+| SMCI | 250 | $48.50 | $52.00 | 63% | CLAUDE |
 
 ### 📋 TRADE RATIONALE (Event-Driven Analysis)
 
 **GKOS** - SELL
 - **Catalyst**: Market catalyst (2025-10-28)
 - **Rationale**: Exit before earnings due to poor momentum and high downside risk
-- **Confidence**: 65% (External: 75%, Internal: 23%)
+- **Confidence**: 63% (External: 70%, Internal: 23%)
 
 **SNDX** - SELL
 - **Catalyst**: Market catalyst
 - **Rationale**: No catalyst support, breaking support levels, reallocate capital
-- **Confidence**: 65% (External: 75%, Internal: 23%)
+- **Confidence**: 63% (External: 70%, Internal: 23%)
 
 **RGTI** - SELL
 - **Catalyst**: Market catalyst
 - **Rationale**: 153% gain achieved, extreme overbought conditions, secure profits
-- **Confidence**: 65% (External: 75%, Internal: 23%)
+- **Confidence**: 63% (External: 70%, Internal: 23%)
 
 **NCNO** - BUY_TO_CLOSE
 - **Catalyst**: Market catalyst
 - **Rationale**: 12.3% short profit secured, approaching support levels
-- **Confidence**: 65% (External: 75%, Internal: 23%)
+- **Confidence**: 63% (External: 70%, Internal: 23%)
 
 **RXRX** - BUY
 - **Catalyst**: Market catalyst (2025-11-11)
 - **Rationale**: AI drug discovery partnership catalyst with Nvidia expected Nov 11
-- **Confidence**: 65% (External: 75%, Internal: 23%)
+- **Confidence**: 63% (External: 70%, Internal: 23%)
 
 **SMCI** - SELL_TO_OPEN
 - **Catalyst**: Market catalyst (2025-10-29)
 - **Rationale**: Accounting issues, delayed 10-K filing, potential delisting risk
-- **Confidence**: 65% (External: 75%, Internal: 23%)
+- **Confidence**: 63% (External: 70%, Internal: 23%)
 
 
 

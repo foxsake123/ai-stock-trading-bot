@@ -243,44 +243,71 @@ class MultiAgentTradeValidator:
 
             print(f"    [CONSENSUS] {decision.action.value} @ {decision.confidence:.0%} (Votes: {consensus_text})")
 
-            # Calculate combined confidence (external + internal)
-            # When FD API data is available, trust Claude Opus 4.1 recommendations more
-            has_fd_data = market_data.get('price', 100) != 100  # Check if we got real data
-
-            if has_fd_data and rec.conviction in ['HIGH', 'MEDIUM']:
-                # Boost external confidence when we have real data verification
-                external_confidence = 0.9 if rec.conviction == 'HIGH' else 0.75
-                # Weight external research heavily (80% external, 20% internal)
-                combined_confidence = (external_confidence * 0.8 + decision.confidence * 0.2)
-                print(f"    [DEBUG] FD-verified, conviction={rec.conviction}, ext={external_confidence:.2f}, int={decision.confidence:.2f}, combined={combined_confidence:.2f}")
-            else:
-                # Standard confidence and weighting
-                external_confidence = 0.7 if rec.conviction == 'HIGH' else 0.5 if rec.conviction == 'MEDIUM' else 0.3
-                combined_confidence = (external_confidence * 0.4 + decision.confidence * 0.6)
-                print(f"    [DEBUG] Standard weighting, ext={external_confidence:.2f}, int={decision.confidence:.2f}, combined={combined_confidence:.2f}")
-
+            # HYBRID APPROACH: External confidence as primary, agents as veto
+            # Agents can REDUCE confidence if they disagree, but cannot boost
             internal_confidence = decision.confidence
 
-            # Check if approved
-            # When we have FD-verified data and high external confidence,
-            # trust Claude Opus 4.1 research even if internal agents disagree
+            # Map conviction to base external confidence
+            conviction_map = {
+                'HIGH': 0.85,
+                'MEDIUM': 0.70,
+                'LOW': 0.55
+            }
+            external_confidence = conviction_map.get(rec.conviction, 0.70)
+
+            # Apply agent veto penalties based on internal consensus strength
+            if internal_confidence < 0.20:
+                # Agents strongly disagree or no data - significant penalty
+                veto_penalty = 0.75  # 25% reduction
+                penalty_reason = "Strong agent disagreement or missing data"
+            elif internal_confidence < 0.35:
+                # Agents moderately disagree - moderate penalty
+                veto_penalty = 0.90  # 10% reduction
+                penalty_reason = "Moderate agent disagreement"
+            else:
+                # Agents agree or neutral - no penalty
+                veto_penalty = 1.0  # No reduction
+                penalty_reason = "Agents neutral/agree"
+
+            combined_confidence = external_confidence * veto_penalty
+
+            print(f"    [HYBRID] ext={external_confidence:.2f} ({rec.conviction}), int={internal_confidence:.2f}, veto={veto_penalty:.2f}, final={combined_confidence:.2f}")
+            print(f"             Reason: {penalty_reason}")
+
+            # HYBRID APPROVAL: Simple threshold on final confidence
+            # No special paths, no overrides - just one consistent rule
+            APPROVAL_THRESHOLD = 0.55  # Balance between filtering and allowing good trades
+
             # Accept all valid trading actions (longs, shorts, exits, covers)
             valid_actions = ['BUY', 'LONG', 'SELL', 'SHORT', 'sell', 'buy',
                            'SELL_TO_OPEN', 'BUY_TO_CLOSE', 'BUY_TO_OPEN', 'SELL_TO_CLOSE',
                            'sell_to_open', 'buy_to_close', 'buy_to_open', 'sell_to_close']
 
-            if has_fd_data and external_confidence >= 0.75 and combined_confidence >= 0.60:
-                # FD-verified path: Trust external research for all action types
-                approved = (rec.action in valid_actions)
-                print(f"    [DEBUG] FD-verified approval path: action={rec.action}, ext={external_confidence:.2f}, combined={combined_confidence:.2f}, approved={approved}")
-            else:
-                # Standard path: Require agent consensus
-                approved = (
-                    decision.action.value == 'BUY' and
-                    combined_confidence >= 0.55 and
-                    rec.action in valid_actions
-                )
-                print(f"    [DEBUG] Standard approval path: agent_action={decision.action.value}, rec_action={rec.action}, combined={combined_confidence:.2f}, approved={approved}")
+            # Additional quality filters
+            quality_filters_passed = True
+            rejection_reasons = []
+
+            # Filter 1: Extremely low internal confidence (only if agents are very negative)
+            if internal_confidence < 0.15:
+                quality_filters_passed = False
+                rejection_reasons.append("Agents have critically low confidence (<15%)")
+
+            # Filter 2: Final confidence too low
+            if combined_confidence < APPROVAL_THRESHOLD:
+                quality_filters_passed = False
+                rejection_reasons.append(f"Combined confidence {combined_confidence:.1%} below threshold {APPROVAL_THRESHOLD:.0%}")
+
+            # Filter 3: Invalid action
+            if rec.action not in valid_actions:
+                quality_filters_passed = False
+                rejection_reasons.append(f"Invalid action: {rec.action}")
+
+            approved = quality_filters_passed
+            rejection_summary = "; ".join(rejection_reasons) if rejection_reasons else "All checks passed"
+            status_text = "APPROVED" if approved else "REJECTED"
+            print(f"    [APPROVAL] {status_text}: final={combined_confidence:.1%}, threshold={APPROVAL_THRESHOLD:.0%}")
+            if not approved:
+                print(f"               Reasons: {rejection_summary}")
 
             return {
                 'recommendation': rec,
@@ -290,7 +317,7 @@ class MultiAgentTradeValidator:
                 'internal_confidence': internal_confidence,
                 'combined_confidence': combined_confidence,
                 'approved': approved,
-                'rejection_reason': None if approved else self._get_rejection_reason(decision, analyses)
+                'rejection_reason': None if approved else rejection_summary
             }
 
         except Exception as e:
