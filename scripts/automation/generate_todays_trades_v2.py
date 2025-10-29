@@ -194,8 +194,54 @@ class MultiAgentTradeValidator:
                 supplemental_data
             )
 
+            # VERBOSE LOGGING: Show individual agent analyses
+            print(f"    [AGENTS] Analyzing {rec.ticker}:")
+            if not analyses:
+                print(f"      [WARNING] No agent analyses returned! Agents may not be initialized.")
+            for agent_id, analysis in analyses.items():
+                print(f"      [DEBUG] Agent {agent_id} returned: {type(analysis)}")
+
+                # Handle both dict and object formats
+                if isinstance(analysis, dict):
+                    # Check if 'recommendation' is a nested dict (agents return this structure)
+                    recommendation = analysis.get('recommendation', {})
+                    if isinstance(recommendation, dict):
+                        action = recommendation.get('action')
+                        confidence_val = recommendation.get('confidence', 0)
+                        reasoning = recommendation.get('reasoning', '')
+                    else:
+                        # Fall back to flat structure
+                        action = analysis.get('action') or recommendation
+                        confidence_val = analysis.get('confidence', 0)
+                        reasoning = analysis.get('reasoning') or analysis.get('analysis', '')
+
+                    if action:
+                        # Handle action being uppercase string or enum
+                        action_str = action if isinstance(action, str) else action.value if hasattr(action, 'value') else str(action)
+                        print(f"      - {agent_id:15s}: {action_str:5s} @ {confidence_val:.0%} confidence")
+                        if reasoning and isinstance(reasoning, str):
+                            print(f"        Reason: {reasoning[:80]}")
+                    else:
+                        print(f"      - {agent_id:15s}: No valid recommendation")
+                elif hasattr(analysis, 'action') and hasattr(analysis, 'confidence'):
+                    print(f"      - {agent_id:15s}: {analysis.action.value:5s} @ {analysis.confidence:.0%} confidence")
+                    if hasattr(analysis, 'reasoning') and analysis.reasoning:
+                        print(f"        Reason: {analysis.reasoning[:80]}")
+                else:
+                    print(f"      - {agent_id:15s}: Unknown format: {analysis}")
+
             # Make consensus decision
             decision = self.coordinator.make_decision(rec.ticker, analyses)
+
+            # Generate consensus summary from agent opinions
+            actions_summary = {}
+            for agent_id, analysis in analyses.items():
+                if hasattr(analysis, 'action'):
+                    action_val = analysis.action.value
+                    actions_summary[action_val] = actions_summary.get(action_val, 0) + 1
+            consensus_text = ", ".join([f"{count} {action}" for action, count in actions_summary.items()])
+
+            print(f"    [CONSENSUS] {decision.action.value} @ {decision.confidence:.0%} (Votes: {consensus_text})")
 
             # Calculate combined confidence (external + internal)
             # When FD API data is available, trust Claude Opus 4.1 recommendations more
