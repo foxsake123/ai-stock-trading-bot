@@ -63,15 +63,38 @@
 - All trades include detailed rationale (feature from Oct 27)
 - Saved to `docs/TODAYS_TRADES_2025-10-28.md`
 
-### Files Modified (2 total)
+**5. Three-Account Research System** ✅
+- **Problem**: Research reports sized for $100K accounts, not the $1K live account
+- **Solution**: Created separate SHORGAN-BOT Live system prompt
+- **Changes**:
+  - Added `SHORGAN_BOT_LIVE_SYSTEM_PROMPT` with $1K constraints
+  - Position sizing: $30-$100 per trade (3-10% of capital)
+  - Share price filter: $3-$100 (affordable for 1+ shares)
+  - Cash account only (no margin, no shorts)
+  - Exact share counts and dollar costs in recommendations
+  - 15% stop loss rule, max $100 daily loss
+- **Generator Updates**:
+  - Added `shorgan_live_trading` client
+  - Now generates 3 reports: DEE-BOT, SHORGAN-BOT Paper, SHORGAN-BOT Live
+  - Each sent to Telegram individually
+- **Impact**: Live account gets properly-sized trade recommendations
+
+### Files Modified (3 total)
 
 1. **scripts/automation/daily_claude_research.py**
    - Added `import requests` and `from dotenv import load_dotenv`
    - Added `send_telegram_notification()` function (lines 114-158)
    - Updated `main()` to collect PDF paths and send notifications
+   - Changed from 2 bots to 3: DEE-BOT, SHORGAN-BOT, SHORGAN-BOT-LIVE
    - Prints success/failure status for each PDF sent
 
-2. **CLAUDE.md** (this file)
+2. **scripts/automation/claude_research_generator.py**
+   - Added `SHORGAN_BOT_LIVE_SYSTEM_PROMPT` (150+ lines, $1K-specific)
+   - Added `shorgan_live_trading` TradingClient for live account
+   - Updated `get_portfolio_snapshot()` to handle 3 accounts
+   - Updated `generate_research_report()` to select correct system prompt
+
+3. **CLAUDE.md** (this file)
    - Updated with Oct 28 session summary
    - Moved Oct 27 session to PREVIOUS SESSION section
 
@@ -91,7 +114,7 @@
    - Quick status check for live account
    - Shows positions, P&L, orders, account value
 
-### Git Commits Made (2 total)
+### Git Commits Made (4 total)
 
 1. **5189681** - chore: comprehensive repository cleanup - Phase 1 & 2
    - Build artifacts removal
@@ -100,6 +123,15 @@
 2. **0f3a186** - chore: comprehensive repository cleanup - Phase 3 & 4
    - Documentation organization (11 files)
    - Obsolete scripts archival (30 files)
+
+3. **e886030** - feat: add Telegram notifications to research generator + session summary
+   - Research PDFs auto-send to Telegram
+   - Session summary updated
+
+4. **62b897c** - feat: add SHORGAN-BOT Live ($1K) research generation system
+   - Three-account research system (DEE, SHORGAN Paper, SHORGAN Live)
+   - $1K-specific system prompt with position sizing
+   - Exact share counts and dollar costs
 
 All commits pushed to origin/master ✅
 
@@ -119,15 +151,24 @@ All commits pushed to origin/master ✅
 - Git history: Clean with 47 files reorganized
 
 **Automation Status**:
-- ✅ Saturday 12 PM: Research generation (with Telegram ✅)
+- ✅ Saturday 12 PM: Research generation (3 reports with Telegram ✅)
+  - DEE-BOT Paper ($100K)
+  - SHORGAN-BOT Paper ($100K)
+  - **SHORGAN-BOT Live ($1K)** ← NEW!
 - ✅ Monday 8:30 AM: Trade generation
 - ✅ Monday 9:30 AM: Trade execution
 - ✅ Monday 4:30 PM: Performance graph (with Telegram ✅)
 
+**Research System**:
+- ✅ Three separate reports tailored to each account size
+- ✅ SHORGAN-BOT Live uses $1K-specific system prompt
+- ✅ Trade recommendations show exact share counts and costs
+- ✅ All reports sent to Telegram individually
+
 **Next Actions**:
 - Monitor FUBO and RVMD positions for stop loss triggers
-- Position sizing fix needed for automated execution (scale to $1K account)
-- Weekend research will auto-generate Saturday 12 PM with Telegram notification
+- Next research: Saturday Nov 2, 12 PM (3 reports generated)
+- Live account will receive properly-sized recommendations ($30-$100 positions)
 
 ---
 
