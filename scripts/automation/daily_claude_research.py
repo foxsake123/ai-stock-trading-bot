@@ -199,8 +199,8 @@ def main():
     days_elapsed = (datetime.now() - start_date).days
     week_number = (days_elapsed // 7) + 1
 
-    # Generate reports for both bots
-    bots = ["DEE-BOT", "SHORGAN-BOT"]
+    # Generate reports for all 3 accounts
+    bots = ["DEE-BOT", "SHORGAN-BOT", "SHORGAN-BOT-LIVE"]
     report_paths = []
     pdf_paths = {}
 
@@ -240,8 +240,8 @@ def main():
             traceback.print_exc()
             continue
 
-    # Combine both bot reports into single claude_research.md file
-    if len(report_paths) == 2:
+    # Combine all bot reports into single claude_research.md file
+    if len(report_paths) >= 2:
         try:
             print(f"\n{'-'*70}")
             print(f"COMBINING REPORTS INTO SINGLE FILE")
@@ -264,7 +264,7 @@ def main():
                 f.write(combined_content)
 
             print(f"[+] Combined report saved: {combined_path}")
-            print(f"    This file combines DEE-BOT and SHORGAN-BOT research")
+            print(f"    This file combines DEE-BOT, SHORGAN-BOT Paper, and SHORGAN-BOT Live research")
             print(f"    Individual bot files preserved for debugging")
 
         except Exception as e:
