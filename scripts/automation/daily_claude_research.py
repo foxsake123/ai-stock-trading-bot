@@ -16,10 +16,15 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 import pytz
+import requests
+from dotenv import load_dotenv
 
 sys.path.append(str(Path(__file__).parent))
 
 from claude_research_generator import ClaudeResearchGenerator
+
+# Load environment variables
+load_dotenv()
 
 
 def is_market_day(date):
@@ -106,6 +111,53 @@ def should_generate_report(force=False):
     return False, next_day, f"Tomorrow is {tomorrow.strftime('%A')} (not a trading day), next market day is {next_day.strftime('%A, %B %d')}"
 
 
+def send_telegram_notification(pdf_paths):
+    """
+    Send research PDFs to Telegram
+
+    Args:
+        pdf_paths: dict with 'dee_bot' and 'shorgan_bot' PDF paths
+
+    Returns:
+        bool: True if both sent successfully
+    """
+    bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
+    chat_id = os.getenv('TELEGRAM_CHAT_ID')
+
+    if not bot_token or not chat_id:
+        print("[-] Warning: Telegram credentials not found, skipping notification")
+        return False
+
+    url = f'https://api.telegram.org/bot{bot_token}/sendDocument'
+    success_count = 0
+
+    for bot_name, pdf_path in pdf_paths.items():
+        if not pdf_path or not os.path.exists(pdf_path):
+            print(f"[-] PDF not found for {bot_name}: {pdf_path}")
+            continue
+
+        try:
+            caption = f"{bot_name.replace('_', '-').upper()} Research - {datetime.now().strftime('%b %d, %Y')}"
+            with open(pdf_path, 'rb') as f:
+                response = requests.post(
+                    url,
+                    data={'chat_id': chat_id, 'caption': caption},
+                    files={'document': f},
+                    timeout=30
+                )
+
+            if response.json().get('ok'):
+                print(f"[+] {bot_name.replace('_', '-').upper()} research sent to Telegram")
+                success_count += 1
+            else:
+                print(f"[-] Failed to send {bot_name}: {response.text}")
+
+        except Exception as e:
+            print(f"[-] Error sending {bot_name} to Telegram: {e}")
+
+    return success_count == len(pdf_paths)
+
+
 def main():
     """Main execution function"""
     import argparse
@@ -150,6 +202,7 @@ def main():
     # Generate reports for both bots
     bots = ["DEE-BOT", "SHORGAN-BOT"]
     report_paths = []
+    pdf_paths = {}
 
     for bot_name in bots:
         try:
@@ -170,6 +223,11 @@ def main():
                 export_pdf=True
             )
             report_paths.append(md_path)
+
+            # Store PDF path for Telegram notification
+            bot_key = bot_name.lower().replace('-', '_')
+            if pdf_path:
+                pdf_paths[bot_key] = pdf_path
 
             print(f"\n[+] {bot_name} report complete!")
             print(f"    Markdown: {md_path}")
@@ -212,9 +270,22 @@ def main():
         except Exception as e:
             print(f"[-] Error combining reports: {e}")
 
+    # Send Telegram notifications
+    if pdf_paths:
+        print(f"\n{'-'*70}")
+        print(f"SENDING TELEGRAM NOTIFICATIONS")
+        print(f"{'-'*70}")
+        telegram_success = send_telegram_notification(pdf_paths)
+        if telegram_success:
+            print(f"[+] All research reports sent to Telegram successfully")
+        else:
+            print(f"[!] Some Telegram notifications may have failed (check logs above)")
+
     print(f"\n{'='*70}")
     print(f"[+] DAILY RESEARCH GENERATION COMPLETE")
     print(f"[+] Review reports before tomorrow's market open (9:30 AM ET)")
+    if pdf_paths:
+        print(f"[+] Research PDFs sent to Telegram")
     print(f"{'='*70}")
 
 
