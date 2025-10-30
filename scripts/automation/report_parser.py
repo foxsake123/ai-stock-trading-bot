@@ -77,8 +77,8 @@ class ExternalReportParser:
         recommendations = []
 
         # Try parsing ORDER BLOCK section first (various formats)
-        # Match any section number (## 4., ## 6., etc.) followed by EXACT/Exact ORDER BLOCK
-        order_block_pattern = r'## \d+\. (?:EXACT |Exact )?ORDER BLOCK(.*?)(?=\n## [^#]|$)'
+        # Match either "## 4. ORDER BLOCK" or "## EXACT ORDER BLOCK" or "## ORDER BLOCK"
+        order_block_pattern = r'##\s*(?:\d+\.\s*)?(?:EXACT\s+|Exact\s+)?ORDER\s+BLOCK(.*?)(?=\n##\s+[A-Z]|$)'
         match = re.search(order_block_pattern, content, re.DOTALL | re.IGNORECASE)
 
         if match:
