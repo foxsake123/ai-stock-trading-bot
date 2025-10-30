@@ -256,18 +256,23 @@ class MultiAgentTradeValidator:
             external_confidence = conviction_map.get(rec.conviction, 0.70)
 
             # Apply agent veto penalties based on internal consensus strength
+            # CALIBRATED: Agents showing 23-25% means weak confidence - should penalize more
             if internal_confidence < 0.20:
-                # Agents strongly disagree or no data - significant penalty
-                veto_penalty = 0.75  # 25% reduction
+                # Agents strongly disagree or no data - heavy penalty
+                veto_penalty = 0.65  # 35% reduction
                 penalty_reason = "Strong agent disagreement or missing data"
-            elif internal_confidence < 0.35:
-                # Agents moderately disagree - moderate penalty
-                veto_penalty = 0.90  # 10% reduction
+            elif internal_confidence < 0.30:
+                # Agents weakly agree (20-30%) - significant penalty
+                veto_penalty = 0.75  # 25% reduction
+                penalty_reason = "Weak agent consensus"
+            elif internal_confidence < 0.50:
+                # Agents moderately agree (30-50%) - moderate penalty
+                veto_penalty = 0.85  # 15% reduction
                 penalty_reason = "Moderate agent disagreement"
             else:
-                # Agents agree or neutral - no penalty
+                # Agents agree (50%+) - no penalty
                 veto_penalty = 1.0  # No reduction
-                penalty_reason = "Agents neutral/agree"
+                penalty_reason = "Agents agree"
 
             combined_confidence = external_confidence * veto_penalty
 
@@ -276,7 +281,7 @@ class MultiAgentTradeValidator:
 
             # HYBRID APPROVAL: Simple threshold on final confidence
             # No special paths, no overrides - just one consistent rule
-            APPROVAL_THRESHOLD = 0.55  # Balance between filtering and allowing good trades
+            APPROVAL_THRESHOLD = 0.60  # Raised from 0.55 to reduce rubber-stamping
 
             # Accept all valid trading actions (longs, shorts, exits, covers)
             valid_actions = ['BUY', 'LONG', 'SELL', 'SHORT', 'sell', 'buy',

@@ -437,6 +437,17 @@ class DailyTradeExecutor:
                 print(f"[SKIP] {symbol}: Invalid share count ({shares})")
                 return None
 
+            # SHORGAN-BOT LIVE ACCOUNT: Adjust position size BEFORE validation
+            if api == self.shorgan_api and SHORGAN_LIVE_TRADING and limit_price:
+                original_shares = shares
+                shares = self.calculate_shorgan_position_size(limit_price, shares)
+                if shares == 0:
+                    print(f"[SKIP] {symbol}: Position too small for $1K account")
+                    return None
+                if shares != original_shares:
+                    print(f"[ADJUST] SHORGAN-BOT Live: {original_shares} → {shares} shares (${shares * limit_price:.2f})")
+                    trade_info['shares'] = shares  # Update trade info
+
             # PRE-EXECUTION VALIDATION
             is_valid, result = self.validate_trade(api, symbol, shares, side, limit_price)
 
