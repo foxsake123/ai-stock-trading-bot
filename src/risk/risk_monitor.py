@@ -3,16 +3,21 @@ Risk Monitoring & Alert System
 Monitor positions against risk limits and send alerts
 """
 
+import os
 import alpaca_trade_api as tradeapi
 from datetime import datetime
 import json
+from dotenv import load_dotenv
 
-# Bot credentials
-DEE_BOT_API = "PK6FZK4DAQVTD7DYVH78"
-DEE_BOT_SECRET = "JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt"
+# Load environment variables
+load_dotenv()
 
-SHORGAN_API = "PKJRLSB2MFEJUSK6UK2E" 
-SHORGAN_SECRET = "QBpREJmZ7HgHS1tHptvHgwjH4MtjFSoEcQ0wmGic"
+# Bot credentials from environment
+DEE_BOT_API = os.getenv("ALPACA_PAPER_API_KEY_DEE") or os.getenv("ALPACA_PAPER_API_KEY")
+DEE_BOT_SECRET = os.getenv("ALPACA_PAPER_SECRET_KEY_DEE") or os.getenv("ALPACA_PAPER_SECRET_KEY")
+
+SHORGAN_API = os.getenv("ALPACA_PAPER_API_KEY_SHORGAN")
+SHORGAN_SECRET = os.getenv("ALPACA_PAPER_SECRET_KEY_SHORGAN")
 
 BASE_URL = "https://paper-api.alpaca.markets"
 

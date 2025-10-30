@@ -1,0 +1,16 @@
+{
+  "SHORGAN-BOT-LIVE:FUBO": {
+    "entry_price": 3.505,
+    "entry_shares": 27,
+    "level1_taken": false,
+    "level2_taken": false,
+    "actions": []
+  },
+  "SHORGAN-BOT-LIVE:RVMD": {
+    "entry_price": 58.25,
+    "entry_shares": 1,
+    "level1_taken": false,
+    "level2_taken": false,
+    "actions": []
+  }
+}
