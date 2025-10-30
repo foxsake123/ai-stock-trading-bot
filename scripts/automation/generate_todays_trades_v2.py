@@ -590,7 +590,7 @@ class AutomatedTradeGeneratorV2:
             for val in dee_results['approved']:
                 rec = val['recommendation']
                 shares = rec.shares or int((rec.position_size_pct or 5) * dee_results['portfolio_value'] / 100 / (rec.entry_price or 100))
-                stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.92 if rec.entry_price else 0)
+                stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.89 if rec.entry_price else 0)  # 11% stop loss (was 8%)
                 content += f"\n| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
         else:
             content += "\n| No buy orders today | - | - | - | - | - | Market conditions unfavorable |\n"
@@ -627,7 +627,7 @@ class AutomatedTradeGeneratorV2:
             for val in shorgan_results['approved']:
                 rec = val['recommendation']
                 shares = rec.shares or int((rec.position_size_pct or 10) * shorgan_results['portfolio_value'] / 100 / (rec.entry_price or 100))
-                stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.85 if rec.entry_price else 0)
+                stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.82 if rec.entry_price else 0)  # 18% stop loss (was 15%)
                 content += f"| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
 
             # Add detailed rationale section for each trade
@@ -677,7 +677,7 @@ class AutomatedTradeGeneratorV2:
 4. **10:00 AM**: Check fill status, adjust unfilled limit orders if needed
 
 ### Risk Controls
-- All positions have stop losses (8% for DEE, 15% for SHORGAN)
+- All positions have stop losses (11% for DEE, 18% for SHORGAN)
 - Position sizing enforced (8% DEE max, 10% SHORGAN max)
 - DEE-BOT is LONG-ONLY (no margin, no shorts)
 - Total portfolio heat monitored
