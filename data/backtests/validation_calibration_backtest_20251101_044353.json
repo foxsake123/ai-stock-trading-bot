@@ -1,0 +1,62 @@
+{
+  "timestamp": "2025-11-01T04:43:53.458242",
+  "old_calibration": {
+    "veto_tiers": [
+      [
+        20,
+        0.75
+      ],
+      [
+        35,
+        0.9
+      ],
+      [
+        100,
+        1.0
+      ]
+    ],
+    "threshold": 0.55,
+    "name": "OLD (100% approval)"
+  },
+  "new_calibration": {
+    "veto_tiers": [
+      [
+        20,
+        0.65
+      ],
+      [
+        30,
+        0.75
+      ],
+      [
+        50,
+        0.85
+      ],
+      [
+        100,
+        1.0
+      ]
+    ],
+    "threshold": 0.6,
+    "name": "NEW (30-50% target)"
+  },
+  "old_results": {
+    "total_trades": 100,
+    "approval_rate": 0.93,
+    "approved_avg_return": 0.017244867915165375,
+    "rejected_avg_return": -0.014937035399720633,
+    "win_rate": 0.7204301075268817,
+    "total_return": 1.6037727161103799,
+    "sharpe_ratio": 10.82232542423934
+  },
+  "new_results": {
+    "total_trades": 100,
+    "approval_rate": 0.2,
+    "approved_avg_return": 0.04426546966462579,
+    "rejected_avg_return": 0.0076738009377477455,
+    "win_rate": 1.0,
+    "total_return": 0.8853093932925158,
+    "sharpe_ratio": 36.2802432815994
+  },
+  "scenario_count": 100
+}
