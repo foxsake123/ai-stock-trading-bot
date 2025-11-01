@@ -32,9 +32,9 @@ import statistics
 # Phase 2 components
 from src.integration.phase2_integration import Phase2IntegrationEngine, Phase2Config
 from src.agents.alternative_data_agent import AlternativeDataAgent
-from debate.debate_coordinator import DebateCoordinator
+from src.agents.debate_coordinator import DebateCoordinator
 from src.analysis.options_flow import OptionsFlowAnalyzer
-from catalyst.catalyst_monitor import CatalystMonitor
+from src.monitors.catalyst_monitor import CatalystMonitor
 
 
 # ============================================================================

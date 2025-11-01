@@ -9,9 +9,6 @@ import sys
 import json
 from datetime import datetime
 
-# Add the path for the integration module
-sys.path.append(os.path.join(os.path.dirname(__file__), 'scripts-and-data', 'automation'))
-
 # Set a test API key if not in environment
 if not os.getenv('FINANCIAL_DATASETS_API_KEY'):
     print("=" * 60)
@@ -22,7 +19,7 @@ if not os.getenv('FINANCIAL_DATASETS_API_KEY'):
     # For testing, you can temporarily set it here:
     # os.environ['FINANCIAL_DATASETS_API_KEY'] = 'your_key_here'
 
-from financial_datasets_integration import FinancialDatasetsAPI
+from scripts.automation.financial_datasets_integration import FinancialDatasetsAPI
 
 def test_basic_functionality():
     """Test basic API functionality"""

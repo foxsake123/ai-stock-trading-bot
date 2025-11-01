@@ -7,9 +7,9 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from data_sources.alternative_data_aggregator import AlternativeDataAggregator
-from data_sources.reddit_wsb_scanner import RedditWSBScanner
-from data_sources.options_flow_tracker import OptionsFlowTracker
+from src.data.alternative_data_aggregator import AlternativeDataAggregator
+from src.data.sources.reddit_wsb_scanner import RedditWSBScanner
+from src.data.sources.options_flow_tracker import OptionsFlowTracker
 import asyncio
 import pandas as pd
 from datetime import datetime
