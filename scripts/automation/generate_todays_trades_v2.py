@@ -754,11 +754,40 @@ class AutomatedTradeGeneratorV2:
             # Generate markdown file
             filepath = self.generate_markdown_file(dee_results, shorgan_results, date_str)
 
+            # Calculate approval statistics
+            dee_total = len(dee_results['approved']) + len(dee_results['rejected'])
+            shorgan_total = len(shorgan_results['approved']) + len(shorgan_results['rejected'])
+            total_approved = len(dee_results['approved']) + len(shorgan_results['approved'])
+            total_total = dee_total + shorgan_total
+
+            dee_pct = (len(dee_results['approved']) / dee_total * 100) if dee_total > 0 else 0
+            shorgan_pct = (len(shorgan_results['approved']) / shorgan_total * 100) if shorgan_total > 0 else 0
+            overall_pct = (total_approved / total_total * 100) if total_total > 0 else 0
+
             # Summary
             print("\n" + "="*80)
             print("GENERATION COMPLETE")
-            print(f"DEE-BOT: {len(dee_results['approved'])} approved")
-            print(f"SHORGAN-BOT: {len(shorgan_results['approved'])} approved")
+            print("="*80)
+            print(f"DEE-BOT: {len(dee_results['approved'])}/{dee_total} approved ({dee_pct:.1f}%)")
+            print(f"SHORGAN-BOT: {len(shorgan_results['approved'])}/{shorgan_total} approved ({shorgan_pct:.1f}%)")
+            print(f"OVERALL: {total_approved}/{total_total} approved ({overall_pct:.1f}%)")
+            print("-"*80)
+
+            # Approval rate warnings
+            if overall_pct == 0:
+                print("[WARNING] 0% approval rate - Multi-agent calibration too strict!")
+                print("          Threshold may need adjustment if this persists")
+            elif overall_pct == 100:
+                print("[WARNING] 100% approval rate - Multi-agent calibration too lenient!")
+                print("          Agents may be rubber-stamping, check validation logic")
+            elif overall_pct < 20:
+                print("[CAUTION] Low approval rate (<20%) - Review multi-agent thresholds")
+            elif overall_pct > 80:
+                print("[CAUTION] High approval rate (>80%) - Validation may be too lenient")
+            else:
+                print("[OK] Approval rate within expected range (20-80%)")
+
+            print("-"*80)
             print(f"File saved: {filepath}")
             print("="*80)
 

@@ -5,8 +5,40 @@ Wraps generate_todays_trades_v2.py with health monitoring
 """
 
 import sys
+import re
 import subprocess
 from pathlib import Path
+
+def extract_approval_rate(output):
+    """Extract approval rate from trade generation output"""
+    details = {}
+
+    # Look for OVERALL line: "OVERALL: 15/30 approved (50.0%)"
+    overall_match = re.search(r'OVERALL:\s+(\d+)/(\d+)\s+approved\s+\(([\d.]+)%\)', output)
+    if overall_match:
+        approved = int(overall_match.group(1))
+        total = int(overall_match.group(2))
+        pct = float(overall_match.group(3))
+
+        details['trades_approved'] = approved
+        details['trades_total'] = total
+        details['approval_rate'] = f"{pct:.1f}%"
+
+        # Add status indicator
+        if pct == 0:
+            details['status'] = 'WARNING: 0% approval'
+        elif pct == 100:
+            details['status'] = 'WARNING: 100% approval'
+        elif pct < 20:
+            details['status'] = 'CAUTION: Low approval'
+        elif pct > 80:
+            details['status'] = 'CAUTION: High approval'
+        else:
+            details['status'] = 'OK'
+    else:
+        details['output'] = 'Trades generated (rate unknown)'
+
+    return details
 
 def main():
     """Run trade generation with monitoring"""
@@ -26,11 +58,8 @@ def main():
             output = result.stdout
             print(output)
 
-            # Try to extract approval rate from output
-            approval_details = {}
-            if 'approved' in output.lower():
-                # Simple extraction (can be enhanced)
-                approval_details['output'] = 'Trades generated successfully'
+            # Extract approval rate details
+            approval_details = extract_approval_rate(output)
 
             # Report success
             subprocess.run([
