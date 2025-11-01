@@ -422,7 +422,8 @@ class AutomatedTradeGeneratorV2:
 
         # Portfolio capital
         self.dee_bot_capital = 100000
-        self.shorgan_bot_capital = 100000
+        self.shorgan_bot_paper_capital = 100000  # Paper trading account
+        self.shorgan_bot_live_capital = 1000     # Live trading account ($1K)
 
     def find_research_reports(self, date_str: str = None) -> Dict[str, Path]:
         """
@@ -472,19 +473,21 @@ class AutomatedTradeGeneratorV2:
 
         return {}
 
-    def generate_bot_trades(self, bot_name: str, date_str: str = None) -> Dict:
+    def generate_bot_trades(self, bot_name: str, date_str: str = None, account_type: str = "paper") -> Dict:
         """
         Generate trades for a specific bot using external research + agents
 
         Args:
             bot_name: DEE-BOT or SHORGAN-BOT
             date_str: Date of research reports
+            account_type: "paper" (default) or "live" (for SHORGAN-BOT only)
 
         Returns:
             Dict with approved and rejected trades
         """
+        account_label = f" ({account_type.upper()})" if bot_name == "SHORGAN-BOT" else ""
         print(f"\n{'='*70}")
-        print(f"{bot_name} TRADE GENERATION")
+        print(f"{bot_name}{account_label} TRADE GENERATION")
         print(f"{'='*70}")
 
         # Find research reports
@@ -526,7 +529,15 @@ class AutomatedTradeGeneratorV2:
         approved = []
         rejected = []
 
-        portfolio_value = self.dee_bot_capital if bot_name == "DEE-BOT" else self.shorgan_bot_capital
+        # Select portfolio value based on bot and account type
+        if bot_name == "DEE-BOT":
+            portfolio_value = self.dee_bot_capital
+        elif account_type == "live":
+            portfolio_value = self.shorgan_bot_live_capital  # $1K
+            print(f"[*] Using LIVE account capital: ${portfolio_value:,.0f}")
+        else:
+            portfolio_value = self.shorgan_bot_paper_capital  # $100K
+            print(f"[*] Using PAPER account capital: ${portfolio_value:,.0f}")
 
         for rec in recommendations:
             try:
@@ -555,8 +566,16 @@ class AutomatedTradeGeneratorV2:
             'portfolio_value': portfolio_value
         }
 
-    def generate_markdown_file(self, dee_results: Dict, shorgan_results: Dict, date_str: str = None):
-        """Create TODAYS_TRADES markdown file from validated trades"""
+    def generate_markdown_file(self, dee_results: Dict, shorgan_results: Dict, date_str: str = None, suffix: str = ""):
+        """
+        Create TODAYS_TRADES markdown file from validated trades
+
+        Args:
+            dee_results: DEE-BOT trade results (can be None for SHORGAN-only files)
+            shorgan_results: SHORGAN-BOT trade results
+            date_str: Date string
+            suffix: Filename suffix (e.g., "_LIVE" for live account file)
+        """
 
         if not date_str:
             date_str = datetime.now().strftime('%Y-%m-%d')
@@ -564,7 +583,13 @@ class AutomatedTradeGeneratorV2:
         today = datetime.strptime(date_str, '%Y-%m-%d')
         day_name = today.strftime('%A')
 
-        content = f"""# Today's AI-Generated Trade Recommendations
+        # Determine file title based on suffix
+        if suffix == "_LIVE":
+            title_suffix = " - SHORGAN-BOT LIVE ($1K Account)"
+        else:
+            title_suffix = ""
+
+        content = f"""# Today's AI-Generated Trade Recommendations{title_suffix}
 ## {day_name}, {today.strftime('%B %d, %Y')}
 ## Generated: {datetime.now().strftime('%I:%M %p ET')}
 
@@ -575,11 +600,20 @@ class AutomatedTradeGeneratorV2:
 **Validation**: 7-agent multi-agent consensus system
 **Risk Controls**: Position sizing, portfolio limits, veto authority
 
-**DEE-BOT**: {len(dee_results['approved'])} approved / {len(dee_results['rejected'])} rejected
-**SHORGAN-BOT**: {len(shorgan_results['approved'])} approved / {len(shorgan_results['rejected'])} rejected
+"""
+        # Add DEE-BOT summary only if provided
+        if dee_results:
+            content += f"**DEE-BOT**: {len(dee_results['approved'])} approved / {len(dee_results['rejected'])} rejected\n"
 
----
+        # Add SHORGAN-BOT summary
+        bot_label = "SHORGAN-BOT (LIVE)" if suffix == "_LIVE" else "SHORGAN-BOT"
+        content += f"**{bot_label}**: {len(shorgan_results['approved'])} approved / {len(shorgan_results['rejected'])} rejected\n"
 
+        content += "\n---\n"
+
+        # Only add DEE-BOT section if results were provided
+        if dee_results:
+            content += f"""
 ## 🛡️ DEE-BOT TRADES (Defensive S&P 100)
 **Strategy**: LONG-ONLY, Beta-neutral ~1.0
 **Capital**: ${dee_results['portfolio_value']:,.0f}
@@ -588,36 +622,38 @@ class AutomatedTradeGeneratorV2:
 ### BUY ORDERS
 """
 
-        # Add DEE-BOT buy orders
-        if dee_results['approved']:
-            content += "| Symbol | Shares | Limit Price | Stop Loss | Confidence | Source | Rationale |\n"
-            content += "|--------|--------|-------------|-----------|------------|--------|-----------|"
-            for val in dee_results['approved']:
-                rec = val['recommendation']
-                shares = rec.shares or int((rec.position_size_pct or 5) * dee_results['portfolio_value'] / 100 / (rec.entry_price or 100))
-                stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.89 if rec.entry_price else 0)  # 11% stop loss (was 8%)
-                content += f"\n| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
-        else:
-            content += "\n| No buy orders today | - | - | - | - | - | Market conditions unfavorable |\n"
+            # Add DEE-BOT buy orders
+            if dee_results['approved']:
+                content += "| Symbol | Shares | Limit Price | Stop Loss | Confidence | Source | Rationale |\n"
+                content += "|--------|--------|-------------|-----------|------------|--------|-----------|"
+                for val in dee_results['approved']:
+                    rec = val['recommendation']
+                    shares = rec.shares or int((rec.position_size_pct or 5) * dee_results['portfolio_value'] / 100 / (rec.entry_price or 100))
+                    stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.89 if rec.entry_price else 0)  # 11% stop loss (was 8%)
+                    content += f"\n| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
+            else:
+                content += "\n| No buy orders today | - | - | - | - | - | Market conditions unfavorable |\n"
 
-        content += f"""
+            content += f"""
 
 ### REJECTED RECOMMENDATIONS (for transparency)
 """
-        if dee_results['rejected']:
-            content += "| Symbol | Source | Rejection Reason |\n"
-            content += "|--------|--------|------------------|\n"
-            for val in dee_results['rejected']:
-                rec = val['recommendation']
-                content += f"| {rec.ticker} | {rec.source.upper()} | {val.get('rejection_reason', 'Unknown')[:80]} |\n"
-        else:
-            content += "*All recommendations approved*\n"
+            if dee_results['rejected']:
+                content += "| Symbol | Source | Rejection Reason |\n"
+                content += "|--------|--------|------------------|\n"
+                for val in dee_results['rejected']:
+                    rec = val['recommendation']
+                    content += f"| {rec.ticker} | {rec.source.upper()} | {val.get('rejection_reason', 'Unknown')[:80]} |\n"
+            else:
+                content += "*All recommendations approved*\n"
 
+            content += "\n---\n"
+
+        # SHORGAN-BOT section
+        account_type_label = " (LIVE $1K)" if suffix == "_LIVE" else ""
         content += f"""
 
----
-
-## 🚀 SHORGAN-BOT TRADES (Catalyst-Driven)
+## 🚀 SHORGAN-BOT TRADES{account_type_label} (Catalyst-Driven)
 **Strategy**: Event-driven, momentum, HIGH-CONVICTION
 **Capital**: ${shorgan_results['portfolio_value']:,.0f}
 **Max Position**: 10%
@@ -716,7 +752,7 @@ class AutomatedTradeGeneratorV2:
 """
 
         # Save the file
-        filename = f"TODAYS_TRADES_{date_str}.md"
+        filename = f"TODAYS_TRADES_{date_str}{suffix}.md"
         filepath = self.docs_dir / filename
 
         with open(filepath, 'w', encoding='utf-8') as f:
@@ -748,20 +784,29 @@ class AutomatedTradeGeneratorV2:
                     return existing_files[0]
 
             # Generate trades for both bots
-            dee_results = self.generate_bot_trades("DEE-BOT", date_str)
-            shorgan_results = self.generate_bot_trades("SHORGAN-BOT", date_str)
+            dee_results = self.generate_bot_trades("DEE-BOT", date_str, account_type="paper")
+            shorgan_paper_results = self.generate_bot_trades("SHORGAN-BOT", date_str, account_type="paper")
+            shorgan_live_results = self.generate_bot_trades("SHORGAN-BOT", date_str, account_type="live")
 
-            # Generate markdown file
-            filepath = self.generate_markdown_file(dee_results, shorgan_results, date_str)
+            # Generate markdown files
+            # Main file (DEE + SHORGAN Paper)
+            filepath = self.generate_markdown_file(dee_results, shorgan_paper_results, date_str, suffix="")
+
+            # Separate file for SHORGAN Live ($1K account)
+            live_filepath = self.generate_markdown_file(None, shorgan_live_results, date_str, suffix="_LIVE")
 
             # Calculate approval statistics
             dee_total = len(dee_results['approved']) + len(dee_results['rejected'])
-            shorgan_total = len(shorgan_results['approved']) + len(shorgan_results['rejected'])
-            total_approved = len(dee_results['approved']) + len(shorgan_results['approved'])
-            total_total = dee_total + shorgan_total
+            shorgan_paper_total = len(shorgan_paper_results['approved']) + len(shorgan_paper_results['rejected'])
+            shorgan_live_total = len(shorgan_live_results['approved']) + len(shorgan_live_results['rejected'])
+            total_approved = (len(dee_results['approved']) +
+                            len(shorgan_paper_results['approved']) +
+                            len(shorgan_live_results['approved']))
+            total_total = dee_total + shorgan_paper_total + shorgan_live_total
 
             dee_pct = (len(dee_results['approved']) / dee_total * 100) if dee_total > 0 else 0
-            shorgan_pct = (len(shorgan_results['approved']) / shorgan_total * 100) if shorgan_total > 0 else 0
+            shorgan_paper_pct = (len(shorgan_paper_results['approved']) / shorgan_paper_total * 100) if shorgan_paper_total > 0 else 0
+            shorgan_live_pct = (len(shorgan_live_results['approved']) / shorgan_live_total * 100) if shorgan_live_total > 0 else 0
             overall_pct = (total_approved / total_total * 100) if total_total > 0 else 0
 
             # Summary
@@ -769,8 +814,13 @@ class AutomatedTradeGeneratorV2:
             print("GENERATION COMPLETE")
             print("="*80)
             print(f"DEE-BOT: {len(dee_results['approved'])}/{dee_total} approved ({dee_pct:.1f}%)")
-            print(f"SHORGAN-BOT: {len(shorgan_results['approved'])}/{shorgan_total} approved ({shorgan_pct:.1f}%)")
+            print(f"SHORGAN-BOT (PAPER): {len(shorgan_paper_results['approved'])}/{shorgan_paper_total} approved ({shorgan_paper_pct:.1f}%)")
+            print(f"SHORGAN-BOT (LIVE): {len(shorgan_live_results['approved'])}/{shorgan_live_total} approved ({shorgan_live_pct:.1f}%)")
             print(f"OVERALL: {total_approved}/{total_total} approved ({overall_pct:.1f}%)")
+            print("-"*80)
+            print(f"Files generated:")
+            print(f"  - Main (DEE + SHORGAN Paper): {filepath}")
+            print(f"  - Live ($1K account): {live_filepath}")
             print("-"*80)
 
             # Approval rate warnings
