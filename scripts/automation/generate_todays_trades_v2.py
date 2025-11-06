@@ -281,7 +281,7 @@ class MultiAgentTradeValidator:
 
             # HYBRID APPROVAL: Simple threshold on final confidence
             # No special paths, no overrides - just one consistent rule
-            APPROVAL_THRESHOLD = 0.60  # Raised from 0.55 to reduce rubber-stamping
+            APPROVAL_THRESHOLD = 0.55  # Lowered from 0.60 after 0% approval on Nov 6 (too strict)
 
             # Accept all valid trading actions (longs, shorts, exits, covers)
             valid_actions = ['BUY', 'LONG', 'SELL', 'SHORT', 'sell', 'buy',
