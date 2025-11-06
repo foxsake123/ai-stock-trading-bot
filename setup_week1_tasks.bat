@@ -34,7 +34,7 @@ echo [OK] Running as Administrator
 echo.
 
 REM Set variables
-set "PYTHON_EXE=C:\Users\shorg\AppData\Local\Programs\Python\Python313\python.exe"
+set "PYTHON_EXE=C:\Python313\python.exe"
 set "PROJECT_DIR=%~dp0"
 set "PROJECT_DIR=%PROJECT_DIR:~0,-1%"
 
