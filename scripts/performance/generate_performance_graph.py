@@ -478,11 +478,78 @@ def plot_performance_comparison(df):
     # Create figure with professional styling
     fig, ax = plt.subplots(figsize=(16, 9))
 
-    # Calculate indexed values (starting at $100 for each)
-    df['combined_indexed'] = (df['combined_value'] / df['combined_value'].iloc[0]) * 100
+    # Calculate indexed values for accounts with no deposits (DEE, SHORGAN Paper)
     df['dee_indexed'] = (df['dee_value'] / df['dee_value'].iloc[0]) * 100
     df['shorgan_paper_indexed'] = (df['shorgan_paper_value'] / df['shorgan_paper_value'].iloc[0]) * 100
-    df['shorgan_live_indexed'] = (df['shorgan_live_value'] / df['shorgan_live_value'].iloc[0]) * 100
+
+    # SHORGAN-LIVE: Calculate deposit-adjusted indexed values to show true trading performance
+    # This accounts for deposits over time so the chart shows stock selection skill, not deposit timing
+    try:
+        with open(SHORGAN_LIVE_DEPOSITS_FILE, 'r') as f:
+            deposit_data = json.load(f)
+            deposits = deposit_data.get('deposit_history', [])
+
+        # Calculate cumulative deposits for each date
+        shorgan_live_indexed_values = []
+        for idx, row in df.iterrows():
+            date = pd.Timestamp(row['date']).normalize()
+
+            # Sum all deposits up to this date
+            cumulative_deposits = sum(
+                float(d['amount'])
+                for d in deposits
+                if pd.Timestamp(d['date']).normalize() <= date
+            )
+
+            # If no deposits yet, skip this row
+            if cumulative_deposits == 0:
+                shorgan_live_indexed_values.append(100.0)
+                continue
+
+            # Calculate trading return: (value - deposits) / deposits
+            trading_return_pct = ((row['shorgan_live_value'] - cumulative_deposits) / cumulative_deposits)
+
+            # Index value: $100 * (1 + return)
+            indexed_value = 100.0 * (1 + trading_return_pct)
+            shorgan_live_indexed_values.append(indexed_value)
+
+        df['shorgan_live_indexed'] = shorgan_live_indexed_values
+
+    except Exception as e:
+        # Fallback to simple indexing if deposit file not found
+        print(f"[WARNING] Could not load deposit history for SHORGAN-LIVE indexing: {e}")
+        df['shorgan_live_indexed'] = (df['shorgan_live_value'] / df['shorgan_live_value'].iloc[0]) * 100
+
+    # Combined: Calculate deposit-adjusted indexed values
+    # Use same deposit-adjusted approach for SHORGAN-LIVE component
+    try:
+        combined_indexed_values = []
+        for idx, row in df.iterrows():
+            date = pd.Timestamp(row['date']).normalize()
+
+            # Sum all SHORGAN-LIVE deposits up to this date
+            cumulative_shorgan_live_deposits = sum(
+                float(d['amount'])
+                for d in deposits
+                if pd.Timestamp(d['date']).normalize() <= date
+            )
+
+            # Total capital deployed up to this date
+            total_capital = INITIAL_CAPITAL_DEE + INITIAL_CAPITAL_SHORGAN_PAPER + cumulative_shorgan_live_deposits
+
+            # Calculate trading return for combined portfolio
+            trading_return_pct = ((row['combined_value'] - total_capital) / total_capital)
+
+            # Index value: $100 * (1 + return)
+            indexed_value = 100.0 * (1 + trading_return_pct)
+            combined_indexed_values.append(indexed_value)
+
+        df['combined_indexed'] = combined_indexed_values
+
+    except Exception as e:
+        # Fallback to simple indexing
+        print(f"[WARNING] Could not calculate deposit-adjusted combined indexing: {e}")
+        df['combined_indexed'] = (df['combined_value'] / df['combined_value'].iloc[0]) * 100
 
     if 'sp500_value' in df.columns:
         df['sp500_indexed'] = (df['sp500_value'] / df['sp500_value'].iloc[0]) * 100
