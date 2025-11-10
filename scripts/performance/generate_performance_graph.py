@@ -40,8 +40,24 @@ BASE_URL_SHORGAN_LIVE = 'https://api.alpaca.markets'  # SHORGAN LIVE
 # Starting capital
 INITIAL_CAPITAL_DEE = 100000.0  # Paper trading
 INITIAL_CAPITAL_SHORGAN_PAPER = 100000.0  # Paper trading
-INITIAL_CAPITAL_SHORGAN_LIVE = 1000.0  # LIVE TRADING - $1K funded account
-INITIAL_CAPITAL_COMBINED = 201000.0  # DEE paper + SHORGAN paper + SHORGAN live
+INITIAL_CAPITAL_SHORGAN_LIVE = 1000.0  # LIVE TRADING - initial deposit (may have more deposits)
+INITIAL_CAPITAL_COMBINED = 201000.0  # DEE paper + SHORGAN paper + SHORGAN live initial
+
+# Deposit tracking file for SHORGAN-LIVE
+SHORGAN_LIVE_DEPOSITS_FILE = "data/shorgan_live_deposits.json"
+
+def get_shorgan_live_total_deposits():
+    """Get total deposits for SHORGAN-LIVE from tracking file"""
+    try:
+        with open(SHORGAN_LIVE_DEPOSITS_FILE, 'r') as f:
+            data = json.load(f)
+            return float(data.get('total_deposits', INITIAL_CAPITAL_SHORGAN_LIVE))
+    except FileNotFoundError:
+        print(f"[WARNING] Deposit tracking file not found, using initial capital: ${INITIAL_CAPITAL_SHORGAN_LIVE}")
+        return INITIAL_CAPITAL_SHORGAN_LIVE
+    except Exception as e:
+        print(f"[ERROR] Could not read deposits file: {e}")
+        return INITIAL_CAPITAL_SHORGAN_LIVE
 
 def get_current_portfolio_values():
     """Fetch current portfolio values from Alpaca (3 accounts)"""
@@ -58,10 +74,14 @@ def get_current_portfolio_values():
         shorgan_paper_value = float(shorgan_paper_account.portfolio_value)
         shorgan_live_value = float(shorgan_live_account.portfolio_value)
 
+        # Get total deposits for SHORGAN-LIVE to calculate true performance
+        shorgan_live_deposits = get_shorgan_live_total_deposits()
+
         return {
             'dee_bot': dee_value,
             'shorgan_paper': shorgan_paper_value,
             'shorgan_live': shorgan_live_value,
+            'shorgan_live_deposits': shorgan_live_deposits,
             'combined': dee_value + shorgan_paper_value + shorgan_live_value
         }
     except Exception as e:
@@ -423,10 +443,12 @@ def calculate_performance_metrics(df):
     metrics['shorgan_paper_return_pct'] = shorgan_paper_return
     metrics['shorgan_paper_final_value'] = df['shorgan_paper_value'].iloc[-1]
 
-    # SHORGAN-LIVE metrics
-    shorgan_live_return = ((df['shorgan_live_value'].iloc[-1] - INITIAL_CAPITAL_SHORGAN_LIVE) / INITIAL_CAPITAL_SHORGAN_LIVE) * 100
+    # SHORGAN-LIVE metrics (account for total deposits, not just initial capital)
+    shorgan_live_deposits = get_shorgan_live_total_deposits()
+    shorgan_live_return = ((df['shorgan_live_value'].iloc[-1] - shorgan_live_deposits) / shorgan_live_deposits) * 100
     metrics['shorgan_live_return_pct'] = shorgan_live_return
     metrics['shorgan_live_final_value'] = df['shorgan_live_value'].iloc[-1]
+    metrics['shorgan_live_deposits'] = shorgan_live_deposits
 
     # Combined metrics
     combined_return = ((df['combined_value'].iloc[-1] - INITIAL_CAPITAL_COMBINED) / INITIAL_CAPITAL_COMBINED) * 100
@@ -566,7 +588,7 @@ def send_telegram_notification(metrics, graph_path):
         caption += f"*Combined*: ${metrics['combined_final_value']:,.2f} ({metrics['combined_return_pct']:+.2f}%)\n\n"
         caption += f"*DEE Paper*: ${metrics['dee_final_value']:,.2f} ({metrics['dee_return_pct']:+.2f}%)\n"
         caption += f"*SHORGAN Paper*: ${metrics['shorgan_paper_final_value']:,.2f} ({metrics['shorgan_paper_return_pct']:+.2f}%)\n"
-        caption += f"*SHORGAN Live* 💰: ${metrics['shorgan_live_final_value']:,.2f} ({metrics['shorgan_live_return_pct']:+.2f}%)\n"
+        caption += f"*SHORGAN Live* 💰: ${metrics['shorgan_live_final_value']:,.2f} ({metrics['shorgan_live_return_pct']:+.2f}%) [Deposits: ${metrics['shorgan_live_deposits']:,.0f}]\n"
 
         if 'sp500_return_pct' in metrics:
             caption += f"\n*S&P 500*: ${metrics['sp500_final_value']:,.2f} ({metrics['sp500_return_pct']:+.2f}%)\n"
