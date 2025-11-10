@@ -41,7 +41,7 @@ BASE_URL_SHORGAN_LIVE = 'https://api.alpaca.markets'  # SHORGAN LIVE
 INITIAL_CAPITAL_DEE = 100000.0  # Paper trading
 INITIAL_CAPITAL_SHORGAN_PAPER = 100000.0  # Paper trading
 INITIAL_CAPITAL_SHORGAN_LIVE = 1000.0  # LIVE TRADING - initial deposit (may have more deposits)
-INITIAL_CAPITAL_COMBINED = 201000.0  # DEE paper + SHORGAN paper + SHORGAN live initial
+# NOTE: INITIAL_CAPITAL_COMBINED will be calculated dynamically to account for SHORGAN-LIVE deposits
 
 # Deposit tracking file for SHORGAN-LIVE
 SHORGAN_LIVE_DEPOSITS_FILE = "data/shorgan_live_deposits.json"
@@ -58,6 +58,9 @@ def get_shorgan_live_total_deposits():
     except Exception as e:
         print(f"[ERROR] Could not read deposits file: {e}")
         return INITIAL_CAPITAL_SHORGAN_LIVE
+
+# Calculate total initial capital accounting for all deposits
+INITIAL_CAPITAL_COMBINED = INITIAL_CAPITAL_DEE + INITIAL_CAPITAL_SHORGAN_PAPER + get_shorgan_live_total_deposits()
 
 def get_current_portfolio_values():
     """Fetch current portfolio values from Alpaca (3 accounts)"""
@@ -450,16 +453,20 @@ def calculate_performance_metrics(df):
     metrics['shorgan_live_final_value'] = df['shorgan_live_value'].iloc[-1]
     metrics['shorgan_live_deposits'] = shorgan_live_deposits
 
-    # Combined metrics
-    combined_return = ((df['combined_value'].iloc[-1] - INITIAL_CAPITAL_COMBINED) / INITIAL_CAPITAL_COMBINED) * 100
+    # Combined metrics (account for all deposits across all accounts)
+    total_capital_deployed = INITIAL_CAPITAL_DEE + INITIAL_CAPITAL_SHORGAN_PAPER + shorgan_live_deposits
+    combined_return = ((df['combined_value'].iloc[-1] - total_capital_deployed) / total_capital_deployed) * 100
     metrics['combined_return_pct'] = combined_return
     metrics['combined_final_value'] = df['combined_value'].iloc[-1]
+    metrics['total_capital_deployed'] = total_capital_deployed
 
-    # S&P 500 metrics (if available)
+    # S&P 500 metrics (if available) - normalize to total capital deployed
     if 'sp500_value' in df.columns:
-        sp500_return = ((df['sp500_value'].iloc[-1] - INITIAL_CAPITAL_COMBINED) / INITIAL_CAPITAL_COMBINED) * 100
+        # Adjust S&P 500 baseline to match total capital deployed
+        sp500_adjusted = (df['sp500_value'] / df['sp500_value'].iloc[0]) * total_capital_deployed
+        sp500_return = ((sp500_adjusted.iloc[-1] - total_capital_deployed) / total_capital_deployed) * 100
         metrics['sp500_return_pct'] = sp500_return
-        metrics['sp500_final_value'] = df['sp500_value'].iloc[-1]
+        metrics['sp500_final_value'] = sp500_adjusted.iloc[-1]
 
     return metrics
 
@@ -585,7 +592,7 @@ def send_telegram_notification(metrics, graph_path):
 
         # Build caption with metrics
         caption = "📊 *Daily Performance Update (3 Accounts)*\n\n"
-        caption += f"*Combined*: ${metrics['combined_final_value']:,.2f} ({metrics['combined_return_pct']:+.2f}%)\n\n"
+        caption += f"*Combined*: ${metrics['combined_final_value']:,.2f} ({metrics['combined_return_pct']:+.2f}%) [Capital: ${metrics['total_capital_deployed']:,.0f}]\n\n"
         caption += f"*DEE Paper*: ${metrics['dee_final_value']:,.2f} ({metrics['dee_return_pct']:+.2f}%)\n"
         caption += f"*SHORGAN Paper*: ${metrics['shorgan_paper_final_value']:,.2f} ({metrics['shorgan_paper_return_pct']:+.2f}%)\n"
         caption += f"*SHORGAN Live* 💰: ${metrics['shorgan_live_final_value']:,.2f} ({metrics['shorgan_live_return_pct']:+.2f}%) [Deposits: ${metrics['shorgan_live_deposits']:,.0f}]\n"
