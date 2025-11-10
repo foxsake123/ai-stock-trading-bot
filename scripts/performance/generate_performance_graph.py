@@ -144,13 +144,15 @@ def create_portfolio_dataframe():
         df = pd.DataFrame()
 
     # Create baseline row (one day before first data point)
+    # Use total deposits for SHORGAN-LIVE to show true trading performance
+    shorgan_live_deposits = get_shorgan_live_total_deposits()
     baseline_date = start_date - pd.Timedelta(days=1)
     baseline_row = pd.DataFrame({
         'date': [baseline_date],
         'dee_value': [INITIAL_CAPITAL_DEE],
         'shorgan_paper_value': [INITIAL_CAPITAL_SHORGAN_PAPER],
-        'shorgan_live_value': [INITIAL_CAPITAL_SHORGAN_LIVE],
-        'combined_value': [INITIAL_CAPITAL_COMBINED]
+        'shorgan_live_value': [shorgan_live_deposits],
+        'combined_value': [INITIAL_CAPITAL_DEE + INITIAL_CAPITAL_SHORGAN_PAPER + shorgan_live_deposits]
     })
 
     # Get current values
