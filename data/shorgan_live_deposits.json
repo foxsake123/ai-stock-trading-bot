@@ -7,15 +7,26 @@
       "amount": 1000.00,
       "description": "Initial account funding",
       "type": "initial_deposit"
+    },
+    {
+      "date": "2025-11-06",
+      "amount": 1000.00,
+      "description": "Second deposit",
+      "type": "additional_deposit"
+    },
+    {
+      "date": "2025-11-17",
+      "amount": 1000.00,
+      "description": "Third deposit",
+      "type": "additional_deposit"
     }
   ],
-  "total_deposits": 1000.00,
+  "total_deposits": 3000.00,
   "notes": [
-    "This file tracks deposits for performance calculation purposes",
-    "Performance is calculated against ONLY the initial $1,000 deposit",
-    "Second $1,000 deposit (Nov 17) is NOT counted for performance tracking",
-    "This shows trading skill based on original capital only",
+    "This file tracks all deposits for accurate performance calculation",
+    "Performance is calculated as: (Current Value - Total Deposits) / Total Deposits",
+    "This shows pure trading performance, excluding deposit effects",
     "Current value: $2,867.53",
-    "Performance calculation: ($2,867.53 - $1,000) / $1,000 = +186.75% (trading only)"
+    "Performance calculation: ($2,867.53 - $3,000) / $3,000 = -4.42% (trading only)"
   ]
 }
