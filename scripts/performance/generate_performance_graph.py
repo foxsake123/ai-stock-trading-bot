@@ -40,7 +40,7 @@ BASE_URL_SHORGAN_LIVE = 'https://api.alpaca.markets'  # SHORGAN LIVE
 # Starting capital
 INITIAL_CAPITAL_DEE = 100000.0  # Paper trading
 INITIAL_CAPITAL_SHORGAN_PAPER = 100000.0  # Paper trading
-INITIAL_CAPITAL_SHORGAN_LIVE = 1000.0  # LIVE TRADING - initial deposit (may have more deposits)
+INITIAL_CAPITAL_SHORGAN_LIVE = 3000.0  # LIVE TRADING - total deposits tracked in shorgan_live_deposits.json
 # NOTE: INITIAL_CAPITAL_COMBINED will be calculated dynamically to account for SHORGAN-LIVE deposits
 
 # Deposit tracking file for SHORGAN-LIVE
