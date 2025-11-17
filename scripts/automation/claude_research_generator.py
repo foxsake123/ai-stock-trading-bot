@@ -128,12 +128,25 @@ You must produce a COMPREHENSIVE hedge fund-style research report (minimum 400+ 
    - Dividend aristocrats and kings screening
    - Recession-resistant positioning
 
-6. **EXACT ORDER BLOCK** (30-50 lines)
+6. **TRADE RECOMMENDATIONS SUMMARY TABLE** (1 table)
+   - Create a markdown table summarizing ALL recommended trades
+   - Include columns: Ticker | Type | Shares | Entry Price | Stop Loss | Target | Rationale
+   - Type should indicate: LONG (stock position)
+   - Rationale should be 1 concise sentence (10-15 words max)
+   - Place this table BEFORE the detailed order block for quick reference
+
+   **Example Format:**
+   | Ticker | Type | Shares | Entry | Stop Loss | Target | Rationale |
+   |--------|------|--------|-------|-----------|--------|-----------|
+   | JNJ | LONG | 52 | $152.00 | $140.16 | $165.00 | Defensive healthcare, undervalued P/E 14.5 |
+   | MSFT | LONG | 12 | $370.00 | $340.60 | $400.00 | AI momentum, quality growth at 30x earnings |
+
+7. **EXACT ORDER BLOCK** (30-50 lines)
    - Only include top 5-8 highest conviction trades
    - Format per existing standard
    - Must include detailed rationale for each
 
-7. **RISK MANAGEMENT & MONITORING** (40-50 lines)
+8. **RISK MANAGEMENT & MONITORING** (40-50 lines)
    - Portfolio risk metrics after proposed trades
    - Correlation analysis
    - Downside protection strategy
@@ -305,13 +318,29 @@ You must produce a COMPREHENSIVE hedge fund catalyst playbook (minimum 450+ line
    - Specific strikes and expiries
    - Max loss vs max gain scenarios
 
-7. **EXACT ORDER BLOCK** (40-60 lines)
+7. **TRADE RECOMMENDATIONS SUMMARY TABLE** (1 table)
+   - Create a markdown table summarizing ALL recommended trades
+   - Include columns: Ticker | Type | Shares/Contracts | Entry Price | Catalyst | Date/Time | Stop Loss | Target | Rationale
+   - Type should indicate: LONG, SHORT, CALL, PUT, CALL SPREAD, PUT SPREAD
+   - Catalyst should be specific event (e.g., "FDA PDUFA", "Q3 Earnings", "Phase 3 Data")
+   - Date/Time should be exact (e.g., "Nov 20 PRE", "Nov 25 4:00 PM ET", "Dec 5 TBD")
+   - Rationale should be 1 concise sentence (15-20 words max)
+   - Place this table BEFORE the detailed order block for quick reference
+
+   **Example Format:**
+   | Ticker | Type | Size | Entry | Catalyst | Date/Time | Stop | Target | Rationale |
+   |--------|------|------|-------|----------|-----------|------|--------|-----------|
+   | ARWR | LONG | 150 | $25.50 | Phase 3 Data | Nov 22 PRE | $23.00 | $35.00 | Positive interim readout expected, 40% upside on approval |
+   | SNDX | SHORT | 100 | $45.00 | Earnings Miss | Nov 20 4PM | $48.00 | $38.00 | Guidance cut likely, failed trial priced in |
+   | CVNA | CALL | 2x $50 | $2.80 | Q3 Earnings | Nov 21 PRE | $1.40 | $5.50 | Beat expected 60% prob, high IV but justified |
+
+8. **EXACT ORDER BLOCK** (40-60 lines)
    - Top 8-12 highest conviction trades ONLY
    - Mix of long, short, and options
    - Prioritize imminent catalysts (next 3-7 days)
    - Format per existing standard
 
-8. **RISK MANAGEMENT** (40-50 lines)
+9. **RISK MANAGEMENT** (40-50 lines)
    - Portfolio heat (% at risk across all positions)
    - Correlation analysis (avoid concentration in single theme)
    - Catalyst timing (don't overload same week)
@@ -509,7 +538,25 @@ You must produce a COMPREHENSIVE $3K catalyst playbook (minimum 400+ lines) with
    - Don't overconcentrate (max 15% per position)
    - Options expiry management (don't hold to expiry)
 
-7. **EXACT ORDER BLOCK FOR $3K ACCOUNT** (40-60 lines)
+7. **TRADE RECOMMENDATIONS SUMMARY TABLE** (1 table)
+   - Create a markdown table summarizing ALL recommended trades
+   - Include columns: Ticker | Type | Size | Cost | Entry | Catalyst | Date/Time | Stop | Target | Rationale
+   - Type should indicate: LONG (stock), CALL, PUT, CALL SPREAD, PUT SPREAD
+   - Size should show exact shares/contracts (e.g., "15 shares", "2 calls")
+   - Cost should show total position cost (e.g., "$225", "$180")
+   - Catalyst should be specific event (e.g., "FDA PDUFA", "Q3 Earnings", "DOE Loan Decision")
+   - Date/Time should be exact (e.g., "Nov 20 PRE", "Nov 25 4:00 PM ET", "Dec 5 TBD")
+   - Rationale should be 1 concise sentence (15-20 words max)
+   - Place this table BEFORE the detailed order block for quick reference
+
+   **Example Format:**
+   | Ticker | Type | Size | Cost | Entry | Catalyst | Date/Time | Stop | Target | Rationale |
+   |--------|------|------|------|-------|----------|-----------|------|--------|-----------|
+   | SOFI | LONG | 15 sh | $154 | $10.30 | Bank Metrics | Dec 8 AM | $9.00 | $12.00 | Oversold fintech, 20% upside on Q4 growth acceleration |
+   | BILI | LONG | 10 sh | $183 | $18.30 | Q3 Earnings | Nov 20 PRE | $16.00 | $22.00 | Gaming license tailwind, user growth reaccelerating |
+   | SOFI | CALL | 2x $11 | $170 | $0.85 | Bank Metrics | Dec 8 AM | $0.43 | $1.49 | Low IV entry before catalyst, 75% upside target |
+
+8. **EXACT ORDER BLOCK FOR $3K ACCOUNT** (40-60 lines)
    - Top 8-12 highest conviction trades ONLY
    - Mix of stocks (5-8) and options (3-4)
    - Each trade must show:
@@ -519,7 +566,7 @@ You must produce a COMPREHENSIVE $3K catalyst playbook (minimum 400+ lines) with
      * Affordable entry prices
    - Format per standard with ACTUAL POSITION SIZES
 
-8. **RISK MANAGEMENT FOR $3K ACCOUNTS** (30-40 lines)
+9. **RISK MANAGEMENT FOR $3K ACCOUNTS** (30-40 lines)
    - Maximum $300 loss per day rule (10% max drawdown)
    - Position sizing:
      * Stocks: $75-$300 per trade
