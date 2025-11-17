@@ -7,20 +7,15 @@
       "amount": 1000.00,
       "description": "Initial account funding",
       "type": "initial_deposit"
-    },
-    {
-      "date": "2025-11-06",
-      "amount": 1000.00,
-      "description": "Additional deposit",
-      "type": "additional_deposit"
     }
   ],
-  "total_deposits": 2000.00,
+  "total_deposits": 1000.00,
   "notes": [
-    "This file tracks all deposits to the SHORGAN-LIVE account",
-    "Performance should be calculated as: (Current Value - Total Deposits) / Total Deposits",
-    "Current value: $2,015.27",
-    "True performance: ($2,015.27 - $2,000) / $2,000 = +0.76% (trading only)",
-    "Previously showed +101% because it didn't account for the second deposit"
+    "This file tracks deposits for performance calculation purposes",
+    "Performance is calculated against ONLY the initial $1,000 deposit",
+    "Second $1,000 deposit (Nov 17) is NOT counted for performance tracking",
+    "This shows trading skill based on original capital only",
+    "Current value: $2,867.53",
+    "Performance calculation: ($2,867.53 - $1,000) / $1,000 = +186.75% (trading only)"
   ]
 }
