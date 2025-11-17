@@ -35,6 +35,7 @@ sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from anthropic import Anthropic
 from alpaca.trading.client import TradingClient
+from mcp_financial_tools import FinancialDataToolsProvider
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import (
     StockLatestQuoteRequest,
@@ -158,6 +159,21 @@ Intended execution date: YYYY-MM-DD
 Stop loss: $XX.XX (for buys only, -8% from entry)
 One-line rationale: Beta impact and quality justification
 ```
+
+CRITICAL TOOLS USAGE:
+- You have access to real-time financial data tools - USE THEM!
+- For ANY stock you analyze or recommend, call get_current_price(ticker) to get accurate pricing
+- DO NOT rely on your training data for prices - it's 10+ months old
+- Use get_fundamental_metrics(ticker) for valuation analysis
+- Use get_price_history(ticker, 30) for technical analysis
+- Use get_multiple_prices([list]) when comparing several stocks
+- ALWAYS verify prices before making recommendations
+
+Example workflow:
+1. Call get_current_price("AAPL") to get real-time price
+2. Call get_fundamental_metrics("AAPL") for P/E, margins, etc.
+3. Call get_price_history("AAPL", 90) for trend analysis
+4. Make recommendation based on CURRENT data, not training data
 
 CRITICAL: Use your full 16K thinking budget to produce truly comprehensive analysis. This report will be reviewed by a multi-agent validation system, so thoroughness and quality are paramount.
 """
@@ -577,6 +593,25 @@ CRITICAL FOR $3K ACCOUNTS:
 - Use your full thinking budget for small-account-specific analysis
 
 This is REAL MONEY - be conservative, specific, and focus on HIGH PROBABILITY setups only. Options are a tool for leverage on catalysts, not for gambling.
+
+CRITICAL TOOLS USAGE:
+- You have access to real-time financial data tools - USE THEM EXTENSIVELY!
+- For EVERY stock you research or recommend, call get_current_price(ticker) for accurate pricing
+- Your training data prices are 10+ months old - DO NOT use them for recommendations
+- Use get_fundamental_metrics(ticker) for P/E, revenue, margins - essential for valuation
+- Use get_earnings_history(ticker, 4) to verify earnings trends and beat rates
+- Use get_news_sentiment(ticker, 5) to identify catalysts and market perception
+- Use get_price_history(ticker, 30) for technical setup validation
+- Use get_multiple_prices([list]) when screening multiple catalyst plays
+
+Example catalyst research workflow:
+1. Call get_current_price("RIVN") - verify current price ($15.35 NOT $20!)
+2. Call get_earnings_history("RIVN", 4) - check beat rate
+3. Call get_news_sentiment("RIVN", 10) - find catalysts
+4. Call get_price_history("RIVN", 60) - technical setup
+5. Make recommendation with CURRENT accurate data
+
+NEVER recommend trades based on outdated prices - use the tools!
 """
 
 
@@ -587,6 +622,9 @@ class ClaudeResearchGenerator:
         """Initialize API clients"""
         # Claude API
         self.claude = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+
+        # MCP Financial Data Tools (for real-time price access during research)
+        self.financial_tools = FinancialDataToolsProvider()
 
         # Alpaca Trading API (for portfolio data)
         self.dee_trading = TradingClient(
@@ -845,28 +883,84 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             system_prompt = SHORGAN_BOT_SYSTEM_PROMPT
 
         try:
-            # Use streaming for Opus 4.1 (required for long-running operations >10 min)
-            # Opus 4.1 max output: 32K tokens, so thinking budget must be less
-            stream = self.claude.messages.stream(
-                model="claude-opus-4-20250514",  # Claude Opus 4.1 for deep research
-                max_tokens=32000,  # Maximum for Opus 4.1
-                temperature=1.0,  # Required for extended thinking
-                thinking={
-                    "type": "enabled",
-                    "budget_tokens": 16000  # Thinking budget (must be < max_tokens)
-                },
-                system=system_prompt,
-                messages=[{"role": "user", "content": user_prompt}]
-            )
+            # Build conversation messages
+            messages = [{"role": "user", "content": user_prompt}]
 
-            # Extract text content from stream (skip thinking blocks)
+            # Get tool definitions
+            tools = self.financial_tools.get_tool_definitions()
+
+            # Call Claude with tool support (may require multiple rounds for tool use)
+            max_turns = 10  # Prevent infinite loops
             report_content = ""
-            with stream as event_stream:
-                for text in event_stream.text_stream:
-                    report_content += text
 
-            # Get final response for token usage stats
-            response = event_stream.get_final_message()
+            print(f"[*] Claude has access to {len(tools)} real-time data tools")
+            print(f"[*] Tools: get_current_price, get_multiple_prices, get_price_history, get_fundamental_metrics, get_earnings_history, get_news_sentiment")
+
+            for turn in range(max_turns):
+                print(f"[*] API Call #{turn + 1}...")
+
+                # Use streaming for Opus 4.1
+                stream = self.claude.messages.stream(
+                    model="claude-opus-4-20250514",  # Claude Opus 4.1 for deep research
+                    max_tokens=32000,  # Maximum for Opus 4.1
+                    temperature=1.0,  # Required for extended thinking
+                    thinking={
+                        "type": "enabled",
+                        "budget_tokens": 16000  # Thinking budget (must be < max_tokens)
+                    },
+                    system=system_prompt,
+                    tools=tools,  # Provide tools to Claude
+                    messages=messages
+                )
+
+                # Collect response
+                current_text = ""
+                tool_uses = []
+
+                with stream as event_stream:
+                    response = event_stream.get_final_message()
+
+                    # Extract text and tool uses from response
+                    for block in response.content:
+                        if hasattr(block, 'type'):
+                            if block.type == "text":
+                                current_text += block.text
+                            elif block.type == "tool_use":
+                                tool_uses.append(block)
+
+                # Add assistant's text response to report
+                if current_text:
+                    report_content += current_text
+
+                # If no tool uses, we're done
+                if not tool_uses:
+                    print(f"[+] Research complete (no more tool calls)")
+                    break
+
+                # Execute tools and continue conversation
+                print(f"[*] Executing {len(tool_uses)} tool calls...")
+                messages.append({"role": "assistant", "content": response.content})
+
+                tool_results = []
+                for tool_use in tool_uses:
+                    tool_name = tool_use.name
+                    tool_input = tool_use.input
+                    print(f"    - {tool_name}({json.dumps(tool_input)})")
+
+                    # Execute the tool
+                    result = self.financial_tools.execute_tool(tool_name, tool_input)
+
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": tool_use.id,
+                        "content": json.dumps(result)
+                    })
+
+                # Add tool results to conversation
+                messages.append({"role": "user", "content": tool_results})
+
+            if turn >= max_turns - 1:
+                print(f"[!] Warning: Reached maximum tool use turns ({max_turns})")
 
             # 6. Add header and metadata
             report_header = f"""# CLAUDE DEEP RESEARCH REPORT - {bot_name}
