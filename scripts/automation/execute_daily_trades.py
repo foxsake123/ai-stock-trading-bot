@@ -80,7 +80,7 @@ class DailyTradeExecutor:
             try:
                 account = self.shorgan_api.get_account()
                 self.shorgan_starting_equity = float(account.last_equity)
-                print(f"\n💰 SHORGAN-BOT LIVE TRADING ACTIVE")
+                print(f"\n[LIVE] SHORGAN-BOT LIVE TRADING ACTIVE")
                 print(f"Starting Equity: ${self.shorgan_starting_equity:,.2f}")
                 print(f"Daily Loss Limit: ${SHORGAN_MAX_DAILY_LOSS:.2f}")
                 print(f"Max Trades Today: {SHORGAN_MAX_TRADES_PER_DAY}")
@@ -98,13 +98,13 @@ class DailyTradeExecutor:
             daily_pnl = current_equity - self.shorgan_starting_equity
 
             if daily_pnl < -SHORGAN_MAX_DAILY_LOSS:
-                print(f"\n⛔ CIRCUIT BREAKER TRIGGERED - SHORGAN-BOT")
+                print(f"\n[CIRCUIT BREAKER] TRIGGERED - SHORGAN-BOT")
                 print(f"Daily Loss: ${-daily_pnl:.2f}")
                 print(f"Loss Limit: ${SHORGAN_MAX_DAILY_LOSS:.2f}")
-                print(f"🚨 STOPPING ALL SHORGAN TRADING FOR TODAY")
+                print(f"[ALERT] STOPPING ALL SHORGAN TRADING FOR TODAY")
                 return False
 
-            print(f"✅ Daily P&L Check: ${daily_pnl:+.2f} (Limit: -${SHORGAN_MAX_DAILY_LOSS:.2f})")
+            print(f"[OK] Daily P&L Check: ${daily_pnl:+.2f} (Limit: -${SHORGAN_MAX_DAILY_LOSS:.2f})")
             return True
         except Exception as e:
             print(f"[ERROR] Could not check daily loss limit: {e}")
@@ -120,11 +120,11 @@ class DailyTradeExecutor:
             position_count = len(positions)
 
             if position_count >= SHORGAN_MAX_POSITIONS:
-                print(f"\n⚠️ Position limit reached: {position_count}/{SHORGAN_MAX_POSITIONS}")
+                print(f"\n[WARNING] Position limit reached: {position_count}/{SHORGAN_MAX_POSITIONS}")
                 print(f"Cannot open new positions until existing ones close")
                 return False
 
-            print(f"✅ Position Count: {position_count}/{SHORGAN_MAX_POSITIONS}")
+            print(f"[OK] Position Count: {position_count}/{SHORGAN_MAX_POSITIONS}")
             return True
         except Exception as e:
             print(f"[ERROR] Could not check position count: {e}")
@@ -147,7 +147,7 @@ class DailyTradeExecutor:
         final_shares = min(shares_recommended, max_shares)
         position_value = final_shares * price
 
-        print(f"📊 Position Size: {final_shares} shares @ ${price:.2f} = ${position_value:.2f}")
+        print(f"[INFO] Position Size: {final_shares} shares @ ${price:.2f} = ${position_value:.2f}")
         return final_shares
 
     def find_todays_trades_file(self):
@@ -339,11 +339,16 @@ class DailyTradeExecutor:
 
             validation_errors = []
 
-            # 1. Check market hours
+            # 1. Check market hours (allow after-hours limit orders, block market orders)
             clock = api.get_clock()
             if not clock.is_open:
-                validation_errors.append(f"Market is closed")
-                return False, validation_errors
+                # If no limit price specified, this would be a market order - block it
+                if limit_price is None:
+                    validation_errors.append(f"Market is closed (market orders not allowed after hours)")
+                    return False, validation_errors
+                else:
+                    # Limit order - allowed after hours for next trading day
+                    print(f"[INFO] Placing after-hours limit order for next trading day")
 
             # 2. Validate SELL orders
             if side == 'sell':
@@ -445,7 +450,7 @@ class DailyTradeExecutor:
                     print(f"[SKIP] {symbol}: Position too small for $1K account")
                     return None
                 if shares != original_shares:
-                    print(f"[ADJUST] SHORGAN-BOT Live: {original_shares} → {shares} shares (${shares * limit_price:.2f})")
+                    print(f"[ADJUST] SHORGAN-BOT Live: {original_shares} -> {shares} shares (${shares * limit_price:.2f})")
                     trade_info['shares'] = shares  # Update trade info
 
             # PRE-EXECUTION VALIDATION
@@ -647,7 +652,7 @@ class DailyTradeExecutor:
                         retry_queue.append(('shorgan', trade, 'sell'))
                     time.sleep(1)
             elif shorgan_trades['short']:
-                print(f"\n⚠️  SKIPPING {len(shorgan_trades['short'])} SHORT TRADES (Shorting disabled - cash account)")
+                print(f"\n[WARNING] SKIPPING {len(shorgan_trades['short'])} SHORT TRADES (Shorting disabled - cash account)")
                 for trade in shorgan_trades['short']:
                     print(f"   [SKIP] SHORT {trade['shares']} {trade['symbol']} @ ${trade.get('price', 'N/A')}")
                     self.failed_trades.append({
