@@ -654,11 +654,12 @@ class AutomatedTradeGeneratorV2:
 
         # SHORGAN-BOT section
         account_type_label = " (LIVE $1K)" if suffix == "_LIVE" else ""
+        portfolio_value = shorgan_results.get('portfolio_value', 100000)  # Default to 100K if not available
         content += f"""
 
 ## 🚀 SHORGAN-BOT TRADES{account_type_label} (Catalyst-Driven)
 **Strategy**: Event-driven, momentum, HIGH-CONVICTION
-**Capital**: ${shorgan_results['portfolio_value']:,.0f}
+**Capital**: ${portfolio_value:,.0f}
 **Max Position**: 10%
 
 ### BUY ORDERS
@@ -670,7 +671,7 @@ class AutomatedTradeGeneratorV2:
             content += "|--------|--------|-------------|-----------|------------|--------|\n"
             for val in shorgan_results['approved']:
                 rec = val['recommendation']
-                shares = rec.shares or int((rec.position_size_pct or 10) * shorgan_results['portfolio_value'] / 100 / (rec.entry_price or 100))
+                shares = rec.shares or int((rec.position_size_pct or 10) * portfolio_value / 100 / (rec.entry_price or 100))
                 stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.82 if rec.entry_price else 0)  # 18% stop loss (was 15%)
                 content += f"| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
 
