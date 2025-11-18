@@ -199,16 +199,23 @@ class FinancialDatasetsAPI:
         net_income = income_stmt.get('net_income', 0)
         gross_profit = income_stmt.get('gross_profit', 0)
         operating_income = income_stmt.get('operating_income', 0)
+        ebitda = income_stmt.get('ebitda', operating_income)  # Use EBITDA if available, else operating income
         eps = income_stmt.get('earnings_per_share', 0)
+        shares_outstanding = income_stmt.get('weighted_average_shares_outstanding', 0)
+
+        # Dividends
+        dividends_paid = income_stmt.get('dividends_paid', 0)
 
         # From balance sheet
         total_assets = balance_sheet.get('total_assets', 0)
         total_equity = balance_sheet.get('total_equity', balance_sheet.get('total_stockholders_equity', 0))
         total_liabilities = balance_sheet.get('total_liabilities', 0)
+        total_debt = balance_sheet.get('total_debt', balance_sheet.get('long_term_debt', 0))
         current_assets = balance_sheet.get('total_current_assets', 0)
         current_liabilities = balance_sheet.get('total_current_liabilities', 0)
+        cash_and_equivalents = balance_sheet.get('cash_and_cash_equivalents', 0)
 
-        # Calculate ratios
+        # Calculate profitability ratios
         if revenue > 0:
             metrics['gross_margin'] = (gross_profit / revenue * 100) if gross_profit else 0
             metrics['operating_margin'] = (operating_income / revenue * 100) if operating_income else 0
@@ -228,10 +235,129 @@ class FinancialDatasetsAPI:
         metrics['revenue'] = revenue
         metrics['net_income'] = net_income
         metrics['eps'] = eps
+        metrics['ebitda'] = ebitda
         metrics['total_assets'] = total_assets
         metrics['total_equity'] = total_equity
+        metrics['total_debt'] = total_debt
+        metrics['cash'] = cash_and_equivalents
+        metrics['shares_outstanding'] = shares_outstanding
+        metrics['dividends_paid'] = abs(dividends_paid) if dividends_paid else 0  # Dividends usually negative in financials
+
+        # Calculate per-share metrics
+        if shares_outstanding > 0:
+            metrics['book_value_per_share'] = total_equity / shares_outstanding
+            metrics['revenue_per_share'] = revenue / shares_outstanding
+            metrics['dividend_per_share'] = abs(dividends_paid) / shares_outstanding if dividends_paid else 0
 
         return metrics
+
+    def get_valuation_multiples(self, ticker: str, current_price: float = None) -> Dict:
+        """
+        Calculate valuation multiples: P/E, P/B, P/S, EV/EBITDA, Dividend Yield
+
+        Args:
+            ticker: Stock symbol
+            current_price: Current stock price (if None, will fetch from API)
+
+        Returns:
+            Dict with valuation multiples
+        """
+        # Get fundamental metrics first
+        fundamentals = self.get_financial_metrics(ticker)
+
+        if not fundamentals or 'eps' not in fundamentals:
+            return {"error": f"No fundamental data available for {ticker}"}
+
+        # Get current price if not provided
+        if current_price is None:
+            price_data = self.get_snapshot_price(ticker)
+            if not price_data or 'close' not in price_data:
+                return {"error": f"Could not fetch current price for {ticker}"}
+            current_price = price_data['close']
+
+        valuation = {
+            'ticker': ticker,
+            'price': current_price,
+            'timestamp': datetime.now().isoformat()
+        }
+
+        # Extract fundamentals
+        eps = fundamentals.get('eps', 0)
+        book_value_per_share = fundamentals.get('book_value_per_share', 0)
+        revenue_per_share = fundamentals.get('revenue_per_share', 0)
+        dividend_per_share = fundamentals.get('dividend_per_share', 0)
+        shares_outstanding = fundamentals.get('shares_outstanding', 0)
+        revenue = fundamentals.get('revenue', 0)
+        ebitda = fundamentals.get('ebitda', 0)
+        total_debt = fundamentals.get('total_debt', 0)
+        cash = fundamentals.get('cash', 0)
+
+        # Calculate market cap
+        market_cap = current_price * shares_outstanding if shares_outstanding > 0 else 0
+
+        # Calculate Enterprise Value = Market Cap + Total Debt - Cash
+        enterprise_value = market_cap + total_debt - cash if market_cap > 0 else 0
+
+        # P/E Ratio (Price to Earnings)
+        if eps > 0:
+            valuation['pe_ratio'] = round(current_price / eps, 2)
+        else:
+            valuation['pe_ratio'] = None  # Negative or zero earnings
+
+        # P/B Ratio (Price to Book)
+        if book_value_per_share > 0:
+            valuation['pb_ratio'] = round(current_price / book_value_per_share, 2)
+        else:
+            valuation['pb_ratio'] = None
+
+        # P/S Ratio (Price to Sales)
+        if revenue_per_share > 0:
+            valuation['ps_ratio'] = round(current_price / revenue_per_share, 2)
+        elif revenue > 0 and shares_outstanding > 0:
+            valuation['ps_ratio'] = round(market_cap / revenue, 2)
+        else:
+            valuation['ps_ratio'] = None
+
+        # EV/EBITDA
+        if ebitda > 0 and enterprise_value > 0:
+            valuation['ev_to_ebitda'] = round(enterprise_value / ebitda, 2)
+        else:
+            valuation['ev_to_ebitda'] = None
+
+        # Dividend Yield (%)
+        if dividend_per_share > 0 and current_price > 0:
+            valuation['dividend_yield_pct'] = round((dividend_per_share / current_price) * 100, 2)
+        else:
+            valuation['dividend_yield_pct'] = 0
+
+        # Add market cap and enterprise value
+        valuation['market_cap'] = market_cap
+        valuation['enterprise_value'] = enterprise_value
+
+        # Add relative valuation context (these would require historical data or sector averages)
+        valuation['valuation_summary'] = self._get_valuation_summary(valuation)
+
+        return valuation
+
+    def _get_valuation_summary(self, valuation: Dict) -> str:
+        """Provide a quick valuation summary based on multiples"""
+        pe = valuation.get('pe_ratio')
+        pb = valuation.get('pb_ratio')
+
+        if pe is None or pb is None:
+            return "Insufficient data for valuation assessment"
+
+        # Simple heuristics (rough guidelines)
+        if pe < 15 and pb < 1.5:
+            return "Potentially undervalued (low P/E and P/B)"
+        elif pe > 30 and pb > 5:
+            return "Potentially overvalued (high P/E and P/B)"
+        elif pe < 15:
+            return "Attractive P/E ratio (< 15)"
+        elif pe > 30:
+            return "Elevated P/E ratio (> 30)"
+        else:
+            return "Moderate valuation (P/E 15-30)"
 
     # =============== EARNINGS & ESTIMATES ===============
     def get_earnings(self, ticker: str, limit: int = 8) -> List[Dict]:

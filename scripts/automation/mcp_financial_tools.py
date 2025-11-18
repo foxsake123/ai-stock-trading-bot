@@ -97,7 +97,21 @@ class FinancialDataToolsProvider:
             },
             {
                 "name": "get_fundamental_metrics",
-                "description": "Get key fundamental metrics: P/E ratio, revenue, earnings, profit margins, ROE, debt ratios, growth rates. Essential for valuation analysis.",
+                "description": "Get key fundamental metrics: revenue, earnings, profit margins, ROE, ROA, debt ratios, growth rates. Essential for fundamental analysis.",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "ticker": {
+                            "type": "string",
+                            "description": "Stock ticker symbol"
+                        }
+                    },
+                    "required": ["ticker"]
+                }
+            },
+            {
+                "name": "get_valuation_multiples",
+                "description": "Get comprehensive valuation multiples: P/E ratio, P/B ratio, P/S ratio, EV/EBITDA, Dividend Yield, Market Cap, Enterprise Value. Critical for determining if a stock is overvalued or undervalued.",
                 "input_schema": {
                     "type": "object",
                     "properties": {
@@ -184,6 +198,8 @@ class FinancialDataToolsProvider:
                 return self._get_price_history(tool_input["ticker"], days)
             elif tool_name == "get_fundamental_metrics":
                 return self._get_fundamental_metrics(tool_input["ticker"])
+            elif tool_name == "get_valuation_multiples":
+                return self._get_valuation_multiples(tool_input["ticker"])
             elif tool_name == "get_multiple_prices":
                 return self._get_multiple_prices(tool_input["tickers"])
             elif tool_name == "get_earnings_history":
@@ -393,6 +409,7 @@ class FinancialDataToolsProvider:
                 "revenue": metrics.get("revenue"),
                 "net_income": metrics.get("net_income"),
                 "eps": metrics.get("eps"),
+                "ebitda": metrics.get("ebitda"),
                 "gross_margin_pct": round(metrics.get("gross_margin", 0), 2),
                 "operating_margin_pct": round(metrics.get("operating_margin", 0), 2),
                 "net_margin_pct": round(metrics.get("net_margin", 0), 2),
@@ -402,6 +419,10 @@ class FinancialDataToolsProvider:
                 "current_ratio": round(metrics.get("current_ratio", 0), 2),
                 "total_assets": metrics.get("total_assets"),
                 "total_equity": metrics.get("total_equity"),
+                "total_debt": metrics.get("total_debt"),
+                "cash": metrics.get("cash"),
+                "shares_outstanding": metrics.get("shares_outstanding"),
+                "book_value_per_share": metrics.get("book_value_per_share"),
                 "data_source": "Financial Datasets",
                 "timestamp": datetime.now().isoformat()
             }
@@ -412,6 +433,38 @@ class FinancialDataToolsProvider:
 
         except Exception as e:
             return {"error": f"Fundamentals fetch failed for {ticker}: {str(e)}"}
+
+    def _get_valuation_multiples(self, ticker: str) -> Dict:
+        """Get valuation multiples (P/E, P/B, P/S, EV/EBITDA, etc.)"""
+        ticker = ticker.upper()
+
+        # Check cache (valid for 1 hour)
+        cache_key = f"valuation_{ticker}"
+        if cache_key in self.metrics_cache:
+            cached_time, cached_data = self.metrics_cache[cache_key]
+            if (datetime.now() - cached_time).seconds < 3600:
+                return cached_data
+
+        try:
+            # Get current price from Alpaca first
+            price_data = self._get_current_price(ticker)
+            current_price = price_data.get("price") if price_data and "price" in price_data else None
+
+            if not current_price:
+                return {"error": f"Could not fetch current price for {ticker}"}
+
+            # Get valuation multiples from Financial Datasets API
+            valuation = self.fd_api.get_valuation_multiples(ticker, current_price=current_price)
+
+            if not valuation or "error" in valuation:
+                return {"error": f"No valuation data available for {ticker}"}
+
+            # Cache result
+            self.metrics_cache[cache_key] = (datetime.now(), valuation)
+            return valuation
+
+        except Exception as e:
+            return {"error": f"Valuation multiples fetch failed for {ticker}: {str(e)}"}
 
     def _get_earnings_history(self, ticker: str, quarters: int = 4) -> Dict:
         """Get earnings history from Financial Datasets"""
