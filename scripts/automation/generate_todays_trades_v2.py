@@ -622,14 +622,29 @@ class AutomatedTradeGeneratorV2:
 **Capital**: ${dee_results['portfolio_value']:,.0f}
 **Max Position**: 8%
 
-### BUY ORDERS
+### SELL ORDERS
 """
 
+            # Add DEE-BOT sell orders first
+            sell_orders = [v for v in dee_results['approved'] if v['recommendation'].action and v['recommendation'].action.upper() == 'SELL']
+            if sell_orders:
+                content += "| Symbol | Shares | Limit Price | Confidence | Source | Rationale |\n"
+                content += "|--------|--------|-------------|------------|--------|-----------|"
+                for val in sell_orders:
+                    rec = val['recommendation']
+                    shares = rec.shares or "ALL"
+                    content += f"\n| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
+            else:
+                content += "\n| No sell orders today | - | - | - | - |\n"
+
+            content += "\n\n### BUY ORDERS\n"
+
             # Add DEE-BOT buy orders
-            if dee_results['approved']:
+            buy_orders = [v for v in dee_results['approved'] if not v['recommendation'].action or v['recommendation'].action.upper() != 'SELL']
+            if buy_orders:
                 content += "| Symbol | Shares | Limit Price | Stop Loss | Confidence | Source | Rationale |\n"
                 content += "|--------|--------|-------------|-----------|------------|--------|-----------|"
-                for val in dee_results['approved']:
+                for val in buy_orders:
                     rec = val['recommendation']
                     shares = rec.shares or int((rec.position_size_pct or 5) * dee_results['portfolio_value'] / 100 / (rec.entry_price or 100))
                     stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.89 if rec.entry_price else 0)  # 11% stop loss (was 8%)
@@ -662,28 +677,43 @@ class AutomatedTradeGeneratorV2:
 **Capital**: ${portfolio_value:,.0f}
 **Max Position**: 10%
 
-### BUY ORDERS
+### SELL ORDERS
 """
 
+        # Add SHORGAN-BOT sell orders first
+        shorgan_sell = [v for v in shorgan_results['approved'] if v['recommendation'].action and v['recommendation'].action.upper() == 'SELL']
+        if shorgan_sell:
+            content += "| Symbol | Shares | Limit Price | Confidence | Source |\n"
+            content += "|--------|--------|-------------|------------|--------|\n"
+            for val in shorgan_sell:
+                rec = val['recommendation']
+                shares = rec.shares or "ALL"
+                content += f"| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
+        else:
+            content += "| No sell orders today | - | - | - | - |\n"
+
+        content += "\n\n### BUY ORDERS\n"
+
         # Add SHORGAN-BOT buy orders
-        if shorgan_results['approved']:
+        shorgan_buy = [v for v in shorgan_results['approved'] if not v['recommendation'].action or v['recommendation'].action.upper() != 'SELL']
+        if shorgan_buy:
             content += "| Symbol | Shares | Limit Price | Stop Loss | Confidence | Source |\n"
             content += "|--------|--------|-------------|-----------|------------|--------|\n"
-            for val in shorgan_results['approved']:
+            for val in shorgan_buy:
                 rec = val['recommendation']
                 shares = rec.shares or int((rec.position_size_pct or 10) * portfolio_value / 100 / (rec.entry_price or 100))
                 stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.82 if rec.entry_price else 0)  # 18% stop loss (was 15%)
                 content += f"| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
 
-            # Add detailed rationale section for each trade
+            # Add detailed rationale section for all buy trades
             content += "\n### 📋 TRADE RATIONALE (Event-Driven Analysis)\n\n"
-            for val in shorgan_results['approved']:
+            for val in shorgan_buy:
                 rec = val['recommendation']
                 catalyst_str = rec.catalyst or 'Market catalyst'
                 catalyst_date_str = f" ({rec.catalyst_date})" if rec.catalyst_date else ""
                 rationale_str = rec.rationale or "Multi-agent approved based on technical and fundamental analysis"
 
-                content += f"**{rec.ticker}** - {rec.action}\n"
+                content += f"**{rec.ticker}** - {rec.action or 'BUY'}\n"
                 content += f"- **Catalyst**: {catalyst_str}{catalyst_date_str}\n"
                 content += f"- **Rationale**: {rationale_str}\n"
                 content += f"- **Confidence**: {val['combined_confidence']:.0%} (External: {val.get('external_confidence', 0):.0%}, Internal: {val.get('internal_confidence', 0):.0%})\n\n"

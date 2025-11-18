@@ -1,6 +1,6 @@
 # Today's AI-Generated Trade Recommendations
 ## Tuesday, November 18, 2025
-## Generated: 08:37 AM ET
+## Generated: 08:46 AM ET
 
 ---
 
@@ -19,11 +19,15 @@
 **Capital**: $100,000
 **Max Position**: 8%
 
+### SELL ORDERS
+| Symbol | Shares | Limit Price | Confidence | Source | Rationale |
+|--------|--------|-------------|------------|--------|-----------|
+| UNH | 34 | $320.00 | 56% | CLAUDE | Exit underperformer facing regulatory headwinds and medical  |
+| AAPL | 10 | $267.50 | 56% | CLAUDE | Reduce concentration risk at elevated valuations near all-ti |
+
 ### BUY ORDERS
 | Symbol | Shares | Limit Price | Stop Loss | Confidence | Source | Rationale |
 |--------|--------|-------------|-----------|------------|--------|-----------|
-| UNH | 34 | $320.00 | $284.80 | 56% | CLAUDE | Exit underperformer facing regulatory headwinds and medical  |
-| AAPL | 10 | $267.50 | $238.08 | 56% | CLAUDE | Reduce concentration risk at elevated valuations near all-ti |
 | PFE | 160 | $25.10 | $22.50 | 56% | CLAUDE | Contrarian value at multi-year lows with 6.4% secure dividen |
 | PEP | 27 | $147.75 | $135.00 | 56% | CLAUDE | Quality defensive staple trading at valuation discount to hi |
 | NEE | 17 | $85.25 | $78.20 | 56% | CLAUDE | Build defensive utility position with renewable growth and d |
@@ -38,6 +42,10 @@
 **Strategy**: Event-driven, momentum, HIGH-CONVICTION
 **Capital**: $100,000
 **Max Position**: 10%
+
+### SELL ORDERS
+| No sell orders today | - | - | - | - |
+
 
 ### BUY ORDERS
 | No buy orders today | - | - | - | - | - |

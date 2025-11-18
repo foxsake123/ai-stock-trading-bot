@@ -1,6 +1,6 @@
 # Today's AI-Generated Trade Recommendations - SHORGAN-BOT LIVE ($1K Account)
 ## Tuesday, November 18, 2025
-## Generated: 08:37 AM ET
+## Generated: 08:46 AM ET
 
 ---
 
@@ -18,6 +18,10 @@
 **Strategy**: Event-driven, momentum, HIGH-CONVICTION
 **Capital**: $100,000
 **Max Position**: 10%
+
+### SELL ORDERS
+| No sell orders today | - | - | - | - |
+
 
 ### BUY ORDERS
 | No buy orders today | - | - | - | - | - |
