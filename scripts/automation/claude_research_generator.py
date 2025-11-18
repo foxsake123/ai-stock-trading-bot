@@ -937,11 +937,11 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             tools = self.financial_tools.get_tool_definitions()
 
             # Call Claude with tool support (may require multiple rounds for tool use)
-            max_turns = 10  # Prevent infinite loops
+            max_turns = 15  # Increased for comprehensive research with valuation multiples
             report_content = ""
 
             print(f"[*] Claude has access to {len(tools)} real-time data tools")
-            print(f"[*] Tools: get_current_price, get_multiple_prices, get_price_history, get_fundamental_metrics, get_earnings_history, get_news_sentiment")
+            print(f"[*] Tools: get_current_price, get_multiple_prices, get_price_history, get_fundamental_metrics, get_valuation_multiples, get_earnings_history, get_news_sentiment")
 
             for turn in range(max_turns):
                 print(f"[*] API Call #{turn + 1}...")
