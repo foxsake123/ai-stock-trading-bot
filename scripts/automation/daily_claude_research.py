@@ -247,10 +247,12 @@ def main():
             print(f"COMBINING REPORTS INTO SINGLE FILE")
             print(f"{'-'*70}")
 
+            # FIX: Use absolute path to avoid CWD dependency
             # Determine target directory (tomorrow's date)
             tomorrow = datetime.now() + timedelta(days=1)
             date_str = tomorrow.strftime("%Y-%m-%d")
-            combined_dir = Path(f"reports/premarket/{date_str}")
+            project_root = Path(__file__).parent.parent
+            combined_dir = project_root / "reports" / "premarket" / date_str
             combined_path = combined_dir / "claude_research.md"
 
             # Read both reports

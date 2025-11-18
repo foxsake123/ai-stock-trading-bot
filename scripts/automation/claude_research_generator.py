@@ -1050,7 +1050,10 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         tomorrow = today + timedelta(days=1)
         date_str = tomorrow.strftime("%Y-%m-%d")
 
-        report_dir = Path(f"reports/premarket/{date_str}")
+        # FIX: Use absolute path to avoid CWD dependency
+        # Get project root directory (2 levels up from this file)
+        project_root = Path(__file__).parent.parent.parent
+        report_dir = project_root / "reports" / "premarket" / date_str
         report_dir.mkdir(parents=True, exist_ok=True)
 
         # Generate filenames - use trading date (tomorrow) for consistency
