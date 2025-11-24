@@ -937,7 +937,7 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             tools = self.financial_tools.get_tool_definitions()
 
             # Call Claude with tool support (may require multiple rounds for tool use)
-            max_turns = 15  # Increased for comprehensive research with valuation multiples
+            max_turns = 20  # Increased to 20 to ensure ORDER BLOCK completion for all bots
             report_content = ""
 
             print(f"[*] Claude has access to {len(tools)} real-time data tools")

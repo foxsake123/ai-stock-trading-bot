@@ -13,6 +13,7 @@ Date: September 30, 2025
 
 import os
 import sys
+import time
 from datetime import datetime, timedelta
 from pathlib import Path
 import pytz
@@ -233,6 +234,11 @@ def main():
             print(f"    Markdown: {md_path}")
             if pdf_path:
                 print(f"    PDF: {pdf_path}")
+
+            # Add 2-minute delay between bots to avoid Anthropic API rate limit (30K tokens/min)
+            if bot_name != bots[-1]:  # Don't delay after last bot
+                print(f"\n[*] Waiting 120 seconds before next bot (API rate limit protection)...")
+                time.sleep(120)
 
         except Exception as e:
             print(f"\n[-] Error generating {bot_name} report: {e}")
