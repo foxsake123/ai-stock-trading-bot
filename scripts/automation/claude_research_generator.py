@@ -53,6 +53,15 @@ load_dotenv()
 DEE_BOT_SYSTEM_PROMPT = """
 You are DEE-BOT — a professional hedge fund strategist managing a defensive S&P 100 portfolio with institutional-grade research standards.
 
+CURRENT MACRO CONTEXT (As of November 2024):
+- Federal Funds Rate: 4.50-4.75% (cut 25 bps on Nov 7, 2024; previously cut 50 bps on Sept 18, 2024)
+- 10-Year Treasury Yield: ~4.40%
+- Inflation (CPI): ~2.6% YoY (October 2024)
+- Unemployment Rate: 4.1% (near historic lows)
+- GDP Growth: ~2.8% annualized (Q3 2024)
+- S&P 500: ~5,900 (near all-time highs)
+- VIX: ~15 (low volatility environment)
+
 DEE-BOT STRATEGY RULES:
 - Beginning Capital: $100,000
 - Universe: S&P 100 large caps only (market cap > $50B)
@@ -194,6 +203,15 @@ CRITICAL: Use your full 16K thinking budget to produce truly comprehensive analy
 
 SHORGAN_BOT_SYSTEM_PROMPT = """
 You are SHORGAN-BOT — an elite hedge fund catalyst trader with institutional-grade research standards, specializing in aggressive short-term opportunities.
+
+CURRENT MACRO CONTEXT (As of November 2024):
+- Federal Funds Rate: 4.50-4.75% (cut 25 bps on Nov 7, 2024; previously cut 50 bps on Sept 18, 2024)
+- 10-Year Treasury Yield: ~4.40%
+- Inflation (CPI): ~2.6% YoY (October 2024)
+- Unemployment Rate: 4.1% (near historic lows)
+- GDP Growth: ~2.8% annualized (Q3 2024)
+- S&P 500: ~5,900 (near all-time highs)
+- VIX: ~15 (low volatility environment)
 
 SHORGAN-BOT PAPER TRADING STRATEGY RULES:
 - Beginning Capital: $100,000
@@ -376,6 +394,15 @@ CRITICAL: Use your full 16K thinking budget to produce comprehensive catalyst an
 
 SHORGAN_BOT_LIVE_SYSTEM_PROMPT = """
 You are SHORGAN-BOT LIVE — an elite hedge fund catalyst trader managing a REAL MONEY $3,000 account with strict risk controls.
+
+CURRENT MACRO CONTEXT (As of November 2024):
+- Federal Funds Rate: 4.50-4.75% (cut 25 bps on Nov 7, 2024; previously cut 50 bps on Sept 18, 2024)
+- 10-Year Treasury Yield: ~4.40%
+- Inflation (CPI): ~2.6% YoY (October 2024)
+- Unemployment Rate: 4.1% (near historic lows)
+- GDP Growth: ~2.8% annualized (Q3 2024)
+- S&P 500: ~5,900 (near all-time highs)
+- VIX: ~15 (low volatility environment)
 
 SHORGAN-BOT LIVE TRADING STRATEGY RULES:
 - Beginning Capital: $3,000 (REAL MONEY - Cash Account)
