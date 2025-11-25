@@ -77,9 +77,10 @@ class ExternalReportParser:
         recommendations = []
 
         # Try parsing ORDER BLOCK section first (various formats)
-        # Match variations like "## 4. ORDER BLOCK", "## **7. EXACT ORDER BLOCK**", "## 8. EXACT ORDER BLOCK FOR $3K ACCOUNT"
+        # Match variations like "# EXACT ORDER BLOCK", "## 4. ORDER BLOCK", "## **7. EXACT ORDER BLOCK**", "## 8. EXACT ORDER BLOCK FOR $3K ACCOUNT"
         # Handle optional bold formatting with ** and allow extra text after ORDER BLOCK
-        order_block_pattern = r'##\s*\*{0,2}\s*(?:\d+\.\s*)?(?:EXACT\s+|Exact\s+)?ORDER\s+BLOCK[^#\n]*(.*?)(?=\n##\s+[A-Z*0-9]|$)'
+        # Use #{1,2} to match both single and double hash headings
+        order_block_pattern = r'#{1,2}\s*\*{0,2}\s*(?:\d+\.\s*)?(?:EXACT\s+|Exact\s+)?ORDER\s+BLOCK[^#\n]*(.*?)(?=\n#{1,2}\s+[A-Z*0-9]|$)'
         match = re.search(order_block_pattern, content, re.DOTALL | re.IGNORECASE)
 
         if match:
