@@ -633,7 +633,8 @@ class AutomatedTradeGeneratorV2:
                 for val in sell_orders:
                     rec = val['recommendation']
                     shares = rec.shares or "ALL"
-                    content += f"\n| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
+                    price = rec.entry_price or 0
+                    content += f"\n| {rec.ticker} | {shares} | ${price:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
             else:
                 content += "\n| No sell orders today | - | - | - | - |\n"
 
@@ -646,9 +647,10 @@ class AutomatedTradeGeneratorV2:
                 content += "|--------|--------|-------------|-----------|------------|--------|-----------|"
                 for val in buy_orders:
                     rec = val['recommendation']
-                    shares = rec.shares or int((rec.position_size_pct or 5) * dee_results['portfolio_value'] / 100 / (rec.entry_price or 100))
-                    stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.89 if rec.entry_price else 0)  # 11% stop loss (was 8%)
-                    content += f"\n| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
+                    price = rec.entry_price or 100
+                    shares = rec.shares or int((rec.position_size_pct or 5) * dee_results['portfolio_value'] / 100 / price)
+                    stop_loss = rec.stop_loss if rec.stop_loss else (price * 0.89)  # 11% stop loss (was 8%)
+                    content += f"\n| {rec.ticker} | {shares} | ${price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
             else:
                 content += "\n| No buy orders today | - | - | - | - | - | Market conditions unfavorable |\n"
 
@@ -688,7 +690,8 @@ class AutomatedTradeGeneratorV2:
             for val in shorgan_sell:
                 rec = val['recommendation']
                 shares = rec.shares or "ALL"
-                content += f"| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
+                price = rec.entry_price or 0
+                content += f"| {rec.ticker} | {shares} | ${price:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
         else:
             content += "| No sell orders today | - | - | - | - |\n"
 
@@ -701,9 +704,10 @@ class AutomatedTradeGeneratorV2:
             content += "|--------|--------|-------------|-----------|------------|--------|\n"
             for val in shorgan_buy:
                 rec = val['recommendation']
-                shares = rec.shares or int((rec.position_size_pct or 10) * portfolio_value / 100 / (rec.entry_price or 100))
-                stop_loss = rec.stop_loss if rec.stop_loss else (rec.entry_price * 0.82 if rec.entry_price else 0)  # 18% stop loss (was 15%)
-                content += f"| {rec.ticker} | {shares} | ${rec.entry_price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
+                price = rec.entry_price or 100
+                shares = rec.shares or int((rec.position_size_pct or 10) * portfolio_value / 100 / price)
+                stop_loss = rec.stop_loss if rec.stop_loss else (price * 0.82)  # 18% stop loss (was 15%)
+                content += f"| {rec.ticker} | {shares} | ${price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
 
             # Add detailed rationale section for all buy trades
             content += "\n### 📋 TRADE RATIONALE (Event-Driven Analysis)\n\n"
