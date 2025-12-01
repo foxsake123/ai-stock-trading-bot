@@ -568,7 +568,7 @@ def plot_performance_comparison(df):
             linewidth=2, color='#D62839', linestyle='--', marker='^', markersize=3)
 
     ax.plot(df['date'], df['shorgan_live_indexed'],
-            label='SHORGAN-BOT Live ($1K - REAL MONEY)',
+            label='SHORGAN-BOT Live ($3K - REAL MONEY)',
             linewidth=2.5, color='#E63946', linestyle='-', marker='D', markersize=4, zorder=4)
 
     # Plot S&P 500 benchmark if available
@@ -640,7 +640,7 @@ SHORGAN Live:   ${shorgan_live_indexed_final:.2f} ({metrics['shorgan_live_return
         print(f"Combined Portfolio:        ${metrics['combined_final_value']:,.2f} ({metrics['combined_return_pct']:+.2f}%)")
         print(f"DEE-BOT Paper ($100K):     ${metrics['dee_final_value']:,.2f} ({metrics['dee_return_pct']:+.2f}%)")
         print(f"SHORGAN Paper ($100K):     ${metrics['shorgan_paper_final_value']:,.2f} ({metrics['shorgan_paper_return_pct']:+.2f}%)")
-        print(f"SHORGAN Live ($1K):        ${metrics['shorgan_live_final_value']:,.2f} ({metrics['shorgan_live_return_pct']:+.2f}%)")
+        print(f"SHORGAN Live ($3K):        ${metrics['shorgan_live_final_value']:,.2f} ({metrics['shorgan_live_return_pct']:+.2f}%)")
         if 'sp500_return_pct' in metrics:
             print(f"S&P 500 Benchmark:         ${metrics['sp500_final_value']:,.2f} ({metrics['sp500_return_pct']:+.2f}%)")
             print(f"\nAlpha vs S&P 500:          {metrics['combined_return_pct'] - metrics['sp500_return_pct']:+.2f}%")
