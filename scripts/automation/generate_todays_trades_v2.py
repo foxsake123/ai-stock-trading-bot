@@ -426,7 +426,7 @@ class AutomatedTradeGeneratorV2:
         # Portfolio capital
         self.dee_bot_capital = 100000
         self.shorgan_bot_paper_capital = 100000  # Paper trading account
-        self.shorgan_bot_live_capital = 1000     # Live trading account ($1K)
+        self.shorgan_bot_live_capital = 2000     # Live trading account ($2K)
 
     def find_research_reports(self, date_str: str = None) -> Dict[str, Path]:
         """
@@ -536,7 +536,7 @@ class AutomatedTradeGeneratorV2:
         if bot_name == "DEE-BOT":
             portfolio_value = self.dee_bot_capital
         elif account_type == "live":
-            portfolio_value = self.shorgan_bot_live_capital  # $1K
+            portfolio_value = self.shorgan_bot_live_capital  # $2K
             print(f"[*] Using LIVE account capital: ${portfolio_value:,.0f}")
         else:
             portfolio_value = self.shorgan_bot_paper_capital  # $100K
@@ -588,7 +588,7 @@ class AutomatedTradeGeneratorV2:
 
         # Determine file title based on suffix
         if suffix == "_LIVE":
-            title_suffix = " - SHORGAN-BOT LIVE ($1K Account)"
+            title_suffix = " - SHORGAN-BOT LIVE ($2K Account)"
         else:
             title_suffix = ""
 
@@ -670,7 +670,7 @@ class AutomatedTradeGeneratorV2:
             content += "\n---\n"
 
         # SHORGAN-BOT section
-        account_type_label = " (LIVE $1K)" if suffix == "_LIVE" else ""
+        account_type_label = " (LIVE $2K)" if suffix == "_LIVE" else ""
         portfolio_value = shorgan_results.get('portfolio_value', 100000)  # Default to 100K if not available
         content += f"""
 
@@ -830,7 +830,7 @@ class AutomatedTradeGeneratorV2:
             # Main file (DEE + SHORGAN Paper)
             filepath = self.generate_markdown_file(dee_results, shorgan_paper_results, date_str, suffix="")
 
-            # Separate file for SHORGAN Live ($1K account)
+            # Separate file for SHORGAN Live ($2K account)
             live_filepath = self.generate_markdown_file(None, shorgan_live_results, date_str, suffix="_LIVE")
 
             # Calculate approval statistics
@@ -858,7 +858,7 @@ class AutomatedTradeGeneratorV2:
             print("-"*80)
             print(f"Files generated:")
             print(f"  - Main (DEE + SHORGAN Paper): {filepath}")
-            print(f"  - Live ($1K account): {live_filepath}")
+            print(f"  - Live ($2K account): {live_filepath}")
             print("-"*80)
 
             # Approval rate warnings
