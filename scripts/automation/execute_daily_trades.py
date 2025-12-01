@@ -36,12 +36,12 @@ SHORGAN_BOT_CONFIG = {
 
 # SHORGAN-BOT LIVE TRADING SETTINGS (User requested: Aggressive)
 SHORGAN_LIVE_TRADING = True  # Set to False to disable live trading
-SHORGAN_CAPITAL = 2000.0  # Live account capital (updated from $1K)
-SHORGAN_MAX_POSITION_SIZE = 200.0  # $200 max per position (10% of capital)
-SHORGAN_MIN_POSITION_SIZE = 60.0  # $60 minimum position size (3%)
+SHORGAN_CAPITAL = 3000.0  # Live account capital ($3K invested)
+SHORGAN_MAX_POSITION_SIZE = 300.0  # $300 max per position (10% of capital)
+SHORGAN_MIN_POSITION_SIZE = 90.0  # $90 minimum position size (3%)
 SHORGAN_CASH_BUFFER = 0.0  # No cash buffer (aggressive mode)
 SHORGAN_MAX_POSITIONS = 10  # Max 10 concurrent positions
-SHORGAN_MAX_DAILY_LOSS = 200.0  # Stop trading if lose $200 in one day (10%)
+SHORGAN_MAX_DAILY_LOSS = 300.0  # Stop trading if lose $300 in one day (10%)
 SHORGAN_MAX_TRADES_PER_DAY = 5  # Execute top 5 highest-confidence trades only
 SHORGAN_ALLOW_SHORTS = False  # DISABLED - Cash account (no margin approval)
 SHORGAN_ALLOW_OPTIONS = True  # Enable options trading (if approved)
@@ -131,7 +131,7 @@ class DailyTradeExecutor:
             return False
 
     def calculate_shorgan_position_size(self, price, shares_recommended):
-        """Calculate safe position size for $2,000 live account"""
+        """Calculate safe position size for $3,000 live account"""
         if not SHORGAN_LIVE_TRADING:
             return shares_recommended  # Use recommended size for paper
 
@@ -447,7 +447,7 @@ class DailyTradeExecutor:
                 original_shares = shares
                 shares = self.calculate_shorgan_position_size(limit_price, shares)
                 if shares == 0:
-                    print(f"[SKIP] {symbol}: Position too small for $2K account")
+                    print(f"[SKIP] {symbol}: Position too small for $3K account")
                     return None
                 if shares != original_shares:
                     print(f"[ADJUST] SHORGAN-BOT Live: {original_shares} -> {shares} shares (${shares * limit_price:.2f})")
