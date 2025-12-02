@@ -38,6 +38,14 @@ from src.agents.risk_manager import RiskManagerAgent
 from src.agents.communication.coordinator import Coordinator
 from src.agents.communication.message_bus import MessageBus
 
+# ML Data Collection
+try:
+    from scripts.ml.data_collector import MLDataCollector
+    ML_COLLECTOR_AVAILABLE = True
+except ImportError:
+    ML_COLLECTOR_AVAILABLE = False
+    print("[WARNING] ML Data Collector not available")
+
 
 class MultiAgentTradeValidator:
     """Validates external recommendations through multi-agent consensus"""
@@ -67,6 +75,17 @@ class MultiAgentTradeValidator:
         except Exception as e:
             print(f"[WARNING] Could not initialize Financial Datasets API: {e}")
             self.fd_api = None
+
+        # Initialize ML Data Collector for training data
+        if ML_COLLECTOR_AVAILABLE:
+            try:
+                self.ml_collector = MLDataCollector()
+                print("[ML] Data collector initialized")
+            except Exception as e:
+                print(f"[WARNING] ML Data Collector init failed: {e}")
+                self.ml_collector = None
+        else:
+            self.ml_collector = None
 
     # S&P 100 ticker list (OEX components)
     SP100_TICKERS = {
@@ -476,6 +495,51 @@ class AutomatedTradeGeneratorV2:
 
         return {}
 
+    def _log_trade_to_ml(self, rec, validation: Dict, bot_name: str):
+        """Log trade to ML training data collector"""
+        if not self.validator.ml_collector:
+            return
+
+        try:
+            # Extract agent scores from validation
+            agent_scores = {}
+            if 'agent_analyses' in validation:
+                for agent_name, analysis in validation['agent_analyses'].items():
+                    if isinstance(analysis, dict):
+                        agent_scores[agent_name] = analysis.get('confidence', 0)
+
+            # Determine conviction level
+            ext_conf = validation.get('external_confidence', 0.5)
+            if ext_conf >= 0.85:
+                conviction = 'HIGH'
+            elif ext_conf >= 0.70:
+                conviction = 'MEDIUM'
+            else:
+                conviction = 'LOW'
+
+            # Build trade data
+            trade_data = {
+                'symbol': rec.ticker,
+                'action': rec.action,
+                'source': bot_name,
+                'shares': rec.shares,
+                'entry_price': rec.entry_price,
+                'limit_price': rec.entry_price,
+                'conviction': conviction,
+                'external_confidence': validation.get('external_confidence'),
+                'agent_scores': agent_scores,
+                'internal_confidence': validation.get('internal_confidence'),
+                'final_score': validation.get('combined_confidence'),
+                'approved': validation.get('approved', False),
+                'catalyst': rec.catalyst if hasattr(rec, 'catalyst') else None,
+                'rationale': rec.rationale if hasattr(rec, 'rationale') else None
+            }
+
+            self.validator.ml_collector.log_trade_recommendation(trade_data)
+
+        except Exception as e:
+            print(f"    [ML] Warning: Failed to log trade: {e}")
+
     def generate_bot_trades(self, bot_name: str, date_str: str = None, account_type: str = "paper") -> Dict:
         """
         Generate trades for a specific bot using external research + agents
@@ -552,6 +616,10 @@ class AutomatedTradeGeneratorV2:
                 else:
                     rejected.append(validation)
                     print(f"    [X] {rec.ticker} REJECTED - {validation.get('rejection_reason', 'Unknown')}")
+
+                # Log to ML training data
+                self._log_trade_to_ml(rec, validation, bot_name)
+
             except Exception as e:
                 print(f"    [ERROR] {rec.ticker} validation failed: {str(e)[:80]}")
                 rejected.append({
