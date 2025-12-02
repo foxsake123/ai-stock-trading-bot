@@ -37,7 +37,7 @@ SHORGAN_BOT_CONFIG = {
 # SHORGAN-BOT LIVE TRADING SETTINGS (User requested: Aggressive)
 SHORGAN_LIVE_TRADING = True  # Set to False to disable live trading
 SHORGAN_CAPITAL = 3000.0  # Live account capital ($3K invested)
-SHORGAN_MAX_POSITION_SIZE = 300.0  # $300 max per position (10% of capital)
+SHORGAN_MAX_POSITION_SIZE = 290.0  # $300 max per position (10% of capital)
 SHORGAN_MIN_POSITION_SIZE = 90.0  # $90 minimum position size (3%)
 SHORGAN_CASH_BUFFER = 0.0  # No cash buffer (aggressive mode)
 SHORGAN_MAX_POSITIONS = 10  # Max 10 concurrent positions
@@ -398,7 +398,12 @@ class DailyTradeExecutor:
                         return False, validation_errors
 
                 # Check position concentration (max 10% for SHORGAN, 8% for DEE)
-                portfolio_value = float(account.portfolio_value)
+                # For SHORGAN Live, use invested capital ($3K) not current equity
+                is_shorgan_live = (api == self.shorgan_api and SHORGAN_LIVE_TRADING)
+                if is_shorgan_live:
+                    portfolio_value = SHORGAN_CAPITAL  # Use invested capital, not equity
+                else:
+                    portfolio_value = float(account.portfolio_value)
                 max_position_pct = 0.08 if is_dee_bot else 0.10
                 max_position_value = portfolio_value * max_position_pct
 
