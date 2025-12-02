@@ -104,9 +104,33 @@ Created system to collect training data for future ML models:
 ### 5. Dec 3 Research Generated
 
 All research reports generated and sent to Telegram:
-- DEE-BOT: 22,161 chars
-- SHORGAN Paper: 20,389 chars
-- SHORGAN Live: 29,569 chars
+- DEE-BOT: 22,161 chars, 9 API calls
+- SHORGAN Paper: 20,389 chars, 10 API calls
+- SHORGAN Live: 29,569 chars, 15 API calls
+
+**Research Generation Details**:
+- Total API calls: 34 (across all 3 bots)
+- Rate limit protection: 120-second delays between bots
+- All PDFs sent to Telegram successfully
+
+---
+
+## Bugs Discovered
+
+### Bug 1: Market Data Float Division by Zero
+- **Location**: `daily_claude_research.py` - market data fetching
+- **Error**: "Error fetching market data: float division by zero"
+- **Impact**: Minor - research still generates correctly
+- **Priority**: LOW
+- **Fix**: Add zero-check before division in market data calculations
+
+### Bug 2: Report Combining Path Error
+- **Location**: `daily_claude_research.py` - combining reports section
+- **Error**: "No such file or directory: 'scripts\\reports\\premarket\\...'"
+- **Root Cause**: Using relative path instead of absolute path
+- **Impact**: Combined report not created (individual reports still work)
+- **Priority**: MEDIUM
+- **Fix**: Use absolute path like individual report saving
 
 ---
 
@@ -167,4 +191,50 @@ python scripts/automation/execute_daily_trades.py
 
 ---
 
-**Session Complete**: Tuesday December 2, 2025 - 12:00 PM ET
+## Recommended Enhancements
+
+### Priority 1: Critical Bug Fixes (1-2 hours)
+1. **Fix report combining path** - Use absolute paths in `daily_claude_research.py`
+2. **Fix market data division by zero** - Add zero-check before calculations
+
+### Priority 2: ML System Completion (4-6 hours)
+1. **Implement outcome tracking** - Run `update_outcomes.py` daily at 4:30 PM
+2. **Build training pipeline** - Once 100+ trades collected, train initial model
+3. **Add feature engineering** - Market conditions, sector performance, volatility
+
+### Priority 3: Automation Reliability (2-3 hours)
+1. **Add health monitoring** - Alert if automation scripts fail
+2. **Implement retry logic** - Retry failed API calls with exponential backoff
+3. **Add execution verification** - Confirm trades actually executed
+
+### Priority 4: Performance Optimization (3-4 hours)
+1. **Reduce API calls** - Batch ticker requests more efficiently
+2. **Cache market data** - Avoid redundant API calls within same session
+3. **Parallelize where safe** - Run independent operations concurrently
+
+### Priority 5: Risk Management (4-6 hours)
+1. **Implement trailing stops** - Protect gains on winning positions
+2. **Add position correlation check** - Avoid over-concentration in correlated assets
+3. **Create daily risk report** - Max drawdown, portfolio beta, sector exposure
+
+---
+
+## Future ML Model Architecture
+
+**Phase 1: Data Collection (Current - 2 weeks)**
+- Collect 100+ trade outcomes with all features
+- Track: symbol, action, conviction, agent scores, catalyst, outcome
+
+**Phase 2: Initial Model (Weeks 3-4)**
+- Train gradient boosting classifier on trade success
+- Features: conviction level, agent consensus, market conditions
+- Target: Binary (profitable within 5 days or not)
+
+**Phase 3: Model Integration (Week 5+)**
+- Use model predictions as additional agent in validation
+- Weight: Start at 10%, increase based on accuracy
+- A/B test: Compare model-influenced vs baseline approval rates
+
+---
+
+**Session Complete**: Tuesday December 2, 2025 - 12:52 PM ET
