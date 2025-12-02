@@ -99,23 +99,23 @@ def load_performance_history():
 
         records = []
         for record in data.get('daily_records', []):
-            # NEW SCHEMA (3 accounts: dee, shorgan_paper, shorgan_live)
-            if 'shorgan_paper' in record and 'shorgan_live' in record:
+            # NEW SCHEMA: Has 'shorgan_live' key (3 accounts: dee, shorgan_bot/paper, shorgan_live)
+            if 'shorgan_live' in record:
                 records.append({
                     'date': pd.to_datetime(record['date']),
                     'dee_value': record['dee_bot']['value'],
-                    'shorgan_paper_value': record['shorgan_paper']['value'],
+                    'shorgan_paper_value': record['shorgan_bot']['value'],  # Paper account uses shorgan_bot key
                     'shorgan_live_value': record['shorgan_live']['value'],
                     'combined_value': record['combined']['total_value']
                 })
-            # OLD SCHEMA (2 accounts: dee, shorgan_bot) - backward compatibility
-            # SHORGAN-LIVE didn't exist yet, so set to 0 (not $3000) to avoid deposit-adjusted spike
+            # OLD SCHEMA (2 accounts: dee, shorgan_bot) - before live account existed
+            # SHORGAN-LIVE didn't exist yet, so set to 0 to avoid deposit-adjusted calculation issues
             else:
                 records.append({
                     'date': pd.to_datetime(record['date']),
                     'dee_value': record['dee_bot']['value'],
-                    'shorgan_paper_value': record['shorgan_bot']['value'],  # Old data was paper
-                    'shorgan_live_value': 0.0,  # Live account didn't exist in old schema period
+                    'shorgan_paper_value': record['shorgan_bot']['value'],
+                    'shorgan_live_value': 0.0,  # Live account didn't exist yet
                     'combined_value': record['combined']['total_value']
                 })
 
