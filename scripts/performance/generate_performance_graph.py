@@ -109,12 +109,13 @@ def load_performance_history():
                     'combined_value': record['combined']['total_value']
                 })
             # OLD SCHEMA (2 accounts: dee, shorgan_bot) - backward compatibility
+            # SHORGAN-LIVE didn't exist yet, so set to 0 (not $3000) to avoid deposit-adjusted spike
             else:
                 records.append({
                     'date': pd.to_datetime(record['date']),
                     'dee_value': record['dee_bot']['value'],
                     'shorgan_paper_value': record['shorgan_bot']['value'],  # Old data was paper
-                    'shorgan_live_value': INITIAL_CAPITAL_SHORGAN_LIVE,  # No live trades yet
+                    'shorgan_live_value': 0.0,  # Live account didn't exist in old schema period
                     'combined_value': record['combined']['total_value']
                 })
 
