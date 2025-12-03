@@ -1,8 +1,8 @@
 # Session Summary: December 3, 2025 - Stock-Bot Hosted MCP Server
 
 ## Session Overview
-**Duration**: ~5 hours
-**Focus**: Create hosted Stock-Bot MCP server for public sharing + v2.1 enhancements
+**Duration**: ~6 hours
+**Focus**: Create hosted Stock-Bot MCP server for public sharing + v2.1 enhancements + Enhanced Telegram notifications
 **Status**: ✅ 100% COMPLETE - Railway deployment live (v2.1)
 
 ---
@@ -193,6 +193,7 @@ cd ~
 2. `13a1d1b` - fix: minimal requirements.txt for Railway deployment
 3. `f851173` - docs: complete session summary for Stock-Bot hosted server
 4. `3c8b3ed` - feat: add Stock-Bot v2.1 enhancements (Telegram alerts, key rotation, trade history, analytics)
+5. `36e39a7` - feat: enhance Telegram performance notification with TODAY's and TOTAL performance
 
 ---
 
@@ -293,6 +294,35 @@ The following enhancements were implemented in this session:
 | **Trade History** | ✅ Done | `GET /trades` - view all trades with timestamps |
 | **Usage Analytics** | ✅ Done | `GET /analytics` - per-user 30-day rolling analytics |
 | **Activity Tracking** | ✅ Done | Logs all user actions internally |
+
+### Enhanced Telegram Performance Notifications
+
+Updated `scripts/performance/generate_performance_graph.py` to include:
+- **TODAY'S PERFORMANCE** section with daily gains/losses
+- **TOTAL PERFORMANCE** section with cumulative P/L
+- Green 🟢 / Red 🔴 indicators for positive/negative changes
+- S&P 500 benchmark and Alpha calculation
+- Auto-sends to Telegram at 4:30 PM daily
+
+---
+
+## Today's Trading Results (Dec 3, 2025)
+
+### Orders Executed
+| Account | Filled | Pending | Details |
+|---------|--------|---------|---------|
+| DEE-BOT | 4 | 2 | Sold CVX, GILD, BMY, AAPL ($15,293 proceeds) |
+| SHORGAN Live | 13 | 1 | Rebalanced portfolio (5 sells, 8 buys) |
+
+### Portfolio Performance
+| Account | Value | P/L | Return |
+|---------|-------|-----|--------|
+| DEE-BOT Paper | $103,962 | +$3,962 | +3.96% |
+| SHORGAN Paper | $115,643 | +$15,643 | +15.64% |
+| SHORGAN Live | $2,966 | -$34 | -1.13% |
+| **Combined** | **$222,571** | **+$19,571** | **+9.64%** |
+| S&P 500 | - | - | -7.78% |
+| **Alpha** | - | - | **+17.42%** |
 
 ---
 
