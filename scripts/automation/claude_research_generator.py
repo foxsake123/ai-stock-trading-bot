@@ -49,6 +49,38 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+def get_dynamic_date_instruction() -> str:
+    """
+    Generate dynamic date instructions for system prompts.
+    Automatically calculates today, tomorrow, and the current week's dates.
+    """
+    from datetime import datetime, timedelta
+
+    today = datetime.now()
+    tomorrow = today + timedelta(days=1)
+
+    # Calculate start of week (Monday) and end of week (Friday)
+    days_since_monday = today.weekday()
+    week_start = today - timedelta(days=days_since_monday)
+    week_end = week_start + timedelta(days=4)  # Friday
+
+    # Get day names for the week
+    day_names = []
+    for i in range(5):  # Mon-Fri
+        day = week_start + timedelta(days=i)
+        day_names.append(f"{day.strftime('%B')} {day.day} = {day.strftime('%A')}")
+
+    today_name = today.strftime('%A')
+    tomorrow_name = tomorrow.strftime('%A')
+
+    return f"""CRITICAL DATE INSTRUCTION:
+- Today is {today_name}, {today.strftime('%B')} {today.day}, {today.year}. Tomorrow is {tomorrow_name.upper()}, {tomorrow.strftime('%B')} {tomorrow.day}, {tomorrow.year}.
+- You are writing for the week of {week_start.strftime('%B')} {week_start.day}-{week_end.day}, {week_start.year}.
+- ALL dates in your report MUST use year {today.year}, NOT {today.year - 1}.
+- {', '.join(day_names)}.
+- When referencing earnings dates, catalyst dates, or any future events, use {today.strftime('%B')} {today.year}."""
+
+
 # System prompt for Claude (defines bot behavior)
 DEE_BOT_SYSTEM_PROMPT = """
 You are DEE-BOT — a professional hedge fund strategist managing a defensive S&P 100 portfolio with institutional-grade research standards.
@@ -62,12 +94,7 @@ CURRENT MACRO CONTEXT (As of December 2025):
 - S&P 500: ~6,000 level
 - VIX: ~13-15 (low volatility environment)
 
-CRITICAL DATE INSTRUCTION:
-- Today is Tuesday, December 2, 2025. Tomorrow is WEDNESDAY, December 3, 2025.
-- You are writing for the week of December 2-6, 2025.
-- ALL dates in your report MUST use year 2025, NOT 2024.
-- December 3, 2025 = Wednesday, December 4 = Thursday, December 5 = Friday.
-- When referencing earnings dates, catalyst dates, or any future events, use December 2025.
+{DATE_INSTRUCTION}
 
 DEE-BOT STRATEGY RULES:
 - Beginning Capital: $100,000
@@ -220,12 +247,7 @@ CURRENT MACRO CONTEXT (As of December 2025):
 - S&P 500: ~6,000 level
 - VIX: ~13-15 (low volatility environment)
 
-CRITICAL DATE INSTRUCTION:
-- Today is Tuesday, December 2, 2025. Tomorrow is WEDNESDAY, December 3, 2025.
-- You are writing for the week of December 2-6, 2025.
-- ALL dates in your report MUST use year 2025, NOT 2024.
-- December 3, 2025 = Wednesday, December 4 = Thursday, December 5 = Friday.
-- When referencing earnings dates, catalyst dates, FDA dates, or any future events, use December 2025.
+{DATE_INSTRUCTION}
 
 SHORGAN-BOT PAPER TRADING STRATEGY RULES:
 - Beginning Capital: $100,000
@@ -418,12 +440,7 @@ CURRENT MACRO CONTEXT (As of December 2025):
 - S&P 500: ~6,000 level
 - VIX: ~13-15 (low volatility environment)
 
-CRITICAL DATE INSTRUCTION:
-- Today is Tuesday, December 2, 2025. Tomorrow is WEDNESDAY, December 3, 2025.
-- You are writing for the week of December 2-6, 2025.
-- ALL dates in your report MUST use year 2025, NOT 2024.
-- December 3, 2025 = Wednesday, December 4 = Thursday, December 5 = Friday.
-- When referencing earnings dates, catalyst dates, FDA dates, or any future events, use December 2025.
+{DATE_INSTRUCTION}
 
 SHORGAN-BOT LIVE TRADING STRATEGY RULES:
 - Beginning Capital: $3,000 (REAL MONEY - Cash Account)
@@ -807,15 +824,22 @@ class ClaudeResearchGenerator:
                 try:
                     q = quotes[ticker]
                     t = trades[ticker]
+
+                    # Calculate spread percentage with zero-check to prevent division by zero
+                    ask_price = float(q.ask_price) if q.ask_price else 0.0
+                    bid_price = float(q.bid_price) if q.bid_price else 0.0
+                    spread = ask_price - bid_price
+                    spread_pct = round((spread / ask_price * 100), 3) if ask_price > 0 else 0.0
+
                     snapshot[ticker] = {
-                        "bid": float(q.bid_price),
-                        "ask": float(q.ask_price),
-                        "bid_size": int(q.bid_size),
-                        "ask_size": int(q.ask_size),
-                        "last_trade_price": float(t.price),
-                        "last_trade_size": int(t.size),
-                        "spread": float(q.ask_price - q.bid_price),
-                        "spread_pct": round((q.ask_price - q.bid_price) / q.ask_price * 100, 3)
+                        "bid": bid_price,
+                        "ask": ask_price,
+                        "bid_size": int(q.bid_size) if q.bid_size else 0,
+                        "ask_size": int(q.ask_size) if q.ask_size else 0,
+                        "last_trade_price": float(t.price) if t.price else 0.0,
+                        "last_trade_size": int(t.size) if t.size else 0,
+                        "spread": spread,
+                        "spread_pct": spread_pct
                     }
                 except (KeyError, AttributeError) as e:
                     snapshot[ticker] = {"error": str(e)}
@@ -976,6 +1000,11 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             system_prompt = SHORGAN_BOT_LIVE_SYSTEM_PROMPT
         else:  # SHORGAN-BOT paper
             system_prompt = SHORGAN_BOT_SYSTEM_PROMPT
+
+        # Inject dynamic date instruction into the system prompt
+        dynamic_date_instruction = get_dynamic_date_instruction()
+        system_prompt = system_prompt.replace("{DATE_INSTRUCTION}", dynamic_date_instruction)
+        print(f"[*] Injected dynamic dates: Today is {datetime.now().strftime('%A, %B %d, %Y')}")
 
         try:
             # Build conversation messages

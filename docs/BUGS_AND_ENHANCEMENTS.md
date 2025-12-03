@@ -6,23 +6,25 @@
 ## Known Bugs
 
 ### BUG-001: Market Data Float Division by Zero
-- **Status**: OPEN
+- **Status**: FIXED ✅
 - **Priority**: LOW
-- **Location**: `scripts/automation/daily_claude_research.py`
+- **Location**: `scripts/automation/claude_research_generator.py` (line 832)
 - **Error**: "Error fetching market data: float division by zero"
 - **Impact**: Minor - research still generates correctly
-- **Root Cause**: Division without zero-check in market data calculations
-- **Fix**: Add `if denominator != 0` check before division
+- **Root Cause**: Division by `ask_price` without zero-check in `get_market_snapshot()`
+- **Fix**: Added zero-checks for all price/size fields before calculations
+- **Fixed**: Dec 3, 2025
 - **Discovered**: Dec 2, 2025
 
 ### BUG-002: Report Combining Path Error
-- **Status**: OPEN
+- **Status**: FIXED ✅
 - **Priority**: MEDIUM
-- **Location**: `scripts/automation/daily_claude_research.py` - combining section
+- **Location**: `scripts/automation/daily_claude_research.py` (line 261)
 - **Error**: "No such file or directory: 'scripts\\reports\\premarket\\...'"
 - **Impact**: Combined report not created (individual reports work fine)
-- **Root Cause**: Using relative path instead of absolute path
-- **Fix**: Use `Path(__file__).parent.parent.parent / "reports"` like individual saves
+- **Root Cause**: `Path(__file__).parent.parent` only went up to `scripts/`, not project root
+- **Fix**: Changed to `Path(__file__).parent.parent.parent` (3 levels up)
+- **Fixed**: Dec 3, 2025
 - **Discovered**: Dec 2, 2025
 
 ### BUG-003: AVDX Asset Not Active
@@ -85,6 +87,10 @@
 
 | Date | Enhancement | Description |
 |------|-------------|-------------|
+| Dec 3 | Dynamic date injection | System prompts now auto-generate dates (no more manual updates) |
+| Dec 3 | Pre-market trading | Extended hours trading enabled (4:00-9:30 AM, 4:00-8:00 PM ET) |
+| Dec 3 | BUG-001 fix | Division by zero in market data - added zero-checks |
+| Dec 3 | BUG-002 fix | Report combining path error - corrected path levels |
 | Dec 2 | Position limit fix | Use invested capital for SHORGAN Live |
 | Dec 2 | Keep-awake script | Prevent Windows sleep during trading |
 | Dec 2 | ML data collection | Infrastructure for training data |
