@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Stock Trading Bot - Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            color: #c9d1d9;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(22, 27, 34, 0.95);
+            border-bottom: 1px solid #30363d;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .last-updated {
+            color: #8b949e;
+            font-size: 0.85rem;
+        }
+
+        .refresh-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .refresh-btn:hover { transform: scale(1.05); }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Portfolio Summary Cards */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(22, 27, 34, 0.8);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            color: #8b949e;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.paper { background: rgba(0,212,255,0.15); color: #00d4ff; }
+        .badge.live { background: rgba(255,136,0,0.15); color: #ff8800; }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .card-pnl {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .positive { color: #3fb950; }
+        .negative { color: #f85149; }
+
+        .card-meta {
+            margin-top: 10px;
+            display: flex;
+            gap: 15px;
+            color: #8b949e;
+            font-size: 0.85rem;
+        }
+
+        /* Total Summary Card */
+        .total-card {
+            background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(123,44,191,0.1));
+            border: 2px solid rgba(0,212,255,0.3);
+        }
+
+        .total-card .card-value {
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* Tables */
+        .table-container {
+            background: rgba(22, 27, 34, 0.8);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #30363d;
+        }
+
+        th {
+            background: #21262d;
+            color: #8b949e;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        tr:hover { background: rgba(48, 54, 61, 0.3); }
+
+        /* Research Reports */
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .research-item {
+            background: rgba(22, 27, 34, 0.8);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .research-info h4 {
+            color: #fff;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .research-info p {
+            color: #8b949e;
+            font-size: 0.8rem;
+        }
+
+        .download-btn {
+            padding: 8px 12px;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .download-btn:hover {
+            background: #30363d;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            background: #21262d;
+            padding: 5px;
+            border-radius: 8px;
+            width: fit-content;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            color: #8b949e;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            color: #fff;
+        }
+
+        .tab:hover:not(.active) {
+            color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #8b949e;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #30363d;
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AI Stock Trading Bot</h1>
+        <div class="header-right">
+            <span class="last-updated" id="lastUpdated">Loading...</span>
+            <button class="refresh-btn" onclick="refreshAll()">Refresh</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Portfolio Summary -->
+        <section class="section">
+            <div class="portfolio-grid" id="portfolioGrid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading portfolio data...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="positions">Positions</button>
+            <button class="tab" data-tab="orders">Orders</button>
+            <button class="tab" data-tab="research">Research</button>
+        </div>
+
+        <!-- Positions Tab -->
+        <section class="section tab-content active" id="positions">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Symbol</th>
+                            <th>Qty</th>
+                            <th>Avg Entry</th>
+                            <th>Current</th>
+                            <th>Market Value</th>
+                            <th>P&L</th>
+                            <th>P&L %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="positionsTable">
+                        <tr><td colspan="8" class="loading">Loading positions...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Orders Tab -->
+        <section class="section tab-content" id="orders">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Symbol</th>
+                            <th>Side</th>
+                            <th>Qty</th>
+                            <th>Filled</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Price</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTable">
+                        <tr><td colspan="9" class="loading">Loading orders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Research Tab -->
+        <section class="section tab-content" id="research">
+            <div class="research-grid" id="researchGrid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading research reports...</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Format currency
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            }).format(value);
+        }
+
+        // Format P&L
+        function formatPnL(value, includeSign = true) {
+            const formatted = formatCurrency(Math.abs(value));
+            if (value >= 0) {
+                return includeSign ? '+' + formatted : formatted;
+            }
+            return '-' + formatted;
+        }
+
+        // Format percentage
+        function formatPct(value) {
+            const sign = value >= 0 ? '+' : '';
+            return sign + value.toFixed(2) + '%';
+        }
+
+        // Load portfolio data
+        async function loadPortfolio() {
+            try {
+                const response = await fetch('/api/portfolio');
+                const result = await response.json();
+
+                if (!result.ok) throw new Error(result.error);
+
+                const data = result.data;
+                const grid = document.getElementById('portfolioGrid');
+
+                let html = '';
+
+                // Individual accounts
+                for (const account of data.accounts) {
+                    if (account.error) {
+                        html += `
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="card-title">${account.name}</span>
+                                </div>
+                                <p class="negative">Error: ${account.error}</p>
+                            </div>
+                        `;
+                        continue;
+                    }
+
+                    const pnlClass = account.pnl >= 0 ? 'positive' : 'negative';
+                    const badgeClass = account.is_live ? 'live' : 'paper';
+                    const badgeText = account.is_live ? 'LIVE' : 'Paper';
+
+                    html += `
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">${account.name}</span>
+                                <span class="badge ${badgeClass}">${badgeText}</span>
+                            </div>
+                            <div class="card-value">${formatCurrency(account.value)}</div>
+                            <div class="card-pnl ${pnlClass}">
+                                ${formatPnL(account.pnl)} (${formatPct(account.pnl_pct)})
+                            </div>
+                            <div class="card-meta">
+                                <span>Cash: ${formatCurrency(account.cash)}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Total card
+                const totalPnlClass = data.total_pnl >= 0 ? 'positive' : 'negative';
+                html += `
+                    <div class="card total-card">
+                        <div class="card-header">
+                            <span class="card-title">COMBINED TOTAL</span>
+                        </div>
+                        <div class="card-value">${formatCurrency(data.total_value)}</div>
+                        <div class="card-pnl ${totalPnlClass}">
+                            ${formatPnL(data.total_pnl)} (${formatPct(data.total_return_pct)})
+                        </div>
+                    </div>
+                `;
+
+                grid.innerHTML = html;
+                document.getElementById('lastUpdated').textContent = 'Updated: ' + data.updated_at;
+
+            } catch (error) {
+                document.getElementById('portfolioGrid').innerHTML = `
+                    <div class="card">
+                        <p class="negative">Error loading portfolio: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Load positions
+        async function loadPositions() {
+            try {
+                const response = await fetch('/api/positions');
+                const result = await response.json();
+
+                if (!result.ok) throw new Error(result.error);
+
+                const tbody = document.getElementById('positionsTable');
+
+                if (result.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8">No positions found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = result.data.map(pos => {
+                    const pnlClass = pos.unrealized_pl >= 0 ? 'positive' : 'negative';
+                    const badgeClass = pos.account.includes('Live') ? 'live' : 'paper';
+
+                    return `
+                        <tr>
+                            <td><span class="badge ${badgeClass}">${pos.account}</span></td>
+                            <td><strong>${pos.symbol}</strong></td>
+                            <td>${pos.qty}</td>
+                            <td>${formatCurrency(pos.avg_entry)}</td>
+                            <td>${formatCurrency(pos.current_price)}</td>
+                            <td>${formatCurrency(pos.market_value)}</td>
+                            <td class="${pnlClass}">${formatPnL(pos.unrealized_pl)}</td>
+                            <td class="${pnlClass}">${formatPct(pos.unrealized_plpc)}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                document.getElementById('positionsTable').innerHTML = `
+                    <tr><td colspan="8" class="negative">Error: ${error.message}</td></tr>
+                `;
+            }
+        }
+
+        // Load orders
+        async function loadOrders() {
+            try {
+                const response = await fetch('/api/orders');
+                const result = await response.json();
+
+                if (!result.ok) throw new Error(result.error);
+
+                const tbody = document.getElementById('ordersTable');
+
+                if (result.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9">No recent orders</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = result.data.map(order => {
+                    const badgeClass = order.is_live ? 'live' : 'paper';
+                    const sideClass = order.side === 'buy' ? 'positive' : 'negative';
+
+                    return `
+                        <tr>
+                            <td><span class="badge ${badgeClass}">${order.account}</span></td>
+                            <td><strong>${order.symbol}</strong></td>
+                            <td class="${sideClass}">${order.side.toUpperCase()}</td>
+                            <td>${order.qty}</td>
+                            <td>${order.filled_qty}</td>
+                            <td>${order.type}</td>
+                            <td>${order.status}</td>
+                            <td>${order.filled_avg_price ? formatCurrency(order.filled_avg_price) : '-'}</td>
+                            <td>${order.created_at || '-'}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                document.getElementById('ordersTable').innerHTML = `
+                    <tr><td colspan="9" class="negative">Error: ${error.message}</td></tr>
+                `;
+            }
+        }
+
+        // Load research reports
+        async function loadResearch() {
+            try {
+                const response = await fetch('/api/research');
+                const result = await response.json();
+
+                if (!result.ok) throw new Error(result.error);
+
+                const grid = document.getElementById('researchGrid');
+
+                if (result.data.length === 0) {
+                    grid.innerHTML = '<p>No research reports found</p>';
+                    return;
+                }
+
+                let html = '';
+                for (const dateGroup of result.data) {
+                    html += `<h3 style="color: #fff; margin-bottom: 10px; grid-column: 1 / -1;">${dateGroup.date}</h3>`;
+
+                    for (const file of dateGroup.files) {
+                        const sizeKB = (file.size / 1024).toFixed(1);
+                        html += `
+                            <div class="research-item">
+                                <div class="research-info">
+                                    <h4>${file.bot}</h4>
+                                    <p>${file.name} (${sizeKB} KB)</p>
+                                </div>
+                                <a href="/download/${file.path}" class="download-btn">Download</a>
+                            </div>
+                        `;
+                    }
+                }
+
+                grid.innerHTML = html;
+
+            } catch (error) {
+                document.getElementById('researchGrid').innerHTML = `
+                    <p class="negative">Error: ${error.message}</p>
+                `;
+            }
+        }
+
+        // Refresh all data
+        function refreshAll() {
+            loadPortfolio();
+            loadPositions();
+            loadOrders();
+            loadResearch();
+        }
+
+        // Initial load
+        refreshAll();
+
+        // Auto-refresh every 60 seconds
+        setInterval(refreshAll, 60000);
+    </script>
+</body>
+</html>
