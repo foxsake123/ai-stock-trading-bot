@@ -1,9 +1,9 @@
 # Session Summary: December 3, 2025 - Stock-Bot Hosted MCP Server
 
 ## Session Overview
-**Duration**: ~4 hours
-**Focus**: Create hosted Stock-Bot MCP server for public sharing
-**Status**: ✅ 100% COMPLETE - Railway deployment live and working
+**Duration**: ~5 hours
+**Focus**: Create hosted Stock-Bot MCP server for public sharing + v2.1 enhancements
+**Status**: ✅ 100% COMPLETE - Railway deployment live (v2.1)
 
 ---
 
@@ -21,7 +21,7 @@
 - Updated position sizing examples for shorts
 
 ### 3. Created Hosted Web Server
-**File**: `scripts/mcp/stock_bot_server.py` (~780 lines)
+**File**: `scripts/mcp/stock_bot_server.py` (~1,050 lines - v2.1)
 
 **Features**:
 - Multi-user support with API keys (sb_xxx format)
@@ -30,6 +30,10 @@
 - Rate limiting (60 req/min per user)
 - Two strategies: DEE-BOT (conservative) and SHORGAN (aggressive)
 - Admin dashboard for monitoring
+- **v2.1: Telegram webhook alerts**
+- **v2.1: API key rotation**
+- **v2.1: Trade history tracking**
+- **v2.1: Usage analytics per user**
 
 **API Endpoints**:
 | Endpoint | Method | Auth | Description |
@@ -45,6 +49,9 @@
 | `/mcp` | GET | Yes | MCP SSE endpoint |
 | `/admin` | GET | No | Admin dashboard |
 | `/admin/data` | GET | Password | Admin data API |
+| `/rotate-key` | POST | Yes | **v2.1:** Rotate API key |
+| `/trades` | GET | Yes | **v2.1:** Get trade history |
+| `/analytics` | GET | Yes | **v2.1:** Get usage analytics |
 
 ### 4. Created Landing Page
 **File**: `scripts/mcp/static/index.html`
@@ -137,7 +144,9 @@ cd ~
 | `.salt` | Encryption salt (don't delete!) |
 | `users.json` | Registered users (email + hashed API key) |
 | `accounts.json` | Encrypted Alpaca credentials |
-| `activity.json` | Activity log |
+| `activity.json` | Activity log (last 1000 events) |
+| `trade_history.json` | **v2.1:** Trade history (last 10,000 trades) |
+| `analytics.json` | **v2.1:** Per-user analytics (30-day rolling) |
 
 **Current Users**: 1 (test@test.com)
 
@@ -182,6 +191,8 @@ cd ~
 
 1. `48367fb` - feat: add Stock-Bot hosted server with admin dashboard and Railway config
 2. `13a1d1b` - fix: minimal requirements.txt for Railway deployment
+3. `f851173` - docs: complete session summary for Stock-Bot hosted server
+4. `3c8b3ed` - feat: add Stock-Bot v2.1 enhancements (Telegram alerts, key rotation, trade history, analytics)
 
 ---
 
@@ -254,6 +265,8 @@ User's Browser
 | MASTER_KEY | PTU0qkUU2s8SbyLgFcSV8x3iXwVBoODqV849jcG-6Mk | Encryption key |
 | ADMIN_PASSWORD | stockbot-admin-2024 | Admin dashboard |
 | PORT | 8888 (local) / auto (Railway) | Server port |
+| TELEGRAM_BOT_TOKEN | (optional) | **v2.1:** Bot token for alerts |
+| TELEGRAM_CHAT_ID | (optional) | **v2.1:** Chat ID for alerts |
 
 ---
 
@@ -269,6 +282,20 @@ Created a complete hosted MCP server that allows anyone to:
 
 ---
 
+## v2.1 Enhancements (Implemented)
+
+The following enhancements were implemented in this session:
+
+| Enhancement | Status | Description |
+|-------------|--------|-------------|
+| **Telegram Alerts** | ✅ Done | Alerts on signup, account connection, live trades |
+| **API Key Rotation** | ✅ Done | `POST /rotate-key` - generate new key, invalidate old |
+| **Trade History** | ✅ Done | `GET /trades` - view all trades with timestamps |
+| **Usage Analytics** | ✅ Done | `GET /analytics` - per-user 30-day rolling analytics |
+| **Activity Tracking** | ✅ Done | Logs all user actions internally |
+
+---
+
 ## Suggested Enhancements (Future)
 
 ### High Priority
@@ -276,17 +303,17 @@ Created a complete hosted MCP server that allows anyone to:
 | Enhancement | Description | Effort |
 |-------------|-------------|--------|
 | **Email Notifications** | Send welcome email on registration with API key backup | 2-3 hours |
-| **Webhook Alerts** | Notify admin on new signups via Telegram/Discord | 1-2 hours |
-| **Trade History** | Store and display user trade history in admin | 3-4 hours |
-| **Usage Analytics** | Track API calls, strategies used, success rates | 4-6 hours |
+| **Admin Trade View** | Show all trades in admin dashboard | 2 hours |
+| **User Delete** | Let users delete their account and data (GDPR) | 1 hour |
+| **Discord Webhook** | Alternative to Telegram for alerts | 1 hour |
 
 ### Medium Priority
 
 | Enhancement | Description | Effort |
 |-------------|-------------|--------|
-| **Password Reset** | Allow users to reset API key via email | 2-3 hours |
+| **Strategy Presets** | Let users customize risk levels (conservative/aggressive) | 3-4 hours |
+| **Position Size Limits** | User-configurable max position size % | 2 hours |
 | **Account Tiers** | Free tier (1 account) vs Pro tier (unlimited) | 4-6 hours |
-| **Strategy Customization** | Let users adjust position sizes, risk levels | 4-6 hours |
 | **Performance Leaderboard** | Anonymous performance comparison | 3-4 hours |
 
 ### Low Priority (Nice to Have)
@@ -304,8 +331,8 @@ Created a complete hosted MCP server that allows anyone to:
 |-------------|-------------|--------|
 | **2FA for Admin** | Two-factor auth for admin dashboard | 2-3 hours |
 | **IP Whitelisting** | Allow users to restrict API access by IP | 2-3 hours |
-| **Audit Log** | Detailed logging of all actions with timestamps | 3-4 hours |
-| **API Key Rotation** | Allow users to rotate keys without re-registering | 1-2 hours |
+| **Login Alerts** | Telegram alert on new device/IP | 1 hour |
+| **Credential Expiry** | Force Alpaca key rotation after 90 days | 2 hours |
 
 ---
 
@@ -313,6 +340,7 @@ Created a complete hosted MCP server that allows anyone to:
 
 1. **Single Region**: Railway deployment is single-region (may have latency for distant users)
 2. **No Email Verification**: Users can register with any email (no verification)
-3. **No Password Recovery**: Lost API keys cannot be recovered (must re-register)
+3. ~~**No Password Recovery**: Lost API keys cannot be recovered (must re-register)~~ **Fixed in v2.1** - use `/rotate-key`
 4. **Railway Free Tier**: May have cold starts after inactivity
 5. **No Trade Limits**: Users can execute unlimited trades (consider rate limiting trades)
+6. **JSON Storage**: Data stored in JSON files (consider SQLite/PostgreSQL for scale)

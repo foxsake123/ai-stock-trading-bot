@@ -1,14 +1,20 @@
-# Stock-Bot MCP Server
+# Stock-Bot MCP Server v2.1
 
 A hosted MCP (Model Context Protocol) server for AI-powered stock trading via Claude Desktop.
+
+**Live URL**: https://ai-stock-trading-bot-production.up.railway.app
 
 ## Features
 
 - **Multi-user support**: Each user gets their own API key
-- **Encrypted credentials**: Alpaca API keys stored encrypted
+- **Encrypted credentials**: Alpaca API keys stored encrypted (AES/Fernet)
 - **Two strategies**: DEE-BOT (conservative) and SHORGAN (aggressive)
 - **Rate limiting**: 60 requests/minute per user
 - **Paper & Live trading**: Support for both modes
+- **v2.1: Telegram alerts**: Get notified on signups and trades
+- **v2.1: API key rotation**: Rotate keys without re-registering
+- **v2.1: Trade history**: View all trades with timestamps
+- **v2.1: Usage analytics**: Per-user analytics with 30-day rolling window
 
 ## Quick Start
 
@@ -107,6 +113,11 @@ Claude will ask for your Alpaca API credentials.
 | `/accounts/{id}/portfolio` | GET | Yes | Get portfolio |
 | `/accounts/{id}/run/{strategy}` | POST | Yes | Run strategy |
 | `/mcp` | GET | Yes | MCP SSE endpoint |
+| `/rotate-key` | POST | Yes | **v2.1:** Rotate API key |
+| `/trades` | GET | Yes | **v2.1:** Get trade history |
+| `/analytics` | GET | Yes | **v2.1:** Get usage analytics |
+| `/admin` | GET | No | Admin dashboard (password protected) |
+| `/admin/data` | GET | Password | Admin data API |
 
 ## Strategies
 
@@ -150,6 +161,29 @@ Once connected, you can say things like:
 | `PORT` | No | 8000 | Server port |
 | `HOST` | No | 0.0.0.0 | Server host |
 | `DATA_DIR` | No | ./data/stock_bot_hosted | Data directory |
+| `ADMIN_PASSWORD` | No | stockbot-admin-2024 | Admin dashboard password |
+| `TELEGRAM_BOT_TOKEN` | No | - | **v2.1:** Telegram bot token for alerts |
+| `TELEGRAM_CHAT_ID` | No | - | **v2.1:** Telegram chat ID for alerts |
+
+## v2.1 New Features
+
+### API Key Rotation
+```bash
+curl -X POST https://your-server.com/rotate-key \
+  -H "Authorization: Bearer sb_YOUR_API_KEY"
+```
+
+### Trade History
+```bash
+curl https://your-server.com/trades?limit=50 \
+  -H "Authorization: Bearer sb_YOUR_API_KEY"
+```
+
+### Usage Analytics
+```bash
+curl https://your-server.com/analytics \
+  -H "Authorization: Bearer sb_YOUR_API_KEY"
+```
 
 ## License
 
