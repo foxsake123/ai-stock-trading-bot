@@ -466,16 +466,21 @@ class AutomatedTradeGeneratorV2:
             # Look for bot-specific files first
             claude_dee = new_reports_dir / f"claude_research_dee_bot_{date_str}.md"
             claude_shorgan = new_reports_dir / f"claude_research_shorgan_bot_{date_str}.md"
+            claude_shorgan_live = new_reports_dir / f"claude_research_shorgan_bot_live_{date_str}.md"
 
             # Fall back to combined file if bot-specific don't exist
             if not claude_dee.exists():
                 claude_dee = new_reports_dir / "claude_research.md"
             if not claude_shorgan.exists():
                 claude_shorgan = new_reports_dir / "claude_research.md"
+            # Fall back to paper research if live-specific doesn't exist
+            if not claude_shorgan_live.exists():
+                claude_shorgan_live = claude_shorgan
 
             return {
                 'claude_dee': claude_dee,
                 'claude_shorgan': claude_shorgan,
+                'claude_shorgan_live': claude_shorgan_live,
                 'chatgpt': new_reports_dir / "chatgpt_research.md",
                 'location': 'new'
             }
@@ -569,7 +574,13 @@ class AutomatedTradeGeneratorV2:
         if bot_name == "DEE-BOT":
             claude_path = reports.get('claude_dee')
         elif bot_name == "SHORGAN-BOT":
-            claude_path = reports.get('claude_shorgan')
+            # Use live-specific research for live account, paper research for paper account
+            if account_type == "live":
+                claude_path = reports.get('claude_shorgan_live')
+                print(f"[*] Using SHORGAN-BOT LIVE research file")
+            else:
+                claude_path = reports.get('claude_shorgan')
+                print(f"[*] Using SHORGAN-BOT PAPER research file")
         else:
             claude_path = reports.get('claude')
 
