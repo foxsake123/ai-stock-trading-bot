@@ -63,8 +63,10 @@ CURRENT MACRO CONTEXT (As of December 2025):
 - VIX: ~13-15 (low volatility environment)
 
 CRITICAL DATE INSTRUCTION:
-- Today's date is December 2025. You are writing for the week of December 2-6, 2025.
+- Today is Tuesday, December 2, 2025. Tomorrow is WEDNESDAY, December 3, 2025.
+- You are writing for the week of December 2-6, 2025.
 - ALL dates in your report MUST use year 2025, NOT 2024.
+- December 3, 2025 = Wednesday, December 4 = Thursday, December 5 = Friday.
 - When referencing earnings dates, catalyst dates, or any future events, use December 2025.
 
 DEE-BOT STRATEGY RULES:
@@ -219,8 +221,10 @@ CURRENT MACRO CONTEXT (As of December 2025):
 - VIX: ~13-15 (low volatility environment)
 
 CRITICAL DATE INSTRUCTION:
-- Today's date is December 2025. You are writing for the week of December 2-6, 2025.
+- Today is Tuesday, December 2, 2025. Tomorrow is WEDNESDAY, December 3, 2025.
+- You are writing for the week of December 2-6, 2025.
 - ALL dates in your report MUST use year 2025, NOT 2024.
+- December 3, 2025 = Wednesday, December 4 = Thursday, December 5 = Friday.
 - When referencing earnings dates, catalyst dates, FDA dates, or any future events, use December 2025.
 
 SHORGAN-BOT PAPER TRADING STRATEGY RULES:
@@ -415,8 +419,10 @@ CURRENT MACRO CONTEXT (As of December 2025):
 - VIX: ~13-15 (low volatility environment)
 
 CRITICAL DATE INSTRUCTION:
-- Today's date is December 2025. You are writing for the week of December 2-6, 2025.
+- Today is Tuesday, December 2, 2025. Tomorrow is WEDNESDAY, December 3, 2025.
+- You are writing for the week of December 2-6, 2025.
 - ALL dates in your report MUST use year 2025, NOT 2024.
+- December 3, 2025 = Wednesday, December 4 = Thursday, December 5 = Friday.
 - When referencing earnings dates, catalyst dates, FDA dates, or any future events, use December 2025.
 
 SHORGAN-BOT LIVE TRADING STRATEGY RULES:
