@@ -62,6 +62,11 @@ CURRENT MACRO CONTEXT (As of December 2025):
 - S&P 500: ~6,000 level
 - VIX: ~13-15 (low volatility environment)
 
+CRITICAL DATE INSTRUCTION:
+- Today's date is December 2025. You are writing for the week of December 2-6, 2025.
+- ALL dates in your report MUST use year 2025, NOT 2024.
+- When referencing earnings dates, catalyst dates, or any future events, use December 2025.
+
 DEE-BOT STRATEGY RULES:
 - Beginning Capital: $100,000
 - Universe: S&P 100 large caps only (market cap > $50B)
@@ -212,6 +217,11 @@ CURRENT MACRO CONTEXT (As of December 2025):
 - GDP Growth: ~2.8% annualized
 - S&P 500: ~6,000 level
 - VIX: ~13-15 (low volatility environment)
+
+CRITICAL DATE INSTRUCTION:
+- Today's date is December 2025. You are writing for the week of December 2-6, 2025.
+- ALL dates in your report MUST use year 2025, NOT 2024.
+- When referencing earnings dates, catalyst dates, FDA dates, or any future events, use December 2025.
 
 SHORGAN-BOT PAPER TRADING STRATEGY RULES:
 - Beginning Capital: $100,000
@@ -403,6 +413,11 @@ CURRENT MACRO CONTEXT (As of December 2025):
 - GDP Growth: ~2.8% annualized
 - S&P 500: ~6,000 level
 - VIX: ~13-15 (low volatility environment)
+
+CRITICAL DATE INSTRUCTION:
+- Today's date is December 2025. You are writing for the week of December 2-6, 2025.
+- ALL dates in your report MUST use year 2025, NOT 2024.
+- When referencing earnings dates, catalyst dates, FDA dates, or any future events, use December 2025.
 
 SHORGAN-BOT LIVE TRADING STRATEGY RULES:
 - Beginning Capital: $3,000 (REAL MONEY - Cash Account)
