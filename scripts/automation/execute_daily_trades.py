@@ -74,6 +74,62 @@ class DailyTradeExecutor:
         # DEE-BOT is LONG-ONLY - no shorting allowed
         self.dee_bot_long_only = True
 
+        # Extended hours trading configuration
+        self.enable_extended_hours = True  # Allow pre-market and after-hours trading
+
+        # Initialize SHORGAN tracking
+        self._init_shorgan_tracking()
+
+    def is_extended_hours(self, api=None):
+        """
+        Check if current time is in extended hours (pre-market or after-hours).
+        Pre-market: 4:00 AM - 9:30 AM ET
+        After-hours: 4:00 PM - 8:00 PM ET
+        """
+        try:
+            # Use the API to get accurate market clock
+            clock = (api or self.dee_api).get_clock()
+
+            if clock.is_open:
+                return False  # Regular market hours
+
+            # Get current Eastern time
+            from datetime import timezone
+            import pytz
+            eastern = pytz.timezone('US/Eastern')
+            now_et = datetime.now(eastern)
+            current_hour = now_et.hour
+            current_minute = now_et.minute
+            current_time = current_hour + current_minute / 60.0
+
+            # Pre-market: 4:00 AM - 9:30 AM ET
+            if 4.0 <= current_time < 9.5:
+                return True
+
+            # After-hours: 4:00 PM - 8:00 PM ET
+            if 16.0 <= current_time < 20.0:
+                return True
+
+            return False
+        except Exception as e:
+            print(f"[WARNING] Could not determine extended hours status: {e}")
+            # Fallback: check time manually
+            try:
+                import pytz
+                eastern = pytz.timezone('US/Eastern')
+                now_et = datetime.now(eastern)
+                current_hour = now_et.hour
+                current_minute = now_et.minute
+                current_time = current_hour + current_minute / 60.0
+
+                if 4.0 <= current_time < 9.5 or 16.0 <= current_time < 20.0:
+                    return True
+            except:
+                pass
+            return False
+
+    def _init_shorgan_tracking(self):
+        """Initialize SHORGAN daily performance tracking"""
         # Track SHORGAN daily performance for circuit breaker
         self.shorgan_starting_equity = None
         if SHORGAN_LIVE_TRADING:
@@ -339,16 +395,22 @@ class DailyTradeExecutor:
 
             validation_errors = []
 
-            # 1. Check market hours (allow after-hours limit orders, block market orders)
+            # 1. Check market hours (allow extended hours limit orders, block market orders)
             clock = api.get_clock()
             if not clock.is_open:
+                # Check if we're in extended hours (pre-market or after-hours)
+                in_extended_hours = self.is_extended_hours(api)
+
                 # If no limit price specified, this would be a market order - block it
                 if limit_price is None:
-                    validation_errors.append(f"Market is closed (market orders not allowed after hours)")
+                    validation_errors.append(f"Market is closed (market orders not allowed in extended hours)")
                     return False, validation_errors
+                elif in_extended_hours and self.enable_extended_hours:
+                    # In pre-market or after-hours - limit orders OK
+                    print(f"[INFO] Extended hours trading - placing limit order")
                 else:
-                    # Limit order - allowed after hours for next trading day
-                    print(f"[INFO] Placing after-hours limit order for next trading day")
+                    # Market is fully closed (outside extended hours)
+                    print(f"[INFO] Placing limit order for next trading session")
 
             # 2. Validate SELL orders
             if side == 'sell':
@@ -510,6 +572,9 @@ class DailyTradeExecutor:
             # Determine order type
             order_type = 'limit' if limit_price else 'market'
 
+            # Check if we're in extended hours
+            in_extended_hours = self.is_extended_hours(api)
+
             order_params = {
                 'symbol': symbol,
                 'qty': shares,
@@ -521,7 +586,13 @@ class DailyTradeExecutor:
             if order_type == 'limit':
                 order_params['limit_price'] = str(limit_price)
 
-            print(f"[EXECUTING] {side.upper()} {shares} {symbol} @ {f'${limit_price}' if limit_price else 'market'}")
+            # Enable extended hours trading if applicable
+            if in_extended_hours and self.enable_extended_hours and order_type == 'limit':
+                order_params['extended_hours'] = True
+                session_type = "PRE-MARKET" if datetime.now().hour < 12 else "AFTER-HOURS"
+                print(f"[{session_type}] {side.upper()} {shares} {symbol} @ ${limit_price}")
+            else:
+                print(f"[EXECUTING] {side.upper()} {shares} {symbol} @ {f'${limit_price}' if limit_price else 'market'}")
 
             order = api.submit_order(**order_params)
 
@@ -534,6 +605,7 @@ class DailyTradeExecutor:
                 'order_id': order.id,
                 'timestamp': datetime.now().isoformat(),
                 'status': 'submitted',
+                'extended_hours': order_params.get('extended_hours', False),
                 'rationale': trade_info.get('rationale', '')
             }
 
@@ -554,19 +626,32 @@ class DailyTradeExecutor:
             return None
 
     def check_market_status(self):
-        """Check if market is open"""
+        """Check if market is open or in extended hours"""
         try:
             clock = self.dee_api.get_clock()
             if clock.is_open:
-                print("[INFO] Market is OPEN")
-                return True
+                print("[INFO] Market is OPEN - Regular trading hours")
+                return 'open'
             else:
-                next_open = clock.next_open
-                print(f"[INFO] Market is CLOSED. Opens at {next_open}")
-                return False
+                # Check if we're in extended hours
+                if self.is_extended_hours():
+                    import pytz
+                    eastern = pytz.timezone('US/Eastern')
+                    now_et = datetime.now(eastern)
+                    if now_et.hour < 12:
+                        print("[INFO] Market is in PRE-MARKET session (4:00 AM - 9:30 AM ET)")
+                        print("[INFO] Extended hours trading ENABLED - limit orders only")
+                    else:
+                        print("[INFO] Market is in AFTER-HOURS session (4:00 PM - 8:00 PM ET)")
+                        print("[INFO] Extended hours trading ENABLED - limit orders only")
+                    return 'extended'
+                else:
+                    next_open = clock.next_open
+                    print(f"[INFO] Market is CLOSED. Opens at {next_open}")
+                    return 'closed'
         except Exception as e:
             print(f"[WARNING] Could not check market status: {e}")
-            return True  # Proceed anyway
+            return 'unknown'  # Proceed anyway
 
     def execute_all_trades(self, max_retries=2):
         """Execute all trades from today's file with retry logic"""
