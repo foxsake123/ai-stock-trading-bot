@@ -702,7 +702,7 @@ def get_todays_performance():
 
 
 def send_telegram_notification(metrics, graph_path):
-    """Send performance graph and metrics via Telegram (3 accounts) with TODAY's and TOTAL performance"""
+    """Send performance graph and metrics via Telegram with clean table format showing Daily and Total P&L"""
     try:
         import requests
 
@@ -715,56 +715,91 @@ def send_telegram_notification(metrics, graph_path):
         # Send performance graph as photo
         url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
 
-        # Build caption with TODAY's performance prominently displayed
-        caption = "📊 *PORTFOLIO PERFORMANCE UPDATE*\n"
+        # Build caption with clean table format
+        caption = "📊 *PORTFOLIO PERFORMANCE*\n"
         caption += f"_{datetime.now().strftime('%B %d, %Y')}_\n\n"
 
-        # TODAY'S PERFORMANCE (prominent section)
+        # Calculate P&L values
+        dee_total_pnl = metrics['dee_final_value'] - 100000
+        shorgan_paper_total_pnl = metrics['shorgan_paper_final_value'] - 100000
+        shorgan_live_total_pnl = metrics['shorgan_live_final_value'] - metrics['shorgan_live_deposits']
+        combined_total_pnl = metrics['combined_final_value'] - metrics['total_capital_deployed']
+
+        # Helper function for emoji
+        def pnl_emoji(val):
+            return "🟢" if val >= 0 else "🔴"
+
+        def format_pnl(val):
+            return f"+${val:,.0f}" if val >= 0 else f"-${abs(val):,.0f}"
+
+        def format_pct(val):
+            return f"+{val:.1f}%" if val >= 0 else f"{val:.1f}%"
+
+        # COMBINED PORTFOLIO (header)
+        caption += f"{pnl_emoji(combined_total_pnl)} *COMBINED*: ${metrics['combined_final_value']:,.0f}\n"
+        caption += "━━━━━━━━━━━━━━━━━━━━━━\n"
+
+        # Table header
+        caption += "`Account     | Daily P&L | Total P&L`\n"
+        caption += "`------------|-----------|----------`\n"
+
+        # DEE-BOT row
         if today_perf:
-            caption += "📈 *TODAY'S PERFORMANCE*\n"
-            caption += "━━━━━━━━━━━━━━━━━━━━━\n"
+            dee_daily = format_pnl(today_perf['dee_change'])
+            dee_daily_pct = format_pct(today_perf['dee_change_pct'])
+        else:
+            dee_daily = "N/A"
+            dee_daily_pct = ""
+        dee_total = format_pnl(dee_total_pnl)
+        dee_total_pct = format_pct(metrics['dee_return_pct'])
+        caption += f"`DEE-BOT     | {dee_daily:>9} | {dee_total:>9}`\n"
+        caption += f"`            | {dee_daily_pct:>9} | {dee_total_pct:>9}`\n"
 
-            # Combined today
-            combined_emoji = "🟢" if today_perf['combined_change'] >= 0 else "🔴"
-            caption += f"{combined_emoji} *Combined*: {'+' if today_perf['combined_change'] >= 0 else ''}${today_perf['combined_change']:,.2f} ({today_perf['combined_change_pct']:+.2f}%)\n"
+        # SHORGAN Paper row
+        if today_perf:
+            sp_daily = format_pnl(today_perf['shorgan_paper_change'])
+            sp_daily_pct = format_pct(today_perf['shorgan_paper_change_pct'])
+        else:
+            sp_daily = "N/A"
+            sp_daily_pct = ""
+        sp_total = format_pnl(shorgan_paper_total_pnl)
+        sp_total_pct = format_pct(metrics['shorgan_paper_return_pct'])
+        caption += f"`SHORGAN-P   | {sp_daily:>9} | {sp_total:>9}`\n"
+        caption += f"`            | {sp_daily_pct:>9} | {sp_total_pct:>9}`\n"
 
-            # Individual accounts today
-            dee_emoji = "🟢" if today_perf['dee_change'] >= 0 else "🔴"
-            caption += f"{dee_emoji} DEE: {'+' if today_perf['dee_change'] >= 0 else ''}${today_perf['dee_change']:,.2f}\n"
+        # SHORGAN Live row
+        if today_perf:
+            sl_daily = format_pnl(today_perf['shorgan_live_change'])
+            sl_daily_pct = format_pct(today_perf['shorgan_live_change_pct'])
+        else:
+            sl_daily = "N/A"
+            sl_daily_pct = ""
+        sl_total = format_pnl(shorgan_live_total_pnl)
+        sl_total_pct = format_pct(metrics['shorgan_live_return_pct'])
+        caption += f"`SHORGAN-L💵 | {sl_daily:>9} | {sl_total:>9}`\n"
+        caption += f"`            | {sl_daily_pct:>9} | {sl_total_pct:>9}`\n"
 
-            shorgan_paper_emoji = "🟢" if today_perf['shorgan_paper_change'] >= 0 else "🔴"
-            caption += f"{shorgan_paper_emoji} SHORGAN Paper: {'+' if today_perf['shorgan_paper_change'] >= 0 else ''}${today_perf['shorgan_paper_change']:,.2f}\n"
+        caption += "`------------|-----------|----------`\n"
 
-            shorgan_live_emoji = "🟢" if today_perf['shorgan_live_change'] >= 0 else "🔴"
-            caption += f"{shorgan_live_emoji} SHORGAN Live: {'+' if today_perf['shorgan_live_change'] >= 0 else ''}${today_perf['shorgan_live_change']:,.2f}\n\n"
+        # Combined totals row
+        if today_perf:
+            comb_daily = format_pnl(today_perf['combined_change'])
+            comb_daily_pct = format_pct(today_perf['combined_change_pct'])
+        else:
+            comb_daily = "N/A"
+            comb_daily_pct = ""
+        comb_total = format_pnl(combined_total_pnl)
+        comb_total_pct = format_pct(metrics['combined_return_pct'])
+        caption += f"`*TOTAL*     | {comb_daily:>9} | {comb_total:>9}`\n"
+        caption += f"`            | {comb_daily_pct:>9} | {comb_total_pct:>9}`\n\n"
 
-        # TOTAL PERFORMANCE (cumulative)
-        caption += "💰 *TOTAL PERFORMANCE*\n"
-        caption += "━━━━━━━━━━━━━━━━━━━━━\n"
-
-        # Combined total
-        total_profit = metrics['combined_final_value'] - metrics['total_capital_deployed']
-        total_emoji = "🟢" if total_profit >= 0 else "🔴"
-        caption += f"{total_emoji} *Combined*: ${metrics['combined_final_value']:,.2f}\n"
-        caption += f"    P/L: {'+' if total_profit >= 0 else ''}${total_profit:,.2f} ({metrics['combined_return_pct']:+.2f}%)\n\n"
-
-        # Individual accounts
-        dee_profit = metrics['dee_final_value'] - 100000
-        caption += f"• DEE: ${metrics['dee_final_value']:,.2f} ({metrics['dee_return_pct']:+.2f}%)\n"
-
-        shorgan_paper_profit = metrics['shorgan_paper_final_value'] - 100000
-        caption += f"• SHORGAN Paper: ${metrics['shorgan_paper_final_value']:,.2f} ({metrics['shorgan_paper_return_pct']:+.2f}%)\n"
-
-        shorgan_live_profit = metrics['shorgan_live_final_value'] - metrics['shorgan_live_deposits']
-        caption += f"• SHORGAN Live 💵: ${metrics['shorgan_live_final_value']:,.2f} ({metrics['shorgan_live_return_pct']:+.2f}%)\n"
-
+        # S&P 500 benchmark
         if 'sp500_return_pct' in metrics:
-            caption += f"\n📉 *S&P 500*: {metrics['sp500_return_pct']:+.2f}%\n"
             alpha = metrics['combined_return_pct'] - metrics['sp500_return_pct']
-            alpha_emoji = "🏆" if alpha >= 0 else "📉"
-            caption += f"{alpha_emoji} *Alpha*: {alpha:+.2f}%\n"
+            caption += f"📈 S&P 500: {format_pct(metrics['sp500_return_pct'])}\n"
+            caption += f"{pnl_emoji(alpha)} *Alpha*: {format_pct(alpha)}\n"
 
-        caption += f"\n⏰ _Updated: {datetime.now().strftime('%I:%M %p ET')}_"
+        caption += f"\n⏰ _{datetime.now().strftime('%I:%M %p ET')}_"
 
         with open(graph_path, 'rb') as photo:
             files = {'photo': photo}
