@@ -443,34 +443,45 @@ CURRENT MACRO CONTEXT (As of December 2025):
 {DATE_INSTRUCTION}
 
 SHORGAN-BOT LIVE TRADING STRATEGY RULES:
-- Beginning Capital: $3,000 (REAL MONEY - Cash Account)
+- Beginning Capital: $3,000 (REAL MONEY - Margin Account)
 - Universe: U.S.-listed equities ($500M-$50B market cap preferred)
 - Time Horizon: 1-30 day catalyst-driven trades
 - Objective: Grow $3K account through high-conviction catalyst trades
-- Account Type: Cash account (NO MARGIN, NO SHORT SELLING, NO PATTERN DAY TRADER RESTRICTIONS)
+- Account Type: MARGIN ACCOUNT with shorting and options enabled (Level 3)
+
+ACCOUNT CAPABILITIES:
+- MARGIN ENABLED: Yes (2x buying power for day trades)
+- SHORTING ENABLED: Yes (can short stocks)
+- OPTIONS LEVEL: 3 (can trade calls, puts, spreads, covered strategies)
+- Pattern Day Trader: No (under $25K, limited to 3 day trades per 5 days)
 
 CRITICAL CONSTRAINTS FOR $3K ACCOUNT:
-- CASH ACCOUNT ONLY: No margin, no short selling, no borrowing
 - Position sizing: $75-$300 per trade (3-10% of capital)
 - Maximum positions: 8-12 concurrent trades
 - Full shares only (no fractional shares)
 - Minimum share price: $3.00 (avoid penny stocks)
-- Maximum share price: $200 (can now afford 1-2 shares)
-- Allowable: LONG STOCKS and OPTIONS (calls/puts, debit spreads only - NO NAKED SELLING)
+- Maximum share price: $200 (affordability constraint)
+- Allowable: LONG STOCKS, SHORT STOCKS, OPTIONS (calls, puts, spreads)
 - Daily loss limit: $300 (10% max drawdown per day)
+- Short position limit: Max 2-3 shorts at a time, $150-$250 each
 
 POSITION SIZING EXAMPLES FOR STOCKS:
-- $10 stock → 8-30 shares = $80-$300 position ✓
-- $25 stock → 3-12 shares = $75-$300 position ✓
-- $50 stock → 2-6 shares = $100-$300 position ✓
-- $150 stock → 1-2 shares = $150-$300 position ✓
-- $200 stock → 1 share = $200 position ✓
+- LONG $10 stock → 8-30 shares = $80-$300 position ✓
+- LONG $25 stock → 3-12 shares = $75-$300 position ✓
+- SHORT $30 stock → 5-8 shares = $150-$240 position ✓
+- SHORT $50 stock → 3-5 shares = $150-$250 position ✓
 
 POSITION SIZING EXAMPLES FOR OPTIONS:
 - Call option @ $1.00 → 1-3 contracts = $100-$300 position ✓
 - Put option @ $0.50 → 2-6 contracts = $100-$300 position ✓
 - Debit spread (net $1.50) → 1-2 spreads = $150-$300 position ✓
 - Avoid options >$3.00 per contract (risk too high for small account) ✗
+
+SHORT SELLING RULES:
+- Only short stocks with clear negative catalysts (bad earnings, FDA rejection, etc.)
+- Set stop loss at 15-20% above entry (shorts can squeeze)
+- Prefer high short interest stocks for momentum plays
+- Cover quickly if thesis breaks - don't fight the tape
 
 COMPREHENSIVE RESEARCH REQUIREMENTS:
 
