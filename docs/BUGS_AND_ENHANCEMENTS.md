@@ -92,6 +92,9 @@
 | Dec 2 | Repository cleanup | Root directory 70+ to 19 files |
 | Dec 2 | Performance graph fix | Fixed SHORGAN Live spike/dip (schema detection) |
 | Dec 2 | PDF report generator | Created performance report PDF generator |
+| Dec 2 | PROD-021 Drawdown alerts | Alert when portfolio drops >5% from peak |
+| Dec 2 | PROD-023 Daily loss limiter | Block trading if daily loss exceeds threshold |
+| Dec 2 | PROD-003 Trade execution alerts | Telegram alerts for each trade with details |
 
 ---
 
@@ -184,11 +187,18 @@
 
 Based on value/effort ratio:
 
-1. **PROD-021 Drawdown Alerts** (1 hr, HIGH value) - Critical risk protection
-2. **PROD-003 Trade Execution Alerts** (1 hr, HIGH value) - Better visibility
-3. **PROD-023 Max Loss Per Day** (1 hr, HIGH value) - Risk protection for live account
+1. ~~**PROD-021 Drawdown Alerts** (1 hr, HIGH value)~~ - ✅ DONE Dec 2
+2. ~~**PROD-003 Trade Execution Alerts** (1 hr, HIGH value)~~ - ✅ DONE Dec 2
+3. ~~**PROD-023 Max Loss Per Day** (1 hr, HIGH value)~~ - ✅ DONE Dec 2
 4. **PROD-001 Daily P&L Email** (2 hr, HIGH value) - User experience
 5. **PROD-020 Portfolio Heat Map** (2 hr, HIGH value) - Risk visualization
+
+### Updated Top 5 (Dec 2):
+1. **PROD-001 Daily P&L Email** (2 hr) - Daily summary with portfolio value, trades
+2. **PROD-020 Portfolio Heat Map** (2 hr) - Visual sector/position concentration
+3. **PROD-010 Earnings Calendar** (3 hr) - Flag positions with upcoming earnings
+4. **PROD-031 Conviction Calibration** (3 hr) - Analyze HIGH vs MEDIUM trade performance
+5. **PROD-040 Cloud Deployment** (6 hr) - Move to AWS/GCP for 24/7 reliability
 
 ---
 
