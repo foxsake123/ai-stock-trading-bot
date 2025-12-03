@@ -1,0 +1,26 @@
+{
+  "dee-bot-paper": {
+    "user_id": "dee-bot-paper",
+    "api_enc": "Z0FBQUFBQnBMMllSS3RmelJRUmdPWmxtRExsLURieFoybjZNa2lBdk9rYV9lS25ZSV9BbFJQVlF6MHJpWlU0WTdqdVdQU3BhQ09OaGJnZjBRSWxEc3d5V0l3Vm5BVjhmVmFWZmV5N0RUUlRqaGZMZnZPZUc2dGc9",
+    "secret_enc": "Z0FBQUFBQnBMMllSSmxKYUVlWVN6Q21yck01aERrbU9QQ2JqN2I3Tzd3SVNRekNvUzZzYS04X0ZtWmMwYVRJeHF4S0VDa3l6ZkdjZ2ZkQnRaektkem5qaUU5SWVaQnF4TkJQQnJQM21MbXRjb2M4emhWSUl2dndILTd4dmJIdlFydy1LY1phd1A4RTY=",
+    "mode": "paper"
+  },
+  "dee-bot-demo": {
+    "user_id": "dee-bot-demo",
+    "api_enc": "Z0FBQUFBQnBMMnRPZG5mVDVLb2NsZjBmb0VObFJnSTNDVTkzUElWLU5DTkV0a0p1cFpkRHdIbmNhSk1mMFNzem5KckRKbTdFVXFLUEN6d1B0YmdtWTRlSGxuOFBmcnJWWmJ4SDVPNnBTUVF5ejNGWUJtY09nWG89",
+    "secret_enc": "Z0FBQUFBQnBMMnRPb1J0djFRUkduQ3VBRFRGS0prTEx4WGw0MWdNN0N0ZG4xblMxYXdWMV8tU3BhcmJ4YmFObXJ5eldiaVFUd2J5TE92ZXhpcGFnUlNDd2haSnpNUUpPaTJla0FudHJ6eXFGMDBudjRpY0toOGhJTGZDVjdRZDYzd08zdU5sZkNvSmE=",
+    "mode": "paper"
+  },
+  "shorgan-paper": {
+    "user_id": "shorgan-paper",
+    "api_enc": "Z0FBQUFBQnBMMnhzaGprNlRaeXUySXYzdDJCcEF0aTlBM01MbGgwZXpiQTlDOHI5TzhXT3IyV0xlWHdoTzcxeFRHRHpBcEFGc0kwblNfUXVGWlRfb1hxN3RLU09NS20wVXVyUnp3UThxbURwTkhyRWFQR3pWbEU9",
+    "secret_enc": "Z0FBQUFBQnBMMnhzQmhySXdQaGdudjlzdEVTb0hhUk1sa0t0Z1doTVhoODEwM25zMFhQcnBtOEdhV1Jkdkd5aEVhNG1CUU5TWWpnN0ExSm5GQi1IZWpIRzZvMFQ4UUF5cHJiRHZyZ25OYjdJNnBvdzFEcVo0OGpVT29mTjNUcXlvT2VKMGtUd1N3Qy0=",
+    "mode": "paper"
+  },
+  "dee-bot": {
+    "user_id": "dee-bot",
+    "api_enc": "Z0FBQUFBQnBMM2FqcFJlTWxiRkhvRmtHOUhNZm5OSno2VnVXNGVXZDRhbnJPcThGWEpYd2VUd3JPMHB4QTRENlluY0c1LXo2NlpfWVdVdnhYWFExc3ZWcFIzYjQ5NF81bTlwMGhOX1M5M28xYlpJclhENFVtNEU9",
+    "secret_enc": "Z0FBQUFBQnBMM2FqcWcxaGxJRTlHRW4xM1A2X3p2Q3d1YWwxMmpIbmRvbTlhN1RGRmUyejJId3NFSjZuLUFoNlE2cEtkb0czSVNjTEhCODRMUzB5ODl3b1lENmplUnNyVVFfRTJPekJydHJDSkM4bWN2SzNWeGZnaWdmc1pFWW9XZ3h5SmhCS3JRckQ=",
+    "mode": "paper"
+  }
+}

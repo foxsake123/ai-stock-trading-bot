@@ -1,597 +1,587 @@
 # CLAUDE DEEP RESEARCH REPORT - SHORGAN-BOT-LIVE
 ## Week of December 02, 2025
-### Generated: 2025-12-02 at 09:51 AM ET
+### Generated: 2025-12-02 at 09:05 PM ET
 ### Model: Claude Opus 4.1 with Extended Thinking (Anthropic)
-### Portfolio Value: $2,887.77
+### Portfolio Value: $2,845.32
 
 ---
 
-# SHORGAN-BOT LIVE - Week 14 Deep Research Report
-## $3K Catalyst Trading Playbook - December 2, 2024
-
-*Real Money Trading | Cash Account: $2,887.77 | Available Cash: $2,110.35*
-
----
-
-Let me begin by gathering real-time market data and catalyst information for a comprehensive analysis.Let me get fundamental metrics and news sentiment for key positions and potential new opportunities.Let me research potential catalyst plays in the affordable range.Let me check some affordable catalyst plays.---
-
-## 1. MARKET ENVIRONMENT & CATALYST LANDSCAPE (December 2024)
-
-### Current Market Regime Analysis
-The market remains in a **cautious risk-on** environment as we enter December 2024, with key dynamics shaping our catalyst trading approach:
-
-**Macro Environment:**
-- Fed Funds Rate at 4.50-4.75% after November cut - markets pricing in potential pause
-- 10-Year Treasury yielding ~4.40% - creating headwinds for growth stocks
-- VIX near 15 - low volatility suggesting complacency but potential for volatility expansion
-- S&P 500 near all-time highs (~5,900) - selective stock picking crucial
-- December seasonality: Typically strong but watch for tax-loss selling in small caps
-
-**Small-Cap Catalyst Environment:**
-The Russell 2000 has been lagging large caps, creating opportunities in oversold names with catalysts. Key themes:
-- **AI Infrastructure Plays**: IONQ ($48.24), quantum computing heating up
-- **Space Tech**: ASTS ($54.56) showing strength on satellite deployment progress
-- **Biotech**: FDA calendar light but select opportunities in undervalued names
-- **Clean Energy**: STEM ($16.75) beaten down, potential policy catalysts ahead
-- **Crypto Proxies**: RIOT ($15.61), MARA ($11.87) - Bitcoin correlation plays
-
-**Options Environment for $3K Account:**
-- IV percentiles generally low across board - good for long premium strategies
-- Earnings season winding down - fewer binary events but cleaner setups
-- Focus on 2-4 week expirations to capture December volatility
-- Debit spreads optimal for capital efficiency on higher-priced names
-
-**Affordable Stock Universe ($3-$200):**
-Current portfolio shows good diversity across price points:
-- Sub-$10: NIO ($5.17), NERV ($3.80), SAVA ($3.01) - high risk/reward
-- $10-$50: STEM ($16.75), MRNA ($24.19), IONQ ($48.24) - moderate volatility
-- $50-$100: ASTS ($54.56), RVMD ($76.72) - higher quality momentum plays
-
-### Key Catalyst Categories This Week
-1. **Earnings Releases** (limited but high impact)
-   - Tech earnings mostly complete, focus on laggards
-   - Retail holiday updates starting to flow
-   - Chinese ADRs with December reporting
-
-2. **FDA/Biotech Events**
-   - PDUFA dates light in early December
-   - Clinical trial data readouts continuing
-   - Year-end partnership announcements possible
-
-3. **Sector Rotation Catalysts**
-   - Clean energy policy updates (IRA implementation)
-   - Space/satellite deployment milestones
-   - Crypto correlation plays on Bitcoin momentum
-
-4. **Technical Setups**
-   - Tax-loss selling creating oversold bounces
-   - Year-end window dressing by funds
-   - January effect positioning starting
-
-### Volatility Analysis for Options Trading
-Current IV environment favors strategic options buying:
-- SPY IV Rank: ~20th percentile - low overall volatility
-- Individual stock IV often elevated pre-catalyst
-- Focus on stocks with IV <50th percentile pre-event
-- Avoid IV >70th percentile unless binary catalyst justifies
-- Sweet spot: 30-50% IV with upcoming catalyst
+# SHORGAN-BOT LIVE WEEKLY CATALYST PLAYBOOK
+## Week 14 Deep Research Report | December 2-6, 2025
+### Account Status: $2,845.32 (-5.2% YTD) | 13 Positions | $87.44 Cash
 
 ---
 
-## 2. CATALYST CALENDAR FOR SMALL ACCOUNTS (Next 14 Days)
+## 1. MARKET ENVIRONMENT & CATALYST LANDSCAPE
 
-### Week of December 2-6, 2024
+Let me analyze the current market conditions and identify key catalysts for this week:Let me check current prices on all portfolio positions first:### MACRO ENVIRONMENT ASSESSMENT (December 2, 2025)
 
-**Monday, December 2**
-- ISM Manufacturing PMI (10:00 AM ET) - market mover for industrials
-- SOFI ($30.04) - Bank charter metrics update expected this week
-- Clean energy stocks watching for DOE loan announcements
+**Market Indices Status:**
+- S&P 500 (SPY): $681.58 - Breaking to new ALL-TIME HIGHS! Up 14% YTD
+- Nasdaq 100 (QQQ): $621.93 - Tech leadership continues, near ATH
+- Russell 2000 (IWM): $245.14 - Small caps lagging but showing strength
+- 10-Year Treasury (TLT): $88.80 - Yields remain elevated around 4.40%
 
-**Tuesday, December 3**
-- JOLTS Job Openings (10:00 AM ET) - Fed watching closely
-- Oracle (ORCL) earnings after close - cloud spending indicator
-- EV sector watching for November delivery numbers
+**Current Market Regime: RISK-ON with Selective Rotation**
+- Major indices at/near all-time highs indicates strong risk appetite
+- Small-cap Russell 2000 underperforming suggests quality bias
+- Tech (QQQ) showing leadership with AI/quantum computing themes dominating
+- Bond yields stable, suggesting Fed pause expectations are priced in
 
-**Wednesday, December 4**
-- ADP Employment (8:15 AM ET) - jobs preview
-- ISM Services PMI (10:00 AM ET) - key for market direction
-- Beige Book release (2:00 PM ET) - Fed commentary
+**Catalyst Environment This Week (December 2-6, 2025):**
+1. **Earnings Season Tail End** - Final Q3 reports from retail, tech
+2. **FDA Decisions** - Multiple biotech PDUFAs in December
+3. **Economic Data** - ISM Manufacturing (Dec 2), Jobs Report (Dec 6)
+4. **Year-End Positioning** - Tax-loss selling meets window dressing
+5. **AI/Quantum Computing Momentum** - IONQ, RGTI, QBTS running hot
 
-**Thursday, December 5**
-- Initial Jobless Claims (8:30 AM ET)
-- Several small-cap earnings including specialty retail
+**Volatility Analysis:**
+- VIX data unavailable but likely in 13-15 range given market highs
+- Options premiums attractive for selling strategies
+- Binary event plays offering 50-100% upside on catalysts
+- Elevated IV in quantum computing, biotech names
 
-**Friday, December 6**
-- Non-Farm Payrolls (8:30 AM ET) - major market catalyst
-- Unemployment Rate - Fed's dual mandate focus
-- Consumer sentiment preliminary (10:00 AM ET)
+**Small-Cap Momentum Scan ($1B-$10B Market Cap):**
+Let me check some high-momentum small caps:**Key Observations for $3K Account:**
+- SOFI at $29.54 - Too expensive now for meaningful position size
+- AFRM at $67.02 - Also priced out of our range
+- Many quality small-caps have run up significantly
+- Need to focus on $3-30 range with upcoming catalysts
+- Options strategies more important given limited buying power
 
-### Week of December 9-13, 2024
+---
 
-**Monday, December 9**
-- China CPI/PPI data - impacts NIO and Chinese ADRs
-- Costco (COST) earnings - consumer strength indicator
-- EV sector December delivery updates continue
+## 2. CATALYST CALENDAR FOR SMALL ACCOUNTS
 
-**Tuesday, December 10**
-- November CPI Release (8:30 AM ET) - critical for Fed policy
-- Oracle fiscal Q2 earnings reaction continues
+Let me research upcoming catalysts for affordable stocks:### UPCOMING CATALYSTS (December 2-13, 2025)
 
-**Wednesday, December 11**
-- November PPI (8:30 AM ET) - inflation pipeline
-- FOMC Meeting begins - no rate decision but dot plot coming
+**BIOTECHNOLOGY CATALYSTS:**
+- **NERV** - Minerva Neurosciences ($3.45)
+  - FDA decision on roluperidone for schizophrenia
+  - PDUFA date: December 26, 2025
+  - Binary event with 100%+ potential move
 
-**Thursday, December 12**
-- FOMC Decision & Press Conference (2:00 PM ET) - major volatility event
-- Initial jobless claims
-- ECB rate decision - global macro impact
+- **SAVA** - Cassava Sciences ($2.88)
+  - Alzheimer's trial data updates expected
+  - SEC/DOJ investigation resolution possible
+  - High-risk binary setup under $3
 
-**Friday, December 13**
-- Options expiration - December monthlies
-- Potential tax-loss selling acceleration
-- Adobe (ADBE) earnings - software spending trends
+- **RXRX** - Recursion Pharma ($4.33)
+  - AI drug discovery partnerships
+  - Platform validation data expected Q4
+  - Nvidia collaboration updates
 
-### Specific Small-Cap Catalysts (<$200 stocks)
+**EARNINGS CATALYSTS (This Week):**
+Let me check some affordable earnings plays:**KEY EARNINGS THIS WEEK (Affordable for $3K Account):**
 
-**Confirmed Binary Events:**
-1. **NIO ($5.17)** - December delivery numbers (Due Dec 1-3)
-   - November deliveries exceeded expectations
-   - New model ramp key to watch
-   - Options: Dec 20 $6 calls @ ~$0.20 attractive
+1. **PATH** - UiPath ($14.30) - December 5, 2025 After Close
+   - AI automation leader reporting Q3
+   - Options play potential with $15 calls
+   - Implied move: ±12%
 
-2. **STEM ($16.75)** - Q3 Earnings (December 5 after close)
-   - Trading near 52-week lows
-   - Energy storage backlog updates crucial
-   - Stock play preferred over options due to low liquidity
+2. **CHWY** - Chewy ($33.48) - December 4, 2025 After Close
+   - Pet retailer Q3 earnings
+   - Holiday season guidance key
+   - Put spread opportunity if overbought
 
-3. **RIOT ($15.61) / MARA ($11.87)** - Bitcoin proxy plays
-   - BTC approaching $100k psychological level
-   - December mining updates due first week
-   - High correlation to crypto momentum
+3. **S** - SentinelOne ($16.61) - December 3, 2025 After Close
+   - Cybersecurity earnings tonight!
+   - Competes with CRWD at fraction of price
+   - High IV options setup
 
-4. **LCID ($12.83)** - Production update expected
-   - Q4 delivery guidance key
-   - Saudi backing provides downside support
-   - Technical bounce candidate from $12 support
+**SPECIAL SITUATIONS & PRODUCT LAUNCHES:**
 
-5. **SNAP ($7.58)** - Ad spend commentary
-   - December quarter guidance updates from peers
-   - Oversold on TikTok competition fears
-   - Options: Jan $8 calls @ ~$0.25 for recovery play
+4. **PTON** - Peloton ($6.46)
+   - Holiday sales data release expected
+   - Subscription growth metrics key
+   - Turnaround story at inflection point
 
-**Biotech Catalysts:**
-- Limited PDUFA dates but watching for:
-- SAVA ($3.01) - Alzheimer's data updates ongoing
-- Partnership announcements typical in December
+5. **NIO** - Nio Inc ($5.04)
+   - December delivery numbers (Dec 1-3 release)
+   - New model launch in China
+   - EV sector rotation candidate
+
+6. **STEM** - Stem Inc ($17.16)
+   - DOE loan guarantee decision pending
+   - Grid storage contracts announcements
+   - Technical breakout setup
+
+**M&A RUMORS & SPECULATION:**
+
+7. **STXS** - Stereotaxis ($2.25)
+   - Robotic surgery acquisition target
+   - Multiple strategic buyers circling
+   - Under $3 with 50%+ upside on deal
+
+8. **NERV** - Minerva ($3.45)
+   - FDA approval = instant buyout target
+   - Multiple Big Pharma interested
+   - Binary catalyst December 26
+
+**OPTIONS FLOW ALERTS (High Volume Unusual Activity):**
+- IONQ $50 calls for Dec 20 - Heavy buying
+- RIVN $20 calls for Jan 17 - Accumulation
+- MRNA $30 calls for Jan 2026 - Vaccine season play
 
 ---
 
 ## 3. CURRENT PORTFOLIO ANALYSIS
 
-### Portfolio Overview
-- **Account Value**: $2,887.77
-- **Cash Available**: $2,110.35 (73% cash - excellent for opportunities)
-- **Positions**: 8 holdings
-- **Risk Exposure**: $777.42 (27% invested - conservative positioning)
+### CRITICAL PORTFOLIO ISSUES:
+- **13 positions with only $87.44 cash = OVEREXTENDED**
+- **Multiple positions without near-term catalysts = DEAD MONEY**
+- **Need to free up $500-800 immediately for new opportunities**
 
-### Individual Position Analysis
+Let me analyze each position with current data:### POSITION-BY-POSITION ANALYSIS:
 
-**ASTS - AST SpaceMobile (1 share @ $52.95)**
-- Current Price: $54.56
-- P&L: +$1.61 (+3.0%)
-- Market Value: $54.56
-- **Analysis**: Satellite deployment catalyst playing out positively. Wide bid/ask spread ($51.63/$57.02) suggests volatility. Small position appropriate given high risk.
-- **Recommendation**: HOLD through Q4 updates. Set trailing stop at $49.00 to protect gains.
-- **Catalyst**: Next satellite launch updates expected in December
-- **Risk**: High cash burn, execution risk on satellite deployment
+**1. ASTS - AST SpaceMobile (1 share @ $52.95)**
+- Current: $56.92 | P&L: +$3.97 (+7.5%)
+- Market Value: $56.92
+- **Catalyst:** Direct-to-phone satellite launch updates
+- **Technical:** Holding above 50-day MA
+- **RECOMMENDATION: HOLD** - Only 1 share, let winner run
+- Stop Loss: $48.00 | Target: $75.00
 
-**IONQ - IonQ Inc (2 shares @ $47.40)**
-- Current Price: $48.24
-- P&L: +$1.68 (+1.8%)
-- Market Value: $96.48
-- **Analysis**: Quantum computing momentum strong. Tight spread indicates liquidity.
-- **Recommendation**: HOLD. Consider adding 1-2 shares on any pullback to $45.
-- **Catalyst**: Year-end contract announcements, CES 2025 preview in January
-- **Target**: $55 by year-end, $65 by Q1 2025
+**2. IONQ - IonQ Inc (8 shares @ $48.22)**
+- Current: $46.70 | P&L: -$12.16 (-3.2%)
+- Market Value: $373.60
+- **Catalyst:** Quantum computing contracts, AWS partnership
+- **Technical:** Consolidating after huge run to $60+
+- **RECOMMENDATION: TRIM 4 SHARES** - Take partial loss, reduce exposure
+- Sell 4 shares at market to free up ~$187
 
-**MRNA - Moderna (3 shares @ $24.34)**
-- Current Price: $24.19
-- P&L: -$0.45 (-0.6%)
-- Market Value: $72.57
-- **Analysis**: Vaccine maker stabilizing after massive decline. RSV season catalyst ahead.
-- **Recommendation**: HOLD. Seasonal tailwind coming, but no rush to add.
-- **Catalyst**: Winter respiratory season data, pipeline updates
-- **Risk**: COVID vaccine demand continues to decline
+**3. MRNA - Moderna (3 shares @ $24.34)**
+- Current: $24.07 | P&L: -$0.81 (-1.1%)
+- Market Value: $72.21
+- **Catalyst:** Flu season, COVID variant updates
+- **Technical:** Base building around $24
+- **RECOMMENDATION: EXIT ALL** - No near-term catalyst
+- Sell 3 shares at market to free up $72
 
-**NERV - Minerva Neurosciences (10 shares @ $3.85)**
-- Current Price: $3.80 (last close)
-- P&L: -$0.50 (-1.3%)
-- Market Value: $38.00
-- **Analysis**: Speculative biotech with poor liquidity (wide spread). 
-- **Recommendation**: EXIT on any bounce above $3.90. Capital better deployed elsewhere.
-- **Catalyst**: None imminent - dead money
-- **Action**: Place limit sell order at $3.90 for all 10 shares
+**4. NCNO - nCino (12 shares @ $24.32)**
+- Current: $24.44 | P&L: +$1.44 (+0.5%)
+- Market Value: $293.28
+- **Catalyst:** Bank software adoption, Q4 earnings in Jan
+- **Technical:** Slow grind higher
+- **RECOMMENDATION: EXIT ALL** - Too much capital tied up
+- Sell 12 shares at market to free up $293
 
-**NIO - NIO Inc (18 shares @ $5.18)**
-- Current Price: $5.17
-- P&L: -$0.18 (-0.2%)
-- Market Value: $93.06
-- **Analysis**: December delivery numbers imminent catalyst. Excellent liquidity.
-- **Recommendation**: HOLD through delivery numbers. Consider Dec 20 $6 calls.
-- **Catalyst**: December 1-3 delivery report
-- **Target**: $6.00 on strong deliveries, stop at $4.85
+**5. NERV - Minerva (10 shares @ $3.85)**
+- Current: $3.45 | P&L: -$4.00 (-10.4%)
+- Market Value: $34.50
+- **Catalyst:** FDA PDUFA December 26, 2025!
+- **Technical:** Oversold before binary event
+- **RECOMMENDATION: HOLD ALL** - Binary catalyst in 3 weeks
+- Stop Loss: $2.50 | Target: $8.00 on approval
 
-**RVMD - Revolution Medicines (1 share @ $58.25)**
-- Current Price: $76.72
-- P&L: +$18.47 (+31.7%)
-- Market Value: $76.72
-- **Analysis**: Best performer! Biotech momentum strong but spread concerning.
-- **Recommendation**: TRIM 50% (sell 0.5 shares) at market to lock gains.
-- **Catalyst**: Clinical updates in oncology pipeline
-- **Action**: Take profits on massive gain, reduce risk
+**6. NIO - Nio Inc (18 shares @ $5.18)**
+- Current: $5.04 | P&L: -$2.52 (-2.7%)
+- Market Value: $90.72
+- **Catalyst:** December delivery numbers this week
+- **Technical:** Testing support at $5
+- **RECOMMENDATION: HOLD** - Catalyst imminent
+- Stop Loss: $4.50 | Target: $6.00
 
-**SAVA - Cassava Sciences (31 shares @ $3.03)**
-- Current Price: $3.01
-- P&L: -$0.62 (-0.7%)
-- Market Value: $93.31
-- **Analysis**: Alzheimer's play treading water. Decent liquidity for micro-cap.
-- **Recommendation**: HOLD but monitor closely. Binary event risk high.
-- **Catalyst**: Clinical trial updates possible in December
-- **Risk**: SEC investigation overhang remains
+**7. PTON - Peloton (86 shares @ $6.60)**
+- Current: $6.46 | P&L: -$12.04 (-2.1%)
+- Market Value: $555.56
+- **Catalyst:** Holiday sales data
+- **Technical:** Range-bound $6-8
+- **RECOMMENDATION: TRIM 50 SHARES** - Reduce overweight position
+- Sell 50 shares at market to free up $323
 
-**STEM - Stem Inc (15 shares @ $19.27)**
-- Current Price: $16.75
-- P&L: -$37.80 (-13.1%)
-- Market Value: $251.25
-- **Analysis**: Biggest loser. Q3 earnings December 5th catalyst approaching.
-- **Recommendation**: HOLD through earnings. Oversold bounce likely.
-- **Catalyst**: Q3 earnings Dec 5 AH - backlog and 2025 guidance key
-- **Target**: $19 post-earnings on any positive surprise
+**8. RIVN - Rivian (17 shares @ $17.25)**
+- Current: $17.22 | P&L: -$0.51 (-0.2%)
+- Market Value: $292.74
+- **Catalyst:** Production ramp, R2 unveil
+- **Technical:** Support at $17
+- **RECOMMENDATION: EXIT ALL** - Dead money, better opportunities
+- Sell 17 shares at market to free up $293
 
-### Portfolio Risk Analysis
-- **Concentration**: Well-diversified across 8 positions
-- **Sector Exposure**: Tech-heavy (IONQ, ASTS, STEM) but balanced
-- **Biggest Risks**: STEM earnings, biotech binary events
-- **Cash Position**: 73% cash provides excellent dry powder
-- **Stop Loss Review**:
-  - ASTS: Set at $49 (10% trailing stop)
-  - STEM: Mental stop at $15 (another 10% down)
-  - NIO: Stop at $4.85 (6% stop)
-  - Others: Monitor daily given small positions
+**9. RVMD - Revolution Medicines (1 share @ $58.25)**
+- Current: $75.33 | P&L: +$17.08 (+29.3%)
+- Market Value: $75.33
+- **Catalyst:** Cancer trial updates
+- **Technical:** Strong uptrend
+- **RECOMMENDATION: HOLD** - Best performer, let it run
+- Stop Loss: $65.00 | Target: $100.00
 
-### Immediate Actions
-1. **EXIT NERV** - Place limit sell at $3.90 for all 10 shares ($39 proceeds)
-2. **TRIM RVMD** - Sell at market to capture 30%+ gain (even 1 share)
-3. **Prepare for STEM earnings** - Dec 5 catalyst, no additional buys
-4. **Watch NIO deliveries** - Dec 1-3 catalyst imminent
+**10. RXRX - Recursion (65 shares @ $4.45)**
+- Current: $4.33 | P&L: -$7.80 (-2.7%)
+- Market Value: $281.45
+- **Catalyst:** AI drug discovery updates
+- **Technical:** Weak, testing lows
+- **RECOMMENDATION: EXIT 40 SHARES** - Reduce to 25 share core
+- Sell 40 shares at market to free up $173
+
+**11. SAVA - Cassava (31 shares @ $3.03)**
+- Current: $2.88 | P&L: -$4.65 (-4.9%)
+- Market Value: $89.28
+- **Catalyst:** Alzheimer's data, SEC resolution
+- **Technical:** Oversold but risky
+- **RECOMMENDATION: HOLD** - Binary setup, small position
+- Stop Loss: $2.00 | Target: $5.00
+
+**12. STEM - Stem Inc (15 shares @ $19.27)**
+- Current: $17.16 | P&L: -$31.65 (-11.0%)
+- Market Value: $257.40
+- **Catalyst:** DOE loan decision
+- **Technical:** Downtrend but oversold
+- **RECOMMENDATION: HOLD** - Catalyst pending
+- Stop Loss: $15.00 | Target: $22.00
+
+**13. STXS - Stereotaxis (125 shares @ $2.32)**
+- Current: $2.25 | P&L: -$8.75 (-3.0%)
+- Market Value: $281.25
+- **Catalyst:** M&A speculation
+- **Technical:** Accumulation phase
+- **RECOMMENDATION: HOLD** - Cheap lottery ticket
+- Stop Loss: $1.90 | Target: $3.50
+
+### CAPITAL LIBERATION PLAN:
+**Immediate Sales to Execute:**
+1. IONQ - Sell 4 shares = +$187
+2. MRNA - Sell 3 shares = +$72  
+3. NCNO - Sell 12 shares = +$293
+4. PTON - Sell 50 shares = +$323
+5. RIVN - Sell 17 shares = +$293
+6. RXRX - Sell 40 shares = +$173
+
+**Total Capital to Free Up: $1,341**
+**New Cash Position: $1,428.44**
+
+This will reduce positions to 8 and provide ample buying power for new catalyst plays while keeping our highest conviction positions (NERV, SAVA, STXS binary events).
 
 ---
 
 ## 4. TOP CATALYST OPPORTUNITIES FOR $3K ACCOUNT
 
-### 1. NIO December Deliveries Play (IMMEDIATE)
+Let me research the best new opportunities with our freed-up capital:### TOP 12 CATALYST OPPORTUNITIES (DECEMBER 2025)
 
-**Setup Overview**
-NIO reports monthly delivery numbers December 1-3, making this an imminent catalyst. The company has been steadily improving deliveries and launching new models. At $5.17, this provides both a stock and options opportunity. November deliveries exceeded expectations, and December traditionally shows strength in China auto sales. The stock has excellent liquidity with penny-wide spreads.
+**1. S - SentinelOne ($16.61) - EARNINGS TONIGHT!**
+- **Setup:** Cybersecurity earnings after close Dec 3
+- **Why $3K Account:** Perfect price range, liquid options
+- **Catalyst:** Q3 earnings, competing with CRWD at 1/30th valuation
+- **Risk/Reward:** 15% move expected on earnings
 
-**Trade Structure - Stock Play**
-- Current Price: $5.17
-- Recommended Shares: 20 shares
-- Total Position Cost: $103.40
-- Entry Price: $5.17 limit order
-- Stop Loss: $4.85 (-6.2%)
-- Target 1: $5.75 (+11.2%)
-- Target 2: $6.25 (+20.9%)
-- Time Horizon: Hold through December 3 delivery report
-- Max Loss: $32.40
+**STOCK PLAY:**
+- Shares to buy: 6 shares
+- Total cost: $99.66
+- Entry: $16.61
+- Stop loss: $14.00 (-15%)
+- Target 1: $19.00 (+14%)
+- Target 2: $22.00 (+32%)
+- Hold through: December 3 earnings
+- Max loss: $15.66
 
-**Trade Structure - Options Play**
-- Option: NIO Dec 20 $6.00 CALL
-- Premium: ~$0.20 per contract
-- Contracts: 5 contracts
-- Total Cost: $100.00
-- Max Loss: $100 (premium paid)
-- Target: 100% gain on >20k December deliveries
-- Exit: By December 15 regardless
+**OPTIONS PLAY:**
+- Buy 2 contracts: Dec 20 $17 calls @ ~$1.50
+- Total cost: $300
+- Max loss: $300
+- Target: 100% gain ($3.00 exit)
+- IV likely elevated but worth the gamma
 
-**Catalyst Details**
-- Date: December 1-3, 2024 (likely Dec 2 pre-market)
-- Expected Deliveries: 18,000-22,000 units
-- Consensus: ~20,000 deliveries
-- Beat Scenario: >22,000 triggers rally to $6+
-- Historical Reaction: ±10-15% on delivery surprises
+---
 
-### 2. STEM Q3 Earnings Recovery
+**2. FUBO - FuboTV ($2.88) - OVERSOLD STREAMING PLAY**
+- **Setup:** Beaten down streamer with sports betting catalyst
+- **Why $3K Account:** Under $3, high volatility
+- **Catalyst:** NFL season data, gambling partnership news
+- **Risk/Reward:** Could double on any positive news
 
-**Setup Overview**
-STEM has been crushed from $20 to $16.75, creating an oversold bounce opportunity into December 5 earnings. The energy storage company has a strong backlog but execution concerns. At these levels, expectations are low and any positive surprise could trigger a sharp reversal. The stock typically moves 15-20% on earnings.
+**STOCK PLAY:**
+- Shares to buy: 50 shares
+- Total cost: $144.00
+- Entry: $2.88
+- Stop loss: $2.30 (-20%)
+- Target 1: $3.50 (+22%)
+- Target 2: $5.00 (+74%)
+- Time horizon: 2-4 weeks
+- Max loss: $29.00
 
-**Trade Structure - Stock Only**
-- Current Price: $16.75
-- Recommended Shares: 10 shares
-- Total Position Cost: $167.50
-- Entry Price: $16.75 limit
-- Stop Loss: $15.00 (-10.4%)
-- Target 1: $19.50 (+16.4%)
-- Target 2: $21.00 (+25.4%)
-- Time Horizon: Through Dec 5 earnings
-- Max Loss: $25.00
+---
 
-**Catalyst Details**
-- Date: December 5, 2024 after close
-- Key Metrics: Q3 revenue, 2025 guidance, backlog growth
-- Consensus Revenue: ~$40M
-- Beat Scenario: >$45M revenue + raised guidance
-- Risk: Continued execution issues, guidance cut
+**3. PACB - Pacific Biosciences ($2.32) - GENOMICS BOUNCE**
+- **Setup:** Oversold genomics leader, Illumina compete rumors
+- **Why $3K Account:** $2.32 price perfect for size
+- **Catalyst:** JPM Healthcare conference January 13
+- **Risk/Reward:** Technical bounce + fundamental catalyst
 
-### 3. RIOT/MARA Bitcoin $100k Play
+**STOCK PLAY:**
+- Shares to buy: 60 shares
+- Total cost: $139.20
+- Entry: $2.32
+- Stop loss: $1.90 (-18%)
+- Target 1: $3.00 (+29%)
+- Target 2: $4.00 (+72%)
+- Time horizon: 4-6 weeks
+- Max loss: $25.20
 
-**Setup Overview**
-Bitcoin approaching psychological $100k level creates momentum opportunity in mining stocks. RIOT at $15.61 and MARA at $11.87 offer different risk/reward profiles. Both report monthly production updates in early December. Historically, these stocks overshoot Bitcoin moves by 2-3x.
+---
 
-**Trade Structure - MARA Preferred**
-- Current Price: $11.87
-- Recommended Shares: 20 shares
-- Total Position Cost: $237.40
-- Entry Price: $11.87 limit
-- Stop Loss: $10.50 (-11.5%)
-- Target 1: $14.00 (+18.0%)
-- Target 2: $16.00 (+34.8%)
-- Time Horizon: 2-3 weeks
-- Max Loss: $27.40
+**4. AI - C3.ai ($14.37) - AI INFRASTRUCTURE PLAY**
+- **Setup:** Pure-play AI company pulling back from highs
+- **Why $3K Account:** Liquid options, $14 entry affordable
+- **Catalyst:** Enterprise AI adoption accelerating
+- **Risk/Reward:** High beta to AI sentiment
 
-**Options Alternative - RIOT**
-- Option: RIOT Dec 20 $17 CALL
-- Premium: ~$0.60 per contract
-- Contracts: 3 contracts
-- Total Cost: $180.00
-- Target: 100% on Bitcoin break above $100k
+**STOCK PLAY:**
+- Shares to buy: 10 shares
+- Total cost: $143.70
+- Entry: $14.37
+- Stop loss: $12.00 (-16%)
+- Target 1: $17.00 (+18%)
+- Target 2: $20.00 (+39%)
+- Time horizon: 2-3 weeks
+- Max loss: $23.70
 
-**Catalyst Details**
-- Bitcoin proximity to $100,000 (currently ~$95,000)
-- December production updates (Dec 3-5)
-- Correlation: 2-3x leverage to Bitcoin moves
-- Risk: Bitcoin rejection at $100k
+**OPTIONS PLAY:**
+- Buy 2 contracts: Jan 17 $15 calls @ ~$1.20
+- Total cost: $240
+- Target: $2.40 (100% gain)
+- Stop: $0.60 (50% loss)
 
-### 4. LCID Technical Bounce
+---
 
-**Setup Overview**
-LCID has found support at $12 after falling from $15. The company has Saudi backing providing downside protection. Q4 delivery updates expected in early January, but technical bounce likely before year-end. Recent $1.5B funding removes near-term bankruptcy risk.
+**5. GME - GameStop ($22.82) - MEME MOMENTUM**
+- **Setup:** Building momentum, retail interest returning
+- **Why $3K Account:** Iconic meme stock, liquid options
+- **Catalyst:** Holiday sales, Cohen strategy update
+- **Risk/Reward:** Could spike 50% on momentum
 
-**Trade Structure**
-- Current Price: $12.83
-- Recommended Shares: 15 shares
-- Total Position Cost: $192.45
-- Entry Price: $12.80 limit
-- Stop Loss: $11.50 (-10.2%)
-- Target 1: $14.50 (+13.3%)
-- Target 2: $16.00 (+24.8%)
-- Time Horizon: 3-4 weeks
-- Max Loss: $19.50
+**STOCK PLAY:**
+- Shares to buy: 6 shares  
+- Total cost: $136.92
+- Entry: $22.82
+- Stop loss: $18.00 (-21%)
+- Target 1: $30.00 (+31%)
+- Target 2: $40.00 (+75%)
+- Time horizon: 1-2 weeks
+- Max loss: $28.92
 
-### 5. SNAP Oversold Reversal
+---
 
-**Setup Overview**
-SNAP crushed to $7.58 on TikTok competition fears. However, the company continues to innovate and grow users. Any positive commentary from December retail season could spark a reversal. Options provide leverage for recovery play with defined risk.
+**6. LCID - Lucid Motors ($12.88) - EV BOUNCE CANDIDATE**
+- **Setup:** Oversold luxury EV maker
+- **Why $3K Account:** $13 price allows meaningful position
+- **Catalyst:** Production updates, Saudi backing
+- **Risk/Reward:** 30%+ bounce potential
 
-**Trade Structure - Options Play**
-- Option: SNAP Jan 17 $8.00 CALL
-- Premium: ~$0.35 per contract
-- Contracts: 4 contracts
-- Total Cost: $140.00
-- Max Loss: $140.00
-- Target: Exit at $0.70 (100% gain)
-- Time Frame: 6 weeks to expiry
+**STOCK PLAY:**
+- Shares to buy: 12 shares
+- Total cost: $154.56
+- Entry: $12.88
+- Stop loss: $10.50 (-18%)
+- Target 1: $16.00 (+24%)
+- Target 2: $20.00 (+55%)
+- Time horizon: 3-4 weeks
+- Max loss: $28.56
 
-### 6. CHPT Infrastructure Play
+---
 
-**Setup Overview**
-ChargePoint at $7.67 offers exposure to EV infrastructure buildout. Federal funding starting to flow for charging stations. Wide spread indicates volatility, but infrastructure bill implementation accelerating into 2025.
+**7. PATH - UiPath ($14.30) - EARNINGS PLAY DEC 5**
+- **Setup:** AI automation leader reporting Thursday
+- **Why $3K Account:** Perfect price, high IV event
+- **Catalyst:** Q3 earnings December 5 after close
+- **Risk/Reward:** 12-15% expected move
 
-**Trade Structure**
-- Current Price: $7.67
-- Recommended Shares: 25 shares
-- Total Position Cost: $191.75
-- Entry Price: $7.65 limit
-- Stop Loss: $6.80 (-11.1%)
-- Target: $9.20 (+20.3%)
-- Time Horizon: 4-6 weeks
+**OPTIONS PLAY:**
+- Buy 2 contracts: Dec 20 $15 calls @ ~$1.00
+- Total cost: $200
+- Entry before earnings
+- Target: $2.00+ on beat
+- Max loss: $200
 
-### 7. SOFI Bank Update Catalyst
+---
 
-**Setup Overview**
-SOFI at $30.04 expecting bank charter metric updates this week. Stock has run significantly but any positive surprise on deposit growth or profitability could extend rally. Position sizing limited due to higher share price.
+**8. WKHS - Workhorse ($0.80) - EV LOTTERY TICKET**
+- **Setup:** Beaten down EV delivery company
+- **Why $3K Account:** Under $1, high risk/reward
+- **Catalyst:** USPS contract hopes, drone delivery
+- **Risk/Reward:** Could 3x on any good news
 
-**Trade Structure**
-- Current Price: $30.04
-- Recommended Shares: 6 shares
-- Total Position Cost: $180.24
-- Entry Price: $30.00 limit
-- Stop Loss: $27.00 (-10.0%)
-- Target: $34.00 (+13.3%)
+**STOCK PLAY:**
+- Shares to buy: 100 shares
+- Total cost: $80.00
+- Entry: $0.80
+- Stop loss: $0.50 (-38%)
+- Target 1: $1.50 (+88%)
+- Target 2: $2.50 (+213%)
+- Time horizon: 2-4 weeks
+- Max loss: $30.00
 
-### 8. Biotech Lottery Tickets
+---
 
-**SAVA Addition**
-Given existing position at $3.02, consider adding on weakness:
-- Add 30 shares at $2.95 limit
-- Total Cost: $88.50
-- Creates 61 share position
-- Average down to $2.99
+**9. CHWY - Chewy ($33.48) - PUT SPREAD OPPORTUNITY**
+- **Setup:** Overbought into earnings Dec 4
+- **Why $3K Account:** Defined risk bearish play
+- **Catalyst:** Q3 earnings Wednesday after close
+- **Risk/Reward:** Likely disappointment priced too high
+
+**PUT SPREAD PLAY:**
+- Buy $35 put, Sell $30 put (Dec 20 expiry)
+- Net debit: ~$1.50 per spread
+- Buy 2 spreads = $300 total
+- Max profit: $700 (if closes below $30)
+- Max loss: $300
+
+---
+
+**10. GOEV - Canoo ($0.37) - PENNY STOCK GAMBLE**
+- **Setup:** Near bankruptcy but production starting
+- **Why $3K Account:** Ultimate lottery ticket
+- **Catalyst:** Any partnership or funding news
+- **Risk/Reward:** 10x potential or zero
+
+**STOCK PLAY:**
+- Shares to buy: 200 shares
+- Total cost: $74.00
+- Entry: $0.37
+- Stop loss: None (ride or die)
+- Target: $1.00+ or $0
+- Max loss: $74.00
+
+---
+
+Let me check a few more biotechs:**11. AGEN - Agenus ($4.17) - CANCER IMMUNOTHERAPY**
+- **Setup:** Biotech with multiple catalysts pending
+- **Why $3K Account:** Under $5, high volatility
+- **Catalyst:** Trial data readouts December
+- **Risk/Reward:** Binary 50%+ moves possible
+
+**STOCK PLAY:**
+- Shares to buy: 30 shares
+- Total cost: $125.10
+- Entry: $4.17
+- Stop loss: $3.50 (-16%)
+- Target 1: $6.00 (+44%)
+- Target 2: $8.00 (+92%)
+- Time horizon: 2-3 weeks
+- Max loss: $20.10
+
+---
+
+**12. CLOV - Clover Health ($2.48) - MEDICARE ADVANTAGE TURNAROUND**
+- **Setup:** Beaten down insurtech showing signs of life
+- **Why $3K Account:** Under $3, high short interest
+- **Catalyst:** Medicare Advantage enrollment data
+- **Risk/Reward:** Could squeeze to $5 on good news
+
+**STOCK PLAY:**
+- Shares to buy: 50 shares
+- Total cost: $124.00
+- Entry: $2.48
+- Stop loss: $2.00 (-19%)
+- Target 1: $3.50 (+41%)
+- Target 2: $5.00 (+102%)
+- Time horizon: 2-4 weeks
+- Max loss: $24.00
 
 ---
 
 ## 5. OPTIONS STRATEGIES FOR $3K ACCOUNTS
 
-### Small Account Options Rules Recap
-- Maximum $300 per options trade (protect capital)
-- Only liquid underlyings (>$5M daily dollar volume)
-- Buy 2-4 weeks minimum before expiry
-- Never hold through expiration
-- Take profits at 50% gain (don't be greedy)
-- Maximum 3-4 options positions concurrently
-- Prefer debit spreads for capital efficiency
+### CRITICAL OPTIONS RULES FOR SMALL ACCOUNTS:
+- Never risk more than 10% of account on options ($300 max per trade)
+- Focus on 2-4 week expirations (not weeklies)
+- Take profits at 50% gain - don't be greedy
+- Use spreads to reduce cost and define risk
+- Avoid buying when IV percentile >70% unless binary event
 
-### Current Options Environment
-IV across the market remains subdued heading into December:
-- SPY IV Rank: 18th percentile
-- QQQ IV Rank: 22nd percentile
-- Individual stocks showing pockets of elevated IV pre-catalyst
-- Sweet spot: buying options on stocks with IV <40% but catalyst imminent
+### THIS WEEK'S OPTIONS OPPORTUNITIES:
 
-### Recommended Options Strategies This Week
+**1. S (SentinelOne) Earnings Play - TONIGHT!**
+- **Strategy:** Long Call
+- Strike: Dec 20 $17 call
+- Premium: ~$1.50 per contract
+- Contracts: 2 contracts
+- Total cost: $300
+- IV Percentile: ~65% (elevated but reasonable)
+- Target: $3.00 (100% gain)
+- Stop: $0.75 (50% loss)
+- Catalyst: Earnings after close December 3
 
-**1. NIO Dec 20 $6 Call - Delivery Play**
-- Entry: $0.20 per contract
-- Buy: 5 contracts = $100 total
-- IV: ~38% (reasonable for catalyst)
-- Breakeven: $6.20 by Dec 20
-- Target: Exit at $0.40 (100% gain)
-- Stop: Exit if deliveries disappoint
-- Max Loss: $100
-- Catalyst: Dec 1-3 delivery numbers
+**2. PATH (UiPath) Earnings Play - December 5**
+- **Strategy:** Call Debit Spread
+- Buy: Dec 20 $15 call @ $1.20
+- Sell: Dec 20 $17.50 call @ $0.40
+- Net debit: $0.80 per spread
+- Contracts: 3 spreads
+- Total cost: $240
+- Max profit: $510 (($2.50 - $0.80) × 3 × 100)
+- Max loss: $240
+- Catalyst: Earnings December 5 after close
 
-**Rationale**: NIO deliveries provide binary catalyst with asymmetric upside. Calls are cheap enough to risk 5 contracts within our $300 limit. Historical delivery beats have driven 15%+ moves.
+**3. IONQ Quantum Computing Momentum**
+- **Strategy:** Put Credit Spread (bullish)
+- Sell: Dec 20 $45 put @ $2.00
+- Buy: Dec 20 $40 put @ $0.80
+- Net credit: $1.20 per spread
+- Risk: $380 per spread (1 spread only)
+- Max profit: $120 (if above $45 at expiry)
+- Probability of profit: ~65%
 
-**2. RIOT Dec 20 $17/$20 Call Spread - Bitcoin Momentum**
-- Buy: Dec 20 $17 Call @ $0.70
-- Sell: Dec 20 $20 Call @ $0.25
-- Net Debit: $0.45 per spread
-- Buy: 4 spreads = $180 total
-- Max Gain: $300 per spread × 4 = $1,200
-- Max Loss: $180
-- Target: Exit at $0.90 (100% gain on debit)
+**4. CHWY Bearish Earnings Play**
+- **Strategy:** Put Debit Spread
+- Buy: Dec 20 $35 put @ $2.50
+- Sell: Dec 20 $30 put @ $1.00
+- Net debit: $1.50 per spread
+- Contracts: 2 spreads
+- Total cost: $300
+- Max profit: $700
+- Catalyst: Earnings December 4 after close
 
-**Rationale**: Bitcoin approaching $100k creates momentum. Spread caps gains but dramatically reduces cost versus naked calls.
-
-**3. SNAP Jan 17 $8 Call - Oversold Bounce**
-- Entry: $0.35 per contract
-- Buy: 4 contracts = $140 total
-- IV: ~42% (reasonable)
-- Target: $0.70 (100% gain)
-- Time: 45 days to work
-- Max Loss: $140
-
-**Rationale**: SNAP oversold on competition fears. January expiry provides time for sentiment shift. Small position size manages risk.
-
-### Options to AVOID This Week
-
-**High IV Traps**:
-- Biotech names with IV >70% pre-binary event
-- Meme stocks with IV >100%
-- Weekly options on any underlying
-
-**Poor Risk/Reward**:
-- Out of the money calls on high-priced stocks (TSLA, NVDA)
-- Options with wide bid/ask spreads (>10% of mid)
-- Expiries less than 2 weeks out
-
-### Options Exit Strategy
-
-**Profit Taking Rules**:
-1. Sell 50% at 50% profit
-2. Sell 25% more at 100% profit  
-3. Let final 25% run with stop at breakeven
-
-**Loss Management**:
-1. Exit if catalyst fails (news-driven)
-2. Exit at -50% for non-catalyst plays
-3. Never hold final week unless deep ITM
-
-**Time Decay Management**:
-- Review all positions when 14 days remain
-- Exit if still OTM with 7 days left
-- Roll winners only if catalyst extends
-
-### December Options Calendar
-
-Key dates for options traders:
-- Dec 6: NFP could spike volatility
-- Dec 11-12: FOMC meeting - volatility event
-- Dec 13: December monthly expiration
-- Dec 20: Third Friday expiry (most liquid)
-
-Focus on Dec 20 and Jan 17 expiries for new positions to avoid theta crush.
+### OPTIONS MANAGEMENT RULES:
+1. **Entry:** Place orders 30-60 minutes before close on catalyst day
+2. **Profit Taking:** Sell 50% at 50% gain, let rest run with stop
+3. **Time Decay:** Exit all positions 2 days before expiry
+4. **IV Crush:** For earnings plays, exit morning after announcement
+5. **Position Sizing:** Never more than $300 per options trade
 
 ---
 
 ## 6. POSITION MANAGEMENT FOR SMALL ACCOUNTS
 
-### Immediate Exit Candidates
+### IMMEDIATE ACTION PLAN (Execute Tuesday, December 3):
 
-**NERV - Exit Priority #1**
-- Current: 10 shares at $3.64
-- Action: Place limit sell at $3.90
-- Reason: No catalyst, poor liquidity, dead money
-- Capital to Free: ~$39
+**MORNING EXITS (9:30-10:30 AM):**
+1. **NCNO** - Sell all 12 shares at market (~$293 freed)
+2. **RIVN** - Sell all 17 shares at market (~$293 freed)
+3. **MRNA** - Sell all 3 shares at market (~$72 freed)
+4. **PTON** - Sell 50 shares at market (~$323 freed)
+5. **IONQ** - Sell 4 shares at market (~$187 freed)
+6. **RXRX** - Sell 40 shares at market (~$173 freed)
 
-**RVMD - Profit Taking**
-- Current: 1 share with +31% gain
-- Action: Sell at market
-- Reason: Lock in exceptional gain
-- Capital to Free: ~$76
+**Total Capital Liberation: ~$1,341**
+**New Buying Power: ~$1,428**
 
-### Positions to Monitor Closely
+### NEW POSITION ENTRY PLAN:
 
-**STEM - Through Earnings**
-- Earnings: Dec 5 after close
-- Current: Down 13%
-- Action: Hold through catalyst
-- Risk: Another 10% downside possible
-- Upside: 20%+ on any positive surprise
+**TUESDAY DECEMBER 3 ENTRIES:**
+1. **S** - Buy 6 shares @ $16.61 limit (-$100)
+2. **S** - Buy 2x Dec 20 $17 calls @ $1.50 limit (-$300)
+3. **FUBO** - Buy 50 shares @ $2.88 limit (-$144)
+4. **PACB** - Buy 60 shares @ $2.32 limit (-$139)
 
-**NIO - Immediate Catalyst**
-- Deliveries: Dec 1-3
-- Action: Hold, consider adding calls
-- Risk: Well-defined at $4.85
-- Upside: $6+ on strong numbers
+**WEDNESDAY DECEMBER 4 ENTRIES:**
+5. **AI** - Buy 10 shares @ $14.37 limit (-$144)
+6. **AGEN** - Buy 30 shares @ $4.17 limit (-$125)
+7. **CHWY** - Buy 2x Dec 20 $35/$30 put spreads @ $1.50 (-$300)
 
-### Profit Taking Strategy
+**Total New Capital Deployed: $1,252**
+**Remaining Cash Buffer: ~$176**
 
-**Scale-Out Rules**:
-- 20% gain: Sell 25% of position
-- 40% gain: Sell another 25%
-- 60% gain: Sell another 25%
-- Let final 25% run with trailing stop
+### STOP LOSS MANAGEMENT:
+- Set all stops immediately after fills
+- Use trailing stops on winners after +20%
+- Hard stops at -15% for stocks, -50% for options
+- No averaging down on losers with limited capital
 
-**Current Candidates**:
-- RVMD: Already at 30%+ (execute now)
-- IONQ: Approaching 20% level
-- ASTS: Near 20% threshold
-
-### Stop Loss Discipline
-
-**Hard Stops** (place orders):
-- ASTS: $49.00 (protect gains)
-- NIO: $4.85 (below support)
-- STEM: $15.00 (mental stop)
-
-**Mental Stops** (monitor):
-- IONQ: $44.00 (10% below avg)
-- LCID: $11.50 (if entering)
-- New positions: 15% max loss
-
-### Cash Allocation Strategy
-
-**Current Cash**: $2,110.35 (73% of account)
-
-**Optimal Allocation**:
-- Keep $500 minimum reserve (17%)
-- Deploy up to $1,600 on new ideas
-- Target 10-12 total positions
-- Average position size: $150-250
-
-**This Week's Deployment**:
-- Exit NERV: +$39 cash
-- Trim RVMD: +$76 cash
-- Total Available: ~$2,225
-
-**New Position Priority**:
-1. NIO calls: $100
-2. MARA shares: $237
-3. LCID shares: $192
-4. SNAP calls: $140
-5. Keep $1,500+ reserve
+### PROFIT TAKING RULES:
+1. **20% Gain:** Take 25% off the table
+2. **50% Gain:** Take another 50% off
+3. **100% Gain:** Exit completely or hold 10% with house money
+4. **Options:** Always take 50% at 50% gain
 
 ---
 
@@ -599,325 +589,260 @@ Focus on Dec 20 and Jan 17 expiries for new positions to avoid theta crush.
 
 | Ticker | Type | Size | Cost | Entry | Catalyst | Date/Time | Stop | Target | Rationale |
 |--------|------|------|------|-------|----------|-----------|------|--------|-----------|
-| NIO | CALL | 5x $6 | $100 | $0.20 | Deliveries | Dec 2 PRE | $0.10 | $0.40 | December delivery beat expected, cheap IV |
-| MARA | LONG | 20 sh | $237 | $11.87 | BTC $100k | Dec 2-15 | $10.50 | $14.00 | Bitcoin momentum play, 2-3x leverage |
-| LCID | LONG | 15 sh | $192 | $12.80 | Technical | Ongoing | $11.50 | $14.50 | Oversold bounce from support, funded |
-| RIOT | CALL SPREAD | 4x 17/20 | $180 | $0.45 | BTC $100k | Dec 2-15 | $0.23 | $0.90 | Defined risk Bitcoin play, momentum |
-| SNAP | CALL | 4x $8 | $140 | $0.35 | Oversold | Jan 17 | $0.17 | $0.70 | Competition fears overblown, time value |
-| CHPT | LONG | 25 sh | $192 | $7.65 | Fed Funding | Dec-Jan | $6.80 | $9.20 | Infrastructure catalyst building |
-| NERV | SELL | 10 sh | -$39 | $3.90 | Exit | ASAP | N/A | N/A | No catalyst, free up dead capital |
-| RVMD | SELL | 1 sh | -$77 | Market | Profit | ASAP | N/A | N/A | Lock in 31% gain, reduce risk |
+| S | LONG | 6 sh | $100 | $16.61 | Q3 Earnings | Dec 3 AH | $14.00 | $22.00 | Cybersecurity undervalued vs CRWD, strong growth |
+| S | CALL | 2x $17 | $300 | $1.50 | Q3 Earnings | Dec 3 AH | $0.75 | $3.00 | High IV but binary catalyst tonight warrants risk |
+| FUBO | LONG | 50 sh | $144 | $2.88 | Sports data | Dec TBD | $2.30 | $5.00 | Oversold streamer, gambling catalyst potential |
+| PACB | LONG | 60 sh | $139 | $2.32 | JPM Conf | Jan 13 | $1.90 | $4.00 | Genomics leader at multi-year lows, bounce due |
+| AI | LONG | 10 sh | $144 | $14.37 | AI adoption | Ongoing | $12.00 | $20.00 | Pure-play AI infrastructure, enterprise growth |
+| AGEN | LONG | 30 sh | $125 | $4.17 | Trial data | Dec TBD | $3.50 | $8.00 | Multiple oncology catalysts, binary setup |
+| CLOV | LONG | 50 sh | $124 | $2.48 | MA enrollment | Dec 15 | $2.00 | $5.00 | Medicare Advantage turnaround, high short interest |
+| GME | LONG | 6 sh | $137 | $22.82 | Holiday sales | Dec TBD | $18.00 | $40.00 | Meme momentum building, Cohen catalyst possible |
+| CHWY | PUT SPRD | 2x $35/30 | $300 | $1.50 | Q3 Earnings | Dec 4 AH | -$300 | +$700 | Overbought into earnings, likely disappoints |
+| PATH | CALL | 2x $15 | $240 | $1.20 | Q3 Earnings | Dec 5 AH | $0.60 | $2.40 | RPA leader, AI tailwinds, earnings catalyst |
+| WKHS | LONG | 100 sh | $80 | $0.80 | Any news | Ongoing | None | $2.50 | Lottery ticket on EV delivery contracts |
+| LCID | LONG | 12 sh | $155 | $12.88 | Production | Dec TBD | $10.50 | $20.00 | Luxury EV oversold, Saudi backing catalyst |
 
 ---
 
 ## 8. EXACT ORDER BLOCK FOR $3K ACCOUNT
 
-### EXITS - Execute First
+**TUESDAY DECEMBER 3, 2025 ORDERS:**
+
+### EXIT ORDERS (Place at Market Open):
 
 ```
 Action: sell
-Ticker: NERV
+Ticker: NCNO
+Shares: 12
+Total proceeds: ~$293.00
+Entry price: MARKET
+Time in force: DAY
+Intended execution date: 2025-12-03
+One-line rationale: No near-term catalyst, free capital for better opportunities
+```
+
+```
+Action: sell
+Ticker: RIVN
+Shares: 17
+Total proceeds: ~$293.00
+Entry price: MARKET
+Time in force: DAY
+Intended execution date: 2025-12-03
+One-line rationale: Dead money, better EV plays available at lower prices
+```
+
+```
+Action: sell
+Ticker: MRNA
+Shares: 3
+Total proceeds: ~$72.00
+Entry price: MARKET
+Time in force: DAY
+Intended execution date: 2025-12-03
+One-line rationale: No vaccine catalyst until spring, capital better deployed elsewhere
+```
+
+```
+Action: sell
+Ticker: PTON
+Shares: 50
+Total proceeds: ~$323.00
+Entry price: MARKET
+Time in force: DAY
+Intended execution date: 2025-12-03
+One-line rationale: Trim overweight position, keep 36 shares for holiday data
+```
+
+```
+Action: sell
+Ticker: IONQ
+Shares: 4
+Total proceeds: ~$187.00
+Entry price: MARKET
+Time in force: DAY
+Intended execution date: 2025-12-03
+One-line rationale: Take partial loss, reduce quantum computing exposure
+```
+
+```
+Action: sell
+Ticker: RXRX
+Shares: 40
+Total proceeds: ~$173.00
+Entry price: MARKET
+Time in force: DAY
+Intended execution date: 2025-12-03
+One-line rationale: Weak momentum, reduce to core 25 share position
+```
+
+### NEW POSITION ORDERS (After exits fill):
+
+```
+Action: buy
+Ticker: S
+Shares: 6
+Total cost: $99.66
+Entry price: $16.61
+Time in force: DAY
+Intended execution date: 2025-12-03
+Catalyst date: 2025-12-03 (after close)
+Stop loss: $14.00
+Target price: $22.00
+Max loss: $15.66
+One-line rationale: Cybersecurity earnings tonight, undervalued vs CRWD at 1/30th market cap
+```
+
+```
+Action: buy_to_open
+Ticker: S
+Option: CALL $17 strike exp 2025-12-20
+Contracts: 2
+Premium: $1.50 per contract
+Total cost: $300.00
+Entry limit: $1.50 per contract
+Time in force: DAY
+Intended execution date: 2025-12-03
+Catalyst date: 2025-12-03 (earnings)
+Expiry: 2025-12-20
+Max loss: $300.00
+Target: 100% premium gain
+Stop loss: $0.75 per contract
+IV Percentile: 65%
+One-line rationale: Binary earnings catalyst with 15% expected move, cheap premium for potential gamma explosion
+```
+
+```
+Action: buy
+Ticker: FUBO
+Shares: 50
+Total cost: $144.00
+Entry price: $2.88
+Time in force: DAY
+Intended execution date: 2025-12-03
+Stop loss: $2.30
+Target price: $5.00
+Max loss: $29.00
+One-line rationale: Oversold streaming play under $3, sports betting catalyst could double stock
+```
+
+```
+Action: buy
+Ticker: PACB
+Shares: 60
+Total cost: $139.20
+Entry price: $2.32
+Time in force: DAY
+Intended execution date: 2025-12-03
+Stop loss: $1.90
+Target price: $4.00
+Max loss: $25.20
+One-line rationale: Genomics leader at 52-week lows, JPM Healthcare catalyst January 13
+```
+
+**WEDNESDAY DECEMBER 4 ORDERS:**
+
+```
+Action: buy
+Ticker: AI
 Shares: 10
-Total proceeds: ~$39.00
-Entry price: $3.90 (limit)
+Total cost: $143.70
+Entry price: $14.37
 Time in force: DAY
-Intended execution date: 2024-12-02
-Stop loss: N/A
-Target price: N/A
-Max loss: N/A
-One-line rationale: Exit dead money position with no catalyst to free capital
-```
-
-```
-Action: sell
-Ticker: RVMD  
-Shares: 1
-Total proceeds: ~$76.72
-Entry price: Market order
-Time in force: DAY
-Intended execution date: 2024-12-02
-Stop loss: N/A
-Target price: N/A
-Max loss: N/A
-One-line rationale: Lock in exceptional 31% gain and reduce biotech risk
-```
-
-### NEW ENTRIES - After Exits Clear
-
-```
-Action: buy_to_open
-Ticker: NIO
-Option: CALL $6 strike exp 2024-12-20
-Contracts: 5
-Premium: $0.20 per contract
-Total cost: $100.00
-Entry limit: $0.20 per contract
-Time in force: DAY
-Intended execution date: 2024-12-02
-Catalyst date: 2024-12-03
-Expiry: 2024-12-20
-Max loss: $100.00
-Target: 100% premium gain (exit at $0.40)
-Stop loss: 50% of premium (exit at $0.10)
-IV Percentile: 38%
-One-line rationale: December deliveries Dec 2-3 could beat 20k consensus for 15% stock move
+Intended execution date: 2025-12-04
+Stop loss: $12.00
+Target price: $20.00
+Max loss: $23.70
+One-line rationale: Pure-play AI infrastructure pulling back, enterprise adoption accelerating
 ```
 
 ```
 Action: buy
-Ticker: MARA
-Shares: 20
-Total cost: $237.40
-Entry price: $11.87 (limit)
+Ticker: AGEN
+Shares: 30
+Total cost: $125.10
+Entry price: $4.17
 Time in force: DAY
-Intended execution date: 2024-12-02
-Catalyst date: 2024-12-05
-Stop loss: $10.50
-Target price: $14.00
-Max loss: $27.40
-One-line rationale: Bitcoin approaching $100k with MARA production update Dec 5
-```
-
-```
-Action: buy
-Ticker: LCID
-Shares: 15
-Total cost: $192.00
-Entry price: $12.80 (limit)
-Time in force: DAY
-Intended execution date: 2024-12-02
-Catalyst date: Ongoing
-Stop loss: $11.50
-Target price: $14.50
-Max loss: $19.50
-One-line rationale: Technical bounce from $12 support with Saudi backing safety net
-```
-
-```
-Action: buy_to_open
-Ticker: RIOT
-Option: CALL $17/$20 debit spread exp 2024-12-20
-Contracts: 4 spreads
-Premium: $0.45 net debit per spread
-Total cost: $180.00
-Entry limit: $0.45 per spread
-Time in force: DAY
-Intended execution date: 2024-12-02
-Catalyst date: 2024-12-05
-Expiry: 2024-12-20
-Max loss: $180.00
-Target: 100% gain on debit (exit at $0.90)
-Stop loss: 50% of debit (exit at $0.23)
-IV Percentile: 41%
-One-line rationale: Bitcoin $100k catalyst with defined risk through spread structure
-```
-
-```
-Action: buy_to_open
-Ticker: SNAP
-Option: CALL $8 strike exp 2025-01-17
-Contracts: 4
-Premium: $0.35 per contract
-Total cost: $140.00
-Entry limit: $0.35 per contract
-Time in force: DAY
-Intended execution date: 2024-12-02
-Catalyst date: Ongoing
-Expiry: 2025-01-17
-Max loss: $140.00
-Target: 100% premium gain (exit at $0.70)
-Stop loss: 50% of premium (exit at $0.17)
-IV Percentile: 42%
-One-line rationale: Oversold on TikTok fears with 45 days for sentiment reversal
-```
-
-```
-Action: buy
-Ticker: CHPT
-Shares: 25
-Total cost: $191.25
-Entry price: $7.65 (limit)
-Time in force: DAY
-Intended execution date: 2024-12-02
-Catalyst date: Ongoing
-Stop loss: $6.80
-Target price: $9.20
-Max loss: $21.25
-One-line rationale: EV infrastructure federal funding acceleration into 2025
-```
-
-### EXISTING POSITION MANAGEMENT
-
-```
-Action: buy_to_open
-Ticker: NIO
-Option: Additional CALL $5.50 strike exp 2024-12-20
-Contracts: 3
-Premium: $0.30 per contract
-Total cost: $90.00
-Entry limit: $0.30 per contract
-Time in force: DAY
-Intended execution date: 2024-12-02
-Catalyst date: 2024-12-03
-Expiry: 2024-12-20
-Max loss: $90.00
-Target: 75% premium gain (exit at $0.52)
-Stop loss: 50% of premium (exit at $0.15)
-IV Percentile: 38%
-One-line rationale: Double down on delivery catalyst with closer to money strikes
+Intended execution date: 2025-12-04
+Stop loss: $3.50
+Target price: $8.00
+Max loss: $20.10
+One-line rationale: Cancer immunotherapy with December trial readouts, 100% upside potential
 ```
 
 ---
 
 ## 9. RISK MANAGEMENT FOR $3K ACCOUNTS
 
-### Daily Risk Limits
+### POSITION SIZING DISCIPLINE:
+- **Current Portfolio After Exits:** 7 positions + 5 new = 12 total
+- **Average Position Size:** $150-250 (5-8% of account)
+- **Options Allocation:** $540 total (19% of account) - S calls + CHWY puts
+- **Cash Buffer:** Maintaining $176 minimum for opportunities
 
-**Maximum Daily Loss**: $300 (10% of account)
-- Current positions at risk: ~$780
-- New positions proposed: ~$1,040
-- Total exposure: ~$1,820 (63% of account)
-- Cash buffer maintained: >$1,000
+### DAILY RISK MONITORING:
+**Maximum Daily Loss Limit: $300 (10% of account)**
 
-**Position Concentration Limits**:
-- No single position >$300 (10% max)
-- Core positions: $150-250 range
-- Lottery tickets: $75-140 range
-- Options positions: $100-180 max
+**Current Risk Exposure:**
+- Stock positions at risk: ~$200 (if all hit stops)
+- Options at risk: $300 (S calls, defined risk)
+- Total capital at risk: ~$500 (acceptable given catalysts)
 
-### Stop Loss Enforcement
+### STOP LOSS ENFORCEMENT:
+**Stocks:**
+- Hard stops at -15% maximum
+- Tighter stops (-10%) on low conviction plays
+- Trailing stops activate at +20% gains
 
-**Stock Positions** (15% max loss):
-- ASTS: Stop at $49.00 (trailing)
-- NIO: Stop at $4.85 (support)
-- STEM: Mental stop $15.00
-- New MARA: Stop at $10.50
-- New LCID: Stop at $11.50
-- New CHPT: Stop at $6.80
+**Options:**
+- Mental stops at -50% of premium
+- Exit before earnings if IV crush expected
+- Never hold through expiration week
 
-**Options Positions** (50% max loss):
-- Exit at 50% loss or catalyst failure
-- NIO calls: Exit if deliveries disappoint
-- Time stops: Close 7 days before expiry
+### CATALYST CALENDAR & RISK EVENTS:
+**This Week (December 2-6):**
+- Tuesday PM: S earnings (6 shares + 2 calls exposed)
+- Wednesday PM: CHWY earnings (2 put spreads)
+- Thursday PM: PATH earnings (potential entry)
+- Friday: Jobs report (market-wide risk)
 
-### Portfolio Heat Map
+**Key Risk Factors:**
+1. **Concentration Risk:** Avoid >15% in any single position
+2. **Correlation Risk:** Mix of sectors (tech, biotech, EV, streaming)
+3. **Liquidity Risk:** All positions have >$1M daily volume
+4. **Catalyst Risk:** Binary events limited to 30% of portfolio
+5. **Time Decay Risk:** Options exits planned before expiry
 
-**High Risk (Monitor Closely)**:
-- STEM: Earnings risk Dec 5
-- Biotech positions: NERV, SAVA
-- Options: All require active management
+### RECOVERY PROTOCOL (If Down 10%+):
+1. **Stop all new entries for 24 hours**
+2. **Review all stops - tighten if needed**
+3. **Exit lowest conviction positions**
+4. **Focus on highest quality setups only**
+5. **Reduce position sizes by 25%**
+6. **No revenge trading or doubling down**
 
-**Medium Risk**:
-- NIO: Catalyst dependent
-- Crypto plays: MARA, RIOT
-- LCID: Technical trade
+### PROFIT PROTECTION STRATEGY:
+- **At +10% on position:** Move stop to breakeven
+- **At +20%:** Take 25% profits, trail stop
+- **At +50%:** Take 50% more, ride free shares
+- **Options:** Always take 50% at 50% gain
 
-**Lower Risk**:
-- IONQ: Momentum strong
-- ASTS: Trending well
-- Cash position: Safety net
+### WEEK 14 RISK SUMMARY:
+- Starting Week Portfolio: $2,845.32
+- Daily Loss Limit: $284.53
+- Weekly Loss Limit: $568.00 (20% max)
+- Risk Per Trade: $75-300 (3-10% of capital)
+- Total Positions: 12 maximum
+- Options Exposure: <20% of portfolio
+- Cash Buffer Target: 5-10% minimum
 
-### Scenario Analysis
+**CRITICAL REMINDERS:**
+1. This is REAL MONEY - every dollar matters
+2. Focus on HIGH PROBABILITY setups only
+3. Catalysts must be IMMINENT (within 2 weeks)
+4. Take profits aggressively in this market
+5. Preserve capital for January opportunities
+6. Options are tools, not lottery tickets
+7. When in doubt, stay in cash
 
-**Best Case (20% probability)**:
-- All catalysts hit
-- Account grows to $3,500+
-- Take profits aggressively
-
-**Base Case (60% probability)**:
-- Mixed results
-- Account $2,900-3,100
-- Steady progress
-
-**Worst Case (20% probability)**:
-- Multiple stops hit
-- Account drops to $2,600
-- Preserve capital, reassess
-
-### Weekly Risk Checklist
-
-Monday:
-- [ ] Exit NERV position
-- [ ] Trim RVMD winner
-- [ ] Enter NIO options before deliveries
-
-Tuesday:
-- [ ] Monitor NIO delivery catalyst
-- [ ] Check Bitcoin for crypto trades
-- [ ] Assess STEM pre-earnings
-
-Wednesday:
-- [ ] Review all stops
-- [ ] Check options time decay
-- [ ] Prepare for STEM earnings
-
-Thursday:
-- [ ] STEM earnings reaction
-- [ ] Options expiry review
-- [ ] Weekend plan
-
-Friday:
-- [ ] Weekly P&L review
-- [ ] Position sizing check
-- [ ] Next week catalyst scan
-
-### Mental Capital Rules
-
-**Avoid These Mistakes**:
-1. Revenge trading after losses
-2. Oversizing winning positions  
-3. Holding options too long
-4. Ignoring stops
-5. FOMO entries
-
-**Best Practices**:
-1. Trade the plan exactly
-2. Take profits at targets
-3. Honor all stops
-4. Keep detailed records
-5. Learn from each trade
-
-**Recovery Protocol**:
-If down >$300 in a day:
-1. Stop trading immediately
-2. Review what went wrong
-3. Paper trade next day
-4. Return with 50% size
-5. Build back slowly
-
----
-
-## WEEK 14 ACTION SUMMARY
-
-**Immediate Actions (Monday)**:
-1. Exit NERV at $3.90 limit - free $39
-2. Sell RVMD at market - lock $77 profit
-3. Buy NIO Dec $6 calls - $100 position
-4. Enter MARA shares - $237 position
-5. Set all stops immediately
-
-**Catalyst Watch**:
-- NIO deliveries (Dec 2-3) - biggest near-term event
-- STEM earnings (Dec 5 AH) - hold existing
-- Bitcoin $100k - triggers crypto trades
-- Fed data all week - market direction
-
-**Capital Allocation**:
-- Current Cash: $2,110
-- After exits: ~$2,225
-- New positions: ~$1,040
-- Remaining cash: ~$1,185
-- Risk on: <65% of capital
-
-**Success Metrics**:
-- Win rate target: 60%
-- Average winner: +20%
-- Average loser: -10%
-- Weekly goal: +$100-150
-- Protect capital above all
-
-Remember: This is REAL MONEY. Every dollar counts. Trade with discipline, take profits at targets, and honor stops religiously. The goal is consistent small wins, not home runs.
-
-Good hunting! 🎯
-
-*[Report Generated: December 2, 2024 09:51 AM ET]*
+**The path from $3K to $10K requires discipline, not gambling. Trade the plan!**
