@@ -428,6 +428,7 @@ def init():
     log.info("Server initialized")
     return True
 
+@web.middleware
 async def auth_middleware(request, handler):
     """Authenticate requests via API key"""
     # Skip auth for registration and health
