@@ -89,6 +89,9 @@
 | Dec 2 | Keep-awake script | Prevent Windows sleep during trading |
 | Dec 2 | ML data collection | Infrastructure for training data |
 | Dec 2 | ML integration | Auto-log trades to training data |
+| Dec 2 | Repository cleanup | Root directory 70+ to 19 files |
+| Dec 2 | Performance graph fix | Fixed SHORGAN Live spike/dip (schema detection) |
+| Dec 2 | PDF report generator | Created performance report PDF generator |
 
 ---
 
@@ -128,4 +131,65 @@
 
 ---
 
-*Last Updated: December 2, 2025*
+## Product Enhancement Suggestions (High Value)
+
+### Priority A: User Experience & Visibility
+
+| ID | Enhancement | Value | Effort | Description |
+|----|-------------|-------|--------|-------------|
+| PROD-001 | Daily P&L Email/SMS | HIGH | 2 hr | Send daily summary with P&L, trades executed, portfolio value |
+| PROD-002 | Web Dashboard | HIGH | 8 hr | Simple Flask/Streamlit dashboard showing real-time portfolio |
+| PROD-003 | Trade Execution Alerts | HIGH | 1 hr | Telegram alert with fill price, P&L impact for each trade |
+| PROD-004 | Weekly Performance Report | MEDIUM | 2 hr | Automated PDF with weekly returns, best/worst trades, sector exposure |
+
+### Priority B: Trading Intelligence
+
+| ID | Enhancement | Value | Effort | Description |
+|----|-------------|-------|--------|-------------|
+| PROD-010 | Earnings Calendar Integration | HIGH | 3 hr | Auto-flag positions with upcoming earnings, suggest pre-earnings actions |
+| PROD-011 | Sector Rotation Signals | HIGH | 4 hr | Track sector momentum, suggest rotation trades |
+| PROD-012 | Correlation-Based Position Sizing | MEDIUM | 3 hr | Reduce position sizes when adding correlated assets |
+| PROD-013 | News Sentiment Scoring | MEDIUM | 4 hr | Score news headlines, flag significant sentiment shifts |
+
+### Priority C: Risk Management
+
+| ID | Enhancement | Value | Effort | Description |
+|----|-------------|-------|--------|-------------|
+| PROD-020 | Portfolio Heat Map | HIGH | 2 hr | Visual showing sector/position concentration risk |
+| PROD-021 | Drawdown Alerts | HIGH | 1 hr | Alert when portfolio drops >5% from peak |
+| PROD-022 | Beta-Adjusted Position Limits | MEDIUM | 2 hr | Limit high-beta positions to control volatility |
+| PROD-023 | Max Loss Per Day Limit | HIGH | 1 hr | Auto-stop trading if daily loss exceeds threshold |
+
+### Priority D: ML & Analytics
+
+| ID | Enhancement | Value | Effort | Description |
+|----|-------------|-------|--------|-------------|
+| PROD-030 | Trade Win Rate Dashboard | MEDIUM | 2 hr | Track win rate by strategy, timeframe, sector |
+| PROD-031 | Conviction Score Calibration | HIGH | 3 hr | Analyze if HIGH conviction trades outperform MEDIUM |
+| PROD-032 | Agent Performance Tracking | MEDIUM | 2 hr | Track which agent (fundamental, technical, etc.) is most predictive |
+| PROD-033 | Backtest New Strategies | HIGH | 4 hr | Framework to backtest strategy changes before deployment |
+
+### Priority E: Automation & Reliability
+
+| ID | Enhancement | Value | Effort | Description |
+|----|-------------|-------|--------|-------------|
+| PROD-040 | Cloud Deployment | HIGH | 6 hr | Move to AWS/GCP for 24/7 reliability (no sleep issues) |
+| PROD-041 | Graceful Degradation | MEDIUM | 2 hr | Continue with cached data if API fails |
+| PROD-042 | Multi-Broker Support | LOW | 8 hr | Add support for IBKR, Schwab as backup |
+| PROD-043 | Paper-to-Live Sync | MEDIUM | 3 hr | Auto-sync successful paper strategies to live account |
+
+---
+
+## Recommended Next 5 Enhancements (Quick Wins)
+
+Based on value/effort ratio:
+
+1. **PROD-021 Drawdown Alerts** (1 hr, HIGH value) - Critical risk protection
+2. **PROD-003 Trade Execution Alerts** (1 hr, HIGH value) - Better visibility
+3. **PROD-023 Max Loss Per Day** (1 hr, HIGH value) - Risk protection for live account
+4. **PROD-001 Daily P&L Email** (2 hr, HIGH value) - User experience
+5. **PROD-020 Portfolio Heat Map** (2 hr, HIGH value) - Risk visualization
+
+---
+
+*Last Updated: December 2, 2025 (Evening)*
