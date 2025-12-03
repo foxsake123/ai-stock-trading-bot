@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  stock-bot:
+    build: .
+    container_name: stock-bot-server
+    ports:
+      - "8000:8000"
+    environment:
+      - MASTER_KEY=${MASTER_KEY}
+      - PORT=8000
+      - HOST=0.0.0.0
+    volumes:
+      - stock-bot-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  stock-bot-data:

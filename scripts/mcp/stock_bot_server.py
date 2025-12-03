@@ -431,8 +431,8 @@ def init():
 @web.middleware
 async def auth_middleware(request, handler):
     """Authenticate requests via API key"""
-    # Skip auth for registration and health
-    if request.path in ["/register", "/health", "/"]:
+    # Skip auth for public endpoints
+    if request.path in ["/register", "/health", "/"] or request.path.startswith("/static") or request.path.startswith("/admin"):
         return await handler(request)
 
     auth = request.headers.get("Authorization", "")
@@ -644,6 +644,96 @@ async def handle_mcp_sse(request):
         await response.write(b": keepalive\n\n")
 
 # =============================================================================
+# STATIC FILES & LANDING PAGE
+# =============================================================================
+
+STATIC_DIR = Path(__file__).parent / "static"
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "stockbot-admin-2024")  # Change this!
+
+async def handle_landing(request):
+    """Serve landing page"""
+    index_file = STATIC_DIR / "index.html"
+    if index_file.exists():
+        return web.FileResponse(index_file)
+    # Fallback if no static file
+    return web.json_response({"ok": True, "service": "stock-bot", "version": "2.0", "docs": "/docs"})
+
+# =============================================================================
+# ADMIN DASHBOARD
+# =============================================================================
+
+async def handle_admin(request):
+    """Serve admin dashboard"""
+    admin_file = STATIC_DIR / "admin.html"
+    if admin_file.exists():
+        return web.FileResponse(admin_file)
+    return web.Response(text="Admin dashboard not found", status=404)
+
+async def handle_admin_data(request):
+    """Get admin data (password protected)"""
+    password = request.query.get("password", "")
+    if password != ADMIN_PASSWORD:
+        return web.json_response({"ok": False, "error": "Invalid password"}, status=401)
+
+    try:
+        # Load users
+        users_file = Config.DATA_DIR / "users.json"
+        users = json.loads(users_file.read_text()) if users_file.exists() else {}
+
+        # Load accounts
+        accounts_file = Config.DATA_DIR / "accounts.json"
+        accounts = json.loads(accounts_file.read_text()) if accounts_file.exists() else {}
+
+        # Load activity log
+        activity_file = Config.DATA_DIR / "activity.json"
+        activity = json.loads(activity_file.read_text()) if activity_file.exists() else []
+
+        # Get portfolio data for each account
+        portfolio_data = []
+        for acc_id, acc in accounts.items():
+            try:
+                api_key = enc.decrypt(acc["api_key_enc"])
+                secret_key = enc.decrypt(acc["secret_key_enc"])
+                client = TradingClient(api_key=api_key, secret_key=secret_key, paper=acc["paper"])
+                acct = client.get_account()
+                positions = client.get_all_positions()
+
+                portfolio_data.append({
+                    "account_id": acc_id,
+                    "user_id": acc["user_id"],
+                    "nickname": acc.get("nickname", ""),
+                    "paper": acc["paper"],
+                    "value": float(acct.portfolio_value),
+                    "cash": float(acct.cash),
+                    "positions": len(positions),
+                    "pnl": float(acct.portfolio_value) - 100000 if acc["paper"] else None  # Assuming $100k paper start
+                })
+            except Exception as e:
+                portfolio_data.append({
+                    "account_id": acc_id,
+                    "user_id": acc["user_id"],
+                    "error": str(e)
+                })
+
+        return web.json_response({
+            "ok": True,
+            "stats": {
+                "total_users": len(users),
+                "total_accounts": len(accounts),
+                "paper_accounts": len([a for a in accounts.values() if a.get("paper", True)]),
+                "live_accounts": len([a for a in accounts.values() if not a.get("paper", True)])
+            },
+            "users": [
+                {"user_id": u["user_id"], "email": u["email"], "created": u["created"]}
+                for u in users.values()
+            ],
+            "portfolios": portfolio_data,
+            "recent_activity": activity[-50:]  # Last 50 activities
+        })
+    except Exception as e:
+        return web.json_response({"ok": False, "error": str(e)}, status=500)
+
+# =============================================================================
 # APP SETUP
 # =============================================================================
 
@@ -661,7 +751,7 @@ def create_app():
     })
 
     # Routes
-    app.router.add_get("/", handle_health)
+    app.router.add_get("/", handle_landing)
     app.router.add_get("/health", handle_health)
     app.router.add_post("/register", handle_register)
     app.router.add_post("/accounts", handle_add_account)
@@ -670,6 +760,8 @@ def create_app():
     app.router.add_get("/accounts/{account_id}/portfolio", handle_portfolio)
     app.router.add_post("/accounts/{account_id}/run/{strategy}", handle_run_strategy)
     app.router.add_get("/mcp", handle_mcp_sse)
+    app.router.add_get("/admin", handle_admin)
+    app.router.add_get("/admin/data", handle_admin_data)
 
     # Add CORS to all routes
     for route in list(app.router.routes()):

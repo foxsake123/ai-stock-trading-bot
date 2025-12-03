@@ -37,7 +37,8 @@ pandas-ta>=0.3.14b            # Technical analysis indicators
 # ============================================================================
 
 requests>=2.31.0              # HTTP requests
-aiohttp>=3.8.5                # Async HTTP client
+aiohttp>=3.9.0                # Async HTTP client
+aiohttp-cors>=0.7.0           # CORS support for aiohttp
 httpx>=0.26.0                 # Modern HTTP client
 beautifulsoup4>=4.12.3        # HTML parsing
 lxml>=5.1.0                   # XML/HTML processing
