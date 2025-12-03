@@ -62,6 +62,9 @@ from alpaca.trading.client import TradingClient
 from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums import OrderSide, TimeInForce
 
+# HTTP client for webhooks
+import aiohttp
+
 # =============================================================================
 # CONFIG
 # =============================================================================
@@ -80,6 +83,10 @@ class Config:
     # Rate limiting
     RATE_LIMIT = 60  # requests per minute
     RATE_WINDOW = 60
+
+    # Telegram webhook (optional)
+    TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
     @classmethod
     def validate(cls):
@@ -241,6 +248,24 @@ class UserStore:
                 return True
             return False
 
+    async def rotate_api_key(self, user_id: str) -> Optional[str]:
+        """Generate new API key for user, invalidate old one"""
+        async with self._lock:
+            users = await self._load_users()
+            if user_id not in users:
+                return None
+
+            # Generate new API key
+            new_api_key = Config.API_KEY_PREFIX + secrets.token_urlsafe(32)
+            new_api_key_hash = self._hash_api_key(new_api_key)
+
+            # Update user
+            users[user_id]["api_key_hash"] = new_api_key_hash
+            users[user_id]["key_rotated"] = datetime.now(timezone.utc).isoformat()
+            await self._save_users(users)
+
+            return new_api_key
+
     async def _load_users(self) -> dict:
         if not self.users_file.exists():
             return {}
@@ -273,6 +298,144 @@ class RateLimiter:
         calls.append(now)
         self._calls[key] = calls
         return True
+
+# =============================================================================
+# TELEGRAM WEBHOOK NOTIFICATIONS
+# =============================================================================
+
+async def send_telegram_alert(message: str, parse_mode: str = "HTML"):
+    """Send alert to Telegram (non-blocking)"""
+    if not Config.TELEGRAM_BOT_TOKEN or not Config.TELEGRAM_CHAT_ID:
+        log.debug("Telegram not configured, skipping alert")
+        return False
+
+    try:
+        url = f"https://api.telegram.org/bot{Config.TELEGRAM_BOT_TOKEN}/sendMessage"
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, json={
+                "chat_id": Config.TELEGRAM_CHAT_ID,
+                "text": message,
+                "parse_mode": parse_mode
+            }, timeout=aiohttp.ClientTimeout(total=5)) as resp:
+                if resp.status == 200:
+                    log.info("Telegram alert sent successfully")
+                    return True
+                else:
+                    log.warning(f"Telegram alert failed: {resp.status}")
+                    return False
+    except Exception as e:
+        log.warning(f"Telegram alert error: {e}")
+        return False
+
+# =============================================================================
+# ACTIVITY & ANALYTICS TRACKING
+# =============================================================================
+
+class ActivityTracker:
+    """Track user activity and trade history"""
+
+    def __init__(self, data_dir: Path):
+        self.activity_file = data_dir / "activity.json"
+        self.trades_file = data_dir / "trade_history.json"
+        self.analytics_file = data_dir / "analytics.json"
+        self._lock = asyncio.Lock()
+        data_dir.mkdir(parents=True, exist_ok=True)
+
+    async def log_activity(self, user_id: str, action: str, details: dict = None):
+        """Log user activity"""
+        async with self._lock:
+            activities = await self._load_activities()
+            activities.append({
+                "ts": datetime.now(timezone.utc).isoformat(),
+                "user_id": user_id,
+                "action": action,
+                "details": details or {}
+            })
+            # Keep last 1000 activities
+            activities = activities[-1000:]
+            await self._save_activities(activities)
+
+    async def log_trade(self, user_id: str, account_id: str, strategy: str, trade: dict):
+        """Log trade for history"""
+        async with self._lock:
+            trades = await self._load_trades()
+            trade_record = {
+                "ts": datetime.now(timezone.utc).isoformat(),
+                "user_id": user_id,
+                "account_id": account_id,
+                "strategy": strategy,
+                **trade
+            }
+            trades.append(trade_record)
+            # Keep last 10000 trades
+            trades = trades[-10000:]
+            await self._save_trades(trades)
+
+    async def update_analytics(self, user_id: str, event_type: str):
+        """Update usage analytics"""
+        async with self._lock:
+            analytics = await self._load_analytics()
+            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+            if user_id not in analytics:
+                analytics[user_id] = {"daily": {}, "totals": {}}
+
+            if today not in analytics[user_id]["daily"]:
+                analytics[user_id]["daily"][today] = {}
+
+            # Increment counters
+            if event_type not in analytics[user_id]["daily"][today]:
+                analytics[user_id]["daily"][today][event_type] = 0
+            analytics[user_id]["daily"][today][event_type] += 1
+
+            if event_type not in analytics[user_id]["totals"]:
+                analytics[user_id]["totals"][event_type] = 0
+            analytics[user_id]["totals"][event_type] += 1
+
+            # Keep only last 30 days of daily data
+            daily_keys = sorted(analytics[user_id]["daily"].keys())
+            if len(daily_keys) > 30:
+                for old_key in daily_keys[:-30]:
+                    del analytics[user_id]["daily"][old_key]
+
+            await self._save_analytics(analytics)
+
+    async def get_user_trades(self, user_id: str, limit: int = 100) -> list:
+        """Get trade history for a user"""
+        async with self._lock:
+            trades = await self._load_trades()
+            user_trades = [t for t in trades if t.get("user_id") == user_id]
+            return user_trades[-limit:]
+
+    async def get_user_analytics(self, user_id: str) -> dict:
+        """Get analytics for a user"""
+        async with self._lock:
+            analytics = await self._load_analytics()
+            return analytics.get(user_id, {"daily": {}, "totals": {}})
+
+    async def _load_activities(self) -> list:
+        if not self.activity_file.exists():
+            return []
+        return json.loads(self.activity_file.read_text())
+
+    async def _save_activities(self, data: list):
+        self.activity_file.write_text(json.dumps(data, indent=2))
+
+    async def _load_trades(self) -> list:
+        if not self.trades_file.exists():
+            return []
+        return json.loads(self.trades_file.read_text())
+
+    async def _save_trades(self, data: list):
+        self.trades_file.write_text(json.dumps(data, indent=2))
+
+    async def _load_analytics(self) -> dict:
+        if not self.analytics_file.exists():
+            return {}
+        return json.loads(self.analytics_file.read_text())
+
+    async def _save_analytics(self, data: dict):
+        self.analytics_file.write_text(json.dumps(data, indent=2))
 
 # =============================================================================
 # TRADING STRATEGIES
@@ -412,9 +575,10 @@ class Shorgan:
 enc: Encryption = None
 user_store: UserStore = None
 rate_limiter: RateLimiter = None
+activity_tracker: ActivityTracker = None
 
 def init():
-    global enc, user_store, rate_limiter
+    global enc, user_store, rate_limiter, activity_tracker
     errors = Config.validate()
     if errors:
         for e in errors:
@@ -425,7 +589,10 @@ def init():
     enc = Encryption(Config.MASTER_KEY, Config.DATA_DIR)
     user_store = UserStore(enc, Config.DATA_DIR)
     rate_limiter = RateLimiter()
+    activity_tracker = ActivityTracker(Config.DATA_DIR)
     log.info("Server initialized")
+    if Config.TELEGRAM_BOT_TOKEN:
+        log.info("Telegram notifications enabled")
     return True
 
 @web.middleware
@@ -454,7 +621,7 @@ async def auth_middleware(request, handler):
 # --- Routes ---
 
 async def handle_health(request):
-    return web.json_response({"ok": True, "service": "stock-bot", "version": "2.0"})
+    return web.json_response({"ok": True, "service": "stock-bot", "version": "2.1"})
 
 async def handle_register(request):
     """Register new user, get API key"""
@@ -465,6 +632,19 @@ async def handle_register(request):
             return web.json_response({"ok": False, "error": "Email required"}, status=400)
 
         user, api_key = await user_store.create_user(email)
+
+        # Log activity
+        await activity_tracker.log_activity(user.user_id, "register", {"email": email})
+        await activity_tracker.update_analytics(user.user_id, "registration")
+
+        # Send Telegram alert (async, non-blocking)
+        asyncio.create_task(send_telegram_alert(
+            f"<b>New Stock-Bot User!</b>\n\n"
+            f"Email: <code>{email}</code>\n"
+            f"User ID: <code>{user.user_id}</code>\n"
+            f"Time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}"
+        ))
+
         return web.json_response({
             "ok": True,
             "user_id": user.user_id,
@@ -495,6 +675,24 @@ async def handle_add_account(request):
 
         account_id = await user_store.add_alpaca_account(user.user_id, api_key, secret_key, paper, nickname)
 
+        # Log activity
+        await activity_tracker.log_activity(user.user_id, "add_account", {
+            "account_id": account_id,
+            "paper": paper,
+            "value": float(acct.portfolio_value)
+        })
+        await activity_tracker.update_analytics(user.user_id, "account_added")
+
+        # Send Telegram alert
+        account_type = "Paper" if paper else "LIVE"
+        asyncio.create_task(send_telegram_alert(
+            f"<b>New Alpaca Account Connected!</b>\n\n"
+            f"User: <code>{user.user_id}</code>\n"
+            f"Type: {account_type}\n"
+            f"Value: ${float(acct.portfolio_value):,.2f}\n"
+            f"Time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}"
+        ))
+
         return web.json_response({
             "ok": True,
             "account_id": account_id,
@@ -516,7 +714,36 @@ async def handle_delete_account(request):
     user = request["user"]
     account_id = request.match_info["account_id"]
     deleted = await user_store.delete_account(user.user_id, account_id)
+    if deleted:
+        await activity_tracker.log_activity(user.user_id, "delete_account", {"account_id": account_id})
     return web.json_response({"ok": deleted})
+
+async def handle_rotate_key(request):
+    """Rotate API key - generates new key, invalidates old one"""
+    user = request["user"]
+    new_api_key = await user_store.rotate_api_key(user.user_id)
+    if new_api_key:
+        await activity_tracker.log_activity(user.user_id, "rotate_key", {})
+        await activity_tracker.update_analytics(user.user_id, "key_rotation")
+        return web.json_response({
+            "ok": True,
+            "api_key": new_api_key,
+            "message": "Save your new API key - the old one is now invalid!"
+        })
+    return web.json_response({"ok": False, "error": "User not found"}, status=404)
+
+async def handle_trade_history(request):
+    """Get user's trade history"""
+    user = request["user"]
+    limit = int(request.query.get("limit", 100))
+    trades = await activity_tracker.get_user_trades(user.user_id, limit=min(limit, 500))
+    return web.json_response({"ok": True, "trades": trades, "count": len(trades)})
+
+async def handle_user_analytics(request):
+    """Get user's usage analytics"""
+    user = request["user"]
+    analytics = await activity_tracker.get_user_analytics(user.user_id)
+    return web.json_response({"ok": True, "analytics": analytics})
 
 async def handle_portfolio(request):
     """Get portfolio status"""
@@ -580,6 +807,32 @@ async def handle_run_strategy(request):
             return web.json_response({"ok": False, "error": f"Unknown strategy: {strategy}"}, status=400)
 
         result["account_id"] = account_id
+
+        # Log activity and trades
+        await activity_tracker.log_activity(user.user_id, "run_strategy", {
+            "account_id": account_id,
+            "strategy": strategy,
+            "dry_run": dry_run,
+            "trades_count": len(result.get("trades", []))
+        })
+        await activity_tracker.update_analytics(user.user_id, f"strategy_run_{strategy}")
+
+        # Log individual trades
+        for trade in result.get("trades", []):
+            await activity_tracker.log_trade(user.user_id, account_id, strategy, trade)
+
+        # Send Telegram alert for live trades
+        if not dry_run and result.get("trades"):
+            trade_count = len(result.get("trades", []))
+            asyncio.create_task(send_telegram_alert(
+                f"<b>Strategy Executed!</b>\n\n"
+                f"User: <code>{user.user_id}</code>\n"
+                f"Strategy: {strategy.upper()}\n"
+                f"Account: {'Paper' if acc['paper'] else 'LIVE'}\n"
+                f"Trades: {trade_count}\n"
+                f"Time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}"
+            ))
+
         return web.json_response(result)
     except Exception as e:
         return web.json_response({"ok": False, "error": str(e)}, status=500)
@@ -763,6 +1016,11 @@ def create_app():
     app.router.add_get("/admin", handle_admin)
     app.router.add_get("/admin/data", handle_admin_data)
 
+    # New v2.1 endpoints
+    app.router.add_post("/rotate-key", handle_rotate_key)
+    app.router.add_get("/trades", handle_trade_history)
+    app.router.add_get("/analytics", handle_user_analytics)
+
     # Add CORS to all routes
     for route in list(app.router.routes()):
         cors.add(route)
@@ -775,7 +1033,7 @@ def create_app():
 
 def main():
     print("=" * 50)
-    print("STOCK-BOT Hosted Server v2.0")
+    print("STOCK-BOT Hosted Server v2.1")
     print("=" * 50)
 
     if not init():
