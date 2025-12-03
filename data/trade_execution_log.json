@@ -1,0 +1,19 @@
+{
+  "date": "2025-12-02",
+  "trades": [
+    {
+      "timestamp": "2025-12-02T19:12:37.373781",
+      "account": "DEE-BOT",
+      "symbol": "AAPL",
+      "action": "BUY",
+      "qty": 10,
+      "fill_price": 175.5,
+      "total_value": 1755.0,
+      "order_type": "MARKET",
+      "stop_loss": 157.95,
+      "target": 200.0,
+      "conviction": "HIGH"
+    }
+  ],
+  "last_updated": "2025-12-02T19:12:37.374486"
+}

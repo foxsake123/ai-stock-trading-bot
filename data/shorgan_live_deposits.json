@@ -9,9 +9,9 @@
       "type": "initial_deposit"
     },
     {
-      "date": "2025-11-06",
+      "date": "2025-10-31",
       "amount": 1000.00,
-      "description": "Second deposit",
+      "description": "Second deposit (appeared in account Oct 31)",
       "type": "additional_deposit"
     },
     {
@@ -24,9 +24,8 @@
   "total_deposits": 3000.00,
   "notes": [
     "This file tracks all deposits for accurate performance calculation",
+    "Dates reflect when deposits appeared in account data (not initiation date)",
     "Performance is calculated as: (Current Value - Total Deposits) / Total Deposits",
-    "This shows pure trading performance, excluding deposit effects",
-    "Current value: $2,867.53",
-    "Performance calculation: ($2,867.53 - $3,000) / $3,000 = -4.42% (trading only)"
+    "This shows pure trading performance, excluding deposit effects"
   ]
 }

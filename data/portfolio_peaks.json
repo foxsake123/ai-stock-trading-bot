@@ -1,0 +1,16 @@
+{
+  "peaks": {
+    "DEE-BOT": 103549.91,
+    "SHORGAN Paper": 113750.83,
+    "SHORGAN Live": 3000.0,
+    "Combined": 220147.54
+  },
+  "last_updated": "2025-12-02T19:08:45.782680",
+  "alert_history": [
+    {
+      "timestamp": "2025-12-02T19:08:45.782413",
+      "account": "SHORGAN Live",
+      "drawdown": 5.106666666666661
+    }
+  ]
+}
