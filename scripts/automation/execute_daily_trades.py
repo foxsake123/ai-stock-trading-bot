@@ -20,6 +20,14 @@ load_dotenv()
 # Add path for logging
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
+# Import regulatory compliance checker
+try:
+    from scripts.automation.regulatory_compliance import RegulatoryComplianceChecker, check_trade_compliance, TradeRecord
+    COMPLIANCE_AVAILABLE = True
+except ImportError:
+    COMPLIANCE_AVAILABLE = False
+    print("[WARNING] Regulatory compliance module not available")
+
 # Alpaca API Configuration (from environment variables)
 DEE_BOT_CONFIG = {
     'API_KEY': os.getenv('ALPACA_API_KEY_DEE'),
@@ -569,6 +577,40 @@ class DailyTradeExecutor:
                         })
                         return None
 
+            # REGULATORY COMPLIANCE CHECK
+            if COMPLIANCE_AVAILABLE:
+                # Determine account info for compliance check
+                account_name = "DEE-BOT" if api == self.dee_api else "SHORGAN-LIVE"
+                try:
+                    account = api.get_account()
+                    account_value = float(account.portfolio_value)
+                    is_margin = account.account_type == 'margin'
+                except:
+                    account_value = SHORGAN_CAPITAL if api == self.shorgan_api else 100000
+                    is_margin = False
+
+                is_compliant, compliance_msg = check_trade_compliance(
+                    symbol=symbol,
+                    action=side.upper(),
+                    account=account_name,
+                    account_value=account_value,
+                    is_margin=is_margin
+                )
+
+                if not is_compliant:
+                    print(f"[COMPLIANCE BLOCK] {symbol}: {compliance_msg}")
+                    self.failed_trades.append({
+                        'symbol': symbol,
+                        'shares': shares,
+                        'side': side,
+                        'error': f"Regulatory compliance: {compliance_msg}",
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    return None
+
+                if "WARNING" in compliance_msg:
+                    print(f"[COMPLIANCE WARNING] {symbol}: {compliance_msg}")
+
             # Determine order type
             order_type = 'limit' if limit_price else 'market'
 
@@ -611,6 +653,24 @@ class DailyTradeExecutor:
 
             self.executed_trades.append(trade_record)
             print(f"[SUCCESS] Order ID: {order.id}")
+
+            # Record trade for regulatory compliance tracking
+            if COMPLIANCE_AVAILABLE:
+                try:
+                    compliance_checker = RegulatoryComplianceChecker()
+                    account_name = "DEE-BOT" if api == self.dee_api else "SHORGAN-LIVE"
+                    compliance_checker.record_trade(TradeRecord(
+                        symbol=symbol,
+                        action=side.upper(),
+                        qty=shares,
+                        price=limit_price or 0,
+                        timestamp=datetime.now(),
+                        account=account_name,
+                        order_id=order.id
+                    ))
+                except Exception as e:
+                    print(f"[WARNING] Failed to record trade for compliance: {e}")
+
             return order
 
         except Exception as e:
