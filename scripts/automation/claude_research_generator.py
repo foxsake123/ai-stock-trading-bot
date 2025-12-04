@@ -30,8 +30,9 @@ from reportlab.graphics.shapes import Drawing
 from reportlab.graphics.charts.piecharts import Pie
 from html.parser import HTMLParser
 
-# Add project root to path
+# Add project root and automation directory to path
 sys.path.append(str(Path(__file__).parent.parent.parent))
+sys.path.append(str(Path(__file__).parent))  # For mcp_financial_tools
 
 from anthropic import Anthropic
 from alpaca.trading.client import TradingClient
