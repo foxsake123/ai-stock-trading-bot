@@ -47,6 +47,164 @@ except ImportError:
     print("[WARNING] ML Data Collector not available")
 
 
+class DebateLogger:
+    """Logs multi-agent validation debates to markdown files"""
+
+    def __init__(self):
+        self.project_root = Path(__file__).parent.parent.parent
+        self.debates_dir = self.project_root / "data" / "agent_debates"
+        self.debates_dir.mkdir(parents=True, exist_ok=True)
+        self.today = datetime.now().strftime("%Y-%m-%d")
+        self.debate_file = self.debates_dir / f"debates_{self.today}.md"
+        self.debates = []
+
+    def log_debate(self, ticker: str, recommendation: 'StockRecommendation',
+                   analyses: Dict, decision: any, validation_result: Dict):
+        """Log a single stock's validation debate"""
+        debate = {
+            "ticker": ticker,
+            "timestamp": datetime.now().strftime("%H:%M:%S"),
+            "recommendation": {
+                "action": recommendation.action,
+                "source": recommendation.source,
+                "conviction": recommendation.conviction or "MEDIUM",
+                "entry_price": recommendation.entry_price,
+                "stop_loss": recommendation.stop_loss,
+                "target_price": recommendation.target_price,
+                "catalyst": recommendation.catalyst,
+                "rationale": recommendation.rationale
+            },
+            "agent_analyses": {},
+            "consensus": {
+                "action": decision.action.value if hasattr(decision, 'action') else str(decision),
+                "confidence": decision.confidence if hasattr(decision, 'confidence') else 0
+            },
+            "hybrid_scoring": {
+                "external_confidence": validation_result.get('external_confidence', 0),
+                "internal_confidence": validation_result.get('internal_confidence', 0),
+                "combined_confidence": validation_result.get('combined_confidence', 0)
+            },
+            "result": {
+                "approved": validation_result.get('approved', False),
+                "rejection_reason": validation_result.get('rejection_reason')
+            }
+        }
+
+        # Parse agent analyses
+        for agent_id, analysis in analyses.items():
+            agent_data = {"action": None, "confidence": 0, "reasoning": ""}
+
+            if isinstance(analysis, dict):
+                rec = analysis.get('recommendation', {})
+                if isinstance(rec, dict):
+                    agent_data["action"] = rec.get('action')
+                    agent_data["confidence"] = rec.get('confidence', 0)
+                    agent_data["reasoning"] = rec.get('reasoning', '')
+                else:
+                    agent_data["action"] = analysis.get('action')
+                    agent_data["confidence"] = analysis.get('confidence', 0)
+                    agent_data["reasoning"] = analysis.get('reasoning', '')
+            elif hasattr(analysis, 'action'):
+                agent_data["action"] = analysis.action.value if hasattr(analysis.action, 'value') else str(analysis.action)
+                agent_data["confidence"] = analysis.confidence if hasattr(analysis, 'confidence') else 0
+                agent_data["reasoning"] = analysis.reasoning if hasattr(analysis, 'reasoning') else ''
+
+            debate["agent_analyses"][agent_id] = agent_data
+
+        self.debates.append(debate)
+
+    def save(self):
+        """Save all debates to markdown file"""
+        if not self.debates:
+            return
+
+        content = f"# Multi-Agent Validation Debates - {self.today}\n\n"
+        content += f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+        content += "---\n\n"
+
+        # Summary stats
+        approved = sum(1 for d in self.debates if d['result']['approved'])
+        rejected = len(self.debates) - approved
+        content += f"## Summary\n"
+        content += f"- **Total Recommendations**: {len(self.debates)}\n"
+        content += f"- **Approved**: {approved} ({approved/len(self.debates)*100:.1f}%)\n"
+        content += f"- **Rejected**: {rejected} ({rejected/len(self.debates)*100:.1f}%)\n\n"
+        content += "---\n\n"
+
+        # Individual debates
+        for i, debate in enumerate(self.debates, 1):
+            status = "APPROVED" if debate['result']['approved'] else "REJECTED"
+            status_emoji = "✅" if debate['result']['approved'] else "❌"
+
+            content += f"## {i}. {debate['ticker']} - {status_emoji} {status}\n\n"
+            content += f"**Time**: {debate['timestamp']}\n\n"
+
+            # Recommendation
+            rec = debate['recommendation']
+            content += f"### External Recommendation\n"
+            content += f"- **Action**: {rec['action']}\n"
+            content += f"- **Source**: {rec['source']}\n"
+            content += f"- **Conviction**: {rec['conviction']}\n"
+            if rec['entry_price']:
+                content += f"- **Entry**: ${rec['entry_price']}\n"
+            if rec['stop_loss']:
+                content += f"- **Stop Loss**: ${rec['stop_loss']}\n"
+            if rec['target_price']:
+                content += f"- **Target**: ${rec['target_price']}\n"
+            if rec['catalyst']:
+                content += f"- **Catalyst**: {rec['catalyst']}\n"
+            if rec['rationale']:
+                content += f"- **Rationale**: {rec['rationale'][:200]}{'...' if len(rec['rationale']) > 200 else ''}\n"
+            content += "\n"
+
+            # Agent Analyses (The Debate)
+            content += f"### Agent Debate\n\n"
+            content += "| Agent | Vote | Confidence | Reasoning |\n"
+            content += "|-------|------|------------|----------|\n"
+
+            for agent_id, analysis in debate['agent_analyses'].items():
+                action = analysis['action'] or 'N/A'
+                conf = f"{analysis['confidence']:.0%}" if analysis['confidence'] else 'N/A'
+                reason = analysis['reasoning'][:50] + '...' if analysis['reasoning'] and len(analysis['reasoning']) > 50 else (analysis['reasoning'] or 'N/A')
+                content += f"| {agent_id} | {action} | {conf} | {reason} |\n"
+
+            content += "\n"
+
+            # Consensus
+            content += f"### Consensus Decision\n"
+            content += f"- **Action**: {debate['consensus']['action']}\n"
+            content += f"- **Confidence**: {debate['consensus']['confidence']:.0%}\n\n"
+
+            # Hybrid Scoring
+            hs = debate['hybrid_scoring']
+            content += f"### Hybrid Scoring\n"
+            content += f"- **External Confidence**: {hs['external_confidence']:.0%} (from {rec['conviction']} conviction)\n"
+            content += f"- **Internal Confidence**: {hs['internal_confidence']:.0%} (agent consensus)\n"
+            content += f"- **Combined Score**: {hs['combined_confidence']:.0%}\n"
+            content += f"- **Threshold**: 55%\n\n"
+
+            # Result
+            content += f"### Final Result\n"
+            if debate['result']['approved']:
+                content += f"**{status_emoji} APPROVED** - Trade will be executed\n"
+            else:
+                content += f"**{status_emoji} REJECTED** - {debate['result']['rejection_reason']}\n"
+
+            content += "\n---\n\n"
+
+        # Write to file
+        with open(self.debate_file, 'w', encoding='utf-8') as f:
+            f.write(content)
+
+        print(f"\n[DEBATES] Saved to: {self.debate_file}")
+
+        # Also save as JSON for programmatic access
+        json_file = self.debates_dir / f"debates_{self.today}.json"
+        with open(json_file, 'w', encoding='utf-8') as f:
+            json.dump(self.debates, f, indent=2, default=str)
+        print(f"[DEBATES] JSON saved to: {json_file}")
+
+
 class MultiAgentTradeValidator:
     """Validates external recommendations through multi-agent consensus"""
 
@@ -86,6 +244,10 @@ class MultiAgentTradeValidator:
                 self.ml_collector = None
         else:
             self.ml_collector = None
+
+        # Initialize Debate Logger for documenting agent discussions
+        self.debate_logger = DebateLogger()
+        print("[DEBATES] Debate logger initialized")
 
     # S&P 100 ticker list (OEX components)
     SP100_TICKERS = {
@@ -336,7 +498,7 @@ class MultiAgentTradeValidator:
             if not approved:
                 print(f"               Reasons: {rejection_summary}")
 
-            return {
+            validation_result = {
                 'recommendation': rec,
                 'agent_analyses': analyses,
                 'consensus_decision': decision,
@@ -346,6 +508,11 @@ class MultiAgentTradeValidator:
                 'approved': approved,
                 'rejection_reason': None if approved else rejection_summary
             }
+
+            # Log the debate for documentation
+            self.debate_logger.log_debate(rec.ticker, rec, analyses, decision, validation_result)
+
+            return validation_result
 
         except Exception as e:
             print(f"    [ERROR] Validation failed: {e}")
@@ -957,6 +1124,9 @@ class AutomatedTradeGeneratorV2:
             print("-"*80)
             print(f"File saved: {filepath}")
             print("="*80)
+
+            # Save the debate log
+            self.debate_logger.save()
 
             return filepath
 
