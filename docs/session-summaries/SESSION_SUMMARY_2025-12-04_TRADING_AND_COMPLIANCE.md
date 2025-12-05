@@ -112,6 +112,8 @@ $task = Get-ScheduledTask -TaskName "AI Trading - Keep Awake"; $task.Actions[0].
 
 | Hash | Description |
 |------|-------------|
+| `bcb5686` | fix: fetch real-time prices for trade documentation |
+| `b7f825b` | docs: add Dec 4 session summary, trade files, and ML outcomes |
 | `6496023` | fix: add automation directory to sys.path for Task Scheduler |
 | `9c90c85` | feat: add regulatory compliance module |
 | `4203f82` | feat: add debate logging |
@@ -164,7 +166,7 @@ Expected schedule:
 ## Product Enhancement Suggestions
 
 ### High Priority
-1. **Fix SHORGAN-LIVE trades file parsing** - Prices showing as $0.00/$100.00 in TODAYS_TRADES_LIVE.md
+1. ~~**Fix SHORGAN-LIVE trades file parsing**~~ - ✅ FIXED (commit `bcb5686`)
 2. **Add compliance summary to Telegram** - Send daily compliance status
 
 ### Medium Priority
