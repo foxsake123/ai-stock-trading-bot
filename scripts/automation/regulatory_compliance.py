@@ -669,6 +669,101 @@ def check_trade_compliance(symbol: str, action: str, account: str,
     return True, "COMPLIANT"
 
 
+def send_compliance_summary_telegram(accounts_data: List[Dict]) -> bool:
+    """
+    Send daily compliance summary to Telegram.
+
+    Args:
+        accounts_data: List of dicts with 'name', 'value', 'is_margin' for each account
+
+    Returns:
+        True if sent successfully
+    """
+    import requests
+
+    bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
+    chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+
+    if not bot_token or not chat_id:
+        print("[WARNING] Telegram credentials not configured")
+        return False
+
+    checker = RegulatoryComplianceChecker()
+
+    # Build message
+    today = datetime.now().strftime("%Y-%m-%d")
+    message_lines = [
+        f"📋 *COMPLIANCE STATUS - {today}*",
+        ""
+    ]
+
+    all_clear = True
+
+    for account in accounts_data:
+        summary = checker.get_compliance_summary(
+            account=account['name'],
+            account_value=account['value']
+        )
+
+        pdt = summary['pdt_status']
+        wash_sales = summary['wash_sale_restrictions']
+
+        # Account header
+        message_lines.append(f"*{account['name']}* (${account['value']:,.0f})")
+
+        # PDT Status
+        if pdt['restricted']:
+            remaining = pdt['day_trades_remaining']
+            if remaining == 0:
+                message_lines.append(f"  ⚠️ PDT: {remaining}/3 day trades remaining")
+                all_clear = False
+            elif remaining <= 1:
+                message_lines.append(f"  ⚡ PDT: {remaining}/3 day trades remaining")
+            else:
+                message_lines.append(f"  ✅ PDT: {remaining}/3 day trades remaining")
+        else:
+            message_lines.append(f"  ✅ PDT: Unrestricted (>${pdt['threshold']:,})")
+
+        # Wash Sale Restrictions
+        if wash_sales:
+            message_lines.append(f"  ⚠️ Wash Sale: {len(wash_sales)} restrictions")
+            for ws in wash_sales[:3]:  # Show first 3
+                end_date = ws['restriction_ends'][:10]
+                message_lines.append(f"      {ws['symbol']} until {end_date}")
+            all_clear = False
+        else:
+            message_lines.append(f"  ✅ Wash Sale: No restrictions")
+
+        message_lines.append("")
+
+    # Summary
+    if all_clear:
+        message_lines.append("✅ *All accounts compliant*")
+    else:
+        message_lines.append("⚠️ *Review warnings above*")
+
+    message = "\n".join(message_lines)
+
+    try:
+        url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+        response = requests.post(url, json={
+            'chat_id': chat_id,
+            'text': message,
+            'parse_mode': 'Markdown'
+        })
+
+        if response.status_code == 200:
+            print("[TELEGRAM] Compliance summary sent")
+            return True
+        else:
+            print(f"[TELEGRAM ERROR] {response.status_code}: {response.text}")
+            return False
+
+    except Exception as e:
+        print(f"[TELEGRAM ERROR] {e}")
+        return False
+
+
 if __name__ == "__main__":
     # Test the compliance checker
     print("="*70)

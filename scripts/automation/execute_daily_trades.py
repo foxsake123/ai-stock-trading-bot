@@ -879,6 +879,42 @@ def main():
     executor = DailyTradeExecutor()
     success = executor.execute_all_trades()
 
+    # Send compliance summary to Telegram
+    try:
+        from scripts.automation.regulatory_compliance import send_compliance_summary_telegram
+
+        # Get account values
+        accounts_data = []
+
+        # DEE-BOT (Paper - over $25K, unrestricted)
+        try:
+            dee_account = executor.dee_api.get_account()
+            accounts_data.append({
+                'name': 'DEE-BOT',
+                'value': float(dee_account.portfolio_value),
+                'is_margin': False
+            })
+        except Exception as e:
+            print(f"[WARNING] Could not get DEE-BOT account: {e}")
+
+        # SHORGAN-LIVE (Real money - under $25K, restricted)
+        if SHORGAN_LIVE_TRADING:
+            try:
+                shorgan_account = executor.shorgan_api.get_account()
+                accounts_data.append({
+                    'name': 'SHORGAN-LIVE',
+                    'value': float(shorgan_account.portfolio_value),
+                    'is_margin': True
+                })
+            except Exception as e:
+                print(f"[WARNING] Could not get SHORGAN-LIVE account: {e}")
+
+        if accounts_data:
+            send_compliance_summary_telegram(accounts_data)
+
+    except Exception as e:
+        print(f"[WARNING] Compliance summary failed: {e}")
+
     if success:
         print("\n[SUCCESS] All trades executed successfully")
         return 0
