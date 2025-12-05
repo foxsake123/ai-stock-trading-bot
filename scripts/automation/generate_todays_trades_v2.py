@@ -46,6 +46,51 @@ except ImportError:
     ML_COLLECTOR_AVAILABLE = False
     print("[WARNING] ML Data Collector not available")
 
+# Alpaca Data API for real-time prices
+try:
+    from alpaca.data import StockHistoricalDataClient
+    from alpaca.data.requests import StockLatestTradeRequest
+    ALPACA_DATA_AVAILABLE = True
+except ImportError:
+    ALPACA_DATA_AVAILABLE = False
+    print("[WARNING] Alpaca Data API not available for price fetching")
+
+
+def get_current_prices(tickers: List[str]) -> Dict[str, float]:
+    """Fetch current prices for a list of tickers from Alpaca"""
+    prices = {}
+
+    if not ALPACA_DATA_AVAILABLE:
+        return prices
+
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+
+        api_key = os.environ.get('ALPACA_API_KEY') or os.environ.get('ALPACA_API_KEY_DEE')
+        api_secret = os.environ.get('ALPACA_SECRET_KEY') or os.environ.get('ALPACA_SECRET_KEY_DEE')
+
+        if not api_key or not api_secret:
+            print("[WARNING] Alpaca API keys not found for price fetching")
+            return prices
+
+        client = StockHistoricalDataClient(api_key, api_secret)
+
+        # Fetch latest trades for all tickers at once
+        request = StockLatestTradeRequest(symbol_or_symbols=tickers)
+        trades = client.get_stock_latest_trade(request)
+
+        for ticker in tickers:
+            if ticker in trades:
+                prices[ticker] = float(trades[ticker].price)
+
+        print(f"[PRICES] Fetched real-time prices for {len(prices)} tickers")
+
+    except Exception as e:
+        print(f"[WARNING] Price fetch failed: {e}")
+
+    return prices
+
 
 class DebateLogger:
     """Logs multi-agent validation debates to markdown files"""
@@ -862,6 +907,10 @@ class AutomatedTradeGeneratorV2:
 
         # Only add DEE-BOT section if results were provided
         if dee_results:
+            # Fetch real-time prices for all DEE-BOT tickers
+            all_dee_tickers = [v['recommendation'].ticker for v in dee_results['approved']]
+            dee_prices = get_current_prices(all_dee_tickers) if all_dee_tickers else {}
+
             content += f"""
 ## 🛡️ DEE-BOT TRADES (Defensive S&P 100)
 **Strategy**: LONG-ONLY, Beta-neutral ~1.0
@@ -879,8 +928,10 @@ class AutomatedTradeGeneratorV2:
                 for val in sell_orders:
                     rec = val['recommendation']
                     shares = rec.shares or "ALL"
-                    price = rec.entry_price or 0
-                    content += f"\n| {rec.ticker} | {shares} | ${price:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
+                    # Use real-time price if available, otherwise use parsed price or market order
+                    price = rec.entry_price or dee_prices.get(rec.ticker, 0)
+                    price_str = f"${price:.2f}" if price > 0 else "MARKET"
+                    content += f"\n| {rec.ticker} | {shares} | {price_str} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
             else:
                 content += "\n| No sell orders today | - | - | - | - |\n"
 
@@ -893,9 +944,12 @@ class AutomatedTradeGeneratorV2:
                 content += "|--------|--------|-------------|-----------|------------|--------|-----------|"
                 for val in buy_orders:
                     rec = val['recommendation']
-                    price = rec.entry_price or 100
+                    # Use real-time price if available, otherwise use parsed price
+                    price = rec.entry_price or dee_prices.get(rec.ticker, 0)
+                    if price <= 0:
+                        price = 50.00  # Fallback for unknown DEE-BOT prices (larger cap stocks)
                     shares = rec.shares or int((rec.position_size_pct or 5) * dee_results['portfolio_value'] / 100 / price)
-                    stop_loss = rec.stop_loss if rec.stop_loss else (price * 0.89)  # 11% stop loss (was 8%)
+                    stop_loss = rec.stop_loss if rec.stop_loss else (price * 0.89)  # 11% stop loss
                     content += f"\n| {rec.ticker} | {shares} | ${price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} | {(rec.rationale or 'Multi-agent approved')[:60]} |"
             else:
                 content += "\n| No buy orders today | - | - | - | - | - | Market conditions unfavorable |\n"
@@ -918,6 +972,11 @@ class AutomatedTradeGeneratorV2:
         # SHORGAN-BOT section
         account_type_label = " (LIVE $3K)" if suffix == "_LIVE" else ""
         portfolio_value = shorgan_results.get('portfolio_value', 100000)  # Default to 100K if not available
+
+        # Fetch real-time prices for all SHORGAN tickers
+        all_shorgan_tickers = [v['recommendation'].ticker for v in shorgan_results['approved']]
+        current_prices = get_current_prices(all_shorgan_tickers) if all_shorgan_tickers else {}
+
         content += f"""
 
 ## 🚀 SHORGAN-BOT TRADES{account_type_label} (Catalyst-Driven)
@@ -936,8 +995,10 @@ class AutomatedTradeGeneratorV2:
             for val in shorgan_sell:
                 rec = val['recommendation']
                 shares = rec.shares or "ALL"
-                price = rec.entry_price or 0
-                content += f"| {rec.ticker} | {shares} | ${price:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
+                # Use real-time price if available, otherwise use parsed price or market order
+                price = rec.entry_price or current_prices.get(rec.ticker, 0)
+                price_str = f"${price:.2f}" if price > 0 else "MARKET"
+                content += f"| {rec.ticker} | {shares} | {price_str} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
         else:
             content += "| No sell orders today | - | - | - | - |\n"
 
@@ -950,9 +1011,12 @@ class AutomatedTradeGeneratorV2:
             content += "|--------|--------|-------------|-----------|------------|--------|\n"
             for val in shorgan_buy:
                 rec = val['recommendation']
-                price = rec.entry_price or 100
+                # Use real-time price if available, otherwise use parsed price
+                price = rec.entry_price or current_prices.get(rec.ticker, 0)
+                if price <= 0:
+                    price = 10.00  # Fallback for unknown prices
                 shares = rec.shares or int((rec.position_size_pct or 10) * portfolio_value / 100 / price)
-                stop_loss = rec.stop_loss if rec.stop_loss else (price * 0.82)  # 18% stop loss (was 15%)
+                stop_loss = rec.stop_loss if rec.stop_loss else (price * 0.82)  # 18% stop loss
                 content += f"| {rec.ticker} | {shares} | ${price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
 
             # Add detailed rationale section for all buy trades
