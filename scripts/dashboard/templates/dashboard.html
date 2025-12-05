@@ -329,6 +329,7 @@
         <div class="tabs">
             <button class="tab active" data-tab="positions">Positions</button>
             <button class="tab" data-tab="orders">Orders</button>
+            <button class="tab" data-tab="performance">Performance</button>
             <button class="tab" data-tab="research">Research</button>
         </div>
 
@@ -376,6 +377,22 @@
                         <tr><td colspan="9" class="loading">Loading orders...</td></tr>
                     </tbody>
                 </table>
+            </div>
+        </section>
+
+        <!-- Performance Tab -->
+        <section class="section tab-content" id="performance">
+            <div class="card" style="padding: 20px;">
+                <h3 style="margin-bottom: 20px; color: #58a6ff;">Portfolio Value (Last 30 Days)</h3>
+                <div style="height: 300px;">
+                    <canvas id="valueChart"></canvas>
+                </div>
+            </div>
+            <div class="card" style="padding: 20px; margin-top: 20px;">
+                <h3 style="margin-bottom: 20px; color: #58a6ff;">Returns % (Last 30 Days)</h3>
+                <div style="height: 300px;">
+                    <canvas id="returnsChart"></canvas>
+                </div>
             </div>
         </section>
 
@@ -636,6 +653,174 @@
 
         // Auto-refresh every 60 seconds
         setInterval(refreshAll, 60000);
+    </script>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        let valueChart = null;
+        let returnsChart = null;
+
+        async function loadPerformanceChart() {
+            try {
+                const response = await fetch('/api/history');
+                const result = await response.json();
+
+                if (!result.ok || !result.data.dates || result.data.dates.length === 0) {
+                    console.log('No performance data available');
+                    return;
+                }
+
+                const data = result.data;
+
+                // Chart colors
+                const colors = {
+                    combined: { border: '#00d4ff', bg: 'rgba(0, 212, 255, 0.1)' },
+                    deeBots: { border: '#7b2cbf', bg: 'rgba(123, 44, 191, 0.1)' },
+                    shorganPaper: { border: '#00ff88', bg: 'rgba(0, 255, 136, 0.1)' },
+                    shorganLive: { border: '#ff6b6b', bg: 'rgba(255, 107, 107, 0.1)' }
+                };
+
+                // Destroy existing charts if they exist
+                if (valueChart) valueChart.destroy();
+                if (returnsChart) returnsChart.destroy();
+
+                // Portfolio Value Chart
+                const valueCtx = document.getElementById('valueChart').getContext('2d');
+                valueChart = new Chart(valueCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.dates,
+                        datasets: [
+                            {
+                                label: 'Combined',
+                                data: data.combined,
+                                borderColor: colors.combined.border,
+                                backgroundColor: colors.combined.bg,
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: 'DEE-BOT',
+                                data: data.dee_bot,
+                                borderColor: colors.deeBots.border,
+                                backgroundColor: colors.deeBots.bg,
+                                tension: 0.3
+                            },
+                            {
+                                label: 'SHORGAN Paper',
+                                data: data.shorgan_paper,
+                                borderColor: colors.shorganPaper.border,
+                                backgroundColor: colors.shorganPaper.bg,
+                                tension: 0.3
+                            },
+                            {
+                                label: 'SHORGAN Live',
+                                data: data.shorgan_live,
+                                borderColor: colors.shorganLive.border,
+                                backgroundColor: colors.shorganLive.bg,
+                                tension: 0.3
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#c9d1d9' }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: '#8b949e' },
+                                grid: { color: '#30363d' }
+                            },
+                            y: {
+                                ticks: {
+                                    color: '#8b949e',
+                                    callback: function(value) {
+                                        return '$' + value.toLocaleString();
+                                    }
+                                },
+                                grid: { color: '#30363d' }
+                            }
+                        }
+                    }
+                });
+
+                // Returns Chart
+                const returnsCtx = document.getElementById('returnsChart').getContext('2d');
+                returnsChart = new Chart(returnsCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.dates,
+                        datasets: [
+                            {
+                                label: 'Combined',
+                                data: data.returns.combined,
+                                borderColor: colors.combined.border,
+                                tension: 0.3
+                            },
+                            {
+                                label: 'DEE-BOT',
+                                data: data.returns.dee_bot,
+                                borderColor: colors.deeBots.border,
+                                tension: 0.3
+                            },
+                            {
+                                label: 'SHORGAN Paper',
+                                data: data.returns.shorgan_paper,
+                                borderColor: colors.shorganPaper.border,
+                                tension: 0.3
+                            },
+                            {
+                                label: 'SHORGAN Live',
+                                data: data.returns.shorgan_live,
+                                borderColor: colors.shorganLive.border,
+                                tension: 0.3
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#c9d1d9' }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: '#8b949e' },
+                                grid: { color: '#30363d' }
+                            },
+                            y: {
+                                ticks: {
+                                    color: '#8b949e',
+                                    callback: function(value) {
+                                        return value.toFixed(1) + '%';
+                                    }
+                                },
+                                grid: { color: '#30363d' }
+                            }
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error loading performance data:', error);
+            }
+        }
+
+        // Load chart when performance tab is clicked
+        document.querySelector('[data-tab="performance"]').addEventListener('click', loadPerformanceChart);
+
+        // Load chart on initial load if performance tab is active
+        if (document.getElementById('performance').classList.contains('active')) {
+            loadPerformanceChart();
+        }
     </script>
 </body>
 </html>

@@ -224,17 +224,53 @@ class TradingDashboard:
         return reports[:10]  # Last 10 days
 
     def get_performance_history(self) -> Dict:
-        """Get historical performance data"""
-        history_file = self.data_dir / "portfolio_history.json"
+        """Get historical performance data for charting"""
+        history_file = self.data_dir / "daily" / "performance" / "performance_history.json"
 
         if history_file.exists():
             try:
                 with open(history_file, "r") as f:
-                    return json.load(f)
-            except:
-                pass
+                    data = json.load(f)
 
-        return {"dates": [], "values": [], "message": "No historical data available"}
+                # Transform to chart-friendly format
+                records = data.get("daily_records", [])
+
+                # Extract last 30 days
+                records = records[-30:] if len(records) > 30 else records
+
+                chart_data = {
+                    "dates": [],
+                    "dee_bot": [],
+                    "shorgan_paper": [],
+                    "shorgan_live": [],
+                    "combined": [],
+                    "returns": {
+                        "dee_bot": [],
+                        "shorgan_paper": [],
+                        "shorgan_live": [],
+                        "combined": []
+                    }
+                }
+
+                for record in records:
+                    chart_data["dates"].append(record.get("date", ""))
+                    chart_data["dee_bot"].append(record.get("dee_bot", {}).get("value", 0))
+                    chart_data["shorgan_paper"].append(record.get("shorgan_bot", {}).get("value", 0))
+                    chart_data["shorgan_live"].append(record.get("shorgan_live", {}).get("value", 0))
+                    chart_data["combined"].append(record.get("combined", {}).get("total_value", 0))
+
+                    # Returns
+                    chart_data["returns"]["dee_bot"].append(record.get("dee_bot", {}).get("total_return", 0))
+                    chart_data["returns"]["shorgan_paper"].append(record.get("shorgan_bot", {}).get("total_return", 0))
+                    chart_data["returns"]["shorgan_live"].append(record.get("shorgan_live", {}).get("total_return", 0))
+                    chart_data["returns"]["combined"].append(record.get("combined", {}).get("total_return", 0))
+
+                return chart_data
+
+            except Exception as e:
+                logger.error(f"Error loading performance history: {e}")
+
+        return {"dates": [], "dee_bot": [], "shorgan_paper": [], "shorgan_live": [], "combined": [], "message": "No historical data available"}
 
     def get_todays_trades(self) -> Optional[Dict]:
         """Get today's trade recommendations"""
