@@ -1,6 +1,6 @@
 # Today's AI-Generated Trade Recommendations - SHORGAN-BOT LIVE ($3K Account)
-## Thursday, December 04, 2025
-## Generated: 05:38 PM ET
+## Tuesday, December 09, 2025
+## Generated: 02:48 PM ET
 
 ---
 
@@ -9,7 +9,7 @@
 **Validation**: 7-agent multi-agent consensus system
 **Risk Controls**: Position sizing, portfolio limits, veto authority
 
-**SHORGAN-BOT (LIVE)**: 10 approved / 0 rejected
+**SHORGAN-BOT (LIVE)**: 8 approved / 0 rejected
 
 ---
 
@@ -22,42 +22,40 @@
 ### SELL ORDERS
 | Symbol | Shares | Limit Price | Confidence | Source |
 |--------|--------|-------------|------------|--------|
-| STEM | 15 | $18.24 | 56% | CLAUDE |
-| OPEN | 40 | $7.16 | 56% | CLAUDE |
-| STXS | 125 | $2.42 | 56% | CLAUDE |
-| RVMD | 1 | $79.66 | 56% | CLAUDE |
-| NERV | 5 | $3.37 | 56% | CLAUDE |
-| FUBO | 25 | $2.85 | 56% | CLAUDE |
+| ASTS | 1 | $73.53 | 56% | CLAUDE |
+| IONQ | 4 | $53.58 | 56% | CLAUDE |
+| NIO | 18 | $5.12 | 56% | CLAUDE |
+| PTON | 36 | $6.43 | 56% | CLAUDE |
 
 
 ### BUY ORDERS
 | Symbol | Shares | Limit Price | Stop Loss | Confidence | Source |
 |--------|--------|-------------|-----------|------------|--------|
-| PLUG | 50 | $2.20 | $1.89 | 56% | CLAUDE |
-| PLUG | 136 | $2.20 | $1.80 | 56% | CLAUDE |
-| EDIT | 60 | $2.40 | $2.01 | 56% | CLAUDE |
-| SOFI | 10 | $27.79 | $22.79 | 56% | CLAUDE |
+| BILI | 10 | $26.01 | $22.50 | 56% | CLAUDE |
+| PATH | 13 | $19.18 | $17.00 | 56% | CLAUDE |
+| SAVA | 92 | $3.24 | $2.66 | 56% | CLAUDE |
+| CHWY | 8 | $34.59 | $28.37 | 56% | CLAUDE |
 
 ### 📋 TRADE RATIONALE (Event-Driven Analysis)
 
-**PLUG** - BUY
-- **Catalyst**: Market catalyst (2025-12-15)
-- **Rationale**: DOE $1.5B loan decision imminent, 35% short squeeze potential
-- **Confidence**: 56% (External: 70%, Internal: 23%)
-
-**PLUG** - BUY_TO_OPEN
-- **Catalyst**: Market catalyst (2025-12-15)
-- **Rationale**: Defined risk leverage play on binary DOE catalyst
-- **Confidence**: 56% (External: 70%, Internal: 23%)
-
-**EDIT** - BUY
+**BILI** - BUY
 - **Catalyst**: Market catalyst (2025-12-10)
-- **Rationale**: ASH sickle cell data Dec 10, potential 50% move on positive results
+- **Rationale**: Gaming license catalyst 12/10 + oversold entry for 15% bounce
 - **Confidence**: 56% (External: 70%, Internal: 23%)
 
-**SOFI** - BUY_TO_OPEN
-- **Catalyst**: Market catalyst (2025-12-08)
-- **Rationale**: Bank charter metrics Dec 8, NIM expansion drives 15%+ move
+**PATH** - BUY
+- **Catalyst**: Market catalyst (2025-12-17)
+- **Rationale**: Software laggard reports 12/17 + automation spending recovery
+- **Confidence**: 56% (External: 70%, Internal: 23%)
+
+**SAVA** - BUY_TO_OPEN
+- **Catalyst**: Market catalyst (2025-12-12)
+- **Rationale**: Protect 131 share position from FDA binary downside risk
+- **Confidence**: 56% (External: 70%, Internal: 23%)
+
+**CHWY** - BUY_TO_OPEN
+- **Catalyst**: Market catalyst (2025-12-11)
+- **Rationale**: Earnings 12/11 AMC + low IV + pet spending strength
 - **Confidence**: 56% (External: 70%, Internal: 23%)
 
 
