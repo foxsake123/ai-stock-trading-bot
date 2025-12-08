@@ -649,6 +649,220 @@ SHORGAN Live:   ${shorgan_live_indexed_final:.2f} ({metrics['shorgan_live_return
 
     return fig, metrics
 
+def is_trading_day(date):
+    """Check if a date is a trading day (weekday, not a holiday)"""
+    # Simple check: weekday only (Monday=0, Friday=4)
+    if date.weekday() > 4:  # Saturday or Sunday
+        return False
+
+    # Major US market holidays (approximate - not exhaustive)
+    holidays = [
+        '2025-01-01',  # New Year's Day
+        '2025-01-20',  # MLK Day
+        '2025-02-17',  # Presidents Day
+        '2025-04-18',  # Good Friday
+        '2025-05-26',  # Memorial Day
+        '2025-06-19',  # Juneteenth
+        '2025-07-04',  # Independence Day
+        '2025-09-01',  # Labor Day
+        '2025-11-27',  # Thanksgiving
+        '2025-11-28',  # Day after Thanksgiving (early close, treating as holiday)
+        '2025-12-25',  # Christmas
+    ]
+
+    date_str = date.strftime('%Y-%m-%d')
+    return date_str not in holidays
+
+
+def backfill_missing_days():
+    """Backfill any missing trading days in the performance history"""
+    try:
+        with open(PERFORMANCE_JSON, 'r') as f:
+            data = json.load(f)
+
+        records = data.get('daily_records', [])
+        if len(records) < 2:
+            return
+
+        # Get existing dates
+        existing_dates = set(r['date'] for r in records)
+
+        # Find date range
+        dates = [datetime.strptime(d, '%Y-%m-%d') for d in existing_dates]
+        min_date = min(dates)
+        max_date = max(dates)
+
+        # Find missing trading days
+        missing_dates = []
+        current = min_date + timedelta(days=1)
+        while current < max_date:
+            date_str = current.strftime('%Y-%m-%d')
+            if is_trading_day(current) and date_str not in existing_dates:
+                missing_dates.append(date_str)
+            current += timedelta(days=1)
+
+        if not missing_dates:
+            return
+
+        print(f"[INFO] Found {len(missing_dates)} missing trading days to backfill")
+
+        # Sort records by date to enable interpolation
+        records_sorted = sorted(records, key=lambda x: x['date'])
+
+        for missing_date in missing_dates:
+            # Find surrounding records for interpolation
+            prev_record = None
+            next_record = None
+
+            for i, r in enumerate(records_sorted):
+                if r['date'] < missing_date:
+                    prev_record = r
+                elif r['date'] > missing_date and next_record is None:
+                    next_record = r
+                    break
+
+            if prev_record and next_record:
+                # Linear interpolation
+                prev_date = datetime.strptime(prev_record['date'], '%Y-%m-%d')
+                next_date = datetime.strptime(next_record['date'], '%Y-%m-%d')
+                target_date = datetime.strptime(missing_date, '%Y-%m-%d')
+
+                total_days = (next_date - prev_date).days
+                elapsed_days = (target_date - prev_date).days
+                progress = elapsed_days / total_days if total_days > 0 else 0.5
+
+                # Interpolate values
+                dee_val = prev_record['dee_bot']['value'] + \
+                          (next_record['dee_bot']['value'] - prev_record['dee_bot']['value']) * progress
+                shorgan_val = prev_record['shorgan_bot']['value'] + \
+                              (next_record['shorgan_bot']['value'] - prev_record['shorgan_bot']['value']) * progress
+
+                # Handle shorgan_live if it exists
+                if 'shorgan_live' in prev_record and 'shorgan_live' in next_record:
+                    live_val = prev_record['shorgan_live']['value'] + \
+                               (next_record['shorgan_live']['value'] - prev_record['shorgan_live']['value']) * progress
+                else:
+                    live_val = 0
+
+                combined = dee_val + shorgan_val + live_val
+
+                new_record = {
+                    'date': missing_date,
+                    'timestamp': f'{missing_date}T16:00:00',
+                    'dee_bot': {
+                        'value': round(dee_val, 2),
+                        'daily_pnl': 0,
+                        'total_return': round((dee_val - 100000) / 100000 * 100, 6)
+                    },
+                    'shorgan_bot': {
+                        'value': round(shorgan_val, 2),
+                        'daily_pnl': 0,
+                        'total_return': round((shorgan_val - 100000) / 100000 * 100, 6)
+                    },
+                    'shorgan_live': {
+                        'value': round(live_val, 2),
+                        'daily_pnl': 0,
+                        'total_return': round((live_val - 3000) / 3000 * 100, 6) if live_val > 0 else 0
+                    },
+                    'combined': {
+                        'total_value': round(combined, 2),
+                        'total_daily_pnl': 0,
+                        'total_return': round((dee_val + shorgan_val - 200000) / 200000 * 100, 6),
+                        'total_positions': 0,
+                        'total_orders_today': 0
+                    }
+                }
+
+                records.append(new_record)
+                print(f"  [BACKFILL] {missing_date}: Combined=${combined:,.2f}")
+
+        # Sort and save
+        data['daily_records'] = sorted(records, key=lambda x: x['date'])
+
+        with open(PERFORMANCE_JSON, 'w') as f:
+            json.dump(data, f, indent=2)
+
+        print(f"[SUCCESS] Backfilled {len(missing_dates)} missing days")
+
+    except Exception as e:
+        print(f"[WARNING] Backfill failed: {e}")
+
+
+def update_performance_history():
+    """Add today's data point to performance history if not already present"""
+    try:
+        today = datetime.now().strftime('%Y-%m-%d')
+
+        # Load existing data
+        with open(PERFORMANCE_JSON, 'r') as f:
+            data = json.load(f)
+
+        # Check if today's record already exists
+        existing_dates = [r['date'] for r in data.get('daily_records', [])]
+        if today in existing_dates:
+            print(f"[INFO] Today's data point ({today}) already exists in history")
+            return True
+
+        # Get current portfolio values from Alpaca
+        current_values = get_current_portfolio_values()
+        if not current_values:
+            print("[ERROR] Could not fetch current portfolio values")
+            return False
+
+        # Create new record
+        dee_val = current_values['dee_bot']
+        shorgan_val = current_values['shorgan_paper']
+        live_val = current_values['shorgan_live']
+        combined = dee_val + shorgan_val + live_val
+        shorgan_live_deposits = current_values['shorgan_live_deposits']
+
+        new_record = {
+            'date': today,
+            'timestamp': f'{today}T16:00:00',
+            'dee_bot': {
+                'value': round(dee_val, 2),
+                'daily_pnl': 0,
+                'total_return': round((dee_val - 100000) / 100000 * 100, 6)
+            },
+            'shorgan_bot': {
+                'value': round(shorgan_val, 2),
+                'daily_pnl': 0,
+                'total_return': round((shorgan_val - 100000) / 100000 * 100, 6)
+            },
+            'shorgan_live': {
+                'value': round(live_val, 2),
+                'daily_pnl': 0,
+                'total_return': round((live_val - shorgan_live_deposits) / shorgan_live_deposits * 100, 6)
+            },
+            'combined': {
+                'total_value': round(combined, 2),
+                'total_daily_pnl': 0,
+                'total_return': round((dee_val + shorgan_val - 200000) / 200000 * 100, 6),
+                'total_positions': 0,
+                'total_orders_today': 0
+            }
+        }
+
+        # Add new record
+        data['daily_records'].append(new_record)
+
+        # Save updated data
+        with open(PERFORMANCE_JSON, 'w') as f:
+            json.dump(data, f, indent=2)
+
+        print(f"[SUCCESS] Added today's data point ({today}):")
+        print(f"  DEE-BOT: ${dee_val:,.2f}")
+        print(f"  SHORGAN Paper: ${shorgan_val:,.2f}")
+        print(f"  SHORGAN Live: ${live_val:,.2f}")
+        print(f"  Combined: ${combined:,.2f}")
+
+        return True
+
+    except Exception as e:
+        print(f"[ERROR] Failed to update performance history: {e}")
+        return False
+
+
 def get_todays_performance():
     """Calculate today's gains/losses for each account"""
     try:
@@ -826,6 +1040,14 @@ def main():
     """Main execution function"""
     print("Generating Performance Comparison Graph...")
     print(f"Data source: {PERFORMANCE_JSON}")
+
+    # First, update performance history with today's data point
+    print("\n--- Updating Performance History ---")
+    update_performance_history()
+
+    # Backfill any missing trading days
+    print("\n--- Checking for Missing Days ---")
+    backfill_missing_days()
 
     # Load portfolio performance data
     portfolio_df = create_portfolio_dataframe()
