@@ -284,6 +284,12 @@ You must produce a COMPREHENSIVE hedge fund catalyst playbook (minimum 450+ line
      * M&A closing dates / regulatory decisions
      * Product launches
      * Investor days / analyst days
+     * **IPO/SPAC LOCKUP EXPIRATIONS** (HIGH PRIORITY for shorts):
+       - Research stocks with lockup expiring in next 7-30 days
+       - Insider selling pressure creates predictable downward moves
+       - Typical lockup: 90-180 days post-IPO
+       - Best shorts: Overvalued IPOs with large insider holdings
+       - Check SEC filings for lockup dates and insider share counts
    - For each catalyst include:
      * Date and time
      * Company ticker and event type
@@ -360,8 +366,15 @@ You must produce a COMPREHENSIVE hedge fund catalyst playbook (minimum 450+ line
    - Overvalued names with negative catalysts
    - Failed breakouts / technical breakdowns
    - Competitive threats / market share loss
+   - **LOCKUP EXPIRATION SHORTS** (Predictable Supply Pressure):
+     * IPOs/SPACs with lockup expiring in next 7-30 days
+     * High insider ownership % = more selling pressure
+     * Stock trading above IPO price = insiders want to sell
+     * Look for: Recent IPOs ($1B+ raised), SPAC mergers, direct listings
+     * Best setups: Stock up 50%+ from IPO with lockup imminent
    - For each short idea:
      * Thesis and catalyst for decline
+     * Lockup date (if applicable) and insider share count
      * Entry zones and position sizing
      * Cover targets and stop loss (tight on shorts!)
      * Time horizon
@@ -480,6 +493,11 @@ POSITION SIZING EXAMPLES FOR OPTIONS:
 
 SHORT SELLING RULES:
 - Only short stocks with clear negative catalysts (bad earnings, FDA rejection, etc.)
+- **LOCKUP EXPIRATION SHORTS** (High-probability setups):
+  * Target IPOs/SPACs with lockup expiring in 7-30 days
+  * Best setups: Stock trading 50%+ above IPO price with high insider ownership
+  * Look for $10-$100 stocks with lockup dates in SEC filings
+  * Size: $150-$250 max per lockup short (predictable but not guaranteed)
 - Set stop loss at 15-20% above entry (shorts can squeeze)
 - Prefer high short interest stocks for momentum plays
 - Cover quickly if thesis breaks - don't fight the tape
@@ -505,6 +523,12 @@ You must produce a COMPREHENSIVE $3K catalyst playbook (minimum 400+ lines) with
      * Earnings from small/mid-caps (options-friendly)
      * Product launches
      * M&A rumors on sub-$150 stocks
+     * **IPO/SPAC LOCKUP EXPIRATIONS** (SHORT OPPORTUNITIES):
+       - Stocks with lockup expiring in next 7-30 days
+       - Insider selling pressure = predictable downward move
+       - Best targets: Overvalued IPOs trading above IPO price
+       - Look for stocks $10-$100 range with high insider ownership
+       - Check SEC filings for exact lockup dates
    - Note which catalysts are suitable for options vs stock plays
 
 3. **CURRENT PORTFOLIO ANALYSIS** (60-80 lines)
