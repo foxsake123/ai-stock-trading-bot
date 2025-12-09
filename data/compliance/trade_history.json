@@ -178,5 +178,32 @@
     "timestamp": "2025-12-08T15:02:35.003606",
     "account": "DEE-BOT",
     "order_id": "f5d9e102-fde1-4046-ad4b-ff1f87c39800"
+  },
+  {
+    "symbol": "CVX",
+    "action": "SELL",
+    "qty": 20,
+    "price": 147.5,
+    "timestamp": "2025-12-09T09:30:07.986741",
+    "account": "DEE-BOT",
+    "order_id": "9706bfe6-eb42-46c0-8292-7efd23f0fc77"
+  },
+  {
+    "symbol": "JNJ",
+    "action": "SELL",
+    "qty": 15,
+    "price": 202.0,
+    "timestamp": "2025-12-09T09:30:09.160026",
+    "account": "DEE-BOT",
+    "order_id": "704ec93c-1d00-424a-93c5-5af511485d76"
+  },
+  {
+    "symbol": "T",
+    "action": "BUY",
+    "qty": 200,
+    "price": 24.8,
+    "timestamp": "2025-12-09T09:30:11.458189",
+    "account": "DEE-BOT",
+    "order_id": "a5669e53-7ee4-472d-96e9-10bdea6d5caa"
   }
 ]

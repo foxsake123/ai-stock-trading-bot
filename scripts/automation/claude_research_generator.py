@@ -531,18 +531,67 @@ You must produce a COMPREHENSIVE $3K catalyst playbook (minimum 400+ lines) with
        - Check SEC filings for exact lockup dates
    - Note which catalysts are suitable for options vs stock plays
 
-3. **CURRENT PORTFOLIO ANALYSIS** (60-80 lines)
-   - Review all existing positions (stocks and options, should be 8-12 max)
-   - For each position:
-     * Entry price and current P&L
-     * Catalyst proximity (when does thesis play out?)
-     * Options expiry review (if applicable)
-     * Stop loss review (protect capital!)
-     * Recommendation: HOLD, ADD, TRIM, or EXIT
-   - Cash position (critical for small account)
+3. **CURRENT PORTFOLIO ANALYSIS & REBALANCING** (80-120 lines)
+   **CRITICAL: This section drives the ORDER BLOCK. Analyze EVERY position.**
+
+   - **CASH AVAILABLE**: Check buying power and determine how much can be deployed
+   - **POSITION COUNT**: Current positions vs target (8-12 max)
+
+   **For EACH existing position, provide:**
+   - Symbol, shares held, entry price, current price, P&L ($, %)
+   - Original catalyst and whether it has played out
+   - Thesis status: INTACT, WEAKENING, or BROKEN
+   - **ACTION REQUIRED** (one of):
+     * **HOLD** - Catalyst still pending, thesis intact
+     * **ADD** - Thesis strengthening, add to winner (if room)
+     * **TRIM** - Take partial profits (up 20%+)
+     * **EXIT** - Catalyst passed, thesis broken, or stop hit
+     * **STOP UPDATE** - Raise/lower stop loss level
+
+   **REBALANCING PRIORITY ORDER:**
+   1. **EXIT losers first** - Free up capital from broken trades
+   2. **TRIM winners** - Lock in profits on positions up 20%+
+   3. **EXIT catalyst-passed positions** - Don't hold dead money
+   4. **HOLD strong setups** - Let winners run to target
+   5. **ADD to best performers** - Double down on thesis confirmation
+
+   **CAPITAL REALLOCATION:**
+   - Calculate cash freed by exits/trims: $XXX
+   - Calculate cash needed for new positions: $XXX
+   - Net deployment: Show exactly how capital flows
+   - **RULE: Exits must fund new buys** (small account constraint)
+
    - Risk exposure (should not exceed 60% of capital at risk)
 
-4. **TOP CATALYST OPPORTUNITIES FOR $3K ACCOUNT** (130-170 lines)
+4. **NEW IDEAS vs EXISTING POSITIONS** (40-60 lines)
+   **Before recommending ANY new buy, answer these questions:**
+
+   - **Is this better than what we already own?**
+     * Compare conviction level (1-10) of new idea vs existing positions
+     * Compare catalyst timing (sooner = better)
+     * Compare risk/reward ratio
+     * If new idea scores lower → DON'T ADD IT
+
+   - **What must we sell to buy this?**
+     * With ~$200 buying power, every new buy requires an exit
+     * Identify the weakest current position to swap out
+     * Calculate net expected value: (New idea upside) - (Exit loss/gain foregone)
+     * Only swap if net positive
+
+   - **POSITION SWAP FRAMEWORK:**
+     | Existing Position | Thesis | Action | Proceeds | New Position | Cost | Net |
+     |-------------------|--------|--------|----------|--------------|------|-----|
+     | EXAMPLE: SAVA | Broken | EXIT | +$290 | BILI | -$260 | +$30 cash |
+
+   - **CONVICTION RANKING** (rank ALL positions + new ideas together):
+     1. [Symbol] - Conviction 9/10 - [Catalyst date] - HOLD/ADD
+     2. [Symbol] - Conviction 8/10 - [Catalyst date] - NEW BUY (swap for #10)
+     3. ... continue for all positions
+     10. [Symbol] - Conviction 3/10 - Catalyst passed - EXIT
+
+   **RULE: Only add new positions if they rank in top 8-10 of combined list**
+
+5. **TOP CATALYST OPPORTUNITIES FOR $3K ACCOUNT** (130-170 lines)
    - Identify 10-15 highest conviction opportunities
    - **FILTER CRITERIA**:
      * Share price: $3-$200 (affordable for 1+ shares)
@@ -592,7 +641,7 @@ You must produce a COMPREHENSIVE $3K catalyst playbook (minimum 400+ lines) with
      * Base case: Small gain or breakeven
      * Bear case: Stop loss at -$XX (15% max for stocks, 100% for options)
 
-5. **OPTIONS STRATEGIES FOR $3K ACCOUNTS** (50-70 lines)
+6. **OPTIONS STRATEGIES FOR $3K ACCOUNTS** (50-70 lines)
    - High-conviction binary events suitable for options
    - **SMALL ACCOUNT OPTIONS RULES**:
      * Only trade options on liquid stocks (>$5M daily volume)
@@ -631,7 +680,7 @@ You must produce a COMPREHENSIVE $3K catalyst playbook (minimum 400+ lines) with
      * Include IV percentile (avoid buying high IV unless justified)
      * Note catalyst timing (earnings date, FDA date, etc.)
 
-6. **POSITION MANAGEMENT FOR SMALL ACCOUNTS** (40-50 lines)
+7. **POSITION MANAGEMENT FOR SMALL ACCOUNTS** (40-50 lines)
    - Which positions to exit today to free capital
    - Profit-taking rules (take 50% off at +20%, 75% at +50%)
    - Stop loss discipline (15% hard stop for stocks, 50% for options)
@@ -639,9 +688,11 @@ You must produce a COMPREHENSIVE $3K catalyst playbook (minimum 400+ lines) with
    - Don't overconcentrate (max 15% per position)
    - Options expiry management (don't hold to expiry)
 
-7. **TRADE RECOMMENDATIONS SUMMARY TABLE** (1 table)
+8. **TRADE RECOMMENDATIONS SUMMARY TABLE** (1 table)
    - Create a markdown table summarizing ALL recommended trades
-   - Include columns: Ticker | Type | Size | Cost | Entry | Catalyst | Date/Time | Stop | Target | Rationale
+   - **INCLUDE BOTH:** Exit trades (sells) AND new position trades (buys)
+   - Include columns: Ticker | Action | Type | Size | Cost/Proceeds | Entry | Catalyst | Date/Time | Stop | Target | Rationale
+   - Action: EXIT, TRIM, BUY, ADD, SHORT
    - Type should indicate: LONG (stock), CALL, PUT, CALL SPREAD, PUT SPREAD
    - Size should show exact shares/contracts (e.g., "15 shares", "2 calls")
    - Cost should show total position cost (e.g., "$225", "$180")
@@ -651,13 +702,16 @@ You must produce a COMPREHENSIVE $3K catalyst playbook (minimum 400+ lines) with
    - Place this table BEFORE the detailed order block for quick reference
 
    **Example Format:**
-   | Ticker | Type | Size | Cost | Entry | Catalyst | Date/Time | Stop | Target | Rationale |
-   |--------|------|------|------|-------|----------|-----------|------|--------|-----------|
-   | SOFI | LONG | 15 sh | $154 | $10.30 | Bank Metrics | Dec 8 AM | $9.00 | $12.00 | Oversold fintech, 20% upside on Q4 growth acceleration |
-   | BILI | LONG | 10 sh | $183 | $18.30 | Q3 Earnings | Nov 20 PRE | $16.00 | $22.00 | Gaming license tailwind, user growth reaccelerating |
-   | SOFI | CALL | 2x $11 | $170 | $0.85 | Bank Metrics | Dec 8 AM | $0.43 | $1.49 | Low IV entry before catalyst, 75% upside target |
+   | Ticker | Action | Type | Size | Proceeds/Cost | Entry | Catalyst | Stop | Target | Rationale |
+   |--------|--------|------|------|---------------|-------|----------|------|--------|-----------|
+   | SAVA | EXIT | LONG | 92 sh | +$298 | market | Passed | - | - | Catalyst failed, thesis broken, free up capital |
+   | BILI | BUY | LONG | 10 sh | -$260 | $26.01 | Gaming | $22.50 | $32.00 | Funded by SAVA exit, better catalyst setup |
+   | PATH | BUY | LONG | 13 sh | -$249 | $19.18 | Earnings | $17.00 | $24.00 | Software recovery play, earnings Dec 17 |
 
-8. **EXACT ORDER BLOCK FOR $3K ACCOUNT** (40-60 lines)
+9. **EXACT ORDER BLOCK FOR $3K ACCOUNT** (40-60 lines)
+   **CRITICAL: List EXITS FIRST, then BUYS**
+   - Start with positions to EXIT (free up capital)
+   - Then list new BUY orders (funded by exits)
    - Top 8-12 highest conviction trades ONLY
    - Mix of stocks (5-8) and options (3-4)
    - Each trade must show:
@@ -666,8 +720,9 @@ You must produce a COMPREHENSIVE $3K catalyst playbook (minimum 400+ lines) with
      * Strike and expiry for options
      * Affordable entry prices
    - Format per standard with ACTUAL POSITION SIZES
+   - **Show capital flow:** "EXIT SAVA (+$298) → BUY BILI (-$260) = +$38 net cash"
 
-9. **RISK MANAGEMENT FOR $3K ACCOUNTS** (30-40 lines)
+10. **RISK MANAGEMENT FOR $3K ACCOUNTS** (30-40 lines)
    - Maximum $300 loss per day rule (10% max drawdown)
    - Position sizing:
      * Stocks: $75-$300 per trade
