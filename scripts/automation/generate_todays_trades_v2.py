@@ -294,6 +294,185 @@ class MultiAgentTradeValidator:
         self.debate_logger = DebateLogger()
         print("[DEBATES] Debate logger initialized")
 
+        # Initialize Alpaca clients for portfolio awareness (Dec 2025 enhancement)
+        self._init_alpaca_clients()
+
+        # Cache for current positions (refreshed per validation run)
+        self._position_cache = {}
+        self._position_cache_time = None
+
+    def _init_alpaca_clients(self):
+        """Initialize Alpaca API clients for portfolio position checking"""
+        from alpaca.trading.client import TradingClient
+
+        try:
+            # DEE-BOT (Paper)
+            self.dee_api = TradingClient(
+                os.getenv('ALPACA_API_KEY_DEE'),
+                os.getenv('ALPACA_SECRET_KEY_DEE'),
+                paper=True
+            )
+            # SHORGAN-BOT Paper
+            self.shorgan_paper_api = TradingClient(
+                os.getenv('ALPACA_API_KEY_SHORGAN'),
+                os.getenv('ALPACA_SECRET_KEY_SHORGAN'),
+                paper=True
+            )
+            # SHORGAN-BOT Live
+            self.shorgan_live_api = TradingClient(
+                os.getenv('ALPACA_LIVE_API_KEY_SHORGAN'),
+                os.getenv('ALPACA_LIVE_SECRET_KEY_SHORGAN'),
+                paper=False
+            )
+            print("[PORTFOLIO] Alpaca clients initialized for position-aware validation")
+        except Exception as e:
+            print(f"[WARNING] Could not init Alpaca clients: {e}")
+            self.dee_api = None
+            self.shorgan_paper_api = None
+            self.shorgan_live_api = None
+
+    def _get_current_positions(self, bot_name: str, account_type: str = "paper") -> dict:
+        """
+        Get current positions from Alpaca for portfolio-aware validation.
+
+        Returns dict: {symbol: {'qty': float, 'market_value': float, 'unrealized_plpc': float, 'weight_pct': float}}
+        """
+        cache_key = f"{bot_name}_{account_type}"
+        cache_ttl = 60  # 60 second cache
+
+        # Check cache
+        if self._position_cache_time and (datetime.now() - self._position_cache_time).seconds < cache_ttl:
+            if cache_key in self._position_cache:
+                return self._position_cache[cache_key]
+
+        try:
+            # Select appropriate API
+            if bot_name == "DEE-BOT":
+                api = self.dee_api
+            elif account_type == "live":
+                api = self.shorgan_live_api
+            else:
+                api = self.shorgan_paper_api
+
+            if not api:
+                return {}
+
+            # Get account and positions
+            account = api.get_account()
+            positions = api.get_all_positions()
+
+            portfolio_value = float(account.equity)
+            position_dict = {}
+
+            for pos in positions:
+                symbol = pos.symbol
+                qty = float(pos.qty)
+                market_value = float(pos.market_value)
+                unrealized_plpc = float(pos.unrealized_plpc) if pos.unrealized_plpc else 0
+
+                position_dict[symbol] = {
+                    'qty': qty,
+                    'market_value': market_value,
+                    'unrealized_plpc': unrealized_plpc,
+                    'weight_pct': (market_value / portfolio_value * 100) if portfolio_value > 0 else 0,
+                    'is_short': qty < 0
+                }
+
+            # Update cache
+            self._position_cache[cache_key] = position_dict
+            self._position_cache_time = datetime.now()
+
+            return position_dict
+
+        except Exception as e:
+            print(f"    [WARNING] Could not fetch positions: {e}")
+            return {}
+
+    def _check_position_concentration(self, rec: StockRecommendation, bot_name: str, portfolio_value: float, account_type: str = "paper") -> tuple[bool, str]:
+        """
+        Check if adding this trade would create position concentration issues.
+
+        Returns (passes, rejection_reason)
+        """
+        positions = self._get_current_positions(bot_name, account_type)
+
+        if not positions:
+            return True, ""  # Can't check, allow trade
+
+        ticker = rec.ticker
+        action = rec.action.upper() if rec.action else ""
+
+        # Get position limits
+        if bot_name == "DEE-BOT":
+            max_position_pct = 8.0
+        else:
+            max_position_pct = 10.0
+
+        # Check if we already hold this position
+        if ticker in positions:
+            current_position = positions[ticker]
+            current_weight = current_position['weight_pct']
+            current_pnl = current_position['unrealized_plpc'] * 100
+            is_short = current_position['is_short']
+
+            # If it's a BUY and we're already at/near max weight
+            if action in ['BUY', 'LONG', 'BUY_TO_OPEN']:
+                if current_weight >= max_position_pct * 0.9:  # Already at 90%+ of limit
+                    return False, f"Already at max position weight ({current_weight:.1f}% >= {max_position_pct}%)"
+
+                # Don't add to big losers
+                if current_pnl <= -15:
+                    return False, f"Position is a loser ({current_pnl:+.1f}%), don't add"
+
+            # If it's a SELL and we have a big winner, encourage the trim
+            if action in ['SELL', 'SELL_TO_CLOSE']:
+                if current_pnl >= 20:
+                    print(f"    [POSITION] Trimming winner {ticker} ({current_pnl:+.1f}%) - ENCOURAGED")
+
+            # Check for conflicting short/long positions in DEE-BOT
+            if bot_name == "DEE-BOT" and is_short:
+                if action not in ['BUY_TO_CLOSE', 'COVER']:
+                    return False, f"DEE-BOT has illegal short position in {ticker} - must cover first"
+
+        return True, ""
+
+    def _check_catalyst_timing(self, rec: StockRecommendation) -> tuple[bool, str]:
+        """
+        Check if the catalyst date is still in the future.
+
+        Returns (passes, rejection_reason)
+        """
+        if not rec.catalyst_date:
+            return True, ""  # No date specified, allow
+
+        try:
+            # Parse catalyst date (handle various formats)
+            catalyst_str = rec.catalyst_date.strip()
+            today = datetime.now().date()
+
+            # Try parsing common date formats
+            for fmt in ['%Y-%m-%d', '%m/%d/%Y', '%B %d', '%b %d']:
+                try:
+                    if fmt in ['%B %d', '%b %d']:
+                        # Add current year for month-day only formats
+                        catalyst_date = datetime.strptime(f"{catalyst_str} {today.year}", f"{fmt} %Y").date()
+                    else:
+                        catalyst_date = datetime.strptime(catalyst_str, fmt).date()
+
+                    # Check if catalyst is in the past
+                    if catalyst_date < today:
+                        return False, f"Catalyst date {catalyst_str} has already passed"
+
+                    return True, ""
+                except ValueError:
+                    continue
+
+            # Couldn't parse date, allow the trade
+            return True, ""
+
+        except Exception:
+            return True, ""  # On error, allow trade
+
     # S&P 100 ticker list (OEX components)
     SP100_TICKERS = {
         'AAPL', 'ABBV', 'ABT', 'ACN', 'ADBE', 'AIG', 'AMD', 'AMGN', 'AMT', 'AMZN',
@@ -357,13 +536,15 @@ class MultiAgentTradeValidator:
 
         return True, ""
 
-    def validate_recommendation(self, rec: StockRecommendation, portfolio_value: float, bot_name: str = None) -> Dict:
+    def validate_recommendation(self, rec: StockRecommendation, portfolio_value: float, bot_name: str = None, account_type: str = "paper") -> Dict:
         """
         Validate external recommendation through multi-agent consensus
 
         Args:
             rec: External recommendation from Claude or ChatGPT
             portfolio_value: Current portfolio value for position sizing
+            bot_name: DEE-BOT or SHORGAN-BOT
+            account_type: "paper" or "live" (affects position checking)
 
         Returns:
             Validation result with consensus decision
@@ -400,6 +581,34 @@ class MultiAgentTradeValidator:
                     'external_confidence': 0.0,
                     'internal_confidence': 0.0
                 }
+
+        # NEW Dec 2025: Position concentration check (portfolio-aware validation)
+        passes_concentration, concentration_reason = self._check_position_concentration(
+            rec, bot_name, portfolio_value, account_type
+        )
+        if not passes_concentration:
+            print(f"    [X] {rec.ticker} REJECTED - {concentration_reason}")
+            return {
+                'recommendation': rec,
+                'approved': False,
+                'rejection_reason': concentration_reason,
+                'combined_confidence': 0.0,
+                'external_confidence': 0.0,
+                'internal_confidence': 0.0
+            }
+
+        # NEW Dec 2025: Catalyst timing check (reject if catalyst already passed)
+        passes_catalyst, catalyst_reason = self._check_catalyst_timing(rec)
+        if not passes_catalyst:
+            print(f"    [X] {rec.ticker} REJECTED - {catalyst_reason}")
+            return {
+                'recommendation': rec,
+                'approved': False,
+                'rejection_reason': catalyst_reason,
+                'combined_confidence': 0.0,
+                'external_confidence': 0.0,
+                'internal_confidence': 0.0
+            }
 
         # Prepare supplemental data (external research context)
         supplemental_data = {
@@ -863,7 +1072,7 @@ class AutomatedTradeGeneratorV2:
 
         for rec in recommendations:
             try:
-                validation = self.validator.validate_recommendation(rec, portfolio_value, bot_name)
+                validation = self.validator.validate_recommendation(rec, portfolio_value, bot_name, account_type)
 
                 if validation['approved']:
                     approved.append(validation)

@@ -1,0 +1,18 @@
+{
+  "last_alert_level": "WARNING",
+  "last_check": "2025-12-09T15:08:36.941041",
+  "metrics": {
+    "equity": 3071.89,
+    "maintenance_margin": 1861.81,
+    "initial_margin": 2193.62,
+    "cash": -198.74,
+    "buying_power": 1756.54,
+    "long_value": 3270.63,
+    "short_value": 0.0,
+    "margin_usage_pct": 60.60796447789472,
+    "margin_cushion": 1210.08,
+    "margin_cushion_pct": 39.39203552210528,
+    "using_margin": true,
+    "timestamp": "2025-12-09T15:08:36.368927"
+  }
+}

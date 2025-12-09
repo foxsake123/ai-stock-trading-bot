@@ -1068,14 +1068,65 @@ class ClaudeResearchGenerator:
         current_date = datetime.now().strftime("%Y-%m-%d")
         current_time = datetime.now().strftime("%I:%M %p ET")
 
-        # Format portfolio holdings
+        # Format portfolio holdings with action flags (Enhanced Dec 2025)
         holdings_text = ""
+        portfolio_value = portfolio['portfolio_value']
+
+        # Categorize positions for attention summary
+        winners_to_trim = []
+        losers_to_exit = []
+        overweight = []
+        shorts_in_dee = []
+        position_limit = 0.08 if bot_name == "DEE-BOT" else 0.10
+
         for h in portfolio["holdings"]:
+            pnl_pct = h['unrealized_plpc'] * 100
+            position_weight = (h['market_value'] / portfolio_value) * 100 if portfolio_value > 0 else 0
+            qty = float(h['qty'])
+            is_short = qty < 0
+
+            # Determine action flag
+            if is_short and bot_name == "DEE-BOT":
+                action_flag = "**[URGENT: COVER SHORT - DEE-BOT IS LONG-ONLY]**"
+                shorts_in_dee.append(h['symbol'])
+            elif pnl_pct <= -25:
+                action_flag = "**[EXIT: Critical loss >25%]**"
+                losers_to_exit.append(f"{h['symbol']} ({pnl_pct:+.1f}%)")
+            elif pnl_pct <= -15:
+                action_flag = "[REVIEW: Loss >15%]"
+                losers_to_exit.append(f"{h['symbol']} ({pnl_pct:+.1f}%)")
+            elif pnl_pct >= 50:
+                action_flag = "**[TRIM: Strong winner >50%]**"
+                winners_to_trim.append(f"{h['symbol']} ({pnl_pct:+.1f}%)")
+            elif pnl_pct >= 20:
+                action_flag = "[TRIM: Winner >20%]"
+                winners_to_trim.append(f"{h['symbol']} ({pnl_pct:+.1f}%)")
+            elif position_weight > position_limit * 100:
+                action_flag = f"[OVERWEIGHT: {position_weight:.1f}% > {position_limit*100:.0f}%]"
+                overweight.append(f"{h['symbol']} ({position_weight:.1f}%)")
+            else:
+                action_flag = "[HOLD]"
+
             holdings_text += f"""
-{h['symbol']}: {h['qty']:.0f} shares @ ${h['avg_entry_price']:.2f} avg
-  Current: ${h['current_price']:.2f} | P&L: ${h['unrealized_pl']:+,.2f} ({h['unrealized_plpc']:+.2f}%)
-  Market Value: ${h['market_value']:,.2f} | Cost Basis: ${h['cost_basis']:,.2f}
+{h['symbol']}: {abs(qty):.0f} shares {'SHORT' if is_short else 'LONG'} @ ${h['avg_entry_price']:.2f}
+  Current: ${h['current_price']:.2f} | P&L: ${h['unrealized_pl']:+,.2f} ({pnl_pct:+.1f}%)
+  Weight: {position_weight:.1f}% | Value: ${abs(h['market_value']):,.2f}
+  {action_flag}
 """
+
+        # Add attention summary at top
+        attention = ""
+        if shorts_in_dee:
+            attention += f"\n**CRITICAL - SHORTS IN LONG-ONLY**: {', '.join(shorts_in_dee)}"
+        if losers_to_exit:
+            attention += f"\n**LOSERS >15%**: {', '.join(losers_to_exit)}"
+        if winners_to_trim:
+            attention += f"\n**WINNERS >20%**: {', '.join(winners_to_trim)}"
+        if overweight:
+            attention += f"\n**OVERWEIGHT**: {', '.join(overweight)}"
+
+        if attention:
+            holdings_text = f"\n=== POSITIONS NEEDING ATTENTION ==={attention}\n\n=== ALL POSITIONS ==={holdings_text}"
 
         # Format market data
         market_text = ""

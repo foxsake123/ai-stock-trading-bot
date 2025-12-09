@@ -638,6 +638,9 @@ class DailyTradeExecutor:
 
             order = api.submit_order(**order_params)
 
+            # Determine bot name for stop-loss and logging
+            bot_name = "DEE-BOT" if api == self.dee_api else "SHORGAN-BOT"
+
             trade_record = {
                 'symbol': symbol,
                 'shares': shares,
@@ -648,7 +651,8 @@ class DailyTradeExecutor:
                 'timestamp': datetime.now().isoformat(),
                 'status': 'submitted',
                 'extended_hours': order_params.get('extended_hours', False),
-                'rationale': trade_info.get('rationale', '')
+                'rationale': trade_info.get('rationale', ''),
+                'bot': bot_name
             }
 
             self.executed_trades.append(trade_record)
@@ -684,6 +688,66 @@ class DailyTradeExecutor:
             self.failed_trades.append(error_record)
             print(f"[ERROR] Failed to {side} {trade_info['symbol']}: {e}")
             return None
+
+    def place_stop_loss_order(self, api, symbol, shares, entry_price, bot_name="DEE-BOT"):
+        """
+        Place a GTC stop-loss order after a BUY fills.
+        Stop-loss percentages:
+        - DEE-BOT: 11% (defensive S&P 100 strategy)
+        - SHORGAN: 18% (aggressive catalyst plays)
+        """
+        try:
+            if bot_name == "DEE-BOT":
+                stop_pct = 0.11  # 11% stop for defensive portfolio
+            else:
+                stop_pct = 0.18  # 18% stop for aggressive catalyst plays
+
+            stop_price = round(entry_price * (1 - stop_pct), 2)
+            print(f"    [STOP-LOSS] Placing GTC stop for {symbol}: {shares} shares @ ${stop_price:.2f} ({stop_pct*100:.0f}% below entry)")
+
+            stop_order = api.submit_order(
+                symbol=symbol,
+                qty=shares,
+                side='sell',
+                type='stop',
+                stop_price=stop_price,
+                time_in_force='gtc'
+            )
+            print(f"    [STOP-LOSS] SUCCESS: Order {stop_order.id} placed for {symbol}")
+            return stop_order
+        except Exception as e:
+            print(f"    [STOP-LOSS] WARNING: Failed to place stop for {symbol}: {e}")
+            return None
+
+    def place_stop_losses_for_executed_buys(self, api, bot_name="DEE-BOT"):
+        """
+        Place stop-loss orders for all successfully executed BUY orders in this session.
+        Called after all trades are executed.
+        """
+        buy_trades = [t for t in self.executed_trades if t.get('side') == 'buy' and t.get('bot') == bot_name]
+
+        if not buy_trades:
+            print(f"\n[STOP-LOSS] No BUY orders executed for {bot_name} - skipping stop placement")
+            return
+
+        print(f"\n{'='*60}")
+        print(f"PLACING STOP-LOSS ORDERS FOR {bot_name}")
+        print(f"{'='*60}")
+
+        stops_placed = 0
+        for trade in buy_trades:
+            symbol = trade.get('symbol')
+            shares = trade.get('shares')
+            # Use limit_price as entry estimate (actual fill may differ slightly)
+            entry_price = trade.get('limit_price') or trade.get('fill_price', 0)
+
+            if entry_price > 0 and shares > 0:
+                result = self.place_stop_loss_order(api, symbol, shares, entry_price, bot_name)
+                if result:
+                    stops_placed += 1
+                time.sleep(0.5)  # Rate limiting
+
+        print(f"\n[STOP-LOSS] Placed {stops_placed}/{len(buy_trades)} stop-loss orders for {bot_name}")
 
     def check_market_status(self):
         """Check if market is open or in extended hours"""
@@ -856,6 +920,13 @@ class DailyTradeExecutor:
             print("\nFailed Trades:")
             for trade in self.failed_trades:
                 print(f"  {trade['side'].upper()} {trade['shares']} {trade['symbol']} - {trade['error']}")
+
+        # Place stop-loss orders for all executed BUY orders
+        print("\n" + "=" * 80)
+        print("AUTOMATIC STOP-LOSS PLACEMENT")
+        print("=" * 80)
+        self.place_stop_losses_for_executed_buys(self.dee_api, "DEE-BOT")
+        self.place_stop_losses_for_executed_buys(self.shorgan_api, "SHORGAN-BOT")
 
         # Save execution log
         log_data = {
