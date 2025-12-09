@@ -135,14 +135,34 @@ You must produce a COMPREHENSIVE hedge fund-style research report (minimum 400+ 
    - Dividend yield environment vs bonds
    - Key risk factors (geopolitical, political, regulatory)
 
-3. **CURRENT PORTFOLIO DEEP DIVE** (100-125 lines)
+3. **CURRENT PORTFOLIO DEEP DIVE & REBALANCING** (100-150 lines)
+   **CRITICAL: This section drives the ORDER BLOCK. Analyze EVERY position.**
+
    - Portfolio metrics (beta, quality scores, dividend yield)
-   - Individual position analysis with:
+   - **For EACH existing position, provide:**
+     * Symbol, shares held, average cost, current price, P&L ($, %)
      * Current fundamental strength (earnings, balance sheet)
      * Valuation vs historical averages
      * Recent news/developments
      * Technical setup (support/resistance)
-     * Recommendation: HOLD, ADD, TRIM, or EXIT
+     * **ACTION REQUIRED** (one of):
+       - **HOLD** - Thesis intact, maintain position
+       - **ADD** - Undervalued opportunity to increase
+       - **TRIM** - Take partial profits (up 15%+ or overweight)
+       - **EXIT** - Thesis broken, sell entire position
+
+   - **REBALANCING PRIORITY ORDER:**
+     1. **EXIT underperformers first** - Free up capital from broken theses
+     2. **TRIM overweight winners** - Lock in profits, reduce concentration
+     3. **HOLD quality positions** - Let compounding work
+     4. **ADD to undervalued names** - Deploy cash opportunistically
+
+   - **CAPITAL REALLOCATION:**
+     * Calculate cash freed by exits/trims: $XXX
+     * Calculate cash needed for new positions: $XXX
+     * Net deployment: Show exactly how capital flows
+     * **RULE: Proceeds from sales fund new purchases**
+
    - Beta drift calculation and rebalancing needs
    - Cash deployment strategy
 
@@ -174,18 +194,24 @@ You must produce a COMPREHENSIVE hedge fund-style research report (minimum 400+ 
 
 6. **TRADE RECOMMENDATIONS SUMMARY TABLE** (1 table)
    - Create a markdown table summarizing ALL recommended trades
-   - Include columns: Ticker | Type | Shares | Entry Price | Stop Loss | Target | Rationale
+   - **Include BOTH exits and new positions**
+   - Include columns: Ticker | Action | Type | Shares | Entry Price | Stop Loss | Target | Rationale
+   - Action: EXIT (sell existing), BUY (new position), TRIM (partial sell)
    - Type should indicate: LONG (stock position)
    - Rationale should be 1 concise sentence (10-15 words max)
+   - **List EXIT trades first, then BUY trades**
    - Place this table BEFORE the detailed order block for quick reference
 
    **Example Format:**
-   | Ticker | Type | Shares | Entry | Stop Loss | Target | Rationale |
-   |--------|------|--------|-------|-----------|--------|-----------|
-   | JNJ | LONG | 52 | $152.00 | $140.16 | $165.00 | Defensive healthcare, undervalued P/E 14.5 |
-   | MSFT | LONG | 12 | $370.00 | $340.60 | $400.00 | AI momentum, quality growth at 30x earnings |
+   | Ticker | Action | Type | Shares | Entry | Stop Loss | Target | Rationale |
+   |--------|--------|------|--------|-------|-----------|--------|-----------|
+   | UNH | EXIT | LONG | 34 | market | - | - | Healthcare headwinds, thesis broken, free up $11K |
+   | JNJ | BUY | LONG | 52 | $152.00 | $140.16 | $165.00 | Defensive healthcare, funded by UNH exit |
+   | MSFT | BUY | LONG | 12 | $370.00 | $340.60 | $400.00 | AI momentum, quality growth at 30x earnings |
 
 7. **EXACT ORDER BLOCK** (30-50 lines)
+   **CRITICAL: List EXIT/SELL orders FIRST, then BUY orders**
+   - Show capital flow: "EXIT UNH (+$11,000) → BUY JNJ (-$7,900) = +$3,100 net cash"
    - Only include top 5-8 highest conviction trades
    - Format per existing standard
    - Must include detailed rationale for each
@@ -297,14 +323,35 @@ You must produce a COMPREHENSIVE hedge fund catalyst playbook (minimum 450+ line
      * Historical stock reaction to similar events
      * Estimated probability of positive outcome
 
-3. **CURRENT PORTFOLIO ANALYSIS** (80-100 lines)
+3. **CURRENT PORTFOLIO ANALYSIS & REBALANCING** (100-130 lines)
+   **CRITICAL: This section drives the ORDER BLOCK. Analyze EVERY position.**
+
    - Review all existing positions (long, short, options)
-   - For each position:
+   - **For EACH position, provide:**
+     * Symbol, shares held, entry price, current price, P&L ($, %)
      * Entry thesis review (is it still valid?)
-     * Catalyst proximity (how close to event?)
-     * P&L status and unrealized gains/losses
+     * Catalyst proximity (how close to event? Has it passed?)
      * Technical setup (support/resistance, momentum)
-     * Recommendation: HOLD, ADD, TRIM, EXIT, or TAKE PROFITS
+     * **ACTION REQUIRED** (one of):
+       - **HOLD** - Catalyst still pending, thesis intact
+       - **ADD** - Thesis strengthening, add to winner (if room)
+       - **TRIM** - Take partial profits (up 20%+)
+       - **EXIT** - Catalyst passed, thesis broken, or stop hit
+       - **TAKE PROFITS** - Exit winner at target
+
+   - **REBALANCING PRIORITY ORDER:**
+     1. **EXIT losers first** - Free up capital from broken trades
+     2. **TAKE PROFITS on winners** - Lock in gains at targets
+     3. **EXIT catalyst-passed positions** - Don't hold dead money
+     4. **HOLD strong setups** - Let winners run to target
+     5. **ADD to best performers** - Double down on thesis confirmation
+
+   - **CAPITAL REALLOCATION:**
+     * Calculate cash freed by exits/trims: $XXX
+     * Calculate cash needed for new positions: $XXX
+     * Net deployment: Show exactly how capital flows
+     * **RULE: Exits fund new entries**
+
    - Portfolio risk metrics (concentration, correlation, beta)
    - Cash position and deployment strategy
 
@@ -388,23 +435,27 @@ You must produce a COMPREHENSIVE hedge fund catalyst playbook (minimum 450+ line
 
 7. **TRADE RECOMMENDATIONS SUMMARY TABLE** (1 table)
    - Create a markdown table summarizing ALL recommended trades
-   - Include columns: Ticker | Type | Shares/Contracts | Entry Price | Catalyst | Date/Time | Stop Loss | Target | Rationale
+   - **Include BOTH exits and new positions**
+   - Include columns: Ticker | Action | Type | Size | Entry | Catalyst | Date/Time | Stop | Target | Rationale
+   - Action: EXIT (close existing), BUY/LONG (new long), SHORT (new short), TRIM (partial)
    - Type should indicate: LONG, SHORT, CALL, PUT, CALL SPREAD, PUT SPREAD
-   - Catalyst should be specific event (e.g., "FDA PDUFA", "Q3 Earnings", "Phase 3 Data")
-   - Date/Time should be exact (e.g., "Nov 20 PRE", "Nov 25 4:00 PM ET", "Dec 5 TBD")
+   - **List EXIT trades first, then new entries**
    - Rationale should be 1 concise sentence (15-20 words max)
    - Place this table BEFORE the detailed order block for quick reference
 
    **Example Format:**
-   | Ticker | Type | Size | Entry | Catalyst | Date/Time | Stop | Target | Rationale |
-   |--------|------|------|-------|----------|-----------|------|--------|-----------|
-   | ARWR | LONG | 150 | $25.50 | Phase 3 Data | Nov 22 PRE | $23.00 | $35.00 | Positive interim readout expected, 40% upside on approval |
-   | SNDX | SHORT | 100 | $45.00 | Earnings Miss | Nov 20 4PM | $48.00 | $38.00 | Guidance cut likely, failed trial priced in |
-   | CVNA | CALL | 2x $50 | $2.80 | Q3 Earnings | Nov 21 PRE | $1.40 | $5.50 | Beat expected 60% prob, high IV but justified |
+   | Ticker | Action | Type | Size | Entry | Catalyst | Date/Time | Stop | Target | Rationale |
+   |--------|--------|------|------|-------|----------|-----------|------|--------|-----------|
+   | SNDX | EXIT | LONG | 200 | market | Passed | - | - | - | Catalyst failed, thesis broken, free up $9K for redeployment |
+   | RGTI | TRIM | LONG | 500 | $5.50 | Profits | - | - | - | Lock in 156% gain, reduce to house money |
+   | ARWR | BUY | LONG | 150 | $25.50 | Phase 3 | Dec 22 PRE | $23.00 | $35.00 | Funded by SNDX exit, 40% upside on approval |
+   | CVNA | BUY | CALL | 2x $50 | $2.80 | Earnings | Dec 21 PRE | $1.40 | $5.50 | Beat expected 60% prob |
 
 8. **EXACT ORDER BLOCK** (40-60 lines)
+   **CRITICAL: List EXIT/SELL orders FIRST, then BUY orders**
+   - Show capital flow: "EXIT SNDX (+$9,000) → BUY ARWR (-$3,825) = +$5,175 net cash"
    - Top 8-12 highest conviction trades ONLY
-   - Mix of long, short, and options
+   - Mix of exits, longs, shorts, and options
    - Prioritize imminent catalysts (next 3-7 days)
    - Format per existing standard
 
