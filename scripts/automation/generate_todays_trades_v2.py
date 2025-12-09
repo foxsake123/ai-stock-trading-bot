@@ -536,6 +536,38 @@ class MultiAgentTradeValidator:
                 quality_filters_passed = False
                 rejection_reasons.append(f"Invalid action: {rec.action}")
 
+            # =====================================================
+            # NEW PORTFOLIO-AWARE FILTERS (Added Dec 2025)
+            # These filters catch issues the agents missed
+            # =====================================================
+
+            # Filter 4: Position limit enforcement
+            # Prevents new buys that would exceed position limits
+            position_limit_pct = 0.08 if bot_name == "DEE-BOT" else 0.10  # 8% DEE, 10% SHORGAN
+            proposed_position_value = market_data.get('proposed_position_size', 0)
+            if rec.action in ['BUY', 'LONG', 'buy', 'BUY_TO_OPEN']:
+                if proposed_position_value > portfolio_value * position_limit_pct:
+                    quality_filters_passed = False
+                    rejection_reasons.append(f"Position ${proposed_position_value:,.0f} exceeds {position_limit_pct:.0%} limit (${portfolio_value * position_limit_pct:,.0f})")
+                    print(f"    [POSITION LIMIT] BLOCKED: ${proposed_position_value:,.0f} > ${portfolio_value * position_limit_pct:,.0f}")
+
+            # Filter 5: DEE-BOT long-only enforcement
+            # DEE-BOT should NEVER initiate short positions
+            if bot_name == "DEE-BOT":
+                if rec.action in ['SHORT', 'SELL_TO_OPEN', 'sell_to_open']:
+                    quality_filters_passed = False
+                    rejection_reasons.append("DEE-BOT is LONG-ONLY - shorts not allowed")
+                    print(f"    [LONG-ONLY] BLOCKED: DEE-BOT cannot short {rec.ticker}")
+
+            # Filter 6: Profit-taking enforcement on winners
+            # If recommendation is to BUY/ADD more of a position up >20%, flag it
+            # (This is a warning - the research SHOULD be recommending TRIM not ADD)
+            if rec.action in ['BUY', 'LONG', 'buy', 'ADD']:
+                existing_gain_pct = market_data.get('existing_position_gain_pct', 0)
+                if existing_gain_pct > 20:
+                    print(f"    [WARNING] Adding to {rec.ticker} which is up {existing_gain_pct:.1f}% - consider TRIM instead")
+                    # Don't block, just warn - research might have valid reason
+
             approved = quality_filters_passed
             rejection_summary = "; ".join(rejection_reasons) if rejection_reasons else "All checks passed"
             status_text = "APPROVED" if approved else "REJECTED"

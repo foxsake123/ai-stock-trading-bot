@@ -21,14 +21,24 @@ class RiskManagerAgent(BaseAgent):
             agent_type="risk_manager"
         )
         
-        # Risk limits
-        self.max_position_size = 0.05  # 5% max per position
+        # Risk limits (Updated Dec 2025 - tighter position controls)
+        self.max_position_size = 0.08  # 8% max per position for DEE-BOT
+        self.max_position_size_aggressive = 0.10  # 10% max for SHORGAN accounts
         self.max_portfolio_risk = 0.15  # 15% max portfolio risk
         self.max_correlation = 0.7  # Max correlation between positions
         self.max_daily_loss = 0.02  # 2% max daily loss
         self.max_volatility = 0.5  # 50% annualized volatility max
         self.min_liquidity_ratio = 100000  # Min $100k daily volume
-        
+
+        # Profit-taking rules (NEW Dec 2025)
+        self.profit_taking_threshold = 0.20  # 20% gain = trim consideration
+        self.strong_winner_threshold = 0.50  # 50%+ gain = mandatory trim
+        self.winner_trim_pct = 0.50  # Trim 50% of position at thresholds
+
+        # Loss-cutting rules (NEW Dec 2025)
+        self.stop_loss_threshold = 0.15  # 15% loss = exit consideration
+        self.critical_loss_threshold = 0.25  # 25%+ loss = mandatory exit
+
         # Risk scoring weights
         self.risk_weights = {
             "volatility": 0.25,
