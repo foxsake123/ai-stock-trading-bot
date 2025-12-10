@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0.0",
+  "bot_type": "SHORGAN-PAPER",
+  "asof": "2025-12-10T04:03:39.779907Z",
+  "equity": 117570.69,
+  "cash": 19845.16,
+  "buying_power": 19845.16,
+  "portfolio_value": 117570.69,
+  "positions": {
+    "ARQT": {
+      "symbol": "ARQT",
+      "qty": 350.0,
+      "avg_entry_price": 20.223014,
+      "current_price": 29.76,
+      "market_value": 10416.0,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 3337.945,
+      "pnl_pct": 47.15907124202906,
+      "side": "long"
+    },
+    "ARWR": {
+      "symbol": "ARWR",
+      "qty": 97.0,
+      "avg_entry_price": 39.391117,
+      "current_price": 68.83,
+      "market_value": 6676.51,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 2855.571675,
+      "pnl_pct": 74.73482773370857,
+      "side": "long"
+    },
+    "BEAM": {
+      "symbol": "BEAM",
+      "qty": 500.0,
+      "avg_entry_price": 27.29,
+      "current_price": 26.48,
+      "market_value": 13240.0,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": -405.0,
+      "pnl_pct": -2.96812019054599,
+      "side": "long"
+    },
+    "CIVI": {
+      "symbol": "CIVI",
+      "qty": -76.0,
+      "avg_entry_price": 28.56,
+      "current_price": 29.83,
+      "market_value": -2267.08,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": -96.52,
+      "pnl_pct": -4.44677871148459,
+      "side": "short"
+    },
+    "CVX": {
+      "symbol": "CVX",
+      "qty": -93.0,
+      "avg_entry_price": 157.265054,
+      "current_price": 148.49,
+      "market_value": -13809.57,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 816.08,
+      "pnl_pct": 5.57978619753652,
+      "side": "short"
+    },
+    "DAKT": {
+      "symbol": "DAKT",
+      "qty": -743.0,
+      "avg_entry_price": 19.81,
+      "current_price": 17.97,
+      "market_value": -13351.71,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 1367.12,
+      "pnl_pct": 9.288238263503281,
+      "side": "short"
+    },
+    "DOCU": {
+      "symbol": "DOCU",
+      "qty": 200.0,
+      "avg_entry_price": 65.45,
+      "current_price": 69.39,
+      "market_value": 13878.0,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 788.0,
+      "pnl_pct": 6.0198624904507305,
+      "side": "long"
+    },
+    "EMBC": {
+      "symbol": "EMBC",
+      "qty": -68.0,
+      "avg_entry_price": 14.15,
+      "current_price": 11.11,
+      "market_value": -755.48,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 206.72,
+      "pnl_pct": 21.484098939929332,
+      "side": "short"
+    },
+    "ENPH": {
+      "symbol": "ENPH",
+      "qty": 300.0,
+      "avg_entry_price": 31.22,
+      "current_price": 31.55,
+      "market_value": 9465.0,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 99.0,
+      "pnl_pct": 1.05701473414478,
+      "side": "long"
+    },
+    "GKOS": {
+      "symbol": "GKOS",
+      "qty": 144.0,
+      "avg_entry_price": 86.978333,
+      "current_price": 106.87,
+      "market_value": 15389.28,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 2864.4,
+      "pnl_pct": 22.8696801885527,
+      "side": "long"
+    },
+    "GPK": {
+      "symbol": "GPK",
+      "qty": -142.0,
+      "avg_entry_price": 17.77,
+      "current_price": 14.23,
+      "market_value": -2020.66,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 502.68,
+      "pnl_pct": 19.921215531795163,
+      "side": "short"
+    },
+    "INCY": {
+      "symbol": "INCY",
+      "qty": 61.0,
+      "avg_entry_price": 83.97,
+      "current_price": 95.16,
+      "market_value": 5804.76,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 682.59,
+      "pnl_pct": 13.326187924258658,
+      "side": "long"
+    },
+    "LOVE": {
+      "symbol": "LOVE",
+      "qty": 400.0,
+      "avg_entry_price": 13.75,
+      "current_price": 13.95,
+      "market_value": 5580.0,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 80.0,
+      "pnl_pct": 1.4545454545454501,
+      "side": "long"
+    },
+    "MFIC": {
+      "symbol": "MFIC",
+      "qty": 770.0,
+      "avg_entry_price": 12.16,
+      "current_price": 11.94,
+      "market_value": 9193.8,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": -169.4,
+      "pnl_pct": -1.8092105263157898,
+      "side": "long"
+    },
+    "NCNO": {
+      "symbol": "NCNO",
+      "qty": -348.0,
+      "avg_entry_price": 29.72,
+      "current_price": 24.85,
+      "market_value": -8647.8,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 1694.76,
+      "pnl_pct": 16.38627187079408,
+      "side": "short"
+    },
+    "ORCL": {
+      "symbol": "ORCL",
+      "qty": 72.0,
+      "avg_entry_price": 219.0,
+      "current_price": 221.53,
+      "market_value": 15950.16,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 182.16,
+      "pnl_pct": 1.15525114155251,
+      "side": "long"
+    },
+    "QSI": {
+      "symbol": "QSI",
+      "qty": 300.0,
+      "avg_entry_price": 1.65,
+      "current_price": 1.42,
+      "market_value": 426.0,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": -69.0,
+      "pnl_pct": -13.939393939393941,
+      "side": "long"
+    },
+    "RGTI": {
+      "symbol": "RGTI",
+      "qty": 252.0,
+      "avg_entry_price": 31.859003,
+      "current_price": 28.22,
+      "market_value": 7111.44,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": -917.028692,
+      "pnl_pct": -11.422211721567491,
+      "side": "long"
+    },
+    "RIG": {
+      "symbol": "RIG",
+      "qty": 1500.0,
+      "avg_entry_price": 3.73125,
+      "current_price": 4.45,
+      "market_value": 6675.0,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 1078.125001,
+      "pnl_pct": 19.26298159584822,
+      "side": "long"
+    },
+    "SNDX": {
+      "symbol": "SNDX",
+      "qty": 220.0,
+      "avg_entry_price": 15.455119,
+      "current_price": 19.51,
+      "market_value": 4292.2,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 892.073809,
+      "pnl_pct": 26.236491203217234,
+      "side": "long"
+    },
+    "SPY": {
+      "symbol": "SPY",
+      "qty": 18.0,
+      "avg_entry_price": 649.101667,
+      "current_price": 683.04,
+      "market_value": 12294.72,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": 610.89,
+      "pnl_pct": 5.22850811762924,
+      "side": "long"
+    },
+    "WOLF": {
+      "symbol": "WOLF",
+      "qty": 96.0,
+      "avg_entry_price": 25.975833,
+      "current_price": 22.76,
+      "market_value": 2184.96,
+      "pnl_realized": 0.0,
+      "pnl_unrealized": -308.72,
+      "pnl_pct": -12.38009688492509,
+      "side": "long"
+    }
+  },
+  "risk": {
+    "daily_loss_limit": 3000.0,
+    "daily_loss_current": 0.0,
+    "max_position_pct": 10.0,
+    "max_drawdown_pct": 15.0,
+    "current_drawdown_pct": 0.0,
+    "fee_budget_remaining": 100.0,
+    "margin_usage_pct": 0.0,
+    "stop_loss_pct": 18.0
+  },
+  "cursors": {
+    "last_order_id": 0,
+    "last_fill_seq": 0,
+    "last_reconcile_seq": 0
+  },
+  "toggles": {
+    "trading_enabled": true,
+    "stop_loss_active": true,
+    "rebalance_enabled": true
+  },
+  "timestamps": {
+    "created": "2025-12-10T04:03:39.759360Z",
+    "last_trade": null,
+    "last_reconcile": null,
+    "last_heartbeat": "2025-12-10T04:03:39.759373Z"
+  },
+  "pending_orders": []
+}
