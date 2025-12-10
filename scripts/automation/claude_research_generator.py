@@ -1302,6 +1302,61 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             print(f"[-] Error calling Claude API: {e}")
             raise
 
+    def _fix_markdown_formatting(self, content: str) -> str:
+        """
+        Fix markdown formatting issues in Claude's output.
+
+        Ensures proper line breaks before section headers and other formatting fixes.
+        Common issue: "text.**Header**" should be "text.\n\n**Header**"
+        """
+        import re
+
+        # Pattern 1: Bold headers that need line breaks before them
+        # Match text followed by **Header** without a newline before it
+        # e.g., "profits above $30.**Position Management**" -> "profits above $30.\n\n**Position Management**"
+        bold_header_patterns = [
+            r'(\S)(\*\*Position Management\*\*)',
+            r'(\S)(\*\*Risk Management\*\*)',
+            r'(\S)(\*\*Trade Recommendations\*\*)',
+            r'(\S)(\*\*Trade Summary\*\*)',
+            r'(\S)(\*\*Catalyst Calendar\*\*)',
+            r'(\S)(\*\*Market Analysis\*\*)',
+            r'(\S)(\*\*Portfolio Analysis\*\*)',
+            r'(\S)(\*\*Technical Analysis\*\*)',
+            r'(\S)(\*\*Fundamental Analysis\*\*)',
+            r'(\S)(\*\*Entry Strategy\*\*)',
+            r'(\S)(\*\*Exit Strategy\*\*)',
+            r'(\S)(\*\*Stop Loss\*\*)',
+            r'(\S)(\*\*Price Target\*\*)',
+            r'(\S)(\*\*Order Block\*\*)',
+            r'(\S)(\*\*Summary\*\*)',
+            r'(\S)(\*\*Conclusion\*\*)',
+            r'(\S)(\*\*Action Items\*\*)',
+            r'(\S)(\*\*Key Levels\*\*)',
+            r'(\S)(\*\*Watch List\*\*)',
+        ]
+
+        for pattern in bold_header_patterns:
+            content = re.sub(pattern, r'\1\n\n\2', content)
+
+        # Pattern 2: Generic fix - any **TitleCase Header** preceded by non-whitespace
+        # This catches headers we might have missed above
+        # Match: non-whitespace + **Word Word** (title case, 1-4 words)
+        content = re.sub(
+            r'([^\s\n])(\*\*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,3}\*\*)',
+            r'\1\n\n\2',
+            content
+        )
+
+        # Pattern 3: Ensure headers starting with ## or ### have blank line before
+        # Match: non-newline char + ## Header
+        content = re.sub(r'([^\n])\n(#{2,6}\s)', r'\1\n\n\2', content)
+
+        # Pattern 4: Clean up excessive blank lines (more than 2 consecutive)
+        content = re.sub(r'\n{4,}', '\n\n\n', content)
+
+        return content
+
     def save_report(self, report: str, bot_name: str, portfolio_data: Dict = None, export_pdf: bool = True) -> tuple[Path, Optional[Path]]:
         """
         Save report to file system in both Markdown and PDF formats
@@ -1315,6 +1370,9 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         Returns:
             Tuple of (markdown_path, pdf_path)
         """
+        # Fix markdown formatting issues (headers running into text)
+        report = self._fix_markdown_formatting(report)
+
         # Create directory structure for tomorrow's trading date
         today = datetime.now()
         tomorrow = today + timedelta(days=1)

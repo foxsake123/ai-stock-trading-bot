@@ -1,6 +1,6 @@
 # Today's AI-Generated Trade Recommendations - SHORGAN-BOT LIVE ($3K Account)
 ## Tuesday, December 09, 2025
-## Generated: 02:48 PM ET
+## Generated: 11:04 AM ET
 
 ---
 
@@ -22,19 +22,19 @@
 ### SELL ORDERS
 | Symbol | Shares | Limit Price | Confidence | Source |
 |--------|--------|-------------|------------|--------|
-| ASTS | 1 | $73.53 | 56% | CLAUDE |
-| IONQ | 4 | $53.58 | 56% | CLAUDE |
-| NIO | 18 | $5.12 | 56% | CLAUDE |
-| PTON | 36 | $6.43 | 56% | CLAUDE |
+| ASTS | 1 | $71.81 | 56% | CLAUDE |
+| IONQ | 4 | $54.74 | 56% | CLAUDE |
+| NIO | 18 | $5.02 | 56% | CLAUDE |
+| PTON | 36 | $6.82 | 56% | CLAUDE |
 
 
 ### BUY ORDERS
 | Symbol | Shares | Limit Price | Stop Loss | Confidence | Source |
 |--------|--------|-------------|-----------|------------|--------|
-| BILI | 10 | $26.01 | $22.50 | 56% | CLAUDE |
-| PATH | 13 | $19.18 | $17.00 | 56% | CLAUDE |
-| SAVA | 92 | $3.24 | $2.66 | 56% | CLAUDE |
-| CHWY | 8 | $34.59 | $28.37 | 56% | CLAUDE |
+| BILI | 10 | $25.01 | $22.50 | 56% | CLAUDE |
+| PATH | 13 | $19.30 | $17.00 | 56% | CLAUDE |
+| SAVA | 93 | $3.20 | $2.62 | 56% | CLAUDE |
+| CHWY | 8 | $34.69 | $28.45 | 56% | CLAUDE |
 
 ### 📋 TRADE RATIONALE (Event-Driven Analysis)
 
