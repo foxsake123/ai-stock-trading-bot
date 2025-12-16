@@ -1,0 +1,122 @@
+name: Daily Trading Automation
+
+on:
+  schedule:
+    # Trade Generation - Weekdays 8:30 AM ET (13:30 UTC)
+    - cron: '30 13 * * 1-5'
+    # Trade Execution - Weekdays 9:35 AM ET (14:35 UTC) - 5 min after market open
+    - cron: '35 14 * * 1-5'
+    # Performance Graph - Weekdays 4:30 PM ET (21:30 UTC)
+    - cron: '30 21 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Task to run'
+        required: true
+        default: 'generate_trades'
+        type: choice
+        options:
+          - generate_research
+          - generate_trades
+          - execute_trades
+          - performance_graph
+
+env:
+  PYTHONIOENCODING: utf-8
+  TZ: America/New_York
+
+jobs:
+  trading:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install alpaca-py anthropic python-dotenv requests pandas numpy matplotlib reportlab yfinance
+
+      - name: Create .env file
+        run: |
+          cat << EOF > .env
+          # Alpaca API Keys
+          ALPACA_API_KEY=${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY=${{ secrets.ALPACA_SECRET_KEY }}
+          ALPACA_API_KEY_SHORGAN=${{ secrets.ALPACA_API_KEY_SHORGAN }}
+          ALPACA_SECRET_KEY_SHORGAN=${{ secrets.ALPACA_SECRET_KEY_SHORGAN }}
+          ALPACA_API_KEY_SHORGAN_LIVE=${{ secrets.ALPACA_API_KEY_SHORGAN_LIVE }}
+          ALPACA_SECRET_KEY_SHORGAN_LIVE=${{ secrets.ALPACA_SECRET_KEY_SHORGAN_LIVE }}
+
+          # Anthropic API Key
+          ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+
+          # Financial Datasets API
+          FINANCIAL_DATASETS_API_KEY=${{ secrets.FINANCIAL_DATASETS_API_KEY }}
+
+          # Telegram Bot
+          TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
+          EOF
+
+      - name: Determine task from schedule
+        id: task
+        run: |
+          HOUR=$(date +%H)
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "task=${{ github.event.inputs.task }}" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" == "13" ]; then
+            echo "task=generate_trades" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" == "14" ]; then
+            echo "task=execute_trades" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" == "21" ]; then
+            echo "task=performance_graph" >> $GITHUB_OUTPUT
+          else
+            echo "task=generate_trades" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate Trades (8:30 AM ET)
+        if: steps.task.outputs.task == 'generate_trades'
+        run: |
+          echo "Generating today's trades..."
+          python scripts/automation/generate_todays_trades_v2.py
+
+      - name: Execute Trades (9:35 AM ET)
+        if: steps.task.outputs.task == 'execute_trades'
+        run: |
+          echo "Executing today's trades..."
+          python scripts/automation/execute_daily_trades.py
+
+      - name: Performance Graph (4:30 PM ET)
+        if: steps.task.outputs.task == 'performance_graph'
+        run: |
+          echo "Generating performance graph..."
+          python scripts/performance/generate_performance_graph.py
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trading-output-${{ github.run_id }}
+          path: |
+            docs/TODAYS_TRADES_*.md
+            performance_results.png
+            reports/premarket/
+          retention-days: 30
+
+      - name: Commit updated files
+        if: success()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff --staged --quiet || git commit -m "Auto-update: Trading data $(date +'%Y-%m-%d %H:%M')"
+          git push || echo "Nothing to push"

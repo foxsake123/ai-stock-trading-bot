@@ -1,0 +1,76 @@
+name: Weekend Research Generation
+
+on:
+  schedule:
+    # Saturday 12:00 PM ET (17:00 UTC)
+    - cron: '0 17 * * 6'
+  workflow_dispatch:
+
+env:
+  PYTHONIOENCODING: utf-8
+  TZ: America/New_York
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60  # Research can take up to 45 minutes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install alpaca-py anthropic python-dotenv requests pandas numpy matplotlib reportlab yfinance
+
+      - name: Create .env file
+        run: |
+          cat << EOF > .env
+          # Alpaca API Keys
+          ALPACA_API_KEY=${{ secrets.ALPACA_API_KEY }}
+          ALPACA_SECRET_KEY=${{ secrets.ALPACA_SECRET_KEY }}
+          ALPACA_API_KEY_SHORGAN=${{ secrets.ALPACA_API_KEY_SHORGAN }}
+          ALPACA_SECRET_KEY_SHORGAN=${{ secrets.ALPACA_SECRET_KEY_SHORGAN }}
+          ALPACA_API_KEY_SHORGAN_LIVE=${{ secrets.ALPACA_API_KEY_SHORGAN_LIVE }}
+          ALPACA_SECRET_KEY_SHORGAN_LIVE=${{ secrets.ALPACA_SECRET_KEY_SHORGAN_LIVE }}
+
+          # Anthropic API Key
+          ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+
+          # Financial Datasets API
+          FINANCIAL_DATASETS_API_KEY=${{ secrets.FINANCIAL_DATASETS_API_KEY }}
+
+          # Telegram Bot
+          TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
+          EOF
+
+      - name: Generate Weekend Research
+        run: |
+          echo "Generating research for all 3 bots..."
+          python scripts/automation/daily_claude_research.py --force
+
+      - name: Upload research artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: research-${{ github.run_id }}
+          path: |
+            reports/premarket/
+          retention-days: 30
+
+      - name: Commit research files
+        if: success()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff --staged --quiet || git commit -m "Auto-update: Weekend research $(date +'%Y-%m-%d')"
+          git push || echo "Nothing to push"
