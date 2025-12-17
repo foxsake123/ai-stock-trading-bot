@@ -33,13 +33,19 @@ jobs:
       - name: Create .env file
         run: |
           cat << EOF > .env
-          # Alpaca API Keys
-          ALPACA_API_KEY=${{ secrets.ALPACA_API_KEY }}
-          ALPACA_SECRET_KEY=${{ secrets.ALPACA_SECRET_KEY }}
+          # DEE-BOT Alpaca API Keys (Paper)
+          ALPACA_API_KEY_DEE=${{ secrets.ALPACA_API_KEY_DEE }}
+          ALPACA_SECRET_KEY_DEE=${{ secrets.ALPACA_SECRET_KEY_DEE }}
+
+          # SHORGAN-BOT Alpaca API Keys (Paper)
           ALPACA_API_KEY_SHORGAN=${{ secrets.ALPACA_API_KEY_SHORGAN }}
           ALPACA_SECRET_KEY_SHORGAN=${{ secrets.ALPACA_SECRET_KEY_SHORGAN }}
+
+          # SHORGAN-BOT Alpaca API Keys (Live)
           ALPACA_API_KEY_SHORGAN_LIVE=${{ secrets.ALPACA_API_KEY_SHORGAN_LIVE }}
           ALPACA_SECRET_KEY_SHORGAN_LIVE=${{ secrets.ALPACA_SECRET_KEY_SHORGAN_LIVE }}
+          ALPACA_LIVE_API_KEY_SHORGAN=${{ secrets.ALPACA_API_KEY_SHORGAN_LIVE }}
+          ALPACA_LIVE_SECRET_KEY_SHORGAN=${{ secrets.ALPACA_SECRET_KEY_SHORGAN_LIVE }}
 
           # Anthropic API Key
           ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
