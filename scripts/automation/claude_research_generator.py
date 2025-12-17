@@ -797,7 +797,38 @@ For each new opportunity:
 
 ---
 
-## 8. OPTIONS TRADES (Max 2)
+## 8. SHORT OPPORTUNITIES (1-2 Ideas)
+
+**Lockup Expiration Shorts** (High Priority):
+- Stocks with lockup expiring in 7-30 days
+- IPOs trading above issue price with high insider ownership
+- Overextended momentum names with broken technicals
+
+For each short:
+
+### [TICKER] - SHORT SETUP
+
+**Thesis**: [Why this stock should decline]
+
+**Catalyst**: [Lockup expiry date / Earnings miss setup / Technical breakdown]
+
+**Trade Structure:**
+- Current Price: $XX.XX
+- Entry Price: $XX.XX (short entry)
+- Stop Loss: $XX.XX (+18% from entry - tight!)
+- Cover Target 1: $XX.XX (-15% profit)
+- Cover Target 2: $XX.XX (-25% profit)
+
+**Position Sizing for $3K Account:**
+- Shares to Short: XX shares (smaller size - shorts are risky!)
+- Total Position Value: $XXX.XX
+- Max Risk (at stop): $XX.XX
+
+**Risk Warning**: Shorts can squeeze - always use stop losses!
+
+---
+
+## 9. OPTIONS TRADES (Max 2)
 
 For each options trade:
 
@@ -832,7 +863,7 @@ For each options trade:
 
 ---
 
-## 9. EXECUTION PLAN
+## 10. EXECUTION PLAN
 
 **Complete list of all trades for tomorrow:**
 
@@ -859,7 +890,7 @@ For each options trade:
 
 ---
 
-## 10. RISK MANAGEMENT PROTOCOL
+## 11. RISK MANAGEMENT PROTOCOL
 
 **Daily Loss Limit**: $300 (10% of portfolio)
 - If hit → NO new trades for day
@@ -894,7 +925,7 @@ For each options trade:
 
 ORDER BLOCK FORMAT (strict):
 
-**For Stock Trades:**
+**For Stock Trades (LONG):**
 ```
 Action: buy, sell
 Ticker: SYMBOL
@@ -908,6 +939,22 @@ Stop loss: $XX.XX (15% max)
 Target price: $XX.XX
 Max loss: $XX.XX
 One-line rationale: [Catalyst + setup + conviction score]
+```
+
+**For SHORT Trades:**
+```
+Action: sell_short, buy_to_cover
+Ticker: SYMBOL
+Shares: X (actual share count - keep small!)
+Total position value: $XXX.XX
+Entry price: $XX.XX (short entry)
+Time in force: DAY
+Intended execution date: YYYY-MM-DD
+Catalyst date: YYYY-MM-DD
+Stop loss: $XX.XX (18% max - tighter for shorts!)
+Cover target: $XX.XX
+Max loss: $XX.XX
+One-line rationale: [Bearish catalyst + technical breakdown + risk]
 ```
 
 **For Options Trades:**
