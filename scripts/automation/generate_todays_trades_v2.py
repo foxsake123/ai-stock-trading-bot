@@ -22,6 +22,14 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional
+from dotenv import load_dotenv
+
+# Change to project root directory (important for Task Scheduler)
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+os.chdir(PROJECT_ROOT)
+
+# Load environment variables from project root
+load_dotenv(PROJECT_ROOT / ".env")
 
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent.parent))

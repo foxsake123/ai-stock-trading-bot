@@ -16,8 +16,12 @@ import numpy as np
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Change to project root directory (important for Task Scheduler)
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+os.chdir(PROJECT_ROOT)
+
+# Load environment variables from project root
+load_dotenv(PROJECT_ROOT / ".env")
 
 # Configuration
 PERFORMANCE_JSON = "data/daily/performance/performance_history.json"

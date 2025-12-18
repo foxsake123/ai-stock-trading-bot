@@ -20,12 +20,16 @@ import pytz
 import requests
 from dotenv import load_dotenv
 
+# Change to project root directory (important for Task Scheduler)
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+os.chdir(PROJECT_ROOT)
+
+# Load environment variables from project root
+load_dotenv(PROJECT_ROOT / ".env")
+
 sys.path.append(str(Path(__file__).parent))
 
 from claude_research_generator import ClaudeResearchGenerator
-
-# Load environment variables
-load_dotenv()
 
 
 def is_market_day(date):

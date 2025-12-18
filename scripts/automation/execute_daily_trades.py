@@ -14,8 +14,12 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Change to project root directory (important for Task Scheduler)
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+os.chdir(PROJECT_ROOT)
+
+# Load environment variables from project root
+load_dotenv(PROJECT_ROOT / ".env")
 
 # Add path for logging
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
