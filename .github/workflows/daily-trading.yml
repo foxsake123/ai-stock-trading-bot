@@ -43,7 +43,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install alpaca-py anthropic python-dotenv requests pandas numpy matplotlib reportlab yfinance
+          pip install alpaca-py anthropic python-dotenv requests pandas numpy matplotlib reportlab yfinance aiohttp
 
       - name: Create .env file
         run: |
