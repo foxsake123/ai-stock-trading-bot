@@ -28,6 +28,14 @@ except ImportError:
     COMPLIANCE_AVAILABLE = False
     print("[WARNING] Regulatory compliance module not available")
 
+# Import tax-loss harvesting module
+try:
+    from scripts.automation.tax_loss_harvester import TaxLossHarvester
+    TLH_AVAILABLE = True
+except ImportError:
+    TLH_AVAILABLE = False
+    print("[WARNING] Tax-loss harvesting module not available")
+
 # Alpaca API Configuration (from environment variables)
 DEE_BOT_CONFIG = {
     'API_KEY': os.getenv('ALPACA_API_KEY_DEE'),
@@ -54,6 +62,24 @@ SHORGAN_MAX_TRADES_PER_DAY = 5  # Execute top 5 highest-confidence trades only
 SHORGAN_ALLOW_SHORTS = False  # DISABLED - Cash account (no margin approval)
 SHORGAN_ALLOW_OPTIONS = True  # Enable options trading (if approved)
 
+# ⚠️ DEE-BOT LIVE TRADING CONFIGURATION ⚠️
+DEE_BOT_LIVE_CONFIG = {
+    'API_KEY': os.getenv('ALPACA_LIVE_API_KEY_DEE'),  # LIVE KEYS
+    'SECRET_KEY': os.getenv('ALPACA_LIVE_SECRET_KEY_DEE'),  # LIVE KEYS
+    'BASE_URL': 'https://api.alpaca.markets'  # LIVE TRADING - REAL MONEY
+}
+
+# DEE-BOT LIVE TRADING SETTINGS ($10K S&P 100 Account)
+DEE_LIVE_TRADING = False  # DISABLED until user creates account and provides API keys
+DEE_CAPITAL = 10000.0  # Live account capital ($10K invested)
+DEE_MAX_POSITION_SIZE = 1000.0  # $1,000 max per position (10% of capital)
+DEE_MIN_POSITION_SIZE = 400.0  # $400 minimum position size (4%)
+DEE_CASH_BUFFER = 500.0  # Keep $500 buffer for emergencies
+DEE_MAX_POSITIONS = 12  # Max 12 concurrent positions
+DEE_MAX_DAILY_LOSS = 500.0  # Stop trading if lose $500 in one day (5%)
+DEE_MAX_TRADES_PER_DAY = 5  # Execute top 5 highest-confidence trades only
+DEE_STOP_LOSS_PCT = 0.08  # 8% hard stop loss on all positions
+
 # Validate API keys are loaded
 if not DEE_BOT_CONFIG['API_KEY'] or not DEE_BOT_CONFIG['SECRET_KEY']:
     raise ValueError("DEE-BOT API keys not found in environment variables. Check your .env file.")
@@ -62,6 +88,7 @@ if not SHORGAN_BOT_CONFIG['API_KEY'] or not SHORGAN_BOT_CONFIG['SECRET_KEY']:
 
 class DailyTradeExecutor:
     def __init__(self):
+        # DEE-BOT Paper API
         self.dee_api = tradeapi.REST(
             DEE_BOT_CONFIG['API_KEY'],
             DEE_BOT_CONFIG['SECRET_KEY'],
@@ -69,6 +96,18 @@ class DailyTradeExecutor:
             api_version='v2'
         )
 
+        # DEE-BOT Live API (only if enabled and keys available)
+        self.dee_live_api = None
+        if DEE_LIVE_TRADING and DEE_BOT_LIVE_CONFIG['API_KEY'] and DEE_BOT_LIVE_CONFIG['SECRET_KEY']:
+            self.dee_live_api = tradeapi.REST(
+                DEE_BOT_LIVE_CONFIG['API_KEY'],
+                DEE_BOT_LIVE_CONFIG['SECRET_KEY'],
+                DEE_BOT_LIVE_CONFIG['BASE_URL'],
+                api_version='v2'
+            )
+            print("[LIVE] DEE-BOT Live API initialized")
+
+        # SHORGAN-BOT Live API
         self.shorgan_api = tradeapi.REST(
             SHORGAN_BOT_CONFIG['API_KEY'],
             SHORGAN_BOT_CONFIG['SECRET_KEY'],
@@ -85,8 +124,9 @@ class DailyTradeExecutor:
         # Extended hours trading configuration
         self.enable_extended_hours = True  # Allow pre-market and after-hours trading
 
-        # Initialize SHORGAN tracking
+        # Initialize tracking for live accounts
         self._init_shorgan_tracking()
+        self._init_dee_live_tracking()
 
     def is_extended_hours(self, api=None):
         """
@@ -151,6 +191,24 @@ class DailyTradeExecutor:
             except Exception as e:
                 print(f"[ERROR] Could not get SHORGAN starting equity: {e}")
 
+    def _init_dee_live_tracking(self):
+        """Initialize DEE-BOT Live daily performance tracking"""
+        self.dee_starting_equity = None
+        self.dee_live_trades_today = 0
+        if DEE_LIVE_TRADING and self.dee_live_api:
+            try:
+                account = self.dee_live_api.get_account()
+                self.dee_starting_equity = float(account.last_equity)
+                print(f"\n[LIVE] DEE-BOT LIVE TRADING ACTIVE")
+                print(f"Starting Equity: ${self.dee_starting_equity:,.2f}")
+                print(f"Daily Loss Limit: ${DEE_MAX_DAILY_LOSS:.2f}")
+                print(f"Max Trades Today: {DEE_MAX_TRADES_PER_DAY}")
+                print(f"Stop Loss: {DEE_STOP_LOSS_PCT*100:.0f}%")
+            except Exception as e:
+                print(f"[ERROR] Could not get DEE-BOT Live starting equity: {e}")
+        else:
+            print(f"[INFO] DEE-BOT Live trading is DISABLED (enable with DEE_LIVE_TRADING=True)")
+
     def check_shorgan_daily_loss_limit(self):
         """Circuit breaker: Stop trading if daily loss exceeds limit"""
         if not SHORGAN_LIVE_TRADING or self.shorgan_starting_equity is None:
@@ -214,32 +272,146 @@ class DailyTradeExecutor:
         print(f"[INFO] Position Size: {final_shares} shares @ ${price:.2f} = ${position_value:.2f}")
         return final_shares
 
-    def find_todays_trades_file(self):
-        """Find today's trades file"""
+    def check_dee_live_daily_loss_limit(self):
+        """Circuit breaker: Stop DEE Live trading if daily loss exceeds limit"""
+        if not DEE_LIVE_TRADING or not self.dee_live_api or self.dee_starting_equity is None:
+            return True
+
+        try:
+            account = self.dee_live_api.get_account()
+            current_equity = float(account.equity)
+            daily_pnl = current_equity - self.dee_starting_equity
+
+            if daily_pnl < -DEE_MAX_DAILY_LOSS:
+                print(f"\n[CIRCUIT BREAKER] TRIGGERED - DEE-BOT LIVE")
+                print(f"Daily Loss: ${-daily_pnl:.2f}")
+                print(f"Loss Limit: ${DEE_MAX_DAILY_LOSS:.2f}")
+                print(f"[ALERT] STOPPING ALL DEE-BOT LIVE TRADING FOR TODAY")
+                return False
+
+            print(f"[OK] DEE Live Daily P&L: ${daily_pnl:+.2f} (Limit: -${DEE_MAX_DAILY_LOSS:.2f})")
+            return True
+        except Exception as e:
+            print(f"[ERROR] Could not check DEE Live daily loss limit: {e}")
+            return False  # Err on side of caution
+
+    def check_dee_live_position_count_limit(self):
+        """Don't exceed max concurrent positions for DEE Live"""
+        if not DEE_LIVE_TRADING or not self.dee_live_api:
+            return True
+
+        try:
+            positions = self.dee_live_api.list_positions()
+            position_count = len(positions)
+
+            if position_count >= DEE_MAX_POSITIONS:
+                print(f"\n[WARNING] DEE Live position limit reached: {position_count}/{DEE_MAX_POSITIONS}")
+                print(f"Cannot open new positions until existing ones close")
+                return False
+
+            print(f"[OK] DEE Live Position Count: {position_count}/{DEE_MAX_POSITIONS}")
+            return True
+        except Exception as e:
+            print(f"[ERROR] Could not check DEE Live position count: {e}")
+            return False
+
+    def calculate_dee_live_position_size(self, price, shares_recommended):
+        """Calculate safe position size for $10,000 DEE Live account"""
+        if not DEE_LIVE_TRADING or not self.dee_live_api:
+            return shares_recommended  # Use recommended size for paper
+
+        # Calculate affordable shares based on position size limit
+        max_shares = int(DEE_MAX_POSITION_SIZE / price)
+
+        # Don't buy if position would be too small
+        if max_shares * price < DEE_MIN_POSITION_SIZE:
+            print(f"[SKIP] DEE Live position too small: ${max_shares * price:.2f} < ${DEE_MIN_POSITION_SIZE}")
+            return 0
+
+        # Use the smaller of recommended or max affordable
+        final_shares = min(shares_recommended, max_shares)
+        position_value = final_shares * price
+
+        print(f"[INFO] DEE Live Position: {final_shares} shares @ ${price:.2f} = ${position_value:.2f}")
+        return final_shares
+
+    def _run_tax_loss_harvesting(self):
+        """Run tax-loss harvesting for all live accounts before regular trades."""
+        print("\n" + "=" * 70)
+        print("TAX-LOSS HARVESTING SCAN")
+        print("=" * 70)
+
+        # Harvest from SHORGAN Live (always active)
+        if SHORGAN_LIVE_TRADING:
+            try:
+                print("\n[TLH] Scanning SHORGAN-BOT Live...")
+                shorgan_tlh = TaxLossHarvester("SHORGAN-LIVE")
+                shorgan_results = shorgan_tlh.run_daily_harvest(dry_run=False)
+                if shorgan_results:
+                    print(f"[TLH] SHORGAN: {len(shorgan_results)} positions harvested")
+            except Exception as e:
+                print(f"[TLH] SHORGAN harvest error: {e}")
+
+        # Harvest from DEE Live (if enabled)
+        if DEE_LIVE_TRADING and self.dee_live_api:
+            try:
+                print("\n[TLH] Scanning DEE-BOT Live...")
+                dee_tlh = TaxLossHarvester("DEE-LIVE")
+                dee_results = dee_tlh.run_daily_harvest(dry_run=False)
+                if dee_results:
+                    print(f"[TLH] DEE: {len(dee_results)} positions harvested")
+            except Exception as e:
+                print(f"[TLH] DEE harvest error: {e}")
+
+        print("\n[TLH] Tax-loss harvesting complete")
+        print("=" * 70 + "\n")
+
+    def find_todays_trades_file(self, file_type="main"):
+        """Find today's trades file
+
+        Args:
+            file_type: "main" (DEE Paper + SHORGAN Paper), "dee_live", or "shorgan_live"
+        """
         today = datetime.now().strftime('%Y-%m-%d')
+
+        # Determine file suffix based on type
+        if file_type == "dee_live":
+            suffix = "_DEE_LIVE"
+        elif file_type == "shorgan_live":
+            suffix = "_SHORGAN_LIVE"
+        else:
+            suffix = ""
 
         # Check multiple possible locations
         possible_paths = [
-            f'docs/TODAYS_TRADES_{today}.md',
-            f'docs/ORDERS_FOR_{today}.md',
-            f'TODAYS_TRADES_{today}.md',
-            f'ORDERS_FOR_{today}.md'
+            f'docs/TODAYS_TRADES_{today}{suffix}.md',
+            f'TODAYS_TRADES_{today}{suffix}.md'
         ]
+
+        # Also check legacy paths for main file
+        if file_type == "main":
+            possible_paths.extend([
+                f'docs/ORDERS_FOR_{today}.md',
+                f'ORDERS_FOR_{today}.md'
+            ])
 
         for path in possible_paths:
             full_path = Path(path)
             if full_path.exists():
                 return full_path
 
-        # If today's file doesn't exist, look for most recent
-        docs_dir = Path('docs')
-        if docs_dir.exists():
-            trade_files = list(docs_dir.glob('TODAYS_TRADES_*.md')) + list(docs_dir.glob('ORDERS_FOR_*.md'))
-            if trade_files:
-                # Get most recent file
-                latest_file = max(trade_files, key=lambda x: x.stat().st_mtime)
-                print(f"[WARNING] Using most recent trades file: {latest_file}")
-                return latest_file
+        # If today's file doesn't exist, look for most recent (main file only)
+        if file_type == "main":
+            docs_dir = Path('docs')
+            if docs_dir.exists():
+                trade_files = list(docs_dir.glob('TODAYS_TRADES_*.md')) + list(docs_dir.glob('ORDERS_FOR_*.md'))
+                # Exclude live-specific files when looking for main
+                trade_files = [f for f in trade_files if '_DEE_LIVE' not in f.name and '_SHORGAN_LIVE' not in f.name]
+                if trade_files:
+                    # Get most recent file
+                    latest_file = max(trade_files, key=lambda x: x.stat().st_mtime)
+                    print(f"[WARNING] Using most recent trades file: {latest_file}")
+                    return latest_file
 
         return None
 
@@ -804,6 +976,10 @@ class DailyTradeExecutor:
         # Check market status
         self.check_market_status()
 
+        # Run tax-loss harvesting BEFORE regular trades (for live accounts)
+        if TLH_AVAILABLE:
+            self._run_tax_loss_harvesting()
+
         total_trades = (len(dee_trades['sell']) + len(dee_trades['buy']) +
                        len(shorgan_trades['sell']) + len(shorgan_trades['buy']) +
                        len(shorgan_trades['short']))
@@ -837,6 +1013,60 @@ class DailyTradeExecutor:
                 if result is None:
                     retry_queue.append(('dee', trade, 'buy'))
                 time.sleep(1)
+
+        # Execute DEE-BOT LIVE trades (if enabled)
+        if DEE_LIVE_TRADING and self.dee_live_api:
+            # Find and parse DEE Live file
+            dee_live_file = self.find_todays_trades_file(file_type="dee_live")
+            if dee_live_file:
+                dee_live_trades, _ = self.parse_trades_file(dee_live_file)
+
+                if dee_live_trades['sell'] or dee_live_trades['buy']:
+                    print("-" * 40)
+                    print("DEE-BOT LIVE TRADES (REAL MONEY)")
+                    print("-" * 40)
+
+                    # Check circuit breakers before executing
+                    if not self.check_dee_live_daily_loss_limit():
+                        print("[CIRCUIT BREAKER] Skipping all DEE Live trades due to daily loss limit")
+                    elif not self.check_dee_live_position_count_limit():
+                        print("[POSITION LIMIT] Skipping new DEE Live buy trades")
+                        # Still execute sells
+                        for trade in dee_live_trades['sell']:
+                            result = self.execute_trade(self.dee_live_api, trade, 'sell')
+                            if result is None:
+                                retry_queue.append(('dee_live', trade, 'sell'))
+                            time.sleep(1)
+                    else:
+                        # Execute sells first
+                        for trade in dee_live_trades['sell']:
+                            result = self.execute_trade(self.dee_live_api, trade, 'sell')
+                            if result is None:
+                                retry_queue.append(('dee_live', trade, 'sell'))
+                            time.sleep(1)
+
+                        # Execute buys with position sizing
+                        trades_executed = 0
+                        for trade in dee_live_trades['buy']:
+                            if trades_executed >= DEE_MAX_TRADES_PER_DAY:
+                                print(f"[LIMIT] Reached max trades per day ({DEE_MAX_TRADES_PER_DAY})")
+                                break
+
+                            # Apply position sizing
+                            price = trade.get('limit_price', 50.0)
+                            original_shares = trade.get('shares', 10)
+                            adjusted_shares = self.calculate_dee_live_position_size(price, original_shares)
+
+                            if adjusted_shares > 0:
+                                trade['shares'] = adjusted_shares
+                                result = self.execute_trade(self.dee_live_api, trade, 'buy')
+                                if result is None:
+                                    retry_queue.append(('dee_live', trade, 'buy'))
+                                else:
+                                    trades_executed += 1
+                            time.sleep(1)
+            else:
+                print("[INFO] No DEE-BOT Live trades file found")
 
         # Execute SHORGAN-BOT trades
         if shorgan_trades['sell'] or shorgan_trades['buy'] or shorgan_trades['short']:
@@ -887,7 +1117,12 @@ class DailyTradeExecutor:
 
             for bot_type, trade, side in retry_queue:
                 print(f"\n[RETRY] {side.upper()} {trade['shares']} {trade['symbol']}")
-                api = self.dee_api if bot_type == 'dee' else self.shorgan_api
+                if bot_type == 'dee':
+                    api = self.dee_api
+                elif bot_type == 'dee_live':
+                    api = self.dee_live_api
+                else:
+                    api = self.shorgan_api
 
                 # Re-validate and retry with adjusted parameters
                 result = self.execute_trade(api, trade, side)
@@ -926,6 +1161,8 @@ class DailyTradeExecutor:
         print("AUTOMATIC STOP-LOSS PLACEMENT")
         print("=" * 80)
         self.place_stop_losses_for_executed_buys(self.dee_api, "DEE-BOT")
+        if DEE_LIVE_TRADING and self.dee_live_api:
+            self.place_stop_losses_for_executed_buys(self.dee_live_api, "DEE-BOT-LIVE", stop_loss_pct=DEE_STOP_LOSS_PCT)
         self.place_stop_losses_for_executed_buys(self.shorgan_api, "SHORGAN-BOT")
 
         # Save execution log

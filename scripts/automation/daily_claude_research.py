@@ -200,8 +200,8 @@ def main():
     days_elapsed = (datetime.now() - start_date).days
     week_number = (days_elapsed // 7) + 1
 
-    # Generate reports for all 3 accounts
-    bots = ["DEE-BOT", "SHORGAN-BOT", "SHORGAN-BOT-LIVE"]
+    # Generate reports for all 4 accounts
+    bots = ["DEE-BOT", "DEE-BOT-LIVE", "SHORGAN-BOT", "SHORGAN-BOT-LIVE"]
     report_paths = []
     pdf_paths = {}
 

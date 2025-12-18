@@ -62,6 +62,10 @@ jobs:
           ALPACA_LIVE_API_KEY_SHORGAN=${{ secrets.ALPACA_API_KEY_SHORGAN_LIVE }}
           ALPACA_LIVE_SECRET_KEY_SHORGAN=${{ secrets.ALPACA_SECRET_KEY_SHORGAN_LIVE }}
 
+          # DEE-BOT Alpaca API Keys (Live)
+          ALPACA_LIVE_API_KEY_DEE=${{ secrets.ALPACA_LIVE_API_KEY_DEE }}
+          ALPACA_LIVE_SECRET_KEY_DEE=${{ secrets.ALPACA_LIVE_SECRET_KEY_DEE }}
+
           # Anthropic API Key
           ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
 

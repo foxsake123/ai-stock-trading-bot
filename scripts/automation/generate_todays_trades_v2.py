@@ -306,11 +306,17 @@ class MultiAgentTradeValidator:
         from alpaca.trading.client import TradingClient
 
         try:
-            # DEE-BOT (Paper)
-            self.dee_api = TradingClient(
+            # DEE-BOT Paper
+            self.dee_paper_api = TradingClient(
                 os.getenv('ALPACA_API_KEY_DEE'),
                 os.getenv('ALPACA_SECRET_KEY_DEE'),
                 paper=True
+            )
+            # DEE-BOT Live
+            self.dee_live_api = TradingClient(
+                os.getenv('ALPACA_LIVE_API_KEY_DEE'),
+                os.getenv('ALPACA_LIVE_SECRET_KEY_DEE'),
+                paper=False
             )
             # SHORGAN-BOT Paper
             self.shorgan_paper_api = TradingClient(
@@ -324,10 +330,11 @@ class MultiAgentTradeValidator:
                 os.getenv('ALPACA_LIVE_SECRET_KEY_SHORGAN'),
                 paper=False
             )
-            print("[PORTFOLIO] Alpaca clients initialized for position-aware validation")
+            print("[PORTFOLIO] Alpaca clients initialized for position-aware validation (4 accounts)")
         except Exception as e:
             print(f"[WARNING] Could not init Alpaca clients: {e}")
-            self.dee_api = None
+            self.dee_paper_api = None
+            self.dee_live_api = None
             self.shorgan_paper_api = None
             self.shorgan_live_api = None
 
@@ -346,13 +353,19 @@ class MultiAgentTradeValidator:
                 return self._position_cache[cache_key]
 
         try:
-            # Select appropriate API
+            # Select appropriate API based on bot and account type
             if bot_name == "DEE-BOT":
-                api = self.dee_api
-            elif account_type == "live":
-                api = self.shorgan_live_api
+                if account_type == "live":
+                    api = self.dee_live_api
+                else:
+                    api = self.dee_paper_api
+            elif bot_name == "SHORGAN-BOT":
+                if account_type == "live":
+                    api = self.shorgan_live_api
+                else:
+                    api = self.shorgan_paper_api
             else:
-                api = self.shorgan_paper_api
+                api = self.dee_paper_api  # default fallback
 
             if not api:
                 return {}
@@ -897,8 +910,9 @@ class AutomatedTradeGeneratorV2:
 
         # Portfolio capital
         self.dee_bot_capital = 100000
+        self.dee_bot_live_capital = 10000        # DEE-BOT Live trading account ($10K)
         self.shorgan_bot_paper_capital = 100000  # Paper trading account
-        self.shorgan_bot_live_capital = 3000     # Live trading account ($3K)
+        self.shorgan_bot_live_capital = 3000     # SHORGAN Live trading account ($3K)
 
     def find_research_reports(self, date_str: str = None) -> Dict[str, Path]:
         """
@@ -918,12 +932,16 @@ class AutomatedTradeGeneratorV2:
         if new_reports_dir.exists():
             # Look for bot-specific files first
             claude_dee = new_reports_dir / f"claude_research_dee_bot_{date_str}.md"
+            claude_dee_live = new_reports_dir / f"claude_research_dee_bot_live_{date_str}.md"
             claude_shorgan = new_reports_dir / f"claude_research_shorgan_bot_{date_str}.md"
             claude_shorgan_live = new_reports_dir / f"claude_research_shorgan_bot_live_{date_str}.md"
 
             # Fall back to combined file if bot-specific don't exist
             if not claude_dee.exists():
                 claude_dee = new_reports_dir / "claude_research.md"
+            # Fall back to paper DEE-BOT research if live-specific doesn't exist
+            if not claude_dee_live.exists():
+                claude_dee_live = claude_dee
             if not claude_shorgan.exists():
                 claude_shorgan = new_reports_dir / "claude_research.md"
             # Fall back to paper research if live-specific doesn't exist
@@ -932,6 +950,7 @@ class AutomatedTradeGeneratorV2:
 
             return {
                 'claude_dee': claude_dee,
+                'claude_dee_live': claude_dee_live,
                 'claude_shorgan': claude_shorgan,
                 'claude_shorgan_live': claude_shorgan_live,
                 'chatgpt': new_reports_dir / "chatgpt_research.md",
@@ -1005,12 +1024,12 @@ class AutomatedTradeGeneratorV2:
         Args:
             bot_name: DEE-BOT or SHORGAN-BOT
             date_str: Date of research reports
-            account_type: "paper" (default) or "live" (for SHORGAN-BOT only)
+            account_type: "paper" (default) or "live" (for both DEE-BOT and SHORGAN-BOT)
 
         Returns:
             Dict with approved and rejected trades
         """
-        account_label = f" ({account_type.upper()})" if bot_name == "SHORGAN-BOT" else ""
+        account_label = f" ({account_type.upper()})" if account_type == "live" else ""
         print(f"\n{'='*70}")
         print(f"{bot_name}{account_label} TRADE GENERATION")
         print(f"{'='*70}")
@@ -1023,9 +1042,14 @@ class AutomatedTradeGeneratorV2:
             return {'approved': [], 'rejected': []}
 
         # Get external recommendations
-        # Determine which Claude file to use
+        # Determine which Claude file to use based on bot and account type
         if bot_name == "DEE-BOT":
-            claude_path = reports.get('claude_dee')
+            if account_type == "live":
+                claude_path = reports.get('claude_dee_live')
+                print(f"[*] Using DEE-BOT LIVE research file")
+            else:
+                claude_path = reports.get('claude_dee')
+                print(f"[*] Using DEE-BOT PAPER research file")
         elif bot_name == "SHORGAN-BOT":
             # Use live-specific research for live account, paper research for paper account
             if account_type == "live":
@@ -1062,13 +1086,22 @@ class AutomatedTradeGeneratorV2:
 
         # Select portfolio value based on bot and account type
         if bot_name == "DEE-BOT":
-            portfolio_value = self.dee_bot_capital
-        elif account_type == "live":
-            portfolio_value = self.shorgan_bot_live_capital  # $3K
-            print(f"[*] Using LIVE account capital: ${portfolio_value:,.0f}")
+            if account_type == "live":
+                portfolio_value = self.dee_bot_live_capital  # $10K
+                print(f"[*] Using DEE-BOT LIVE capital: ${portfolio_value:,.0f}")
+            else:
+                portfolio_value = self.dee_bot_capital  # $100K
+                print(f"[*] Using DEE-BOT PAPER capital: ${portfolio_value:,.0f}")
+        elif bot_name == "SHORGAN-BOT":
+            if account_type == "live":
+                portfolio_value = self.shorgan_bot_live_capital  # $3K
+                print(f"[*] Using SHORGAN-BOT LIVE capital: ${portfolio_value:,.0f}")
+            else:
+                portfolio_value = self.shorgan_bot_paper_capital  # $100K
+                print(f"[*] Using SHORGAN-BOT PAPER capital: ${portfolio_value:,.0f}")
         else:
-            portfolio_value = self.shorgan_bot_paper_capital  # $100K
-            print(f"[*] Using PAPER account capital: ${portfolio_value:,.0f}")
+            portfolio_value = self.dee_bot_capital
+            print(f"[*] Using default capital: ${portfolio_value:,.0f}")
 
         for rec in recommendations:
             try:
@@ -1119,7 +1152,9 @@ class AutomatedTradeGeneratorV2:
         day_name = today.strftime('%A')
 
         # Determine file title based on suffix
-        if suffix == "_LIVE":
+        if suffix == "_DEE_LIVE":
+            title_suffix = " - DEE-BOT LIVE ($10K Account)"
+        elif suffix == "_SHORGAN_LIVE":
             title_suffix = " - SHORGAN-BOT LIVE ($3K Account)"
         else:
             title_suffix = ""
@@ -1138,11 +1173,13 @@ class AutomatedTradeGeneratorV2:
 """
         # Add DEE-BOT summary only if provided
         if dee_results:
-            content += f"**DEE-BOT**: {len(dee_results['approved'])} approved / {len(dee_results['rejected'])} rejected\n"
+            dee_label = "DEE-BOT (LIVE)" if suffix == "_DEE_LIVE" else "DEE-BOT"
+            content += f"**{dee_label}**: {len(dee_results['approved'])} approved / {len(dee_results['rejected'])} rejected\n"
 
-        # Add SHORGAN-BOT summary
-        bot_label = "SHORGAN-BOT (LIVE)" if suffix == "_LIVE" else "SHORGAN-BOT"
-        content += f"**{bot_label}**: {len(shorgan_results['approved'])} approved / {len(shorgan_results['rejected'])} rejected\n"
+        # Add SHORGAN-BOT summary only if provided
+        if shorgan_results:
+            shorgan_label = "SHORGAN-BOT (LIVE)" if suffix == "_SHORGAN_LIVE" else "SHORGAN-BOT"
+            content += f"**{shorgan_label}**: {len(shorgan_results['approved'])} approved / {len(shorgan_results['rejected'])} rejected\n"
 
         content += "\n---\n"
 
@@ -1210,15 +1247,16 @@ class AutomatedTradeGeneratorV2:
 
             content += "\n---\n"
 
-        # SHORGAN-BOT section
-        account_type_label = " (LIVE $3K)" if suffix == "_LIVE" else ""
-        portfolio_value = shorgan_results.get('portfolio_value', 100000)  # Default to 100K if not available
+        # SHORGAN-BOT section (only if results provided)
+        if shorgan_results:
+            account_type_label = " (LIVE $3K)" if suffix == "_SHORGAN_LIVE" else ""
+            portfolio_value = shorgan_results.get('portfolio_value', 100000)  # Default to 100K if not available
 
-        # Fetch real-time prices for all SHORGAN tickers
-        all_shorgan_tickers = [v['recommendation'].ticker for v in shorgan_results['approved']]
-        current_prices = get_current_prices(all_shorgan_tickers) if all_shorgan_tickers else {}
+            # Fetch real-time prices for all SHORGAN tickers
+            all_shorgan_tickers = [v['recommendation'].ticker for v in shorgan_results['approved']]
+            current_prices = get_current_prices(all_shorgan_tickers) if all_shorgan_tickers else {}
 
-        content += f"""
+            content += f"""
 
 ## 🚀 SHORGAN-BOT TRADES{account_type_label} (Catalyst-Driven)
 **Strategy**: Event-driven, momentum, HIGH-CONVICTION
@@ -1228,65 +1266,65 @@ class AutomatedTradeGeneratorV2:
 ### SELL ORDERS
 """
 
-        # Add SHORGAN-BOT sell orders first
-        shorgan_sell = [v for v in shorgan_results['approved'] if v['recommendation'].action and v['recommendation'].action.upper() == 'SELL']
-        if shorgan_sell:
-            content += "| Symbol | Shares | Limit Price | Confidence | Source |\n"
-            content += "|--------|--------|-------------|------------|--------|\n"
-            for val in shorgan_sell:
-                rec = val['recommendation']
-                shares = rec.shares or "ALL"
-                # Use real-time price if available, otherwise use parsed price or market order
-                price = rec.entry_price or current_prices.get(rec.ticker, 0)
-                price_str = f"${price:.2f}" if price > 0 else "MARKET"
-                content += f"| {rec.ticker} | {shares} | {price_str} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
-        else:
-            content += "| No sell orders today | - | - | - | - |\n"
+            # Add SHORGAN-BOT sell orders first
+            shorgan_sell = [v for v in shorgan_results['approved'] if v['recommendation'].action and v['recommendation'].action.upper() == 'SELL']
+            if shorgan_sell:
+                content += "| Symbol | Shares | Limit Price | Confidence | Source |\n"
+                content += "|--------|--------|-------------|------------|--------|\n"
+                for val in shorgan_sell:
+                    rec = val['recommendation']
+                    shares = rec.shares or "ALL"
+                    # Use real-time price if available, otherwise use parsed price or market order
+                    price = rec.entry_price or current_prices.get(rec.ticker, 0)
+                    price_str = f"${price:.2f}" if price > 0 else "MARKET"
+                    content += f"| {rec.ticker} | {shares} | {price_str} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
+            else:
+                content += "| No sell orders today | - | - | - | - |\n"
 
-        content += "\n\n### BUY ORDERS\n"
+            content += "\n\n### BUY ORDERS\n"
 
-        # Add SHORGAN-BOT buy orders
-        shorgan_buy = [v for v in shorgan_results['approved'] if not v['recommendation'].action or v['recommendation'].action.upper() != 'SELL']
-        if shorgan_buy:
-            content += "| Symbol | Shares | Limit Price | Stop Loss | Confidence | Source |\n"
-            content += "|--------|--------|-------------|-----------|------------|--------|\n"
-            for val in shorgan_buy:
-                rec = val['recommendation']
-                # Use real-time price if available, otherwise use parsed price
-                price = rec.entry_price or current_prices.get(rec.ticker, 0)
-                if price <= 0:
-                    price = 10.00  # Fallback for unknown prices
-                shares = rec.shares or int((rec.position_size_pct or 10) * portfolio_value / 100 / price)
-                stop_loss = rec.stop_loss if rec.stop_loss else (price * 0.82)  # 18% stop loss
-                content += f"| {rec.ticker} | {shares} | ${price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
+            # Add SHORGAN-BOT buy orders
+            shorgan_buy = [v for v in shorgan_results['approved'] if not v['recommendation'].action or v['recommendation'].action.upper() != 'SELL']
+            if shorgan_buy:
+                content += "| Symbol | Shares | Limit Price | Stop Loss | Confidence | Source |\n"
+                content += "|--------|--------|-------------|-----------|------------|--------|\n"
+                for val in shorgan_buy:
+                    rec = val['recommendation']
+                    # Use real-time price if available, otherwise use parsed price
+                    price = rec.entry_price or current_prices.get(rec.ticker, 0)
+                    if price <= 0:
+                        price = 10.00  # Fallback for unknown prices
+                    shares = rec.shares or int((rec.position_size_pct or 10) * portfolio_value / 100 / price)
+                    stop_loss = rec.stop_loss if rec.stop_loss else (price * 0.82)  # 18% stop loss
+                    content += f"| {rec.ticker} | {shares} | ${price:.2f} | ${stop_loss:.2f} | {val['combined_confidence']:.0%} | {rec.source.upper()} |\n"
 
-            # Add detailed rationale section for all buy trades
-            content += "\n### 📋 TRADE RATIONALE (Event-Driven Analysis)\n\n"
-            for val in shorgan_buy:
-                rec = val['recommendation']
-                catalyst_str = rec.catalyst or 'Market catalyst'
-                catalyst_date_str = f" ({rec.catalyst_date})" if rec.catalyst_date else ""
-                rationale_str = rec.rationale or "Multi-agent approved based on technical and fundamental analysis"
+                # Add detailed rationale section for all buy trades
+                content += "\n### 📋 TRADE RATIONALE (Event-Driven Analysis)\n\n"
+                for val in shorgan_buy:
+                    rec = val['recommendation']
+                    catalyst_str = rec.catalyst or 'Market catalyst'
+                    catalyst_date_str = f" ({rec.catalyst_date})" if rec.catalyst_date else ""
+                    rationale_str = rec.rationale or "Multi-agent approved based on technical and fundamental analysis"
 
-                content += f"**{rec.ticker}** - {rec.action or 'BUY'}\n"
-                content += f"- **Catalyst**: {catalyst_str}{catalyst_date_str}\n"
-                content += f"- **Rationale**: {rationale_str}\n"
-                content += f"- **Confidence**: {val['combined_confidence']:.0%} (External: {val.get('external_confidence', 0):.0%}, Internal: {val.get('internal_confidence', 0):.0%})\n\n"
-        else:
-            content += "| No buy orders today | - | - | - | - | - |\n"
+                    content += f"**{rec.ticker}** - {rec.action or 'BUY'}\n"
+                    content += f"- **Catalyst**: {catalyst_str}{catalyst_date_str}\n"
+                    content += f"- **Rationale**: {rationale_str}\n"
+                    content += f"- **Confidence**: {val['combined_confidence']:.0%} (External: {val.get('external_confidence', 0):.0%}, Internal: {val.get('internal_confidence', 0):.0%})\n\n"
+            else:
+                content += "| No buy orders today | - | - | - | - | - |\n"
 
-        content += f"""
+            content += f"""
 
 ### REJECTED RECOMMENDATIONS (for transparency)
 """
-        if shorgan_results['rejected']:
-            content += "| Symbol | Source | Rejection Reason |\n"
-            content += "|--------|--------|------------------|\n"
-            for val in shorgan_results['rejected']:
-                rec = val['recommendation']
-                content += f"| {rec.ticker} | {rec.source.upper()} | {val.get('rejection_reason', 'Unknown')[:80]} |\n"
-        else:
-            content += "*All recommendations approved*\n"
+            if shorgan_results['rejected']:
+                content += "| Symbol | Source | Rejection Reason |\n"
+                content += "|--------|--------|------------------|\n"
+                for val in shorgan_results['rejected']:
+                    rec = val['recommendation']
+                    content += f"| {rec.ticker} | {rec.source.upper()} | {val.get('rejection_reason', 'Unknown')[:80]} |\n"
+            else:
+                content += "*All recommendations approved*\n"
 
         content += f"""
 
@@ -1372,28 +1410,35 @@ class AutomatedTradeGeneratorV2:
                     print("[ABORT] Keeping existing file")
                     return existing_files[0]
 
-            # Generate trades for both bots
-            dee_results = self.generate_bot_trades("DEE-BOT", date_str, account_type="paper")
+            # Generate trades for all bots (paper and live accounts)
+            dee_paper_results = self.generate_bot_trades("DEE-BOT", date_str, account_type="paper")
+            dee_live_results = self.generate_bot_trades("DEE-BOT", date_str, account_type="live")
             shorgan_paper_results = self.generate_bot_trades("SHORGAN-BOT", date_str, account_type="paper")
             shorgan_live_results = self.generate_bot_trades("SHORGAN-BOT", date_str, account_type="live")
 
             # Generate markdown files
-            # Main file (DEE + SHORGAN Paper)
-            filepath = self.generate_markdown_file(dee_results, shorgan_paper_results, date_str, suffix="")
+            # Main file (DEE Paper + SHORGAN Paper)
+            filepath = self.generate_markdown_file(dee_paper_results, shorgan_paper_results, date_str, suffix="")
+
+            # Separate file for DEE Live ($10K account)
+            dee_live_filepath = self.generate_markdown_file(dee_live_results, None, date_str, suffix="_DEE_LIVE")
 
             # Separate file for SHORGAN Live ($3K account)
-            live_filepath = self.generate_markdown_file(None, shorgan_live_results, date_str, suffix="_LIVE")
+            shorgan_live_filepath = self.generate_markdown_file(None, shorgan_live_results, date_str, suffix="_SHORGAN_LIVE")
 
             # Calculate approval statistics
-            dee_total = len(dee_results['approved']) + len(dee_results['rejected'])
+            dee_paper_total = len(dee_paper_results['approved']) + len(dee_paper_results['rejected'])
+            dee_live_total = len(dee_live_results['approved']) + len(dee_live_results['rejected'])
             shorgan_paper_total = len(shorgan_paper_results['approved']) + len(shorgan_paper_results['rejected'])
             shorgan_live_total = len(shorgan_live_results['approved']) + len(shorgan_live_results['rejected'])
-            total_approved = (len(dee_results['approved']) +
+            total_approved = (len(dee_paper_results['approved']) +
+                            len(dee_live_results['approved']) +
                             len(shorgan_paper_results['approved']) +
                             len(shorgan_live_results['approved']))
-            total_total = dee_total + shorgan_paper_total + shorgan_live_total
+            total_total = dee_paper_total + dee_live_total + shorgan_paper_total + shorgan_live_total
 
-            dee_pct = (len(dee_results['approved']) / dee_total * 100) if dee_total > 0 else 0
+            dee_paper_pct = (len(dee_paper_results['approved']) / dee_paper_total * 100) if dee_paper_total > 0 else 0
+            dee_live_pct = (len(dee_live_results['approved']) / dee_live_total * 100) if dee_live_total > 0 else 0
             shorgan_paper_pct = (len(shorgan_paper_results['approved']) / shorgan_paper_total * 100) if shorgan_paper_total > 0 else 0
             shorgan_live_pct = (len(shorgan_live_results['approved']) / shorgan_live_total * 100) if shorgan_live_total > 0 else 0
             overall_pct = (total_approved / total_total * 100) if total_total > 0 else 0
@@ -1402,14 +1447,16 @@ class AutomatedTradeGeneratorV2:
             print("\n" + "="*80)
             print("GENERATION COMPLETE")
             print("="*80)
-            print(f"DEE-BOT: {len(dee_results['approved'])}/{dee_total} approved ({dee_pct:.1f}%)")
+            print(f"DEE-BOT (PAPER): {len(dee_paper_results['approved'])}/{dee_paper_total} approved ({dee_paper_pct:.1f}%)")
+            print(f"DEE-BOT (LIVE): {len(dee_live_results['approved'])}/{dee_live_total} approved ({dee_live_pct:.1f}%)")
             print(f"SHORGAN-BOT (PAPER): {len(shorgan_paper_results['approved'])}/{shorgan_paper_total} approved ({shorgan_paper_pct:.1f}%)")
             print(f"SHORGAN-BOT (LIVE): {len(shorgan_live_results['approved'])}/{shorgan_live_total} approved ({shorgan_live_pct:.1f}%)")
             print(f"OVERALL: {total_approved}/{total_total} approved ({overall_pct:.1f}%)")
             print("-"*80)
             print(f"Files generated:")
-            print(f"  - Main (DEE + SHORGAN Paper): {filepath}")
-            print(f"  - Live ($3K account): {live_filepath}")
+            print(f"  - Main (DEE Paper + SHORGAN Paper): {filepath}")
+            print(f"  - DEE Live ($10K account): {dee_live_filepath}")
+            print(f"  - SHORGAN Live ($3K account): {shorgan_live_filepath}")
             print("-"*80)
 
             # Approval rate warnings
