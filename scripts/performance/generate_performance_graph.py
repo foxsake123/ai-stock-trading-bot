@@ -875,11 +875,11 @@ def get_todays_performance():
             data = json.load(f)
 
         records = data.get('daily_records', [])
-        if len(records) < 1:
+        if len(records) < 2:
             return None
 
-        # Get yesterday's record (last in history before today)
-        yesterday = records[-1]
+        # Get yesterday's record - records[-1] is TODAY (just added), so use records[-2]
+        yesterday = records[-2]
 
         # Get current values
         current = get_current_portfolio_values()
