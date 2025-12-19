@@ -1182,12 +1182,19 @@ class ClaudeResearchGenerator:
         )
 
         # DEE-BOT Live Trading Client (REAL MONEY - $10K account)
-        self.dee_live_trading = TradingClient(
-            api_key=os.getenv("ALPACA_LIVE_API_KEY_DEE"),
-            secret_key=os.getenv("ALPACA_LIVE_SECRET_KEY_DEE"),
-            paper=False,
-            raw_data=False
-        )
+        # Only initialize if API keys are available (user needs to create account first)
+        dee_live_key = os.getenv("ALPACA_LIVE_API_KEY_DEE")
+        dee_live_secret = os.getenv("ALPACA_LIVE_SECRET_KEY_DEE")
+        if dee_live_key and dee_live_secret:
+            self.dee_live_trading = TradingClient(
+                api_key=dee_live_key,
+                secret_key=dee_live_secret,
+                paper=False,
+                raw_data=False
+            )
+        else:
+            self.dee_live_trading = None
+            print("[INFO] DEE-BOT Live not configured - skipping (no API keys)")
 
         # Alpaca Market Data API (for quotes/bars)
         self.market_data = StockHistoricalDataClient(
@@ -1200,6 +1207,9 @@ class ClaudeResearchGenerator:
         if bot_name == "DEE-BOT":
             client = self.dee_trading
         elif bot_name == "DEE-BOT-LIVE":
+            if self.dee_live_trading is None:
+                print(f"[WARNING] DEE-BOT Live not configured - cannot get portfolio")
+                return {"error": "DEE-BOT Live not configured", "cash": 0, "positions": []}
             client = self.dee_live_trading
         elif bot_name == "SHORGAN-BOT-LIVE":
             client = self.shorgan_live_trading

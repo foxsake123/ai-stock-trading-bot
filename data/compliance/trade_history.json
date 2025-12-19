@@ -835,5 +835,23 @@
     "timestamp": "2025-12-18T10:16:43.187519",
     "account": "SHORGAN-LIVE",
     "order_id": "e9b20db0-71de-4cef-bffd-b802ed0a6e93"
+  },
+  {
+    "symbol": "RIVN",
+    "action": "SELL",
+    "qty": 7,
+    "price": 17.62,
+    "timestamp": "2025-12-19T09:30:10.730282",
+    "account": "SHORGAN-LIVE",
+    "order_id": "f9633d8e-3932-4ae3-8599-61294cdc966a"
+  },
+  {
+    "symbol": "VKTX",
+    "action": "BUY",
+    "qty": 4,
+    "price": 34.29,
+    "timestamp": "2025-12-19T09:30:14.184964",
+    "account": "SHORGAN-LIVE",
+    "order_id": "696e90d9-8e63-4dcc-bc1e-f72d7a0ff39b"
   }
 ]

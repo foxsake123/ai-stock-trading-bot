@@ -204,8 +204,13 @@ def main():
     days_elapsed = (datetime.now() - start_date).days
     week_number = (days_elapsed // 7) + 1
 
-    # Generate reports for all 4 accounts
-    bots = ["DEE-BOT", "DEE-BOT-LIVE", "SHORGAN-BOT", "SHORGAN-BOT-LIVE"]
+    # Generate reports for all configured accounts
+    # DEE-BOT-LIVE only included if API keys are configured
+    bots = ["DEE-BOT", "SHORGAN-BOT", "SHORGAN-BOT-LIVE"]
+    if os.getenv("ALPACA_LIVE_API_KEY_DEE") and os.getenv("ALPACA_LIVE_SECRET_KEY_DEE"):
+        bots.insert(1, "DEE-BOT-LIVE")  # Add after DEE-BOT
+    else:
+        print("[INFO] Skipping DEE-BOT-LIVE - no API keys configured")
     report_paths = []
     pdf_paths = {}
 
