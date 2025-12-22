@@ -47,8 +47,15 @@ DEE_BOT_CONFIG = {
     'BASE_URL': 'https://paper-api.alpaca.markets'  # Keep DEE on paper
 }
 
+# SHORGAN-BOT PAPER CONFIGURATION
+SHORGAN_PAPER_CONFIG = {
+    'API_KEY': os.getenv('ALPACA_API_KEY_SHORGAN'),  # PAPER KEYS
+    'SECRET_KEY': os.getenv('ALPACA_SECRET_KEY_SHORGAN'),  # PAPER KEYS
+    'BASE_URL': 'https://paper-api.alpaca.markets'  # PAPER TRADING
+}
+
 # ⚠️ SHORGAN-BOT LIVE TRADING CONFIGURATION ⚠️
-SHORGAN_BOT_CONFIG = {
+SHORGAN_LIVE_CONFIG = {
     'API_KEY': os.getenv('ALPACA_LIVE_API_KEY_SHORGAN'),  # LIVE KEYS
     'SECRET_KEY': os.getenv('ALPACA_LIVE_SECRET_KEY_SHORGAN'),  # LIVE KEYS
     'BASE_URL': 'https://api.alpaca.markets'  # LIVE TRADING - REAL MONEY
@@ -87,8 +94,10 @@ DEE_STOP_LOSS_PCT = 0.08  # 8% hard stop loss on all positions
 # Validate API keys are loaded
 if not DEE_BOT_CONFIG['API_KEY'] or not DEE_BOT_CONFIG['SECRET_KEY']:
     raise ValueError("DEE-BOT API keys not found in environment variables. Check your .env file.")
-if not SHORGAN_BOT_CONFIG['API_KEY'] or not SHORGAN_BOT_CONFIG['SECRET_KEY']:
-    raise ValueError("SHORGAN-BOT LIVE API keys not found in environment variables. Check your .env file.")
+if not SHORGAN_PAPER_CONFIG['API_KEY'] or not SHORGAN_PAPER_CONFIG['SECRET_KEY']:
+    raise ValueError("SHORGAN-BOT Paper API keys not found in environment variables. Check your .env file.")
+if not SHORGAN_LIVE_CONFIG['API_KEY'] or not SHORGAN_LIVE_CONFIG['SECRET_KEY']:
+    print("[WARNING] SHORGAN-BOT Live API keys not found - live trading disabled")
 
 class DailyTradeExecutor:
     def __init__(self):
@@ -111,13 +120,25 @@ class DailyTradeExecutor:
             )
             print("[LIVE] DEE-BOT Live API initialized")
 
-        # SHORGAN-BOT Live API
-        self.shorgan_api = tradeapi.REST(
-            SHORGAN_BOT_CONFIG['API_KEY'],
-            SHORGAN_BOT_CONFIG['SECRET_KEY'],
-            SHORGAN_BOT_CONFIG['BASE_URL'],
+        # SHORGAN-BOT Paper API
+        self.shorgan_paper_api = tradeapi.REST(
+            SHORGAN_PAPER_CONFIG['API_KEY'],
+            SHORGAN_PAPER_CONFIG['SECRET_KEY'],
+            SHORGAN_PAPER_CONFIG['BASE_URL'],
             api_version='v2'
         )
+        print("[PAPER] SHORGAN-BOT Paper API initialized")
+
+        # SHORGAN-BOT Live API
+        self.shorgan_live_api = None
+        if SHORGAN_LIVE_TRADING and SHORGAN_LIVE_CONFIG['API_KEY'] and SHORGAN_LIVE_CONFIG['SECRET_KEY']:
+            self.shorgan_live_api = tradeapi.REST(
+                SHORGAN_LIVE_CONFIG['API_KEY'],
+                SHORGAN_LIVE_CONFIG['SECRET_KEY'],
+                SHORGAN_LIVE_CONFIG['BASE_URL'],
+                api_version='v2'
+            )
+            print("[LIVE] SHORGAN-BOT Live API initialized")
 
         self.executed_trades = []
         self.failed_trades = []
@@ -184,9 +205,9 @@ class DailyTradeExecutor:
         """Initialize SHORGAN daily performance tracking"""
         # Track SHORGAN daily performance for circuit breaker
         self.shorgan_starting_equity = None
-        if SHORGAN_LIVE_TRADING:
+        if SHORGAN_LIVE_TRADING and self.shorgan_live_api:
             try:
-                account = self.shorgan_api.get_account()
+                account = self.shorgan_live_api.get_account()
                 self.shorgan_starting_equity = float(account.last_equity)
                 print(f"\n[LIVE] SHORGAN-BOT LIVE TRADING ACTIVE")
                 print(f"Starting Equity: ${self.shorgan_starting_equity:,.2f}")
@@ -215,11 +236,11 @@ class DailyTradeExecutor:
 
     def check_shorgan_daily_loss_limit(self):
         """Circuit breaker: Stop trading if daily loss exceeds limit"""
-        if not SHORGAN_LIVE_TRADING or self.shorgan_starting_equity is None:
+        if not SHORGAN_LIVE_TRADING or not self.shorgan_live_api or self.shorgan_starting_equity is None:
             return True
 
         try:
-            account = self.shorgan_api.get_account()
+            account = self.shorgan_live_api.get_account()
             current_equity = float(account.equity)
             daily_pnl = current_equity - self.shorgan_starting_equity
 
@@ -238,11 +259,11 @@ class DailyTradeExecutor:
 
     def check_shorgan_position_count_limit(self):
         """Don't exceed max concurrent positions"""
-        if not SHORGAN_LIVE_TRADING:
+        if not SHORGAN_LIVE_TRADING or not self.shorgan_live_api:
             return True
 
         try:
-            positions = self.shorgan_api.list_positions()
+            positions = self.shorgan_live_api.list_positions()
             position_count = len(positions)
 
             if position_count >= SHORGAN_MAX_POSITIONS:
@@ -645,7 +666,7 @@ class DailyTradeExecutor:
 
                 # Check position concentration (max 10% for SHORGAN, 8% for DEE)
                 # For SHORGAN Live, use invested capital ($3K) not current equity
-                is_shorgan_live = (api == self.shorgan_api and SHORGAN_LIVE_TRADING)
+                is_shorgan_live = (api == self.shorgan_live_api and SHORGAN_LIVE_TRADING)
                 if is_shorgan_live:
                     portfolio_value = SHORGAN_CAPITAL  # Use invested capital, not equity
                 else:
@@ -694,7 +715,7 @@ class DailyTradeExecutor:
                 return None
 
             # SHORGAN-BOT LIVE ACCOUNT: Adjust position size BEFORE validation
-            if api == self.shorgan_api and SHORGAN_LIVE_TRADING and limit_price:
+            if api == self.shorgan_live_api and SHORGAN_LIVE_TRADING and limit_price:
                 original_shares = shares
                 shares = self.calculate_shorgan_position_size(limit_price, shares)
                 if shares == 0:
@@ -762,7 +783,7 @@ class DailyTradeExecutor:
                     account_value = float(account.portfolio_value)
                     is_margin = account.account_type == 'margin'
                 except:
-                    account_value = SHORGAN_CAPITAL if api == self.shorgan_api else 100000
+                    account_value = SHORGAN_CAPITAL if api == self.shorgan_live_api else 100000
                     is_margin = False
 
                 is_compliant, compliance_msg = check_trade_compliance(
@@ -1072,44 +1093,79 @@ class DailyTradeExecutor:
             else:
                 print("[INFO] No DEE-BOT Live trades file found")
 
-        # Execute SHORGAN-BOT trades
+        # Execute SHORGAN-BOT PAPER trades
         if shorgan_trades['sell'] or shorgan_trades['buy'] or shorgan_trades['short']:
             print("-" * 40)
-            print("SHORGAN-BOT TRADES")
+            print("SHORGAN-BOT PAPER TRADES")
             print("-" * 40)
 
             # Execute sells first
             for trade in shorgan_trades['sell']:
-                result = self.execute_trade(self.shorgan_api, trade, 'sell')
+                result = self.execute_trade(self.shorgan_paper_api, trade, 'sell')
                 if result is None:
-                    retry_queue.append(('shorgan', trade, 'sell'))
+                    retry_queue.append(('shorgan_paper', trade, 'sell'))
                 time.sleep(1)
 
             # Execute buys
             for trade in shorgan_trades['buy']:
-                result = self.execute_trade(self.shorgan_api, trade, 'buy')
+                result = self.execute_trade(self.shorgan_paper_api, trade, 'buy')
                 if result is None:
-                    retry_queue.append(('shorgan', trade, 'buy'))
+                    retry_queue.append(('shorgan_paper', trade, 'buy'))
                 time.sleep(1)
 
-            # Execute shorts (if enabled)
-            if SHORGAN_ALLOW_SHORTS:
-                for trade in shorgan_trades['short']:
-                    result = self.execute_trade(self.shorgan_api, trade, 'sell')  # Short = sell
-                    if result is None:
-                        retry_queue.append(('shorgan', trade, 'sell'))
-                    time.sleep(1)
-            elif shorgan_trades['short']:
-                print(f"\n[WARNING] SKIPPING {len(shorgan_trades['short'])} SHORT TRADES (Shorting disabled - cash account)")
-                for trade in shorgan_trades['short']:
-                    print(f"   [SKIP] SHORT {trade['shares']} {trade['symbol']} @ ${trade.get('price', 'N/A')}")
-                    self.failed_trades.append({
-                        'symbol': trade['symbol'],
-                        'side': 'short',
-                        'shares': trade['shares'],
-                        'error': 'Shorting disabled - cash account (no margin)',
-                        'bot': 'SHORGAN-BOT'
-                    })
+            # Execute shorts (Paper account can short)
+            for trade in shorgan_trades['short']:
+                result = self.execute_trade(self.shorgan_paper_api, trade, 'sell')  # Short = sell
+                if result is None:
+                    retry_queue.append(('shorgan_paper', trade, 'sell'))
+                time.sleep(1)
+
+        # Execute SHORGAN-BOT LIVE trades (if enabled)
+        if SHORGAN_LIVE_TRADING and self.shorgan_live_api:
+            # Find and parse SHORGAN Live file
+            shorgan_live_file = self.find_todays_trades_file(file_type="shorgan_live")
+            if shorgan_live_file:
+                _, shorgan_live_trades = self.parse_trades_file(shorgan_live_file)
+
+                if shorgan_live_trades['sell'] or shorgan_live_trades['buy']:
+                    print("-" * 40)
+                    print("SHORGAN-BOT LIVE TRADES (REAL MONEY)")
+                    print("-" * 40)
+
+                    # Check circuit breakers before executing
+                    if not self.check_shorgan_daily_loss_limit():
+                        print("[CIRCUIT BREAKER] Skipping all SHORGAN Live trades due to daily loss limit")
+                    elif not self.check_shorgan_position_count_limit():
+                        print("[POSITION LIMIT] Skipping new SHORGAN Live buy trades")
+                        # Still execute sells
+                        for trade in shorgan_live_trades['sell']:
+                            result = self.execute_trade(self.shorgan_live_api, trade, 'sell')
+                            if result is None:
+                                retry_queue.append(('shorgan_live', trade, 'sell'))
+                            time.sleep(1)
+                    else:
+                        # Execute sells first
+                        for trade in shorgan_live_trades['sell']:
+                            result = self.execute_trade(self.shorgan_live_api, trade, 'sell')
+                            if result is None:
+                                retry_queue.append(('shorgan_live', trade, 'sell'))
+                            time.sleep(1)
+
+                        # Execute buys with position sizing
+                        trades_executed = 0
+                        for trade in shorgan_live_trades['buy']:
+                            if trades_executed >= SHORGAN_MAX_TRADES_PER_DAY:
+                                print(f"[LIMIT] Reached max trades per day ({SHORGAN_MAX_TRADES_PER_DAY})")
+                                break
+
+                            result = self.execute_trade(self.shorgan_live_api, trade, 'buy')
+                            if result is None:
+                                retry_queue.append(('shorgan_live', trade, 'buy'))
+                            else:
+                                trades_executed += 1
+                            time.sleep(1)
+            else:
+                print("[INFO] No SHORGAN-BOT Live trades file found")
 
         # Retry failed trades if any
         if retry_queue and max_retries > 0:
@@ -1125,8 +1181,12 @@ class DailyTradeExecutor:
                     api = self.dee_api
                 elif bot_type == 'dee_live':
                     api = self.dee_live_api
+                elif bot_type == 'shorgan_paper':
+                    api = self.shorgan_paper_api
+                elif bot_type == 'shorgan_live':
+                    api = self.shorgan_live_api
                 else:
-                    api = self.shorgan_api
+                    api = self.shorgan_paper_api  # Default to paper
 
                 # Re-validate and retry with adjusted parameters
                 result = self.execute_trade(api, trade, side)
@@ -1167,7 +1227,9 @@ class DailyTradeExecutor:
         self.place_stop_losses_for_executed_buys(self.dee_api, "DEE-BOT")
         if DEE_LIVE_TRADING and self.dee_live_api:
             self.place_stop_losses_for_executed_buys(self.dee_live_api, "DEE-BOT-LIVE", stop_loss_pct=DEE_STOP_LOSS_PCT)
-        self.place_stop_losses_for_executed_buys(self.shorgan_api, "SHORGAN-BOT")
+        self.place_stop_losses_for_executed_buys(self.shorgan_paper_api, "SHORGAN-BOT")
+        if SHORGAN_LIVE_TRADING and self.shorgan_live_api:
+            self.place_stop_losses_for_executed_buys(self.shorgan_live_api, "SHORGAN-BOT-LIVE")
 
         # Save execution log
         log_data = {
@@ -1210,9 +1272,9 @@ def main():
             print(f"[WARNING] Could not get DEE-BOT account: {e}")
 
         # SHORGAN-LIVE (Real money - under $25K, restricted)
-        if SHORGAN_LIVE_TRADING:
+        if SHORGAN_LIVE_TRADING and executor.shorgan_live_api:
             try:
-                shorgan_account = executor.shorgan_api.get_account()
+                shorgan_account = executor.shorgan_live_api.get_account()
                 accounts_data.append({
                     'name': 'SHORGAN-LIVE',
                     'value': float(shorgan_account.portfolio_value),
