@@ -1722,176 +1722,978 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
         return md_filepath, pdf_filepath
 
+    def _create_order_block_card(self, code_text: str) -> Optional[Table]:
+        """
+        Convert an order block code section into a styled trade card.
+
+        Returns a Table element styled as a professional trade card.
+        """
+        try:
+            # Parse key-value pairs from the order block
+            lines = code_text.strip().split('\n')
+            data = {}
+            for line in lines:
+                if ':' in line:
+                    key, value = line.split(':', 1)
+                    data[key.strip().lower()] = value.strip()
+
+            if not data.get('ticker') or not data.get('action'):
+                return None  # Not a valid order block
+
+            # Determine card color based on action
+            action = data.get('action', '').lower()
+            if action in ['buy', 'buy_to_open']:
+                header_color = HexColor('#2e7d32')  # Green
+                action_text = 'BUY'
+            elif action in ['sell', 'sell_to_close']:
+                header_color = HexColor('#c62828')  # Red
+                action_text = 'SELL'
+            elif action == 'sell_short':
+                header_color = HexColor('#7b1fa2')  # Purple
+                action_text = 'SHORT'
+            else:
+                header_color = HexColor('#1565c0')  # Blue
+                action_text = action.upper()
+
+            ticker = data.get('ticker', 'N/A')
+            shares = data.get('shares', data.get('contracts', 'N/A'))
+            entry = data.get('entry price', data.get('entry', 'N/A'))
+            stop = data.get('stop loss', data.get('stop', 'N/A'))
+            target = data.get('target price', data.get('target', data.get('cover target', 'N/A')))
+            cost = data.get('total cost', data.get('total position value', 'N/A'))
+            rationale = data.get('one-line rationale', '')
+            catalyst = data.get('catalyst date', '')
+
+            # Build card table
+            card_data = [
+                [f'{action_text}  {ticker}', f'{shares} shares @ {entry}'],
+            ]
+
+            # Add stop/target row if available
+            if stop != 'N/A' or target != 'N/A':
+                card_data.append([f'Stop: {stop}', f'Target: {target}'])
+
+            # Add cost row
+            if cost != 'N/A':
+                card_data.append([f'Cost: {cost}', f'Catalyst: {catalyst}' if catalyst else ''])
+
+            # Add rationale
+            if rationale:
+                card_data.append([rationale, ''])
+
+            card = Table(card_data, colWidths=[3.2*inch, 3.2*inch])
+
+            style_commands = [
+                # Header row - colored based on action
+                ('BACKGROUND', (0, 0), (-1, 0), header_color),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 10),
+                ('ALIGN', (0, 0), (0, 0), 'LEFT'),
+                ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
+
+                # Body rows
+                ('BACKGROUND', (0, 1), (-1, -1), HexColor('#fafafa')),
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 9),
+                ('TEXTCOLOR', (0, 1), (-1, -1), HexColor('#333333')),
+
+                # Border
+                ('BOX', (0, 0), (-1, -1), 1, header_color),
+                ('LINEBELOW', (0, 0), (-1, 0), 1, header_color),
+
+                # Padding
+                ('TOPPADDING', (0, 0), (-1, -1), 6),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                ('LEFTPADDING', (0, 0), (-1, -1), 8),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+
+                # Span rationale across both columns if present
+                ('SPAN', (0, -1), (-1, -1)) if rationale else ('TOPPADDING', (0, 0), (0, 0), 6),
+            ]
+
+            card.setStyle(TableStyle(style_commands))
+            return card
+
+        except Exception as e:
+            print(f"    [!] Order block card failed: {e}")
+            return None
+
+    def _create_catalyst_calendar_table(self, code_text: str) -> Optional[Table]:
+        """
+        Convert catalyst calendar code block into a styled table.
+        """
+        try:
+            lines = code_text.strip().split('\n')
+            table_data = [['Date', 'Event', 'Impact', 'Trade Idea']]
+
+            current_date = ''
+            current_event = ''
+            current_impact = ''
+            current_trade = ''
+
+            for line in lines:
+                line = line.strip()
+                if line.startswith('[') and ']' in line:
+                    # Save previous entry if exists
+                    if current_date:
+                        table_data.append([current_date, current_event, current_impact, current_trade])
+                    # New date entry
+                    current_date = line[1:line.index(']')]
+                    rest = line[line.index(']')+1:].strip(' -')
+                    current_event = rest
+                    current_impact = ''
+                    current_trade = ''
+                elif line.startswith('Type:'):
+                    current_event = line.replace('Type:', '').strip()
+                elif line.startswith('Expected Impact:'):
+                    current_impact = line.replace('Expected Impact:', '').strip()
+                elif line.startswith('Suggested Trade:'):
+                    current_trade = line.replace('Suggested Trade:', '').strip()
+
+            # Don't forget last entry
+            if current_date:
+                table_data.append([current_date, current_event, current_impact, current_trade])
+
+            if len(table_data) <= 1:
+                return None
+
+            table = Table(table_data, colWidths=[1.3*inch, 2.0*inch, 1.0*inch, 2.0*inch])
+
+            # Impact color coding
+            style_commands = [
+                ('BACKGROUND', (0, 0), (-1, 0), HexColor('#1a1a1a')),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 8),
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 8),
+                ('GRID', (0, 0), (-1, -1), 0.25, HexColor('#e0e0e0')),
+                ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, HexColor('#fafafa')]),
+                ('TOPPADDING', (0, 0), (-1, -1), 4),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ]
+
+            # Color-code impact column
+            for row_idx, row in enumerate(table_data[1:], start=1):
+                if len(row) > 2:
+                    impact = row[2].lower()
+                    if 'high' in impact:
+                        style_commands.append(('TEXTCOLOR', (2, row_idx), (2, row_idx), HexColor('#c62828')))
+                        style_commands.append(('FONTNAME', (2, row_idx), (2, row_idx), 'Helvetica-Bold'))
+                    elif 'medium' in impact:
+                        style_commands.append(('TEXTCOLOR', (2, row_idx), (2, row_idx), HexColor('#f57c00')))
+                    elif 'low' in impact:
+                        style_commands.append(('TEXTCOLOR', (2, row_idx), (2, row_idx), HexColor('#2e7d32')))
+
+            table.setStyle(TableStyle(style_commands))
+            return table
+
+        except Exception as e:
+            print(f"    [!] Catalyst calendar table failed: {e}")
+            return None
+
+    def _apply_text_formatting(self, text: str) -> str:
+        """
+        Apply inline formatting to text including action badges and thesis status.
+        Returns text with XML formatting for ReportLab paragraphs.
+        """
+        import re
+
+        # Action badges - wrap in colored spans
+        action_colors = {
+            'BUY': ('#2e7d32', '#e8f5e9'),      # Green
+            'SELL': ('#c62828', '#ffebee'),     # Red
+            'HOLD': ('#1565c0', '#e3f2fd'),     # Blue
+            'TRIM': ('#f57c00', '#fff3e0'),     # Orange
+            'EXIT': ('#c62828', '#ffebee'),     # Red
+            'SHORT': ('#7b1fa2', '#f3e5f5'),    # Purple
+            'WATCH': ('#757575', '#fafafa'),    # Gray
+        }
+
+        for action, (fg, bg) in action_colors.items():
+            # Match standalone action words (with word boundaries)
+            pattern = rf'\b({action})\b'
+            replacement = f'<font color="{fg}"><b>{action}</b></font>'
+            text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+
+        # Thesis status badges
+        thesis_colors = {
+            'INTACT': '#1565c0',      # Blue
+            'STRONG': '#2e7d32',      # Green
+            'WEAKENING': '#f57c00',   # Orange
+            'BROKEN': '#c62828',      # Red
+        }
+
+        for status, color in thesis_colors.items():
+            pattern = rf'\b({status})\b'
+            replacement = f'<font color="{color}"><b>[{status}]</b></font>'
+            text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+
+        # P&L formatting - green for positive, red for negative
+        # Match patterns like +$22.96, +3.1%, -$5.52, -3.1%
+        def color_pl(match):
+            value = match.group(0)
+            if value.startswith('+'):
+                return f'<font color="#2e7d32"><b>{value}</b></font>'
+            elif value.startswith('-'):
+                return f'<font color="#c62828"><b>{value}</b></font>'
+            return value
+
+        text = re.sub(r'[+-]\$[\d,]+\.?\d*', color_pl, text)
+        text = re.sub(r'[+-]\d+\.?\d*%', color_pl, text)
+
+        return text
+
+    def _create_conviction_gauge(self, ticker: str, score: int, rationale: str = '') -> Optional[Table]:
+        """
+        Create a visual conviction gauge for a position (1-10 scale).
+        Returns a styled table with progress bar visualization.
+        """
+        try:
+            # Validate score
+            score = max(1, min(10, int(score)))
+
+            # Determine color based on score
+            if score >= 8:
+                bar_color = HexColor('#2e7d32')  # Green - high conviction
+                label = 'HIGH'
+            elif score >= 5:
+                bar_color = HexColor('#f57c00')  # Orange - medium conviction
+                label = 'MEDIUM'
+            else:
+                bar_color = HexColor('#c62828')  # Red - low conviction
+                label = 'LOW'
+
+            # Create visual progress bar as nested table
+            filled_cells = score
+            empty_cells = 10 - score
+
+            bar_data = [['']*10]
+            bar_table = Table(bar_data, colWidths=[0.3*inch]*10)
+
+            bar_style_commands = [
+                ('BACKGROUND', (0, 0), (filled_cells-1, 0), bar_color),
+                ('BACKGROUND', (filled_cells, 0), (9, 0), HexColor('#e0e0e0')),
+                ('BOX', (0, 0), (-1, -1), 0.5, HexColor('#999999')),
+                ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white),
+                ('TOPPADDING', (0, 0), (-1, -1), 4),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ]
+            bar_table.setStyle(TableStyle(bar_style_commands))
+
+            # Main card layout
+            card_data = [
+                [f'{ticker}', f'{score}/10 - {label}'],
+            ]
+            if rationale:
+                card_data.append([rationale[:80] + ('...' if len(rationale) > 80 else ''), ''])
+
+            card = Table(card_data, colWidths=[2.5*inch, 3.5*inch])
+            card.setStyle(TableStyle([
+                ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, -1), 9),
+                ('TEXTCOLOR', (1, 0), (1, 0), bar_color),
+                ('FONTNAME', (1, 0), (1, 0), 'Helvetica-Bold'),
+                ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 4),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+            ]))
+
+            # Combine into wrapper with progress bar
+            wrapper_data = [
+                [card],
+                [bar_table],
+            ]
+            wrapper = Table(wrapper_data, colWidths=[6.5*inch])
+            wrapper.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, -1), HexColor('#fafafa')),
+                ('BOX', (0, 0), (-1, -1), 0.5, HexColor('#e0e0e0')),
+                ('TOPPADDING', (0, 0), (-1, -1), 4),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ]))
+
+            return wrapper
+
+        except Exception as e:
+            print(f"    [!] Conviction gauge failed: {e}")
+            return None
+
+    def _create_position_card(self, header: str, content_lines: List[str], pl_value: float = 0) -> Optional[Table]:
+        """
+        Create a position analysis card with P&L-colored left border.
+        """
+        try:
+            # Determine border color based on P&L
+            if pl_value > 0:
+                border_color = HexColor('#2e7d32')  # Green for profit
+            elif pl_value < 0:
+                border_color = HexColor('#c62828')  # Red for loss
+            else:
+                border_color = HexColor('#1565c0')  # Blue for neutral
+
+            # Format content
+            content = '<br/>'.join(content_lines[:6])  # Limit to 6 lines
+
+            # Create paragraph style for content
+            content_style = ParagraphStyle(
+                'PositionContent',
+                fontSize=8,
+                leading=11,
+                textColor=HexColor('#333333')
+            )
+
+            # Create card table with colored left border
+            card_data = [
+                [Paragraph(f'<b>{header}</b>', ParagraphStyle('Header', fontSize=10, textColor=HexColor('#1a1a1a')))],
+                [Paragraph(content, content_style)],
+            ]
+
+            card = Table(card_data, colWidths=[6.2*inch])
+            card.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, -1), HexColor('#fafafa')),
+                ('LINEBEFORECOL', (0, 0), (0, -1), 4, border_color),  # Thick left border
+                ('BOX', (0, 0), (-1, -1), 0.5, HexColor('#e0e0e0')),
+                ('TOPPADDING', (0, 0), (-1, -1), 6),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                ('LEFTPADDING', (0, 0), (-1, -1), 12),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+            ]))
+
+            return card
+
+        except Exception as e:
+            print(f"    [!] Position card failed: {e}")
+            return None
+
+    def _parse_conviction_scorecard(self, text: str) -> Optional[List[Table]]:
+        """
+        Parse conviction scorecard section and return visual gauge elements.
+        """
+        import re
+        try:
+            gauges = []
+            # Pattern: Ticker - Score (X/10) or Ticker: X/10
+            pattern = r'([A-Z]{1,5})\s*[-:]\s*(\d+)/10(?:\s*[-:]\s*(.+))?'
+            matches = re.findall(pattern, text)
+
+            for match in matches:
+                ticker = match[0]
+                score = int(match[1])
+                rationale = match[2] if len(match) > 2 else ''
+                gauge = self._create_conviction_gauge(ticker, score, rationale)
+                if gauge:
+                    gauges.append(gauge)
+
+            return gauges if gauges else None
+
+        except Exception as e:
+            print(f"    [!] Conviction scorecard parsing failed: {e}")
+            return None
+
+    def _preprocess_markdown(self, markdown_content: str) -> tuple:
+        """
+        Preprocess markdown to extract structure and clean redundant info.
+        Returns (cleaned_content, sections_list, executive_summary) for TOC and document structure.
+        """
+        import re
+        lines = markdown_content.split('\n')
+        cleaned_lines = []
+        sections = []  # List of (level, title, anchor) for TOC
+        executive_summary = []  # Lines for executive summary section
+
+        skip_patterns = [
+            r'^# CLAUDE DEEP RESEARCH REPORT',  # Redundant header
+            r'^### Generated:',  # Date already in header
+            r'^### Model:',  # Not needed
+            r'^\*\*Date:.*\*\*',  # Redundant date
+            r'^## (?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),',  # Redundant date header
+        ]
+
+        section_counter = 0
+        in_exec_summary = False
+
+        for line in lines:
+            # Skip redundant lines
+            skip = False
+            for pattern in skip_patterns:
+                if re.match(pattern, line.strip()):
+                    skip = True
+                    break
+
+            if skip:
+                continue
+
+            # Track sections for TOC
+            if line.startswith('## ') and not line.startswith('### '):
+                section_counter += 1
+                title = line[3:].strip()
+                # Remove numbering if present (e.g., "1. PORTFOLIO SNAPSHOT" -> "PORTFOLIO SNAPSHOT")
+                title_clean = re.sub(r'^\d+\.\s*', '', title)
+                sections.append((2, title_clean, f'section_{section_counter}'))
+
+                # Check if this is the Executive Summary section
+                if 'EXECUTIVE SUMMARY' in title.upper() or 'EXEC SUMMARY' in title.upper():
+                    in_exec_summary = True
+                    continue  # Don't add to cleaned_lines, we'll handle it separately
+                elif in_exec_summary:
+                    in_exec_summary = False  # End of exec summary
+
+            elif line.startswith('### ') and not line.startswith('#### '):
+                title = line[4:].strip()
+                # Only add ticker sections to TOC
+                if re.match(r'^[A-Z]{1,5}\s*[-:]', title):
+                    sections.append((3, title, f'section_{section_counter}_{len(sections)}'))
+                if in_exec_summary:
+                    in_exec_summary = False  # Subsection ends exec summary
+
+            # Collect executive summary lines
+            if in_exec_summary:
+                executive_summary.append(line)
+                continue  # Don't add to cleaned_lines
+
+            cleaned_lines.append(line)
+
+        return '\n'.join(cleaned_lines), sections, '\n'.join(executive_summary)
+
+    def _create_toc(self, sections: list, styles) -> list:
+        """Create a table of contents from sections list."""
+        elements = []
+
+        toc_title = ParagraphStyle(
+            'TOCTitle',
+            fontSize=14,
+            fontName='Helvetica-Bold',
+            textColor=HexColor('#1a1a1a'),
+            spaceAfter=12
+        )
+        elements.append(Paragraph("Table of Contents", toc_title))
+
+        toc_style = ParagraphStyle(
+            'TOCEntry',
+            fontSize=9,
+            leading=14,
+            leftIndent=0,
+            textColor=HexColor('#333333')
+        )
+
+        toc_sub_style = ParagraphStyle(
+            'TOCSubEntry',
+            fontSize=8,
+            leading=12,
+            leftIndent=15,
+            textColor=HexColor('#666666')
+        )
+
+        for level, title, anchor in sections:
+            if level == 2:
+                elements.append(Paragraph(f"• {title}", toc_style))
+            elif level == 3:
+                elements.append(Paragraph(f"  ◦ {title}", toc_sub_style))
+
+        elements.append(Spacer(1, 0.3*inch))
+        return elements
+
+    def _create_title_page(self, bot_name: str, exec_summary_text: str, portfolio_data: Dict = None) -> list:
+        """Create title page with report title, key stats, and executive summary."""
+        from datetime import datetime
+        import re
+
+        elements = []
+
+        # Report title - large and centered
+        title_style = ParagraphStyle(
+            'ReportTitle',
+            fontSize=24,
+            fontName='Helvetica-Bold',
+            textColor=HexColor('#1a1a1a'),
+            alignment=1,  # Center
+            spaceAfter=8
+        )
+
+        subtitle_style = ParagraphStyle(
+            'ReportSubtitle',
+            fontSize=12,
+            fontName='Helvetica',
+            textColor=HexColor('#666666'),
+            alignment=1,
+            spaceAfter=20
+        )
+
+        # Determine report type based on bot name
+        if 'LIVE' in bot_name.upper():
+            report_type = "Live Trading Research"
+        elif 'SHORGAN' in bot_name.upper():
+            report_type = "Small-Cap Catalyst Research"
+        else:
+            report_type = "Equity Research Report"
+
+        elements.append(Spacer(1, 0.5*inch))
+        elements.append(Paragraph(f"{bot_name}", title_style))
+        elements.append(Paragraph(report_type, subtitle_style))
+
+        # Date line
+        date_style = ParagraphStyle(
+            'DateLine',
+            fontSize=10,
+            fontName='Helvetica',
+            textColor=HexColor('#333333'),
+            alignment=1,
+            spaceAfter=24
+        )
+        report_date = datetime.now().strftime("%A, %B %d, %Y")
+        elements.append(Paragraph(report_date, date_style))
+
+        # Key stats box if portfolio data available
+        if portfolio_data:
+            stats_data = []
+            pv = portfolio_data.get('portfolio_value', 0)
+            cash = portfolio_data.get('cash', 0)
+            equity = portfolio_data.get('equity', pv)
+
+            # Calculate daily P&L if available
+            daily_pnl = portfolio_data.get('daily_pnl', 0)
+            daily_pnl_pct = portfolio_data.get('daily_pnl_pct', 0)
+
+            stats_row = [
+                f"Portfolio Value\n${pv:,.2f}",
+                f"Cash Available\n${cash:,.2f}",
+                f"Equity\n${equity:,.2f}",
+            ]
+
+            if daily_pnl != 0:
+                pnl_color = '#2e7d32' if daily_pnl >= 0 else '#c62828'
+                pnl_sign = '+' if daily_pnl >= 0 else ''
+                stats_row.append(f"Today's P&L\n{pnl_sign}${daily_pnl:,.2f} ({pnl_sign}{daily_pnl_pct:.2f}%)")
+
+            stats_table = Table([stats_row], colWidths=[1.7*inch] * len(stats_row))
+            stats_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, -1), HexColor('#f8f9fa')),
+                ('TEXTCOLOR', (0, 0), (-1, -1), HexColor('#1a1a1a')),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 0), (-1, -1), 9),
+                ('TOPPADDING', (0, 0), (-1, -1), 8),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+                ('BOX', (0, 0), (-1, -1), 1, HexColor('#0066cc')),
+            ]))
+            elements.append(stats_table)
+            elements.append(Spacer(1, 0.3*inch))
+
+        # Executive Summary section
+        if exec_summary_text.strip():
+            exec_title_style = ParagraphStyle(
+                'ExecTitle',
+                fontSize=14,
+                fontName='Helvetica-Bold',
+                textColor=HexColor('#0066cc'),
+                spaceBefore=16,
+                spaceAfter=8
+            )
+            elements.append(Paragraph("Executive Summary", exec_title_style))
+
+            exec_body_style = ParagraphStyle(
+                'ExecBody',
+                fontSize=10,
+                fontName='Helvetica',
+                textColor=HexColor('#333333'),
+                leading=14,
+                spaceAfter=6
+            )
+
+            exec_bullet_style = ParagraphStyle(
+                'ExecBullet',
+                fontSize=10,
+                fontName='Helvetica',
+                textColor=HexColor('#333333'),
+                leading=14,
+                spaceAfter=4,
+                leftIndent=15
+            )
+
+            # Parse executive summary text
+            for line in exec_summary_text.split('\n'):
+                line = line.strip()
+                if not line:
+                    continue
+
+                # Apply markdown formatting
+                text = self._format_text_with_markdown(line)
+
+                if line.startswith('- ') or line.startswith('* '):
+                    text = text[2:] if text.startswith('- ') or text.startswith('* ') else text
+                    bullet = '<font color="#0066cc">&#9632;</font>'
+                    try:
+                        elements.append(Paragraph(f"{bullet} {text}", exec_bullet_style))
+                    except:
+                        elements.append(Paragraph(f"* {line[2:]}", exec_bullet_style))
+                else:
+                    try:
+                        elements.append(Paragraph(text, exec_body_style))
+                    except:
+                        elements.append(Paragraph(line, exec_body_style))
+
+        elements.append(PageBreak())
+        return elements
+
+    def _create_visual_catalyst_timeline(self, code_text: str) -> Optional[str]:
+        """Create a visual timeline chart for catalyst calendar."""
+        import re
+        try:
+            # Parse catalyst entries
+            entries = []
+            pattern = r'\[([^\]]+)\]\s*[-–]\s*(.+?)(?:\n\s+Type:\s*(.+?))?(?:\n\s+Expected Impact:\s*(.+?))?(?:\n\s+Suggested Trade:\s*(.+?))?(?=\n\[|\n```|$)'
+
+            # Simpler parsing - just get date and first line
+            lines = code_text.strip().split('\n')
+            current_entry = None
+
+            for line in lines:
+                line = line.strip()
+                if line.startswith('[') and ']' in line:
+                    if current_entry:
+                        entries.append(current_entry)
+                    bracket_end = line.index(']')
+                    date = line[1:bracket_end]
+                    event = line[bracket_end+1:].strip(' -–')
+                    current_entry = {'date': date, 'event': event, 'impact': 'Medium', 'trade': ''}
+                elif current_entry:
+                    if line.startswith('Type:'):
+                        current_entry['event'] = line.replace('Type:', '').strip()
+                    elif line.startswith('Expected Impact:'):
+                        current_entry['impact'] = line.replace('Expected Impact:', '').strip()
+                    elif line.startswith('Suggested Trade:'):
+                        current_entry['trade'] = line.replace('Suggested Trade:', '').strip()
+
+            if current_entry:
+                entries.append(current_entry)
+
+            if not entries:
+                return None
+
+            # Create timeline visualization
+            fig, ax = plt.subplots(figsize=(10, max(3, len(entries) * 0.5)))
+
+            y_positions = range(len(entries))
+            colors = []
+            for entry in entries:
+                impact = entry.get('impact', '').lower()
+                if 'high' in impact:
+                    colors.append('#c62828')
+                elif 'medium' in impact:
+                    colors.append('#f57c00')
+                else:
+                    colors.append('#2e7d32')
+
+            # Draw timeline
+            ax.barh(y_positions, [1]*len(entries), color=colors, height=0.6, alpha=0.7)
+
+            # Add labels
+            for i, entry in enumerate(entries):
+                ax.text(-0.02, i, entry['date'], ha='right', va='center', fontsize=9, fontweight='bold')
+                ax.text(0.05, i, entry['event'][:50], ha='left', va='center', fontsize=8)
+
+            ax.set_xlim(-0.5, 1.5)
+            ax.set_ylim(-0.5, len(entries) - 0.5)
+            ax.invert_yaxis()
+            ax.axis('off')
+            ax.set_title('Catalyst Timeline', fontsize=12, fontweight='bold', loc='left')
+
+            # Add legend
+            from matplotlib.patches import Patch
+            legend_elements = [
+                Patch(facecolor='#c62828', label='High Impact'),
+                Patch(facecolor='#f57c00', label='Medium Impact'),
+                Patch(facecolor='#2e7d32', label='Low Impact')
+            ]
+            ax.legend(handles=legend_elements, loc='upper right', fontsize=8)
+
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / 'catalyst_timeline.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Catalyst timeline failed: {e}")
+            plt.close()
+            return None
+
+    def _format_text_with_markdown(self, text: str) -> str:
+        """Convert markdown formatting to ReportLab XML tags."""
+        import re
+
+        # Escape & first
+        text = text.replace('&', '&amp;')
+
+        # Convert **bold** to markers (before escaping < >)
+        text = re.sub(r'\*\*([^*]+)\*\*', r'<b>\1</b>', text)
+
+        # Convert *italic* to markers
+        text = re.sub(r'\*([^*]+)\*', r'<i>\1</i>', text)
+
+        # Apply P&L coloring
+        def color_pl(match):
+            value = match.group(0)
+            if value.startswith('+'):
+                return f'<font color="#2e7d32"><b>{value}</b></font>'
+            elif value.startswith('-'):
+                return f'<font color="#c62828"><b>{value}</b></font>'
+            return value
+
+        text = re.sub(r'[+-]\$[\d,]+\.?\d*', color_pl, text)
+        text = re.sub(r'[+-]\d+\.?\d*%', color_pl, text)
+
+        # Color action words
+        action_colors = {
+            'BUY': '#2e7d32', 'SELL': '#c62828', 'HOLD': '#1565c0',
+            'TRIM': '#f57c00', 'EXIT': '#c62828', 'SHORT': '#7b1fa2',
+            'INTACT': '#1565c0', 'STRONG': '#2e7d32',
+            'WEAKENING': '#f57c00', 'BROKEN': '#c62828'
+        }
+
+        for word, color in action_colors.items():
+            pattern = rf'\b({word})\b'
+            text = re.sub(pattern, rf'<font color="{color}"><b>\1</b></font>', text)
+
+        return text
+
     def _generate_pdf(self, markdown_content: str, output_path: Path, bot_name: str, portfolio_data: Dict = None):
         """
         Convert markdown report to professional PDF with visual enhancements
 
         Includes: portfolio stats, pie charts, holdings tables, P/L breakdowns
         """
+        from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame
+        from reportlab.lib.pagesizes import letter
+        from datetime import datetime
+        import re
 
-        # Create PDF document
-        doc = SimpleDocTemplate(
+        # Preprocess markdown - clean redundant info and extract sections for TOC
+        cleaned_content, sections, exec_summary = self._preprocess_markdown(markdown_content)
+
+        # Custom page template with header and footer
+        def add_header_footer(canvas, doc):
+            canvas.saveState()
+
+            # Header bar - teal accent line at top
+            canvas.setStrokeColor(HexColor('#0066cc'))
+            canvas.setLineWidth(2)
+            canvas.line(0.5*inch, letter[1] - 0.4*inch, letter[0] - 0.5*inch, letter[1] - 0.4*inch)
+
+            # Header text - bot name and date
+            canvas.setFont('Helvetica-Bold', 8)
+            canvas.setFillColor(HexColor('#1a1a1a'))
+            canvas.drawString(0.75*inch, letter[1] - 0.35*inch, bot_name)
+
+            canvas.setFont('Helvetica', 8)
+            canvas.setFillColor(HexColor('#666666'))
+            report_date = datetime.now().strftime("%B %d, %Y")
+            canvas.drawRightString(letter[0] - 0.75*inch, letter[1] - 0.35*inch, f"Daily Research")
+
+            # Footer - page number and disclaimer
+            canvas.setStrokeColor(HexColor('#e0e0e0'))
+            canvas.setLineWidth(0.5)
+            canvas.line(0.75*inch, 0.5*inch, letter[0] - 0.75*inch, 0.5*inch)
+
+            canvas.setFont('Helvetica', 7)
+            canvas.setFillColor(HexColor('#999999'))
+            canvas.drawString(0.75*inch, 0.35*inch, "AI-Generated Research | Not Financial Advice")
+            canvas.drawRightString(letter[0] - 0.75*inch, 0.35*inch, f"Page {doc.page}")
+
+            canvas.restoreState()
+
+        # Create PDF document with custom template
+        doc = BaseDocTemplate(
             str(output_path),
             pagesize=letter,
             rightMargin=0.75*inch,
             leftMargin=0.75*inch,
-            topMargin=0.75*inch,
-            bottomMargin=0.75*inch
+            topMargin=0.6*inch,
+            bottomMargin=0.65*inch
         )
 
-        # Define styles
+        # Create frame for content
+        frame = Frame(
+            doc.leftMargin,
+            doc.bottomMargin,
+            doc.width,
+            doc.height,
+            id='normal'
+        )
+
+        # Add page template with header/footer
+        template = PageTemplate(id='main', frames=frame, onPage=add_header_footer)
+        doc.addPageTemplates([template])
+
+        # Define styles - Morgan Stanley / Bulge Bracket Research Style
         styles = getSampleStyleSheet()
 
-        # Custom styles - Enhanced formatting
+        # Main report title (compact, professional)
         title_style = ParagraphStyle(
             'CustomTitle',
             parent=styles['Heading1'],
-            fontSize=26,
-            textColor=HexColor('#1a1a2e'),
-            spaceAfter=15,
+            fontSize=16,
+            textColor=HexColor('#1a1a1a'),
+            spaceAfter=4,
             spaceBefore=0,
-            leading=32,
-            fontName='Helvetica-Bold'
-        )
-
-        heading_style = ParagraphStyle(
-            'CustomHeading',
-            parent=styles['Heading2'],
-            fontSize=18,
-            textColor=HexColor('#0066cc'),
-            spaceAfter=12,
-            spaceBefore=25,
-            leading=22,
-            fontName='Helvetica-Bold',
-            borderColor=HexColor('#0066cc'),
-            borderWidth=0,
-            borderPadding=0
-        )
-
-        subheading_style = ParagraphStyle(
-            'CustomSubHeading',
-            parent=styles['Heading3'],
-            fontSize=14,
-            textColor=HexColor('#2c3e50'),
-            spaceAfter=10,
-            spaceBefore=18,
             leading=18,
             fontName='Helvetica-Bold'
         )
 
+        # Section headers (## level) - compact with teal accent
+        heading_style = ParagraphStyle(
+            'CustomHeading',
+            parent=styles['Heading2'],
+            fontSize=12,
+            textColor=HexColor('#1a1a1a'),
+            spaceAfter=4,
+            spaceBefore=8,
+            leading=14,
+            fontName='Helvetica-Bold'
+        )
+
+        # Subsection headers (### level) - stock tickers
+        subheading_style = ParagraphStyle(
+            'CustomSubHeading',
+            parent=styles['Heading3'],
+            fontSize=11,
+            textColor=HexColor('#1a1a1a'),
+            spaceAfter=3,
+            spaceBefore=8,
+            leading=13,
+            fontName='Helvetica-Bold'
+        )
+
+        # Body text - compact
         body_style = ParagraphStyle(
             'CustomBody',
             parent=styles['BodyText'],
-            fontSize=10,
-            leading=15,
-            spaceAfter=8,
-            textColor=HexColor('#2c3e50')
+            fontSize=9,
+            leading=12,
+            spaceAfter=4,
+            textColor=HexColor('#333333')
         )
 
-        # Bullet list style
+        # Bullet list style with teal square bullets (Morgan Stanley style)
         bullet_style = ParagraphStyle(
             'BulletItem',
             parent=styles['BodyText'],
-            fontSize=10,
-            leading=14,
-            spaceAfter=4,
-            leftIndent=20,
-            bulletIndent=8,
-            textColor=HexColor('#2c3e50')
+            fontSize=9,
+            leading=12,
+            spaceAfter=3,
+            leftIndent=15,
+            bulletIndent=5,
+            textColor=HexColor('#333333')
         )
 
-        # Highlight/important text style
+        # Key takeaway style (teal left border like MS)
         highlight_style = ParagraphStyle(
             'Highlight',
             parent=styles['BodyText'],
-            fontSize=10,
-            leading=14,
-            spaceAfter=8,
-            backColor=HexColor('#fff3cd'),
-            borderColor=HexColor('#ffc107'),
-            borderWidth=1,
-            borderPadding=8,
-            leftIndent=10,
-            rightIndent=10
+            fontSize=9,
+            leading=12,
+            spaceAfter=4,
+            leftIndent=8,
+            textColor=HexColor('#333333')
         )
 
-        # Success/positive style
+        # Positive/green text style
         success_style = ParagraphStyle(
             'Success',
             parent=styles['BodyText'],
-            fontSize=10,
-            leading=14,
-            spaceAfter=8,
-            backColor=HexColor('#d4edda'),
-            borderColor=HexColor('#28a745'),
-            borderWidth=1,
-            borderPadding=8,
-            leftIndent=10,
-            rightIndent=10
+            fontSize=9,
+            leading=12,
+            spaceAfter=4,
+            textColor=HexColor('#2e7d32')
         )
 
-        # Danger/warning style
+        # Negative/red text style
         danger_style = ParagraphStyle(
             'Danger',
             parent=styles['BodyText'],
-            fontSize=10,
-            leading=14,
-            spaceAfter=8,
-            backColor=HexColor('#f8d7da'),
-            borderColor=HexColor('#dc3545'),
-            borderWidth=1,
-            borderPadding=8,
-            leftIndent=10,
-            rightIndent=10
+            fontSize=9,
+            leading=12,
+            spaceAfter=4,
+            textColor=HexColor('#c62828')
         )
 
+        # Code block style - compact
         code_style = ParagraphStyle(
             'CustomCode',
             parent=styles['Code'],
-            fontSize=9,
+            fontSize=8,
             fontName='Courier',
-            leftIndent=15,
-            rightIndent=15,
-            spaceBefore=10,
-            spaceAfter=10,
-            backColor=HexColor('#f4f4f4'),
-            borderColor=HexColor('#ddd'),
-            borderWidth=1,
-            borderPadding=10
+            leftIndent=10,
+            rightIndent=10,
+            spaceBefore=4,
+            spaceAfter=4,
+            backColor=HexColor('#f5f5f5'),
+            borderColor=HexColor('#e0e0e0'),
+            borderWidth=0.5,
+            borderPadding=6
         )
 
-        # Info box style
-        info_style = ParagraphStyle(
-            'InfoBox',
+        # Exhibit/chart caption style
+        exhibit_style = ParagraphStyle(
+            'Exhibit',
             parent=styles['BodyText'],
             fontSize=10,
-            leading=14,
-            spaceAfter=10,
-            backColor=HexColor('#e7f3ff'),
-            borderColor=HexColor('#0066cc'),
-            borderWidth=1,
-            borderPadding=10,
-            leftIndent=10,
-            rightIndent=10
+            leading=12,
+            spaceAfter=4,
+            spaceBefore=8,
+            textColor=HexColor('#1a1a1a'),
+            fontName='Helvetica-Bold'
         )
 
-        # Build story with portfolio summary at top
+        # Source citation style
+        source_style = ParagraphStyle(
+            'Source',
+            parent=styles['BodyText'],
+            fontSize=7,
+            leading=9,
+            spaceAfter=8,
+            textColor=HexColor('#666666'),
+            fontName='Helvetica-Oblique'
+        )
+
+        # Build story with new document structure:
+        # 1. Title page with Executive Summary
+        # 2. Table of Contents (page 2)
+        # 3. Portfolio Dashboard
+        # 4. Main content
         story = []
 
-        # Add portfolio visual dashboard if data available
+        # Track holdings for inline chart generation
+        holdings_dict = {}
+        if portfolio_data:
+            for h in portfolio_data.get('holdings', []):
+                symbol = h.get('symbol', '')
+                if symbol:
+                    holdings_dict[symbol] = h
+
+        # PAGE 1: Title Page with Executive Summary
+        story.extend(self._create_title_page(bot_name, exec_summary, portfolio_data))
+
+        # PAGE 2: Table of Contents
+        if sections:
+            story.extend(self._create_toc(sections, styles))
+            story.append(PageBreak())
+
+        # PAGE 3+: Portfolio visual dashboard if data available
         if portfolio_data:
             story.extend(self._create_portfolio_dashboard(portfolio_data, bot_name, styles))
             story.append(PageBreak())
 
-            # Add price charts for top holdings
-            holdings = portfolio_data.get('holdings', [])
-            if holdings:
-                print(f"[*] Generating price charts for top holdings...")
-                chart_elements = self._create_price_charts_section(holdings, styles, max_charts=6)
-                story.extend(chart_elements)
-
-        # Parse markdown and build rest of report
-        lines = markdown_content.split('\n')
+        # Parse cleaned markdown content (redundant info removed)
+        lines = cleaned_content.split('\n')
 
         in_code_block = False
         code_lines = []
@@ -1899,16 +2701,88 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         table_lines = []
 
         for line in lines:
-            # Handle code blocks
-            if line.startswith('```'):
+            # Handle code blocks - check for ``` at start OR end of line
+            # Some markdown has ``` stuck at end of previous line like "## Heading```"
+            line_stripped = line.strip()
+            is_code_fence = line_stripped.startswith('```') or line_stripped == '```' or line_stripped.endswith('```')
+
+            # If line ends with ``` but isn't just ```, extract the non-code part first
+            if line_stripped.endswith('```') and not line_stripped.startswith('```') and len(line_stripped) > 3:
+                # Process the text before the ``` as regular content, then toggle code block
+                text_before = line_stripped[:-3].strip()
+                if text_before:
+                    # This is likely a heading with ``` appended - process heading first
+                    if text_before.startswith('## '):
+                        story.append(Paragraph(text_before[3:], heading_style))
+                        story.append(Spacer(1, 0.05*inch))
+                    elif text_before.startswith('### '):
+                        story.append(Paragraph(text_before[4:], subheading_style))
+                    elif text_before.startswith('# '):
+                        story.append(Paragraph(text_before[2:], title_style))
+                    else:
+                        text_formatted = self._format_text_with_markdown(text_before)
+                        try:
+                            story.append(Paragraph(text_formatted, body_style))
+                        except:
+                            story.append(Paragraph(text_before, body_style))
+                # Now toggle code block state
+                in_code_block = not in_code_block
+                continue
+
+            if is_code_fence and line_stripped.startswith('```'):
                 if in_code_block:
-                    # End code block
+                    # End code block - determine type and render appropriately
                     code_text = '\n'.join(code_lines)
-                    story.append(Preformatted(code_text, code_style))
-                    story.append(Spacer(1, 0.2*inch))
+
+                    # Check if this is an order block (contains Action: and Ticker:)
+                    if 'action:' in code_text.lower() and 'ticker:' in code_text.lower():
+                        order_card = self._create_order_block_card(code_text)
+                        if order_card:
+                            story.append(order_card)
+                            story.append(Spacer(1, 0.1*inch))
+                        else:
+                            story.append(Preformatted(code_text, code_style))
+                            story.append(Spacer(1, 0.1*inch))
+
+                    # Check if this is a catalyst calendar - create visual timeline
+                    elif '[monday' in code_text.lower() or '[tuesday' in code_text.lower() or '[thursday' in code_text.lower() or '[friday' in code_text.lower() or '[jan' in code_text.lower() or '[dec' in code_text.lower():
+                        # Try visual timeline first
+                        print(f"    [*] Creating visual catalyst timeline...")
+                        timeline_path = self._create_visual_catalyst_timeline(code_text)
+                        if timeline_path and Path(timeline_path).exists():
+                            story.append(Image(timeline_path, width=6.5*inch, height=3.0*inch))
+                            story.append(Spacer(1, 0.1*inch))
+                        else:
+                            # Fall back to table format
+                            calendar_table = self._create_catalyst_calendar_table(code_text)
+                            if calendar_table:
+                                story.append(calendar_table)
+                                story.append(Spacer(1, 0.1*inch))
+                            else:
+                                story.append(Preformatted(code_text, code_style))
+                                story.append(Spacer(1, 0.1*inch))
+
+                    else:
+                        # Regular code block - use compact styling
+                        story.append(Preformatted(code_text, code_style))
+                        story.append(Spacer(1, 0.1*inch))
+
                     code_lines = []
                 in_code_block = not in_code_block
                 continue
+
+            # SAFEGUARD: If we see a markdown heading while in code block, force exit code block
+            # This handles cases where code blocks aren't properly closed
+            if in_code_block and (line.startswith('## ') or line.startswith('# ')):
+                print(f"    [!] WARNING: Detected unclosed code block, forcing exit at: {line[:50]}")
+                # Process accumulated code as a code block
+                if code_lines:
+                    code_text = '\n'.join(code_lines)
+                    story.append(Preformatted(code_text, code_style))
+                    story.append(Spacer(1, 0.1*inch))
+                code_lines = []
+                in_code_block = False
+                # Fall through to process this line normally
 
             if in_code_block:
                 code_lines.append(line)
@@ -1950,20 +2824,39 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                 story.append(Spacer(1, 0.1*inch))
             elif line.startswith('## '):
                 text = line[3:].strip()
-                # Add spacing and visual separator before h2
-                story.append(Spacer(1, 0.15*inch))
-                # Section divider line
+                # Add compact spacing and visual separator before h2 (Morgan Stanley style)
+                story.append(Spacer(1, 0.1*inch))
+                # Section divider line - subtle teal accent
                 divider = Table([['']],colWidths=[6.5*inch])
                 divider.setStyle(TableStyle([
-                    ('LINEABOVE', (0, 0), (-1, -1), 0.5, HexColor('#e0e0e0')),
+                    ('LINEABOVE', (0, 0), (-1, -1), 1, HexColor('#0066cc')),
                     ('TOPPADDING', (0, 0), (-1, -1), 0),
-                    ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
                 ]))
                 story.append(divider)
                 story.append(Paragraph(text, heading_style))
             elif line.startswith('### '):
                 text = line[4:].strip()
                 story.append(Paragraph(text, subheading_style))
+
+                # Check for stock ticker in heading and generate inline chart
+                # Pattern: "### AAPL - Apple Inc" or "### AAPL: Company Name"
+                import re
+                ticker_match = re.match(r'^([A-Z]{1,5})(?:\s*[-:]\s*|\s+)', text)
+                if ticker_match:
+                    ticker = ticker_match.group(1)
+                    # Only generate chart if ticker is in our holdings
+                    if ticker in holdings_dict:
+                        print(f"    [*] Generating inline chart for {ticker}...")
+                        inline_chart_path = self._generate_inline_price_chart(ticker)
+                        if inline_chart_path and Path(inline_chart_path).exists():
+                            # Add exhibit label (Morgan Stanley style)
+                            story.append(Spacer(1, 0.08*inch))
+                            story.append(Paragraph(f"<b>Exhibit: {ticker} 60-Day Price Action</b>", exhibit_style))
+                            # Use proper aspect ratio - 5.5" wide, 2.2" tall (2.5:1 ratio)
+                            story.append(Image(inline_chart_path, width=5.5*inch, height=2.2*inch))
+                            story.append(Paragraph("<i>Source: Alpaca Markets, moving averages 20/50-day</i>", source_style))
+                            story.append(Spacer(1, 0.1*inch))
             elif line.startswith('#### '):
                 # H4 style
                 text = line[5:].strip()
@@ -1978,47 +2871,51 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                 )
                 story.append(Paragraph(text, h4_style))
             elif line.startswith('---'):
-                # Horizontal rule - visual divider
+                # Horizontal rule - compact visual divider
                 hr = Table([['']],colWidths=[6*inch])
                 hr.setStyle(TableStyle([
-                    ('LINEBELOW', (0, 0), (-1, -1), 1, HexColor('#dee2e6')),
-                    ('TOPPADDING', (0, 0), (-1, -1), 8),
-                    ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+                    ('LINEBELOW', (0, 0), (-1, -1), 0.5, HexColor('#cccccc')),
+                    ('TOPPADDING', (0, 0), (-1, -1), 4),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
                 ]))
                 story.append(hr)
             elif line.strip():
-                import re
                 text = line.strip()
 
-                # Detect bullet points
+                # Check if this is a conviction score line (e.g., "1. AAPL - 8/10 - Rationale")
+                conviction_match = re.match(r'^(?:\d+\.\s+)?([A-Z]{1,5})\s*[-:]\s*(\d+)/10(?:\s*[-:]\s*(.+))?$', text)
+                if conviction_match:
+                    ticker = conviction_match.group(1)
+                    score = int(conviction_match.group(2))
+                    rationale = conviction_match.group(3) or ''
+                    gauge = self._create_conviction_gauge(ticker, score, rationale)
+                    if gauge:
+                        story.append(gauge)
+                        story.append(Spacer(1, 0.08*inch))
+                        continue
+
+                # Detect bullet points - Morgan Stanley style (teal squares)
                 is_bullet = False
-                bullet_char = '•'
-                if text.startswith('- ') or text.startswith('* '):
+                indent_level = 0
+                if text.startswith('- ') or text.startswith('• '):
                     is_bullet = True
                     text = text[2:]
-                elif text.startswith('  - ') or text.startswith('  * '):
+                elif text.startswith('  - ') or text.startswith('  • '):
                     is_bullet = True
-                    bullet_char = '  ◦'  # Sub-bullet
+                    indent_level = 1
                     text = text[4:]
 
-                # First escape XML special chars (except our markers)
-                text = text.replace('&', '&amp;')
+                # Apply markdown formatting (bold, italic, P&L colors, action words)
+                text = self._format_text_with_markdown(text)
 
-                # Convert markdown to XML tags
-                text = re.sub(r'\*\*(.*?)\*\*', r'|||BOLD_START|||\1|||BOLD_END|||', text)
-                text = re.sub(r'\*(.*?)\*', r'|||ITALIC_START|||\1|||ITALIC_END|||', text)
-
-                # Now escape < and >
-                text = text.replace('<', '&lt;').replace('>', '&gt;')
-
-                # Replace our markers with actual tags
-                text = text.replace('|||BOLD_START|||', '<b>').replace('|||BOLD_END|||', '</b>')
-                text = text.replace('|||ITALIC_START|||', '<i>').replace('|||ITALIC_END|||', '</i>')
-
-                # Apply appropriate style
+                # Create paragraph with appropriate style
                 try:
                     if is_bullet:
-                        # Format as bullet point
+                        # Teal square bullets for main, gray for sub-bullets
+                        if indent_level == 0:
+                            bullet_char = '<font color="#0066cc">&#9632;</font>'
+                        else:
+                            bullet_char = '&nbsp;&nbsp;<font color="#666666">&#9642;</font>'
                         bullet_text = f"{bullet_char} {text}"
                         story.append(Paragraph(bullet_text, bullet_style))
                     else:
@@ -2032,9 +2929,15 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                             story.append(Paragraph(text, success_style))
                         else:
                             story.append(Paragraph(text, body_style))
-                except:
-                    # If paragraph fails, just skip this line
-                    pass
+                except Exception as e:
+                    # Log error instead of silently skipping
+                    print(f"    [!] Paragraph render failed for: {text[:50]}... Error: {e}")
+                    # Try plain text fallback
+                    try:
+                        plain_text = re.sub(r'<[^>]+>', '', text)  # Strip HTML tags
+                        story.append(Paragraph(plain_text, body_style))
+                    except:
+                        pass
             else:
                 # Empty line
                 story.append(Spacer(1, 0.08*inch))
@@ -2059,6 +2962,9 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         Returns:
             ReportLab Table object, or None if parsing fails
         """
+        import re
+        from reportlab.platypus import Paragraph
+        from reportlab.lib.styles import ParagraphStyle
         try:
             if len(table_lines) < 2:
                 return None
@@ -2096,21 +3002,21 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             data_rows = rows[1:] if len(rows) > 1 else []
 
             # Build table data
-            table_data = [header] + data_rows
+            raw_table_data = [header] + data_rows
 
             # Normalize column count
-            max_cols = max(len(row) for row in table_data) if table_data else 0
-            table_data = [row + [''] * (max_cols - len(row)) for row in table_data]
+            max_cols = max(len(row) for row in raw_table_data) if raw_table_data else 0
+            raw_table_data = [row + [''] * (max_cols - len(row)) for row in raw_table_data]
 
-            if not table_data or max_cols == 0:
+            if not raw_table_data or max_cols == 0:
                 return None
 
-            # Calculate column widths based on content
+            # Calculate column widths based on content (before formatting)
             available_width = 7.0 * inch  # Page width minus margins
             col_widths = []
 
             for col_idx in range(max_cols):
-                max_len = max(len(str(row[col_idx])) for row in table_data)
+                max_len = max(len(str(row[col_idx])) for row in raw_table_data)
                 # Scale width based on content, min 0.6", max 2"
                 width = min(max(0.6 * inch, max_len * 0.08 * inch), 2.0 * inch)
                 col_widths.append(width)
@@ -2121,48 +3027,79 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                 scale = available_width / total_width
                 col_widths = [w * scale for w in col_widths]
 
-            # Create table
+            # Convert cells to Paragraph objects with markdown formatting
+            # Define cell styles
+            header_cell_style = ParagraphStyle(
+                'TableHeader',
+                fontSize=8,
+                fontName='Helvetica-Bold',
+                textColor=colors.white,
+                alignment=1  # Center
+            )
+            data_cell_style = ParagraphStyle(
+                'TableCell',
+                fontSize=8,
+                fontName='Helvetica',
+                textColor=HexColor('#333333'),
+                alignment=1  # Center
+            )
+
+            # Apply markdown formatting to all cells and convert to Paragraphs
+            table_data = []
+            for row_idx, row in enumerate(raw_table_data):
+                formatted_row = []
+                for cell in row:
+                    cell_text = str(cell).strip()
+                    # Apply markdown formatting (bold, italic, colors)
+                    formatted_text = self._format_text_with_markdown(cell_text)
+                    try:
+                        if row_idx == 0:
+                            # Header row - use white text style
+                            p = Paragraph(formatted_text, header_cell_style)
+                        else:
+                            # Data row - use dark text style
+                            p = Paragraph(formatted_text, data_cell_style)
+                        formatted_row.append(p)
+                    except Exception as e:
+                        # Fallback to plain text if parsing fails
+                        plain = re.sub(r'<[^>]+>', '', cell_text)
+                        if row_idx == 0:
+                            formatted_row.append(Paragraph(plain, header_cell_style))
+                        else:
+                            formatted_row.append(Paragraph(plain, data_cell_style))
+                table_data.append(formatted_row)
+
+            # Create table with Paragraph objects
             table = Table(table_data, colWidths=col_widths)
 
-            # Apply styling
+            # Apply styling - clean Morgan Stanley look
             style_commands = [
-                # Header row styling
-                ('BACKGROUND', (0, 0), (-1, 0), HexColor('#2c3e50')),
+                # Header row styling - subtle dark header
+                ('BACKGROUND', (0, 0), (-1, 0), HexColor('#1a1a1a')),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
                 ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
                 ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('FONTSIZE', (0, 0), (-1, 0), 9),
-                ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
-                ('TOPPADDING', (0, 0), (-1, 0), 8),
+                ('FONTSIZE', (0, 0), (-1, 0), 8),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 6),
+                ('TOPPADDING', (0, 0), (-1, 0), 6),
 
-                # Data row styling
+                # Data row styling - compact
                 ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
                 ('FONTSIZE', (0, 1), (-1, -1), 8),
                 ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
-                ('TOPPADDING', (0, 1), (-1, -1), 5),
-                ('BOTTOMPADDING', (0, 1), (-1, -1), 5),
+                ('TOPPADDING', (0, 1), (-1, -1), 4),
+                ('BOTTOMPADDING', (0, 1), (-1, -1), 4),
 
-                # Grid and alternating rows
-                ('GRID', (0, 0), (-1, -1), 0.5, HexColor('#bdc3c7')),
-                ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, HexColor('#f8f9fa')]),
+                # Thin grid and subtle alternating rows
+                ('GRID', (0, 0), (-1, -1), 0.25, HexColor('#e0e0e0')),
+                ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, HexColor('#fafafa')]),
 
                 # Left-align first column (usually symbol/ticker)
                 ('ALIGN', (0, 1), (0, -1), 'LEFT'),
             ]
 
-            # Color P&L columns if they exist (look for % or $ in header)
-            for col_idx, header_cell in enumerate(header):
-                header_lower = header_cell.lower()
-                if 'p&l' in header_lower or 'profit' in header_lower or 'return' in header_lower:
-                    # Apply conditional coloring for this column
-                    for row_idx, row in enumerate(data_rows, start=1):
-                        if col_idx < len(row):
-                            cell_text = str(row[col_idx])
-                            if cell_text.startswith('+') or (cell_text.replace('$', '').replace('%', '').replace(',', '').replace('.', '').lstrip('-').isdigit() and not cell_text.startswith('-')):
-                                if '+' in cell_text or (not cell_text.startswith('-') and any(c.isdigit() for c in cell_text)):
-                                    style_commands.append(('TEXTCOLOR', (col_idx, row_idx), (col_idx, row_idx), HexColor('#27ae60')))
-                            elif cell_text.startswith('-'):
-                                style_commands.append(('TEXTCOLOR', (col_idx, row_idx), (col_idx, row_idx), HexColor('#e74c3c')))
+            # Note: P&L coloring is now handled by _format_text_with_markdown in Paragraph objects
+            # The function applies green/red font colors to +/- values automatically
 
             table.setStyle(TableStyle(style_commands))
             return table
@@ -2179,19 +3116,18 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         """
         elements = []
 
-        # Dashboard title
+        # Compact dashboard title
         dashboard_title = ParagraphStyle(
             'DashboardTitle',
             parent=styles['Heading1'],
-            fontSize=20,
-            textColor=HexColor('#0066cc'),
-            alignment=TA_CENTER,
-            spaceAfter=20
+            fontSize=14,
+            textColor=HexColor('#1a1a1a'),
+            alignment=TA_LEFT,
+            spaceAfter=8
         )
-        elements.append(Paragraph(f"{bot_name} Portfolio Dashboard", dashboard_title))
-        elements.append(Spacer(1, 0.2*inch))
+        elements.append(Paragraph(f"Portfolio Summary", dashboard_title))
 
-        # Portfolio summary stats box
+        # Portfolio summary stats - TWO COLUMN LAYOUT
         cash = portfolio_data.get('cash', 0)
         portfolio_value = portfolio_data.get('portfolio_value', 0)
         equity = portfolio_data.get('equity', 0)
@@ -2201,49 +3137,60 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         total_unrealized_pl = sum([h.get('unrealized_pl', 0) for h in portfolio_data.get('holdings', [])])
         total_pl_pct = (total_unrealized_pl / (portfolio_value - total_unrealized_pl) * 100) if portfolio_value > total_unrealized_pl else 0
 
-        # Stats table
+        # Calculate winners/losers
+        holdings = portfolio_data.get('holdings', [])
+        winners = len([h for h in holdings if h.get('unrealized_pl', 0) > 0])
+        losers = len([h for h in holdings if h.get('unrealized_pl', 0) < 0])
+        win_rate = (winners / len(holdings) * 100) if holdings else 0
+
+        # Determine P&L color
+        pl_color = '#2e7d32' if total_unrealized_pl >= 0 else '#c62828'
+
+        # Two-column stats table - compact layout
         stats_data = [
-            ['Portfolio Value', f'${portfolio_value:,.2f}'],
-            ['Cash Available', f'${cash:,.2f}'],
-            ['Equity', f'${equity:,.2f}'],
-            ['Unrealized P&L', f'${total_unrealized_pl:+,.2f} ({total_pl_pct:+.2f}%)'],
-            ['Positions', str(position_count)]
+            ['Portfolio Value', f'${portfolio_value:,.2f}', 'Positions', f'{position_count}'],
+            ['Cash Available', f'${cash:,.2f}', 'Win Rate', f'{win_rate:.0f}% ({winners}W/{losers}L)'],
+            ['Unrealized P&L', f'${total_unrealized_pl:+,.2f}', 'Return', f'{total_pl_pct:+.2f}%'],
         ]
 
-        stats_table = Table(stats_data, colWidths=[2.5*inch, 2.5*inch])
+        stats_table = Table(stats_data, colWidths=[1.5*inch, 1.8*inch, 1.2*inch, 1.8*inch])
         stats_table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, -1), HexColor('#f0f8ff')),
+            ('BACKGROUND', (0, 0), (-1, -1), HexColor('#fafafa')),
             ('TEXTCOLOR', (0, 0), (-1, -1), HexColor('#1a1a1a')),
-            ('ALIGN', (0, 0), (0, -1), 'LEFT'),
             ('ALIGN', (1, 0), (1, -1), 'RIGHT'),
-            ('FONTNAME', (0, 0), (-1, -1), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, -1), 12),
-            ('GRID', (0, 0), (-1, -1), 1, HexColor('#0066cc')),
-            ('ROWBACKGROUNDS', (0, 0), (-1, -1), [HexColor('#ffffff'), HexColor('#f0f8ff')]),
-            ('PADDING', (0, 0), (-1, -1), 8),
+            ('ALIGN', (3, 0), (3, -1), 'RIGHT'),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica'),
+            ('FONTNAME', (2, 0), (2, -1), 'Helvetica'),
+            ('FONTNAME', (1, 0), (1, -1), 'Helvetica-Bold'),
+            ('FONTNAME', (3, 0), (3, -1), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, -1), 9),
+            ('TEXTCOLOR', (0, 0), (0, -1), HexColor('#666666')),
+            ('TEXTCOLOR', (2, 0), (2, -1), HexColor('#666666')),
+            ('GRID', (0, 0), (-1, -1), 0.25, HexColor('#e0e0e0')),
+            ('BOX', (0, 0), (-1, -1), 1, HexColor('#0066cc')),
+            ('PADDING', (0, 0), (-1, -1), 6),
         ]))
         elements.append(stats_table)
-        elements.append(Spacer(1, 0.3*inch))
+        elements.append(Spacer(1, 0.15*inch))
 
-        # Pie chart for position allocation (if holdings exist)
-        holdings = portfolio_data.get('holdings', [])
+        # Pie chart and holdings in compact layout
         if holdings:
             elements.append(Paragraph("Position Allocation", styles['Heading2']))
-            elements.append(Spacer(1, 0.1*inch))
+            elements.append(Spacer(1, 0.05*inch))
 
-            # Create pie chart
+            # Create pie chart (smaller)
             pie_chart = self._create_pie_chart(holdings)
             elements.append(pie_chart)
-            elements.append(Spacer(1, 0.3*inch))
+            elements.append(Spacer(1, 0.1*inch))
 
             # Top holdings table with P&L
             elements.append(Paragraph("Current Holdings", styles['Heading2']))
-            elements.append(Spacer(1, 0.1*inch))
+            elements.append(Spacer(1, 0.05*inch))
 
             holdings_table = self._create_holdings_table(holdings)
             elements.append(holdings_table)
 
-            # === NEW ENHANCED VISUALIZATIONS ===
+            # === ENHANCED VISUALIZATIONS (Compact -20% sizing) ===
 
             # Sector Breakdown Chart
             print(f"    [*] Generating sector breakdown chart...")
@@ -2251,18 +3198,18 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             if sector_chart_path and Path(sector_chart_path).exists():
                 elements.append(PageBreak())
                 elements.append(Paragraph("Sector Allocation Analysis", styles['Heading2']))
+                elements.append(Spacer(1, 0.05*inch))
+                elements.append(Image(sector_chart_path, width=5.6*inch, height=2.4*inch))
                 elements.append(Spacer(1, 0.1*inch))
-                elements.append(Image(sector_chart_path, width=7*inch, height=3*inch))
-                elements.append(Spacer(1, 0.2*inch))
 
             # Risk Metrics Dashboard
             print(f"    [*] Generating risk metrics dashboard...")
             risk_chart_path = self._create_risk_metrics_dashboard(holdings, portfolio_value)
             if risk_chart_path and Path(risk_chart_path).exists():
                 elements.append(Paragraph("Risk Metrics Dashboard", styles['Heading2']))
+                elements.append(Spacer(1, 0.05*inch))
+                elements.append(Image(risk_chart_path, width=5.6*inch, height=2.8*inch))
                 elements.append(Spacer(1, 0.1*inch))
-                elements.append(Image(risk_chart_path, width=7*inch, height=3.5*inch))
-                elements.append(Spacer(1, 0.2*inch))
 
             # P&L Waterfall Chart
             print(f"    [*] Generating P&L waterfall chart...")
@@ -2270,18 +3217,18 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             if waterfall_path and Path(waterfall_path).exists():
                 elements.append(PageBreak())
                 elements.append(Paragraph("P&L Attribution by Position", styles['Heading2']))
+                elements.append(Spacer(1, 0.05*inch))
+                elements.append(Image(waterfall_path, width=5.6*inch, height=2.8*inch))
                 elements.append(Spacer(1, 0.1*inch))
-                elements.append(Image(waterfall_path, width=7*inch, height=3.5*inch))
-                elements.append(Spacer(1, 0.2*inch))
 
             # Correlation Heatmap
             print(f"    [*] Generating correlation heatmap...")
             corr_path = self._create_correlation_heatmap(holdings)
             if corr_path and Path(corr_path).exists():
                 elements.append(Paragraph("Position Correlation Matrix", styles['Heading2']))
+                elements.append(Spacer(1, 0.05*inch))
+                elements.append(Image(corr_path, width=4.8*inch, height=3.6*inch))
                 elements.append(Spacer(1, 0.1*inch))
-                elements.append(Image(corr_path, width=6*inch, height=4.5*inch))
-                elements.append(Spacer(1, 0.2*inch))
 
             # Performance Comparison
             print(f"    [*] Generating performance comparison chart...")
@@ -2289,9 +3236,9 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             if perf_path and Path(perf_path).exists():
                 elements.append(PageBreak())
                 elements.append(Paragraph("30-Day Performance History", styles['Heading2']))
+                elements.append(Spacer(1, 0.05*inch))
+                elements.append(Image(perf_path, width=5.6*inch, height=2.8*inch))
                 elements.append(Spacer(1, 0.1*inch))
-                elements.append(Image(perf_path, width=7*inch, height=3.5*inch))
-                elements.append(Spacer(1, 0.2*inch))
 
             # Earnings Calendar
             print(f"    [*] Generating earnings calendar...")
@@ -2299,18 +3246,18 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             if earnings_path and Path(earnings_path).exists():
                 elements.append(PageBreak())
                 elements.append(Paragraph("Upcoming Earnings Calendar", styles['Heading2']))
+                elements.append(Spacer(1, 0.05*inch))
+                elements.append(Image(earnings_path, width=5.6*inch, height=2.8*inch))
                 elements.append(Spacer(1, 0.1*inch))
-                elements.append(Image(earnings_path, width=7*inch, height=3.5*inch))
-                elements.append(Spacer(1, 0.2*inch))
 
             # Catalyst Timeline
             print(f"    [*] Generating catalyst timeline...")
             catalyst_path = self._create_catalyst_timeline(holdings)
             if catalyst_path and Path(catalyst_path).exists():
                 elements.append(Paragraph("Catalyst Timeline (Next 45 Days)", styles['Heading2']))
+                elements.append(Spacer(1, 0.05*inch))
+                elements.append(Image(catalyst_path, width=5.6*inch, height=3.2*inch))
                 elements.append(Spacer(1, 0.1*inch))
-                elements.append(Image(catalyst_path, width=7*inch, height=4*inch))
-                elements.append(Spacer(1, 0.2*inch))
 
             # AI Confidence Meters
             print(f"    [*] Generating AI confidence meters...")
@@ -2318,18 +3265,18 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             if ai_conf_path and Path(ai_conf_path).exists():
                 elements.append(PageBreak())
                 elements.append(Paragraph("AI Confidence Analysis", styles['Heading2']))
+                elements.append(Spacer(1, 0.05*inch))
+                elements.append(Image(ai_conf_path, width=5.6*inch, height=2.8*inch))
                 elements.append(Spacer(1, 0.1*inch))
-                elements.append(Image(ai_conf_path, width=7*inch, height=3.5*inch))
-                elements.append(Spacer(1, 0.2*inch))
 
             # News Sentiment Gauge
             print(f"    [*] Generating news sentiment gauge...")
             sentiment_path = self._create_news_sentiment_gauge(holdings)
             if sentiment_path and Path(sentiment_path).exists():
                 elements.append(Paragraph("News Sentiment Analysis", styles['Heading2']))
+                elements.append(Spacer(1, 0.05*inch))
+                elements.append(Image(sentiment_path, width=5.6*inch, height=2.8*inch))
                 elements.append(Spacer(1, 0.1*inch))
-                elements.append(Image(sentiment_path, width=7*inch, height=3.5*inch))
-                elements.append(Spacer(1, 0.2*inch))
 
             # Options Flow Summary
             print(f"    [*] Generating options flow summary...")
@@ -2337,9 +3284,9 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             if options_path and Path(options_path).exists():
                 elements.append(PageBreak())
                 elements.append(Paragraph("Options Flow Analysis", styles['Heading2']))
+                elements.append(Spacer(1, 0.05*inch))
+                elements.append(Image(options_path, width=5.6*inch, height=2.8*inch))
                 elements.append(Spacer(1, 0.1*inch))
-                elements.append(Image(options_path, width=7*inch, height=3.5*inch))
-                elements.append(Spacer(1, 0.2*inch))
 
         else:
             elements.append(Paragraph("No current positions", styles['Normal']))
@@ -2417,31 +3364,31 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                 f'{pl_pct:+.2f}%'
             ])
 
-        # Create table
-        col_widths = [0.8*inch, 0.7*inch, 0.9*inch, 0.9*inch, 1.2*inch, 1.0*inch, 0.9*inch]
+        # Create table - compact styling
+        col_widths = [0.75*inch, 0.6*inch, 0.8*inch, 0.8*inch, 1.0*inch, 0.9*inch, 0.8*inch]
         table = Table(table_data, colWidths=col_widths)
 
-        # Style table
+        # Style table - clean Morgan Stanley look
         table.setStyle(TableStyle([
-            # Header row
-            ('BACKGROUND', (0, 0), (-1, 0), HexColor('#0066cc')),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            # Header row - dark, professional
+            ('BACKGROUND', (0, 0), (-1, 0), HexColor('#1a1a1a')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
             ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, 0), 9),
+            ('FONTSIZE', (0, 0), (-1, 0), 8),
 
-            # Data rows
+            # Data rows - compact
             ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-            ('FONTSIZE', (0, 1), (-1, -1), 8),
+            ('FONTSIZE', (0, 1), (-1, -1), 7),
             ('ALIGN', (0, 1), (0, -1), 'LEFT'),  # Symbol left-aligned
             ('ALIGN', (1, 1), (-1, -1), 'RIGHT'),  # Numbers right-aligned
 
-            # Grid
-            ('GRID', (0, 0), (-1, -1), 0.5, HexColor('#cccccc')),
-            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, HexColor('#f5f5f5')]),
+            # Thin grid and subtle alternating
+            ('GRID', (0, 0), (-1, -1), 0.25, HexColor('#e0e0e0')),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, HexColor('#fafafa')]),
 
-            # Padding
-            ('PADDING', (0, 0), (-1, -1), 4),
+            # Compact padding
+            ('PADDING', (0, 0), (-1, -1), 3),
         ]))
 
         return table
@@ -3050,6 +3997,138 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
         except Exception as e:
             print(f"    [!] Chart generation failed for {ticker}: {e}")
+            plt.close()
+            return None
+
+    def _generate_inline_price_chart(self, ticker: str, days: int = 60) -> Optional[str]:
+        """
+        Generate a compact inline candlestick chart for embedding within stock sections.
+        Uses proper aspect ratio (2.5:1) to prevent distortion.
+
+        Args:
+            ticker: Stock symbol
+            days: Number of days of history to show
+
+        Returns:
+            Path to generated chart image, or None if failed
+        """
+        try:
+            from datetime import datetime, timedelta
+
+            # Fetch historical bars from Alpaca
+            start_date = datetime.now() - timedelta(days=days)
+            bars_req = StockBarsRequest(
+                symbol_or_symbols=ticker,
+                timeframe=TimeFrame.Day,
+                start=start_date
+            )
+            bars = self.market_data.get_stock_bars(bars_req)
+
+            # Handle BarSet object - access data correctly
+            if hasattr(bars, 'data') and ticker in bars.data:
+                ticker_bars = bars.data[ticker]
+            elif ticker in bars:
+                ticker_bars = bars[ticker]
+            else:
+                return None
+
+            if len(ticker_bars) < 5:
+                return None
+
+            # Extract data
+            dates = [bar.timestamp for bar in ticker_bars]
+            opens = [float(bar.open) for bar in ticker_bars]
+            highs = [float(bar.high) for bar in ticker_bars]
+            lows = [float(bar.low) for bar in ticker_bars]
+            closes = [float(bar.close) for bar in ticker_bars]
+            volumes = [int(bar.volume) for bar in ticker_bars]
+
+            # Calculate moving averages
+            closes_arr = np.array(closes)
+            ma_20 = np.convolve(closes_arr, np.ones(20)/20, mode='valid') if len(closes) >= 20 else None
+
+            # Create compact figure with proper aspect ratio (2.5:1 - Morgan Stanley style)
+            fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 4), gridspec_kw={'height_ratios': [3, 1]}, sharex=True)
+            fig.subplots_adjust(hspace=0.05)
+
+            # Clean Morgan Stanley styling
+            ax1.set_facecolor('#ffffff')
+            ax2.set_facecolor('#ffffff')
+            fig.patch.set_facecolor('#ffffff')
+
+            # Draw candlesticks
+            width = 0.6
+            for i in range(len(dates)):
+                color = '#2e7d32' if closes[i] >= opens[i] else '#c62828'  # Green up, Red down
+
+                # Candle body
+                body_bottom = min(opens[i], closes[i])
+                body_height = abs(closes[i] - opens[i])
+                ax1.bar(i, body_height, bottom=body_bottom, width=width, color=color, edgecolor=color, linewidth=0.5)
+
+                # Wicks (high-low lines)
+                ax1.plot([i, i], [lows[i], highs[i]], color=color, linewidth=0.8)
+
+            # Plot 20-day MA if available
+            if ma_20 is not None and len(ma_20) > 0:
+                ma_x = list(range(19, len(dates)))
+                ax1.plot(ma_x, ma_20, color='#0066cc', linewidth=1.2, linestyle='-', label='20 MA', alpha=0.9)
+
+            # Latest price annotation (Morgan Stanley style - right side)
+            latest_price = closes[-1]
+            price_change = ((closes[-1] - closes[0]) / closes[0]) * 100 if closes[0] > 0 else 0
+            change_color = '#2e7d32' if price_change >= 0 else '#c62828'
+
+            ax1.axhline(y=latest_price, color='#999999', linestyle=':', alpha=0.5, linewidth=0.5)
+
+            # Price label on right
+            ax1.annotate(f'${latest_price:.2f} ({price_change:+.1f}%)',
+                        xy=(1.01, latest_price), xycoords=('axes fraction', 'data'),
+                        fontsize=9, fontweight='bold', color=change_color,
+                        verticalalignment='center')
+
+            # Volume bars
+            vol_colors = ['#2e7d32' if closes[i] >= opens[i] else '#c62828' for i in range(len(closes))]
+            ax2.bar(range(len(volumes)), volumes, color=vol_colors, alpha=0.7, width=width)
+
+            # Minimal axis styling (MS style - clean)
+            ax1.set_ylabel('Price ($)', fontsize=8, color='#666666')
+            ax2.set_ylabel('Vol', fontsize=8, color='#666666')
+
+            for ax in [ax1, ax2]:
+                ax.tick_params(axis='both', labelsize=7, colors='#666666')
+                ax.spines['top'].set_visible(False)
+                ax.spines['right'].set_visible(False)
+                ax.spines['left'].set_color('#cccccc')
+                ax.spines['bottom'].set_color('#cccccc')
+                ax.grid(True, alpha=0.3, linestyle='-', linewidth=0.5, color='#e0e0e0')
+                ax.set_axisbelow(True)
+
+            # Legend (compact, top left)
+            if ma_20 is not None:
+                ax1.legend(loc='upper left', fontsize=7, framealpha=0.9, edgecolor='#cccccc')
+
+            # Format x-axis dates - show select labels
+            num_labels = 6
+            step = max(1, len(dates) // num_labels)
+            tick_positions = list(range(0, len(dates), step))
+            tick_labels = [dates[i].strftime('%b %d') for i in tick_positions]
+            ax2.set_xticks(tick_positions)
+            ax2.set_xticklabels(tick_labels, fontsize=7)
+
+            plt.tight_layout()
+
+            # Save to temp file with unique name
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / f'{ticker}_inline_chart.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white', edgecolor='none')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Inline chart generation failed for {ticker}: {e}")
             plt.close()
             return None
 
