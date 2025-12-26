@@ -19,10 +19,14 @@ from pathlib import Path
 from typing import Dict, List, Optional
 import json
 import markdown
+import tempfile
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import numpy as np
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Preformatted, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Preformatted, Table, TableStyle, Image
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib.colors import HexColor
 from reportlab.lib import colors
@@ -1797,6 +1801,13 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             story.extend(self._create_portfolio_dashboard(portfolio_data, bot_name, styles))
             story.append(PageBreak())
 
+            # Add price charts for top holdings
+            holdings = portfolio_data.get('holdings', [])
+            if holdings:
+                print(f"[*] Generating price charts for top holdings...")
+                chart_elements = self._create_price_charts_section(holdings, styles, max_charts=6)
+                story.extend(chart_elements)
+
         # Parse markdown and build rest of report
         lines = markdown_content.split('\n')
 
@@ -2037,6 +2048,184 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         ]))
 
         return table
+
+    def _generate_price_chart(self, ticker: str, days: int = 60) -> Optional[str]:
+        """
+        Generate a price chart for a given ticker and save to temp file.
+
+        Args:
+            ticker: Stock symbol
+            days: Number of days of history to show
+
+        Returns:
+            Path to generated chart image, or None if failed
+        """
+        try:
+            from datetime import datetime, timedelta
+
+            # Fetch historical bars from Alpaca
+            start_date = datetime.now() - timedelta(days=days)
+            bars_req = StockBarsRequest(
+                symbol_or_symbols=ticker,
+                timeframe=TimeFrame.Day,
+                start=start_date
+            )
+            bars = self.market_data.get_stock_bars(bars_req)
+
+            # Handle BarSet object - access data correctly
+            if hasattr(bars, 'data') and ticker in bars.data:
+                ticker_bars = bars.data[ticker]
+            elif ticker in bars:
+                ticker_bars = bars[ticker]
+            else:
+                print(f"    [!] No data available for {ticker}")
+                return None
+
+            if len(ticker_bars) < 5:
+                print(f"    [!] Insufficient data for {ticker} chart ({len(ticker_bars)} bars)")
+                return None
+
+            # Extract data
+            dates = [bar.timestamp for bar in ticker_bars]
+            opens = [float(bar.open) for bar in ticker_bars]
+            highs = [float(bar.high) for bar in ticker_bars]
+            lows = [float(bar.low) for bar in ticker_bars]
+            closes = [float(bar.close) for bar in ticker_bars]
+            volumes = [int(bar.volume) for bar in ticker_bars]
+
+            # Calculate moving averages
+            closes_arr = np.array(closes)
+            ma_20 = np.convolve(closes_arr, np.ones(20)/20, mode='valid') if len(closes) >= 20 else None
+            ma_50 = np.convolve(closes_arr, np.ones(50)/50, mode='valid') if len(closes) >= 50 else None
+
+            # Create figure with 2 subplots (price + volume)
+            fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 5), gridspec_kw={'height_ratios': [3, 1]}, sharex=True)
+            fig.suptitle(f'{ticker} - {days}D Price Chart', fontsize=14, fontweight='bold')
+
+            # Plot price with candlestick-style coloring
+            colors_list = ['#2ecc71' if closes[i] >= opens[i] else '#e74c3c' for i in range(len(closes))]
+
+            # Plot closing price line
+            ax1.plot(dates, closes, color='#2c3e50', linewidth=1.5, label='Close')
+
+            # Add fill between high and low
+            ax1.fill_between(dates, lows, highs, alpha=0.2, color='#3498db')
+
+            # Plot moving averages if available
+            if ma_20 is not None:
+                ma_dates = dates[19:]
+                ax1.plot(ma_dates, ma_20, color='#f39c12', linewidth=1, linestyle='--', label='20 MA')
+            if ma_50 is not None:
+                ma_dates_50 = dates[49:]
+                ax1.plot(ma_dates_50, ma_50, color='#9b59b6', linewidth=1, linestyle='--', label='50 MA')
+
+            # Add price at latest point
+            latest_price = closes[-1]
+            ax1.axhline(y=latest_price, color='#3498db', linestyle=':', alpha=0.7)
+            ax1.annotate(f'${latest_price:.2f}', xy=(dates[-1], latest_price),
+                        xytext=(5, 0), textcoords='offset points', fontsize=9, color='#3498db')
+
+            # Calculate and show support/resistance
+            min_price = min(lows)
+            max_price = max(highs)
+            ax1.axhline(y=min_price, color='#e74c3c', linestyle=':', alpha=0.5, linewidth=0.8)
+            ax1.axhline(y=max_price, color='#2ecc71', linestyle=':', alpha=0.5, linewidth=0.8)
+
+            ax1.set_ylabel('Price ($)', fontsize=10)
+            ax1.legend(loc='upper left', fontsize=8)
+            ax1.grid(True, alpha=0.3)
+
+            # Plot volume
+            ax2.bar(dates, volumes, color=['#2ecc71' if closes[i] >= opens[i] else '#e74c3c' for i in range(len(closes))], alpha=0.7)
+            ax2.set_ylabel('Volume', fontsize=10)
+            ax2.set_xlabel('Date', fontsize=10)
+            ax2.grid(True, alpha=0.3)
+
+            # Format x-axis
+            ax2.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d'))
+            ax2.xaxis.set_major_locator(mdates.WeekdayLocator(interval=2))
+            plt.xticks(rotation=45, ha='right')
+
+            plt.tight_layout()
+
+            # Save to temp file
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / f'{ticker}_chart.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Chart generation failed for {ticker}: {e}")
+            plt.close()
+            return None
+
+    def _create_price_charts_section(self, holdings: List[Dict], styles, max_charts: int = 6) -> List:
+        """
+        Create a section with price charts for top holdings.
+
+        Args:
+            holdings: List of holding dictionaries
+            styles: ReportLab styles
+            max_charts: Maximum number of charts to generate
+
+        Returns:
+            List of reportlab flowables
+        """
+        elements = []
+
+        # Sort by market value and take top holdings
+        sorted_holdings = sorted(holdings, key=lambda x: abs(x.get('market_value', 0)), reverse=True)[:max_charts]
+
+        if not sorted_holdings:
+            return elements
+
+        elements.append(PageBreak())
+        elements.append(Paragraph("Price Charts - Top Holdings", styles['Heading1']))
+        elements.append(Spacer(1, 0.2*inch))
+
+        charts_generated = 0
+        for holding in sorted_holdings:
+            ticker = holding.get('symbol', '')
+            if not ticker:
+                continue
+
+            print(f"    [*] Generating chart for {ticker}...")
+            chart_path = self._generate_price_chart(ticker)
+
+            if chart_path and Path(chart_path).exists():
+                # Add ticker header with P&L info
+                pl_pct = holding.get('unrealized_plpc', 0) * 100
+                current_price = holding.get('current_price', 0)
+                pl_color = '#2ecc71' if pl_pct >= 0 else '#e74c3c'
+
+                header_text = f"<b>{ticker}</b> - ${current_price:.2f} (<font color='{pl_color}'>{pl_pct:+.1f}%</font>)"
+                chart_header = ParagraphStyle(
+                    'ChartHeader',
+                    parent=styles['Heading3'],
+                    fontSize=12,
+                    textColor=HexColor('#1a1a1a'),
+                    spaceAfter=5,
+                    spaceBefore=10
+                )
+                elements.append(Paragraph(header_text, chart_header))
+
+                # Add the chart image
+                img = Image(chart_path, width=6*inch, height=3.75*inch)
+                elements.append(img)
+                elements.append(Spacer(1, 0.2*inch))
+                charts_generated += 1
+
+                # Add page break after every 2 charts
+                if charts_generated % 2 == 0 and charts_generated < len(sorted_holdings):
+                    elements.append(PageBreak())
+
+        if charts_generated == 0:
+            elements.append(Paragraph("Unable to generate price charts - insufficient market data", styles['Normal']))
+
+        return elements
 
     def _send_telegram_notification(self, pdf_path: Path, bot_name: str, trade_date: str):
         """
