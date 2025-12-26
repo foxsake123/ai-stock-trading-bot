@@ -1,7 +1,7 @@
 """
 Claude-Powered Deep Research Report Generator
 ==============================================
-Generates comprehensive weekly research reports using Claude AI
+Generates comprehensive daily research reports using Claude AI
 with integration to Alpaca market data and Financial Datasets API.
 
 Bot Strategies:
@@ -146,7 +146,7 @@ Present current portfolio state:
 - **S&P 500 Level**: Current, trend, key support/resistance
 - **VIX**: Level and interpretation
 - **Sector Performance**: Best and worst performing sectors
-- **Key Events This Week**: FOMC, CPI, major earnings
+- **Upcoming Events**: FOMC, CPI, major earnings
 - **DEE-BOT Positioning**: How we're positioned vs current environment
 - **Top 3 Conviction Ideas**: Quick summary
 
@@ -314,7 +314,7 @@ Rationale: [Quality justification]
 - **Stop Loss Rule**: 8% hard stop for all positions
 - **Rebalancing Trigger**: Beta drift >0.15 from target
 
-**Weekly Review Checklist:**
+**Daily Review Checklist:**
 - [ ] Check portfolio beta
 - [ ] Review position weights
 - [ ] Assess dividend safety
@@ -418,7 +418,7 @@ Present current portfolio state:
 - **10-Year Treasury**: Yield impact on dividend stocks
 - **VIX Level**: Risk assessment
 - **Sector Rotation**: Which sectors are favored
-- **Economic Calendar**: Key data releases this week
+- **Economic Calendar**: Key upcoming data releases
 
 ---
 
@@ -551,7 +551,7 @@ Present current portfolio state:
 - **Sector Momentum**: What's hot, what's fading
 - **VIX Analysis**: Level, interpretation, options implications
 - **IV Rank**: Overall market implied volatility percentile
-- **Key Events This Week**: FOMC, CPI, major earnings
+- **Upcoming Events**: FOMC, CPI, major earnings
 - **Short Squeeze Watchlist**: High short interest + catalyst setups
 
 ---
@@ -795,7 +795,7 @@ Provide comprehensive market context:
 - **SPY Commentary**: Current level, trend, support/resistance
 - **QQQ Commentary**: Tech sector momentum, key levels
 - **IWM Commentary**: Small-cap sentiment (critical for our universe)
-- **Macro Events This Week**: CPI, Fed speakers, retail sales
+- **Upcoming Macro Events**: CPI, Fed speakers, retail sales
 - **Catalyst-Rich Sectors**: Which sectors have upcoming binary events
 - **Volatility Regime**: VIX level, interpretation, options premium conditions
 - **IV Rank Context**: Overall market IV percentile (affects options pricing)
@@ -1058,8 +1058,8 @@ For each options trade:
 - Exit 2 days before expiration minimum
 - Take profits at 50% (don't be greedy)
 
-**Weekly Review Triggers:**
-- If portfolio -5% in week → review all positions
+**Review Triggers:**
+- If portfolio -5% from peak → review all positions
 - If any position -20% → mandatory reassessment
 - If 3+ positions show "BROKEN" thesis → reduce exposure
 
@@ -1336,11 +1336,11 @@ class ClaudeResearchGenerator:
         include_market_data: bool = True
     ) -> tuple[str, Dict]:
         """
-        Generate comprehensive weekly research report using Claude
+        Generate comprehensive daily research report using Claude
 
         Args:
             bot_name: "DEE-BOT" or "SHORGAN-BOT"
-            week_number: Week number in experiment (optional)
+            week_number: Optional identifier for tracking (legacy parameter)
             include_market_data: Whether to fetch live market data
 
         Returns:
@@ -1474,7 +1474,7 @@ Position Count: {portfolio['position_count']}
 {history_text if history_text else "No historical data available"}
 
 TASK:
-Generate a comprehensive Weekly Deep Research Report following your system prompt structure.
+Generate a comprehensive Daily Deep Research Report following your system prompt structure.
 
 Focus on:
 1. {"Quality assessment of current holdings, beta management, rebalancing needs" if bot_name == "DEE-BOT" else "Catalyst proximity, momentum status, new opportunities"}
@@ -1586,7 +1586,7 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
             # 6. Add header and metadata
             report_header = f"""# CLAUDE DEEP RESEARCH REPORT - {bot_name}
-## Week of {datetime.now().strftime("%B %d, %Y")}
+## {datetime.now().strftime("%A, %B %d, %Y")}
 ### Generated: {current_date} at {current_time}
 ### Model: Claude Opus 4.1 with Extended Thinking (Anthropic)
 ### Portfolio Value: ${portfolio['portfolio_value']:,.2f}
@@ -2183,7 +2183,8 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             return elements
 
         elements.append(PageBreak())
-        elements.append(Paragraph("Price Charts - Top Holdings", styles['Heading1']))
+        elements.append(Paragraph("Technical Analysis Charts", styles['Heading1']))
+        elements.append(Paragraph("60-day price history with 20/50 moving averages, volume, and support/resistance levels", styles['Normal']))
         elements.append(Spacer(1, 0.2*inch))
 
         charts_generated = 0
