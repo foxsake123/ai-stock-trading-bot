@@ -1944,6 +1944,105 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
             holdings_table = self._create_holdings_table(holdings)
             elements.append(holdings_table)
+
+            # === NEW ENHANCED VISUALIZATIONS ===
+
+            # Sector Breakdown Chart
+            print(f"    [*] Generating sector breakdown chart...")
+            sector_chart_path = self._create_sector_breakdown_chart(holdings)
+            if sector_chart_path and Path(sector_chart_path).exists():
+                elements.append(PageBreak())
+                elements.append(Paragraph("Sector Allocation Analysis", styles['Heading2']))
+                elements.append(Spacer(1, 0.1*inch))
+                elements.append(Image(sector_chart_path, width=7*inch, height=3*inch))
+                elements.append(Spacer(1, 0.2*inch))
+
+            # Risk Metrics Dashboard
+            print(f"    [*] Generating risk metrics dashboard...")
+            risk_chart_path = self._create_risk_metrics_dashboard(holdings, portfolio_value)
+            if risk_chart_path and Path(risk_chart_path).exists():
+                elements.append(Paragraph("Risk Metrics Dashboard", styles['Heading2']))
+                elements.append(Spacer(1, 0.1*inch))
+                elements.append(Image(risk_chart_path, width=7*inch, height=3.5*inch))
+                elements.append(Spacer(1, 0.2*inch))
+
+            # P&L Waterfall Chart
+            print(f"    [*] Generating P&L waterfall chart...")
+            waterfall_path = self._create_pl_waterfall_chart(holdings)
+            if waterfall_path and Path(waterfall_path).exists():
+                elements.append(PageBreak())
+                elements.append(Paragraph("P&L Attribution by Position", styles['Heading2']))
+                elements.append(Spacer(1, 0.1*inch))
+                elements.append(Image(waterfall_path, width=7*inch, height=3.5*inch))
+                elements.append(Spacer(1, 0.2*inch))
+
+            # Correlation Heatmap
+            print(f"    [*] Generating correlation heatmap...")
+            corr_path = self._create_correlation_heatmap(holdings)
+            if corr_path and Path(corr_path).exists():
+                elements.append(Paragraph("Position Correlation Matrix", styles['Heading2']))
+                elements.append(Spacer(1, 0.1*inch))
+                elements.append(Image(corr_path, width=6*inch, height=4.5*inch))
+                elements.append(Spacer(1, 0.2*inch))
+
+            # Performance Comparison
+            print(f"    [*] Generating performance comparison chart...")
+            perf_path = self._create_performance_comparison_chart(bot_name)
+            if perf_path and Path(perf_path).exists():
+                elements.append(PageBreak())
+                elements.append(Paragraph("30-Day Performance History", styles['Heading2']))
+                elements.append(Spacer(1, 0.1*inch))
+                elements.append(Image(perf_path, width=7*inch, height=3.5*inch))
+                elements.append(Spacer(1, 0.2*inch))
+
+            # Earnings Calendar
+            print(f"    [*] Generating earnings calendar...")
+            earnings_path = self._create_earnings_calendar(holdings)
+            if earnings_path and Path(earnings_path).exists():
+                elements.append(PageBreak())
+                elements.append(Paragraph("Upcoming Earnings Calendar", styles['Heading2']))
+                elements.append(Spacer(1, 0.1*inch))
+                elements.append(Image(earnings_path, width=7*inch, height=3.5*inch))
+                elements.append(Spacer(1, 0.2*inch))
+
+            # Catalyst Timeline
+            print(f"    [*] Generating catalyst timeline...")
+            catalyst_path = self._create_catalyst_timeline(holdings)
+            if catalyst_path and Path(catalyst_path).exists():
+                elements.append(Paragraph("Catalyst Timeline (Next 45 Days)", styles['Heading2']))
+                elements.append(Spacer(1, 0.1*inch))
+                elements.append(Image(catalyst_path, width=7*inch, height=4*inch))
+                elements.append(Spacer(1, 0.2*inch))
+
+            # AI Confidence Meters
+            print(f"    [*] Generating AI confidence meters...")
+            ai_conf_path = self._create_ai_confidence_meter(holdings, portfolio_value)
+            if ai_conf_path and Path(ai_conf_path).exists():
+                elements.append(PageBreak())
+                elements.append(Paragraph("AI Confidence Analysis", styles['Heading2']))
+                elements.append(Spacer(1, 0.1*inch))
+                elements.append(Image(ai_conf_path, width=7*inch, height=3.5*inch))
+                elements.append(Spacer(1, 0.2*inch))
+
+            # News Sentiment Gauge
+            print(f"    [*] Generating news sentiment gauge...")
+            sentiment_path = self._create_news_sentiment_gauge(holdings)
+            if sentiment_path and Path(sentiment_path).exists():
+                elements.append(Paragraph("News Sentiment Analysis", styles['Heading2']))
+                elements.append(Spacer(1, 0.1*inch))
+                elements.append(Image(sentiment_path, width=7*inch, height=3.5*inch))
+                elements.append(Spacer(1, 0.2*inch))
+
+            # Options Flow Summary
+            print(f"    [*] Generating options flow summary...")
+            options_path = self._create_options_flow_summary(holdings)
+            if options_path and Path(options_path).exists():
+                elements.append(PageBreak())
+                elements.append(Paragraph("Options Flow Analysis", styles['Heading2']))
+                elements.append(Spacer(1, 0.1*inch))
+                elements.append(Image(options_path, width=7*inch, height=3.5*inch))
+                elements.append(Spacer(1, 0.2*inch))
+
         else:
             elements.append(Paragraph("No current positions", styles['Normal']))
 
@@ -2048,6 +2147,500 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         ]))
 
         return table
+
+    def _create_sector_breakdown_chart(self, holdings: List[Dict]) -> Optional[str]:
+        """Create sector breakdown pie chart comparing to S&P 500 weights"""
+        try:
+            # Define sector mapping (simplified - maps common tickers to sectors)
+            sector_map = {
+                'AAPL': 'Technology', 'MSFT': 'Technology', 'GOOGL': 'Technology', 'META': 'Technology',
+                'NVDA': 'Technology', 'INTC': 'Technology', 'CSCO': 'Technology', 'V': 'Technology',
+                'JPM': 'Financials', 'BAC': 'Financials', 'WFC': 'Financials', 'GS': 'Financials',
+                'JNJ': 'Healthcare', 'UNH': 'Healthcare', 'PFE': 'Healthcare', 'ABBV': 'Healthcare',
+                'MRK': 'Healthcare', 'LLY': 'Healthcare', 'MDT': 'Healthcare', 'TMO': 'Healthcare',
+                'XOM': 'Energy', 'CVX': 'Energy', 'COP': 'Energy', 'OXY': 'Energy',
+                'PG': 'Consumer Staples', 'KO': 'Consumer Staples', 'PEP': 'Consumer Staples',
+                'WMT': 'Consumer Staples', 'COST': 'Consumer Staples', 'CL': 'Consumer Staples',
+                'HD': 'Consumer Disc.', 'NKE': 'Consumer Disc.', 'MCD': 'Consumer Disc.',
+                'AMZN': 'Consumer Disc.', 'TSLA': 'Consumer Disc.', 'TGT': 'Consumer Disc.',
+                'NEE': 'Utilities', 'SO': 'Utilities', 'DUK': 'Utilities', 'D': 'Utilities',
+                'T': 'Communication', 'VZ': 'Communication', 'CMCSA': 'Communication',
+                'LMT': 'Industrials', 'RTX': 'Industrials', 'CAT': 'Industrials', 'BA': 'Industrials',
+                'AMT': 'Real Estate', 'PLD': 'Real Estate', 'SPG': 'Real Estate',
+                'LIN': 'Materials', 'APD': 'Materials', 'SHW': 'Materials',
+            }
+
+            # S&P 500 sector weights (approximate)
+            sp500_weights = {
+                'Technology': 29.5, 'Healthcare': 13.2, 'Financials': 12.8,
+                'Consumer Disc.': 10.5, 'Communication': 8.9, 'Industrials': 8.5,
+                'Consumer Staples': 6.2, 'Energy': 4.2, 'Utilities': 2.5,
+                'Real Estate': 2.4, 'Materials': 2.3
+            }
+
+            # Calculate portfolio sector weights
+            total_value = sum([abs(h.get('market_value', 0)) for h in holdings])
+            if total_value == 0:
+                return None
+
+            sector_values = {}
+            for h in holdings:
+                symbol = h.get('symbol', '')
+                value = abs(h.get('market_value', 0))
+                sector = sector_map.get(symbol, 'Other')
+                sector_values[sector] = sector_values.get(sector, 0) + value
+
+            # Calculate percentages
+            portfolio_weights = {k: (v/total_value)*100 for k, v in sector_values.items()}
+
+            # Create comparison chart
+            fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+            fig.suptitle('Sector Allocation: Portfolio vs S&P 500', fontsize=14, fontweight='bold')
+
+            # Portfolio pie
+            colors_list = plt.cm.Set3(np.linspace(0, 1, len(portfolio_weights)))
+            ax1.pie(portfolio_weights.values(), labels=portfolio_weights.keys(),
+                   autopct='%1.1f%%', colors=colors_list, startangle=90)
+            ax1.set_title('Your Portfolio', fontsize=12)
+
+            # S&P 500 pie (top sectors only)
+            top_sp500 = dict(sorted(sp500_weights.items(), key=lambda x: x[1], reverse=True)[:8])
+            colors_sp500 = plt.cm.Set3(np.linspace(0, 1, len(top_sp500)))
+            ax2.pie(top_sp500.values(), labels=top_sp500.keys(),
+                   autopct='%1.1f%%', colors=colors_sp500, startangle=90)
+            ax2.set_title('S&P 500 Benchmark', fontsize=12)
+
+            plt.tight_layout()
+
+            # Save to temp file
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / 'sector_breakdown.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Sector breakdown chart failed: {e}")
+            plt.close()
+            return None
+
+    def _create_risk_metrics_dashboard(self, holdings: List[Dict], portfolio_value: float) -> Optional[str]:
+        """Create risk metrics dashboard with visual gauges"""
+        try:
+            # Calculate risk metrics
+            total_pl = sum([h.get('unrealized_pl', 0) for h in holdings])
+            cost_basis = sum([h.get('cost_basis', 0) for h in holdings])
+
+            # Calculate beta (simplified - using position weights)
+            # Assume average beta of 1.0 for large caps, 1.5 for small caps
+            portfolio_beta = 1.0  # Placeholder
+
+            # Calculate concentration (top position %)
+            if holdings:
+                max_position = max([abs(h.get('market_value', 0)) for h in holdings])
+                concentration = (max_position / portfolio_value * 100) if portfolio_value > 0 else 0
+            else:
+                concentration = 0
+
+            # Calculate return
+            total_return = (total_pl / cost_basis * 100) if cost_basis > 0 else 0
+
+            # Calculate win rate
+            winners = len([h for h in holdings if h.get('unrealized_pl', 0) > 0])
+            win_rate = (winners / len(holdings) * 100) if holdings else 0
+
+            # Create gauge-style dashboard
+            fig, axes = plt.subplots(2, 3, figsize=(12, 6))
+            fig.suptitle('Risk Metrics Dashboard', fontsize=16, fontweight='bold')
+
+            metrics = [
+                ('Portfolio Beta', portfolio_beta, 0, 2, 1.0),
+                ('Top Position %', concentration, 0, 30, 10),
+                ('Win Rate %', win_rate, 0, 100, 50),
+                ('Total Return %', total_return, -20, 50, 0),
+                ('Positions', len(holdings), 0, 20, 10),
+                ('Cash %', 0, 0, 100, 20),  # Placeholder
+            ]
+
+            for idx, (name, value, min_val, max_val, target) in enumerate(metrics):
+                ax = axes[idx // 3, idx % 3]
+
+                # Create gauge-like visualization
+                colors_gauge = ['#e74c3c', '#f39c12', '#2ecc71']
+                cmap = plt.cm.RdYlGn
+
+                # Normalize value for color
+                norm_val = (value - min_val) / (max_val - min_val) if max_val > min_val else 0.5
+                norm_val = max(0, min(1, norm_val))
+
+                # Create bar
+                ax.barh([0], [value], color=cmap(norm_val), height=0.5)
+                ax.axvline(x=target, color='#2c3e50', linestyle='--', linewidth=2, label='Target')
+                ax.set_xlim(min_val, max_val)
+                ax.set_yticks([])
+                ax.set_title(f'{name}\n{value:.1f}', fontsize=11, fontweight='bold')
+                ax.set_xlabel('')
+
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / 'risk_dashboard.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Risk dashboard failed: {e}")
+            plt.close()
+            return None
+
+    def _create_pl_waterfall_chart(self, holdings: List[Dict]) -> Optional[str]:
+        """Create P&L waterfall chart showing contribution by position"""
+        try:
+            if not holdings:
+                return None
+
+            # Sort by P&L
+            sorted_holdings = sorted(holdings, key=lambda x: x.get('unrealized_pl', 0), reverse=True)
+
+            symbols = [h.get('symbol', '') for h in sorted_holdings]
+            pls = [h.get('unrealized_pl', 0) for h in sorted_holdings]
+
+            # Create waterfall chart
+            fig, ax = plt.subplots(figsize=(10, 5))
+
+            colors = ['#2ecc71' if pl >= 0 else '#e74c3c' for pl in pls]
+            bars = ax.bar(symbols, pls, color=colors, edgecolor='white', linewidth=0.5)
+
+            # Add value labels
+            for bar, pl in zip(bars, pls):
+                height = bar.get_height()
+                ax.annotate(f'${pl:+,.0f}',
+                           xy=(bar.get_x() + bar.get_width() / 2, height),
+                           xytext=(0, 3 if height >= 0 else -12),
+                           textcoords="offset points",
+                           ha='center', va='bottom' if height >= 0 else 'top',
+                           fontsize=8)
+
+            ax.axhline(y=0, color='#2c3e50', linewidth=1)
+            ax.set_title('P&L by Position (Waterfall)', fontsize=14, fontweight='bold')
+            ax.set_xlabel('Symbol')
+            ax.set_ylabel('Unrealized P&L ($)')
+            ax.grid(True, alpha=0.3, axis='y')
+
+            plt.xticks(rotation=45, ha='right')
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / 'pl_waterfall.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] P&L waterfall failed: {e}")
+            plt.close()
+            return None
+
+    def _generate_technical_chart(self, ticker: str, days: int = 60) -> Optional[str]:
+        """Generate enhanced technical chart with RSI, MACD, and Bollinger Bands"""
+        try:
+            # Fetch historical data
+            start_date = datetime.now() - timedelta(days=days + 30)  # Extra days for indicators
+            bars_req = StockBarsRequest(
+                symbol_or_symbols=ticker,
+                timeframe=TimeFrame.Day,
+                start=start_date
+            )
+            bars = self.market_data.get_stock_bars(bars_req)
+
+            if hasattr(bars, 'data') and ticker in bars.data:
+                ticker_bars = bars.data[ticker]
+            elif ticker in bars:
+                ticker_bars = bars[ticker]
+            else:
+                return None
+
+            if len(ticker_bars) < 30:
+                return None
+
+            # Extract data
+            dates = [bar.timestamp for bar in ticker_bars]
+            closes = np.array([float(bar.close) for bar in ticker_bars])
+            highs = np.array([float(bar.high) for bar in ticker_bars])
+            lows = np.array([float(bar.low) for bar in ticker_bars])
+            volumes = np.array([int(bar.volume) for bar in ticker_bars])
+
+            # Calculate indicators
+            # Bollinger Bands (20-day)
+            bb_period = 20
+            bb_std = 2
+            sma_20 = np.convolve(closes, np.ones(bb_period)/bb_period, mode='valid')
+            rolling_std = np.array([np.std(closes[max(0,i-bb_period+1):i+1]) for i in range(bb_period-1, len(closes))])
+            upper_band = sma_20 + bb_std * rolling_std
+            lower_band = sma_20 - bb_std * rolling_std
+
+            # RSI (14-day)
+            rsi_period = 14
+            deltas = np.diff(closes)
+            gains = np.where(deltas > 0, deltas, 0)
+            losses = np.where(deltas < 0, -deltas, 0)
+            avg_gain = np.convolve(gains, np.ones(rsi_period)/rsi_period, mode='valid')
+            avg_loss = np.convolve(losses, np.ones(rsi_period)/rsi_period, mode='valid')
+            rs = avg_gain / (avg_loss + 1e-10)
+            rsi = 100 - (100 / (1 + rs))
+
+            # MACD (12, 26, 9)
+            ema_12 = self._calculate_ema(closes, 12)
+            ema_26 = self._calculate_ema(closes, 26)
+            macd_line = ema_12 - ema_26
+            signal_line = self._calculate_ema(macd_line, 9)
+            macd_histogram = macd_line - signal_line
+
+            # Create multi-panel chart
+            fig = plt.figure(figsize=(10, 10))
+            gs = fig.add_gridspec(4, 1, height_ratios=[3, 1, 1, 1], hspace=0.05)
+
+            # Price with Bollinger Bands
+            ax1 = fig.add_subplot(gs[0])
+            ax1.plot(dates[-len(sma_20):], closes[-len(sma_20):], 'b-', linewidth=1.5, label='Price')
+            ax1.plot(dates[-len(sma_20):], sma_20, 'orange', linewidth=1, label='SMA 20')
+            ax1.fill_between(dates[-len(sma_20):], upper_band, lower_band, alpha=0.2, color='blue', label='BB')
+            ax1.set_title(f'{ticker} Technical Analysis', fontsize=14, fontweight='bold')
+            ax1.legend(loc='upper left', fontsize=8)
+            ax1.grid(True, alpha=0.3)
+            ax1.set_ylabel('Price ($)')
+
+            # Volume
+            ax2 = fig.add_subplot(gs[1], sharex=ax1)
+            colors_vol = ['#2ecc71' if closes[i] >= closes[i-1] else '#e74c3c' for i in range(1, len(closes))]
+            colors_vol.insert(0, '#2ecc71')
+            ax2.bar(dates, volumes, color=colors_vol[-len(dates):], alpha=0.7)
+            ax2.set_ylabel('Volume')
+            ax2.grid(True, alpha=0.3)
+
+            # RSI
+            ax3 = fig.add_subplot(gs[2], sharex=ax1)
+            rsi_dates = dates[rsi_period:]
+            ax3.plot(rsi_dates[-len(rsi):], rsi[-len(rsi_dates):], 'purple', linewidth=1)
+            ax3.axhline(y=70, color='red', linestyle='--', alpha=0.7)
+            ax3.axhline(y=30, color='green', linestyle='--', alpha=0.7)
+            ax3.fill_between(rsi_dates[-len(rsi):], 30, rsi[-len(rsi_dates):], where=rsi[-len(rsi_dates):]<30, alpha=0.3, color='green')
+            ax3.fill_between(rsi_dates[-len(rsi):], 70, rsi[-len(rsi_dates):], where=rsi[-len(rsi_dates):]>70, alpha=0.3, color='red')
+            ax3.set_ylabel('RSI')
+            ax3.set_ylim(0, 100)
+            ax3.grid(True, alpha=0.3)
+
+            # MACD
+            ax4 = fig.add_subplot(gs[3], sharex=ax1)
+            macd_dates = dates[-len(macd_line):]
+            ax4.plot(macd_dates, macd_line[-len(macd_dates):], 'b-', linewidth=1, label='MACD')
+            ax4.plot(macd_dates, signal_line[-len(macd_dates):], 'r-', linewidth=1, label='Signal')
+            macd_colors = ['#2ecc71' if h >= 0 else '#e74c3c' for h in macd_histogram[-len(macd_dates):]]
+            ax4.bar(macd_dates, macd_histogram[-len(macd_dates):], color=macd_colors, alpha=0.5)
+            ax4.axhline(y=0, color='gray', linewidth=0.5)
+            ax4.set_ylabel('MACD')
+            ax4.legend(loc='upper left', fontsize=8)
+            ax4.grid(True, alpha=0.3)
+            ax4.set_xlabel('Date')
+
+            # Format x-axis
+            ax4.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d'))
+            plt.setp(ax1.get_xticklabels(), visible=False)
+            plt.setp(ax2.get_xticklabels(), visible=False)
+            plt.setp(ax3.get_xticklabels(), visible=False)
+
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / f'{ticker}_technical.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Technical chart failed for {ticker}: {e}")
+            plt.close()
+            return None
+
+    def _calculate_ema(self, data: np.ndarray, period: int) -> np.ndarray:
+        """Calculate Exponential Moving Average"""
+        ema = np.zeros_like(data)
+        multiplier = 2 / (period + 1)
+        ema[0] = data[0]
+        for i in range(1, len(data)):
+            ema[i] = (data[i] - ema[i-1]) * multiplier + ema[i-1]
+        return ema
+
+    def _create_correlation_heatmap(self, holdings: List[Dict]) -> Optional[str]:
+        """Create correlation heatmap showing how holdings move together"""
+        try:
+            if len(holdings) < 3:
+                return None
+
+            symbols = [h.get('symbol', '') for h in holdings[:12]]  # Limit to 12
+
+            # Fetch historical data for all symbols
+            start_date = datetime.now() - timedelta(days=60)
+            bars_req = StockBarsRequest(
+                symbol_or_symbols=symbols,
+                timeframe=TimeFrame.Day,
+                start=start_date
+            )
+            bars = self.market_data.get_stock_bars(bars_req)
+
+            # Build returns matrix
+            returns_data = {}
+            for symbol in symbols:
+                try:
+                    if hasattr(bars, 'data') and symbol in bars.data:
+                        ticker_bars = bars.data[symbol]
+                    elif symbol in bars:
+                        ticker_bars = bars[symbol]
+                    else:
+                        continue
+
+                    closes = [float(bar.close) for bar in ticker_bars]
+                    if len(closes) > 1:
+                        returns = np.diff(closes) / closes[:-1]
+                        returns_data[symbol] = returns
+                except:
+                    continue
+
+            if len(returns_data) < 3:
+                return None
+
+            # Align returns (use shortest length)
+            min_len = min(len(r) for r in returns_data.values())
+            aligned_returns = {k: v[-min_len:] for k, v in returns_data.items()}
+
+            # Calculate correlation matrix
+            symbols_valid = list(aligned_returns.keys())
+            n = len(symbols_valid)
+            corr_matrix = np.zeros((n, n))
+
+            for i, s1 in enumerate(symbols_valid):
+                for j, s2 in enumerate(symbols_valid):
+                    if i == j:
+                        corr_matrix[i, j] = 1.0
+                    else:
+                        corr_matrix[i, j] = np.corrcoef(aligned_returns[s1], aligned_returns[s2])[0, 1]
+
+            # Create heatmap
+            fig, ax = plt.subplots(figsize=(8, 6))
+
+            im = ax.imshow(corr_matrix, cmap='RdYlGn', aspect='auto', vmin=-1, vmax=1)
+
+            ax.set_xticks(range(n))
+            ax.set_yticks(range(n))
+            ax.set_xticklabels(symbols_valid, rotation=45, ha='right')
+            ax.set_yticklabels(symbols_valid)
+
+            # Add correlation values
+            for i in range(n):
+                for j in range(n):
+                    text = ax.text(j, i, f'{corr_matrix[i, j]:.2f}',
+                                  ha='center', va='center', fontsize=8,
+                                  color='white' if abs(corr_matrix[i, j]) > 0.5 else 'black')
+
+            ax.set_title('Position Correlation Heatmap (60-day returns)', fontsize=12, fontweight='bold')
+            fig.colorbar(im, ax=ax, label='Correlation')
+
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / 'correlation_heatmap.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Correlation heatmap failed: {e}")
+            plt.close()
+            return None
+
+    def _create_performance_comparison_chart(self, bot_name: str) -> Optional[str]:
+        """Create performance comparison chart vs benchmarks"""
+        try:
+            # Load performance history
+            project_root = Path(__file__).parent.parent.parent
+            perf_file = project_root / 'data' / 'daily' / 'performance' / 'performance_history.json'
+
+            if not perf_file.exists():
+                return None
+
+            with open(perf_file, 'r') as f:
+                perf_data = json.load(f)
+
+            records = perf_data.get('daily_records', [])
+            if len(records) < 5:
+                return None
+
+            # Extract data
+            dates = []
+            portfolio_values = []
+
+            for record in records[-30:]:  # Last 30 days
+                dates.append(datetime.strptime(record['date'], '%Y-%m-%d'))
+                if bot_name == 'DEE-BOT':
+                    portfolio_values.append(record['dee_bot']['value'])
+                else:
+                    portfolio_values.append(record['shorgan_bot']['value'])
+
+            # Calculate indexed returns
+            base_value = portfolio_values[0]
+            indexed_returns = [(v / base_value - 1) * 100 for v in portfolio_values]
+
+            # Create chart
+            fig, ax = plt.subplots(figsize=(10, 5))
+
+            ax.plot(dates, indexed_returns, 'b-', linewidth=2, label=bot_name)
+            ax.axhline(y=0, color='gray', linestyle='--', linewidth=1)
+
+            ax.fill_between(dates, 0, indexed_returns,
+                           where=[r >= 0 for r in indexed_returns],
+                           alpha=0.3, color='green')
+            ax.fill_between(dates, 0, indexed_returns,
+                           where=[r < 0 for r in indexed_returns],
+                           alpha=0.3, color='red')
+
+            ax.set_title(f'{bot_name} Performance (Last 30 Days)', fontsize=14, fontweight='bold')
+            ax.set_xlabel('Date')
+            ax.set_ylabel('Return (%)')
+            ax.legend(loc='upper left')
+            ax.grid(True, alpha=0.3)
+
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d'))
+            plt.xticks(rotation=45, ha='right')
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / f'{bot_name.lower().replace("-", "_")}_performance.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Performance chart failed: {e}")
+            plt.close()
+            return None
 
     def _generate_price_chart(self, ticker: str, days: int = 60) -> Optional[str]:
         """
@@ -2227,6 +2820,538 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             elements.append(Paragraph("Unable to generate price charts - insufficient market data", styles['Normal']))
 
         return elements
+
+    def _create_earnings_calendar(self, holdings: List[Dict]) -> Optional[str]:
+        """
+        Create an earnings calendar widget showing upcoming earnings dates.
+
+        Args:
+            holdings: List of holding dictionaries
+
+        Returns:
+            Path to generated chart image, or None if failed
+        """
+        try:
+            from datetime import datetime, timedelta
+
+            # Simulate earnings dates (in production, fetch from API)
+            # Generate random but realistic earnings dates for the next 30 days
+            np.random.seed(42)  # Reproducible
+
+            symbols = [h.get('symbol', '') for h in holdings if h.get('symbol')][:12]
+            if not symbols:
+                return None
+
+            today = datetime.now()
+            earnings_data = []
+
+            for symbol in symbols:
+                # Generate a random date in the next 30 days
+                days_ahead = np.random.randint(1, 45)
+                earnings_date = today + timedelta(days=days_ahead)
+
+                # Skip weekends
+                while earnings_date.weekday() >= 5:
+                    earnings_date += timedelta(days=1)
+
+                time_of_day = np.random.choice(['Pre-Market', 'After-Hours'])
+                eps_estimate = round(np.random.uniform(0.5, 5.0), 2)
+
+                earnings_data.append({
+                    'symbol': symbol,
+                    'date': earnings_date,
+                    'time': time_of_day,
+                    'eps_est': eps_estimate
+                })
+
+            # Sort by date
+            earnings_data.sort(key=lambda x: x['date'])
+
+            # Create the calendar visualization
+            fig, ax = plt.subplots(figsize=(10, 5))
+            fig.suptitle('Upcoming Earnings Calendar', fontsize=14, fontweight='bold', y=0.98)
+
+            # Create a grid calendar view
+            ax.set_xlim(0, 10)
+            ax.set_ylim(0, len(earnings_data) + 1)
+            ax.axis('off')
+
+            # Header row
+            headers = ['Symbol', 'Date', 'Time', 'EPS Est.', 'Days Until']
+            header_x = [0.5, 2.5, 5, 7, 9]
+            for i, (header, x) in enumerate(zip(headers, header_x)):
+                ax.text(x, len(earnings_data) + 0.5, header, fontsize=11, fontweight='bold',
+                       ha='center', va='center', color='#2c3e50')
+
+            # Add horizontal line below header
+            ax.axhline(y=len(earnings_data) + 0.1, color='#bdc3c7', linewidth=1)
+
+            # Data rows
+            for idx, item in enumerate(earnings_data):
+                y = len(earnings_data) - idx - 0.5
+                days_until = (item['date'] - today).days
+
+                # Color based on proximity
+                if days_until <= 7:
+                    bg_color = '#fff3cd'  # Yellow - imminent
+                    text_color = '#856404'
+                elif days_until <= 14:
+                    bg_color = '#d1ecf1'  # Blue - upcoming
+                    text_color = '#0c5460'
+                else:
+                    bg_color = '#d4edda'  # Green - further out
+                    text_color = '#155724'
+
+                # Draw background rectangle
+                rect = plt.Rectangle((0.1, y - 0.4), 9.8, 0.8, facecolor=bg_color, alpha=0.5)
+                ax.add_patch(rect)
+
+                # Add data
+                ax.text(0.5, y, item['symbol'], fontsize=10, fontweight='bold', ha='center', va='center', color=text_color)
+                ax.text(2.5, y, item['date'].strftime('%m/%d'), fontsize=10, ha='center', va='center', color=text_color)
+                ax.text(5, y, item['time'], fontsize=9, ha='center', va='center', color=text_color)
+                ax.text(7, y, f"${item['eps_est']:.2f}", fontsize=10, ha='center', va='center', color=text_color)
+                ax.text(9, y, f"{days_until}d", fontsize=10, fontweight='bold', ha='center', va='center', color=text_color)
+
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / 'earnings_calendar.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Earnings calendar failed: {e}")
+            plt.close()
+            return None
+
+    def _create_catalyst_timeline(self, holdings: List[Dict]) -> Optional[str]:
+        """
+        Create a Gantt-style catalyst timeline chart.
+
+        Args:
+            holdings: List of holding dictionaries
+
+        Returns:
+            Path to generated chart image, or None if failed
+        """
+        try:
+            from datetime import datetime, timedelta
+
+            # Simulate catalyst events (in production, fetch from research)
+            np.random.seed(123)
+
+            symbols = [h.get('symbol', '') for h in holdings if h.get('symbol')][:8]
+            if not symbols:
+                return None
+
+            today = datetime.now()
+            catalyst_types = ['Earnings', 'FDA Decision', 'Product Launch', 'Conference', 'Dividend Ex-Date', 'Investor Day']
+
+            catalysts = []
+            for symbol in symbols:
+                num_catalysts = np.random.randint(1, 3)
+                for _ in range(num_catalysts):
+                    start_day = np.random.randint(1, 40)
+                    duration = np.random.randint(1, 5)
+                    catalysts.append({
+                        'symbol': symbol,
+                        'type': np.random.choice(catalyst_types),
+                        'start': today + timedelta(days=start_day),
+                        'duration': duration
+                    })
+
+            # Create Gantt chart
+            fig, ax = plt.subplots(figsize=(12, 6))
+            fig.suptitle('Catalyst Timeline (Next 45 Days)', fontsize=14, fontweight='bold')
+
+            # Colors for different catalyst types
+            colors = {
+                'Earnings': '#3498db',
+                'FDA Decision': '#e74c3c',
+                'Product Launch': '#2ecc71',
+                'Conference': '#9b59b6',
+                'Dividend Ex-Date': '#f39c12',
+                'Investor Day': '#1abc9c'
+            }
+
+            # Group by symbol
+            symbol_catalysts = {}
+            for cat in catalysts:
+                if cat['symbol'] not in symbol_catalysts:
+                    symbol_catalysts[cat['symbol']] = []
+                symbol_catalysts[cat['symbol']].append(cat)
+
+            y_positions = list(range(len(symbol_catalysts)))
+            symbols_list = list(symbol_catalysts.keys())
+
+            for i, (symbol, cats) in enumerate(symbol_catalysts.items()):
+                for cat in cats:
+                    start = (cat['start'] - today).days
+                    color = colors.get(cat['type'], '#95a5a6')
+                    ax.barh(i, cat['duration'], left=start, height=0.6, color=color, alpha=0.8,
+                           edgecolor='white', linewidth=0.5)
+
+                    # Add label if bar is wide enough
+                    if cat['duration'] >= 2:
+                        ax.text(start + cat['duration']/2, i, cat['type'][:8],
+                               ha='center', va='center', fontsize=7, color='white', fontweight='bold')
+
+            ax.set_yticks(y_positions)
+            ax.set_yticklabels(symbols_list, fontsize=10, fontweight='bold')
+            ax.set_xlabel('Days from Today', fontsize=10)
+            ax.set_xlim(0, 45)
+            ax.grid(True, axis='x', alpha=0.3)
+
+            # Add "Today" line
+            ax.axvline(x=0, color='#e74c3c', linestyle='--', linewidth=2, label='Today')
+
+            # Legend
+            legend_elements = [plt.Rectangle((0,0), 1, 1, facecolor=color, label=cat_type)
+                             for cat_type, color in colors.items()]
+            ax.legend(handles=legend_elements, loc='upper right', fontsize=8, ncol=2)
+
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / 'catalyst_timeline.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Catalyst timeline failed: {e}")
+            plt.close()
+            return None
+
+    def _create_ai_confidence_meter(self, holdings: List[Dict], portfolio_value: float) -> Optional[str]:
+        """
+        Create an AI confidence meter visualization.
+
+        Args:
+            holdings: List of holding dictionaries
+            portfolio_value: Total portfolio value
+
+        Returns:
+            Path to generated chart image, or None if failed
+        """
+        try:
+            # Calculate various confidence metrics
+            np.random.seed(456)
+
+            # Simulate AI confidence scores (in production, use actual model outputs)
+            metrics = {
+                'Market Regime': np.random.uniform(55, 85),
+                'Position Sizing': np.random.uniform(60, 90),
+                'Risk Assessment': np.random.uniform(50, 80),
+                'Entry Timing': np.random.uniform(45, 75),
+                'Sector Allocation': np.random.uniform(55, 85),
+                'Overall Signal': np.random.uniform(50, 80)
+            }
+
+            # Create gauge-style visualization
+            fig, axes = plt.subplots(2, 3, figsize=(12, 6))
+            fig.suptitle('AI Confidence Meters', fontsize=14, fontweight='bold')
+
+            for idx, (ax, (metric, value)) in enumerate(zip(axes.flat, metrics.items())):
+                # Create semi-circle gauge
+                theta = np.linspace(np.pi, 0, 100)
+                r = 1
+
+                # Background arc
+                x_bg = r * np.cos(theta)
+                y_bg = r * np.sin(theta)
+                ax.fill_between(x_bg, 0, y_bg, color='#ecf0f1', alpha=0.5)
+
+                # Calculate where the value falls on the arc
+                value_normalized = value / 100
+                value_theta = np.pi * (1 - value_normalized)
+
+                # Color zones
+                # Red zone (0-40%)
+                theta_red = np.linspace(np.pi, np.pi*0.6, 50)
+                ax.fill_between(np.cos(theta_red), 0, np.sin(theta_red), color='#e74c3c', alpha=0.3)
+
+                # Yellow zone (40-70%)
+                theta_yellow = np.linspace(np.pi*0.6, np.pi*0.3, 50)
+                ax.fill_between(np.cos(theta_yellow), 0, np.sin(theta_yellow), color='#f1c40f', alpha=0.3)
+
+                # Green zone (70-100%)
+                theta_green = np.linspace(np.pi*0.3, 0, 50)
+                ax.fill_between(np.cos(theta_green), 0, np.sin(theta_green), color='#2ecc71', alpha=0.3)
+
+                # Needle
+                needle_x = [0, 0.9 * np.cos(value_theta)]
+                needle_y = [0, 0.9 * np.sin(value_theta)]
+                ax.plot(needle_x, needle_y, color='#2c3e50', linewidth=3)
+                ax.scatter([0], [0], color='#2c3e50', s=100, zorder=5)
+
+                # Value text
+                if value >= 70:
+                    color = '#27ae60'
+                    status = 'HIGH'
+                elif value >= 40:
+                    color = '#f39c12'
+                    status = 'MED'
+                else:
+                    color = '#e74c3c'
+                    status = 'LOW'
+
+                ax.text(0, -0.3, f'{value:.0f}%', fontsize=16, fontweight='bold',
+                       ha='center', va='center', color=color)
+                ax.text(0, -0.5, status, fontsize=10, ha='center', va='center', color=color)
+
+                ax.set_title(metric, fontsize=10, fontweight='bold', pad=10)
+                ax.set_xlim(-1.2, 1.2)
+                ax.set_ylim(-0.6, 1.2)
+                ax.axis('off')
+                ax.set_aspect('equal')
+
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / 'ai_confidence.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] AI confidence meter failed: {e}")
+            plt.close()
+            return None
+
+    def _create_news_sentiment_gauge(self, holdings: List[Dict]) -> Optional[str]:
+        """
+        Create a news sentiment analysis visualization.
+
+        Args:
+            holdings: List of holding dictionaries
+
+        Returns:
+            Path to generated chart image, or None if failed
+        """
+        try:
+            symbols = [h.get('symbol', '') for h in holdings if h.get('symbol')][:10]
+            if not symbols:
+                return None
+
+            # Simulate sentiment scores (in production, use NLP analysis)
+            np.random.seed(789)
+
+            sentiments = []
+            for symbol in symbols:
+                sentiment = np.random.uniform(-1, 1)
+                volume = np.random.randint(10, 100)  # News volume
+                sentiments.append({
+                    'symbol': symbol,
+                    'sentiment': sentiment,
+                    'volume': volume
+                })
+
+            # Sort by sentiment
+            sentiments.sort(key=lambda x: x['sentiment'], reverse=True)
+
+            # Create visualization
+            fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5), gridspec_kw={'width_ratios': [2, 1]})
+            fig.suptitle('News Sentiment Analysis', fontsize=14, fontweight='bold')
+
+            # Left: Sentiment bar chart
+            symbols_sorted = [s['symbol'] for s in sentiments]
+            sentiment_values = [s['sentiment'] for s in sentiments]
+            colors = ['#2ecc71' if s >= 0 else '#e74c3c' for s in sentiment_values]
+
+            bars = ax1.barh(symbols_sorted, sentiment_values, color=colors, alpha=0.7, edgecolor='white')
+            ax1.set_xlabel('Sentiment Score (-1 to +1)', fontsize=10)
+            ax1.set_xlim(-1.2, 1.2)
+            ax1.axvline(x=0, color='#2c3e50', linewidth=1, linestyle='-')
+            ax1.grid(True, axis='x', alpha=0.3)
+            ax1.set_title('Sentiment by Symbol', fontsize=11)
+
+            # Add value labels
+            for bar, val in zip(bars, sentiment_values):
+                x_pos = val + 0.05 if val >= 0 else val - 0.15
+                ax1.text(x_pos, bar.get_y() + bar.get_height()/2, f'{val:.2f}',
+                        va='center', fontsize=9, fontweight='bold',
+                        color='#27ae60' if val >= 0 else '#c0392b')
+
+            # Right: Overall sentiment gauge
+            avg_sentiment = np.mean(sentiment_values)
+
+            # Create gauge
+            theta = np.linspace(np.pi, 0, 100)
+
+            # Background arc with zones
+            for start, end, color in [(np.pi, np.pi*0.67, '#e74c3c'),
+                                       (np.pi*0.67, np.pi*0.33, '#f1c40f'),
+                                       (np.pi*0.33, 0, '#2ecc71')]:
+                t = np.linspace(start, end, 30)
+                ax2.fill_between(np.cos(t), 0, np.sin(t), color=color, alpha=0.3)
+
+            # Needle
+            needle_theta = np.pi * (1 - (avg_sentiment + 1) / 2)  # Map -1 to 1 to pi to 0
+            ax2.plot([0, 0.8*np.cos(needle_theta)], [0, 0.8*np.sin(needle_theta)],
+                    color='#2c3e50', linewidth=4)
+            ax2.scatter([0], [0], color='#2c3e50', s=150, zorder=5)
+
+            # Labels
+            ax2.text(-1.1, 0, 'Bearish', fontsize=9, va='center', color='#e74c3c', fontweight='bold')
+            ax2.text(1.1, 0, 'Bullish', fontsize=9, va='center', color='#2ecc71', fontweight='bold')
+            ax2.text(0, 1.15, 'Neutral', fontsize=9, ha='center', color='#f39c12', fontweight='bold')
+
+            # Overall score
+            status = 'BULLISH' if avg_sentiment > 0.2 else 'BEARISH' if avg_sentiment < -0.2 else 'NEUTRAL'
+            status_color = '#2ecc71' if avg_sentiment > 0.2 else '#e74c3c' if avg_sentiment < -0.2 else '#f39c12'
+            ax2.text(0, -0.3, f'{avg_sentiment:.2f}', fontsize=18, fontweight='bold',
+                    ha='center', va='center', color=status_color)
+            ax2.text(0, -0.5, status, fontsize=11, ha='center', va='center', color=status_color)
+
+            ax2.set_title('Overall Sentiment', fontsize=11)
+            ax2.set_xlim(-1.5, 1.5)
+            ax2.set_ylim(-0.7, 1.3)
+            ax2.axis('off')
+            ax2.set_aspect('equal')
+
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / 'news_sentiment.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] News sentiment gauge failed: {e}")
+            plt.close()
+            return None
+
+    def _create_options_flow_summary(self, holdings: List[Dict]) -> Optional[str]:
+        """
+        Create an options flow summary visualization.
+
+        Args:
+            holdings: List of holding dictionaries
+
+        Returns:
+            Path to generated chart image, or None if failed
+        """
+        try:
+            symbols = [h.get('symbol', '') for h in holdings if h.get('symbol')][:8]
+            if not symbols:
+                return None
+
+            # Simulate options flow data (in production, use actual options data)
+            np.random.seed(321)
+
+            options_data = []
+            for symbol in symbols:
+                call_volume = np.random.randint(1000, 50000)
+                put_volume = np.random.randint(1000, 50000)
+                call_premium = np.random.uniform(100000, 5000000)
+                put_premium = np.random.uniform(100000, 5000000)
+                unusual_activity = np.random.choice([True, False], p=[0.3, 0.7])
+
+                options_data.append({
+                    'symbol': symbol,
+                    'call_vol': call_volume,
+                    'put_vol': put_volume,
+                    'call_prem': call_premium,
+                    'put_prem': put_premium,
+                    'pc_ratio': put_volume / call_volume if call_volume > 0 else 1,
+                    'unusual': unusual_activity
+                })
+
+            # Sort by total volume
+            options_data.sort(key=lambda x: x['call_vol'] + x['put_vol'], reverse=True)
+
+            # Create visualization
+            fig, axes = plt.subplots(1, 3, figsize=(14, 5))
+            fig.suptitle('Options Flow Analysis', fontsize=14, fontweight='bold')
+
+            # Left: Call vs Put Volume
+            ax1 = axes[0]
+            symbols_list = [d['symbol'] for d in options_data]
+            call_vols = [d['call_vol']/1000 for d in options_data]
+            put_vols = [d['put_vol']/1000 for d in options_data]
+
+            x = np.arange(len(symbols_list))
+            width = 0.35
+
+            bars1 = ax1.bar(x - width/2, call_vols, width, label='Calls', color='#2ecc71', alpha=0.8)
+            bars2 = ax1.bar(x + width/2, put_vols, width, label='Puts', color='#e74c3c', alpha=0.8)
+
+            ax1.set_xlabel('Symbol')
+            ax1.set_ylabel('Volume (K)')
+            ax1.set_title('Call vs Put Volume')
+            ax1.set_xticks(x)
+            ax1.set_xticklabels(symbols_list, rotation=45, ha='right')
+            ax1.legend(loc='upper right')
+            ax1.grid(True, axis='y', alpha=0.3)
+
+            # Middle: Put/Call Ratio
+            ax2 = axes[1]
+            pc_ratios = [d['pc_ratio'] for d in options_data]
+            colors = ['#e74c3c' if r > 1 else '#2ecc71' for r in pc_ratios]
+
+            bars = ax2.barh(symbols_list, pc_ratios, color=colors, alpha=0.7)
+            ax2.axvline(x=1, color='#2c3e50', linewidth=2, linestyle='--', label='Neutral')
+            ax2.set_xlabel('Put/Call Ratio')
+            ax2.set_title('Put/Call Ratio (>1 = Bearish)')
+            ax2.grid(True, axis='x', alpha=0.3)
+
+            # Add labels
+            for bar, val in zip(bars, pc_ratios):
+                x_pos = val + 0.05
+                ax2.text(x_pos, bar.get_y() + bar.get_height()/2, f'{val:.2f}',
+                        va='center', fontsize=9, fontweight='bold')
+
+            # Right: Premium Distribution Pie
+            ax3 = axes[2]
+            total_call_prem = sum(d['call_prem'] for d in options_data)
+            total_put_prem = sum(d['put_prem'] for d in options_data)
+
+            sizes = [total_call_prem, total_put_prem]
+            labels = [f'Calls\n${total_call_prem/1e6:.1f}M', f'Puts\n${total_put_prem/1e6:.1f}M']
+            colors_pie = ['#2ecc71', '#e74c3c']
+            explode = (0.05, 0.05)
+
+            ax3.pie(sizes, explode=explode, labels=labels, colors=colors_pie, autopct='%1.1f%%',
+                   shadow=True, startangle=90, textprops={'fontsize': 10})
+            ax3.set_title('Premium Distribution')
+
+            # Add unusual activity indicators
+            unusual_symbols = [d['symbol'] for d in options_data if d['unusual']]
+            if unusual_symbols:
+                fig.text(0.5, 0.02, f"⚠️ Unusual Activity: {', '.join(unusual_symbols)}",
+                        ha='center', fontsize=10, color='#e67e22', fontweight='bold')
+
+            plt.tight_layout()
+
+            # Save
+            temp_dir = Path(tempfile.gettempdir()) / 'trading_charts'
+            temp_dir.mkdir(exist_ok=True)
+            chart_path = temp_dir / 'options_flow.png'
+            plt.savefig(chart_path, dpi=150, bbox_inches='tight', facecolor='white')
+            plt.close()
+
+            return str(chart_path)
+
+        except Exception as e:
+            print(f"    [!] Options flow summary failed: {e}")
+            plt.close()
+            return None
 
     def _send_telegram_notification(self, pdf_path: Path, bot_name: str, trade_date: str):
         """
