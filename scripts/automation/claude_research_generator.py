@@ -1742,43 +1742,107 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         # Define styles
         styles = getSampleStyleSheet()
 
-        # Custom styles
+        # Custom styles - Enhanced formatting
         title_style = ParagraphStyle(
             'CustomTitle',
             parent=styles['Heading1'],
-            fontSize=24,
-            textColor=HexColor('#1a1a1a'),
-            spaceAfter=12,
+            fontSize=26,
+            textColor=HexColor('#1a1a2e'),
+            spaceAfter=15,
             spaceBefore=0,
-            leading=30
+            leading=32,
+            fontName='Helvetica-Bold'
         )
 
         heading_style = ParagraphStyle(
             'CustomHeading',
             parent=styles['Heading2'],
-            fontSize=16,
+            fontSize=18,
             textColor=HexColor('#0066cc'),
-            spaceAfter=10,
-            spaceBefore=20,
-            leading=20
+            spaceAfter=12,
+            spaceBefore=25,
+            leading=22,
+            fontName='Helvetica-Bold',
+            borderColor=HexColor('#0066cc'),
+            borderWidth=0,
+            borderPadding=0
         )
 
         subheading_style = ParagraphStyle(
             'CustomSubHeading',
             parent=styles['Heading3'],
-            fontSize=13,
-            textColor=HexColor('#333333'),
-            spaceAfter=8,
-            spaceBefore=15,
-            leading=16
+            fontSize=14,
+            textColor=HexColor('#2c3e50'),
+            spaceAfter=10,
+            spaceBefore=18,
+            leading=18,
+            fontName='Helvetica-Bold'
         )
 
         body_style = ParagraphStyle(
             'CustomBody',
             parent=styles['BodyText'],
             fontSize=10,
+            leading=15,
+            spaceAfter=8,
+            textColor=HexColor('#2c3e50')
+        )
+
+        # Bullet list style
+        bullet_style = ParagraphStyle(
+            'BulletItem',
+            parent=styles['BodyText'],
+            fontSize=10,
             leading=14,
-            spaceAfter=8
+            spaceAfter=4,
+            leftIndent=20,
+            bulletIndent=8,
+            textColor=HexColor('#2c3e50')
+        )
+
+        # Highlight/important text style
+        highlight_style = ParagraphStyle(
+            'Highlight',
+            parent=styles['BodyText'],
+            fontSize=10,
+            leading=14,
+            spaceAfter=8,
+            backColor=HexColor('#fff3cd'),
+            borderColor=HexColor('#ffc107'),
+            borderWidth=1,
+            borderPadding=8,
+            leftIndent=10,
+            rightIndent=10
+        )
+
+        # Success/positive style
+        success_style = ParagraphStyle(
+            'Success',
+            parent=styles['BodyText'],
+            fontSize=10,
+            leading=14,
+            spaceAfter=8,
+            backColor=HexColor('#d4edda'),
+            borderColor=HexColor('#28a745'),
+            borderWidth=1,
+            borderPadding=8,
+            leftIndent=10,
+            rightIndent=10
+        )
+
+        # Danger/warning style
+        danger_style = ParagraphStyle(
+            'Danger',
+            parent=styles['BodyText'],
+            fontSize=10,
+            leading=14,
+            spaceAfter=8,
+            backColor=HexColor('#f8d7da'),
+            borderColor=HexColor('#dc3545'),
+            borderWidth=1,
+            borderPadding=8,
+            leftIndent=10,
+            rightIndent=10
         )
 
         code_style = ParagraphStyle(
@@ -1786,14 +1850,29 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             parent=styles['Code'],
             fontSize=9,
             fontName='Courier',
-            leftIndent=20,
-            rightIndent=20,
-            spaceBefore=8,
-            spaceAfter=8,
-            backColor=HexColor('#f8f8f8'),
+            leftIndent=15,
+            rightIndent=15,
+            spaceBefore=10,
+            spaceAfter=10,
+            backColor=HexColor('#f4f4f4'),
+            borderColor=HexColor('#ddd'),
+            borderWidth=1,
+            borderPadding=10
+        )
+
+        # Info box style
+        info_style = ParagraphStyle(
+            'InfoBox',
+            parent=styles['BodyText'],
+            fontSize=10,
+            leading=14,
+            spaceAfter=10,
+            backColor=HexColor('#e7f3ff'),
             borderColor=HexColor('#0066cc'),
             borderWidth=1,
-            borderPadding=8
+            borderPadding=10,
+            leftIndent=10,
+            rightIndent=10
         )
 
         # Build story with portfolio summary at top
@@ -1858,19 +1937,69 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             # Handle headings
             if line.startswith('# ') and not line.startswith('## '):
                 text = line[2:].strip()
+                # Add a decorative line under main title
                 story.append(Paragraph(text, title_style))
+                # Add subtle underline effect using a table
+                underline = Table([['']],colWidths=[5*inch])
+                underline.setStyle(TableStyle([
+                    ('LINEBELOW', (0, 0), (-1, -1), 2, HexColor('#0066cc')),
+                    ('TOPPADDING', (0, 0), (-1, -1), 0),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+                ]))
+                story.append(underline)
+                story.append(Spacer(1, 0.1*inch))
             elif line.startswith('## '):
                 text = line[3:].strip()
+                # Add spacing and visual separator before h2
+                story.append(Spacer(1, 0.15*inch))
+                # Section divider line
+                divider = Table([['']],colWidths=[6.5*inch])
+                divider.setStyle(TableStyle([
+                    ('LINEABOVE', (0, 0), (-1, -1), 0.5, HexColor('#e0e0e0')),
+                    ('TOPPADDING', (0, 0), (-1, -1), 0),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+                ]))
+                story.append(divider)
                 story.append(Paragraph(text, heading_style))
             elif line.startswith('### '):
                 text = line[4:].strip()
                 story.append(Paragraph(text, subheading_style))
+            elif line.startswith('#### '):
+                # H4 style
+                text = line[5:].strip()
+                h4_style = ParagraphStyle(
+                    'H4Style',
+                    parent=body_style,
+                    fontSize=11,
+                    fontName='Helvetica-Bold',
+                    textColor=HexColor('#495057'),
+                    spaceAfter=6,
+                    spaceBefore=12
+                )
+                story.append(Paragraph(text, h4_style))
             elif line.startswith('---'):
-                story.append(Spacer(1, 0.1*inch))
+                # Horizontal rule - visual divider
+                hr = Table([['']],colWidths=[6*inch])
+                hr.setStyle(TableStyle([
+                    ('LINEBELOW', (0, 0), (-1, -1), 1, HexColor('#dee2e6')),
+                    ('TOPPADDING', (0, 0), (-1, -1), 8),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+                ]))
+                story.append(hr)
             elif line.strip():
-                # Regular text - clean markdown formatting
                 import re
-                text = line
+                text = line.strip()
+
+                # Detect bullet points
+                is_bullet = False
+                bullet_char = '•'
+                if text.startswith('- ') or text.startswith('* '):
+                    is_bullet = True
+                    text = text[2:]
+                elif text.startswith('  - ') or text.startswith('  * '):
+                    is_bullet = True
+                    bullet_char = '  ◦'  # Sub-bullet
+                    text = text[4:]
 
                 # First escape XML special chars (except our markers)
                 text = text.replace('&', '&amp;')
@@ -1886,14 +2015,29 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                 text = text.replace('|||BOLD_START|||', '<b>').replace('|||BOLD_END|||', '</b>')
                 text = text.replace('|||ITALIC_START|||', '<i>').replace('|||ITALIC_END|||', '</i>')
 
+                # Apply appropriate style
                 try:
-                    story.append(Paragraph(text, body_style))
+                    if is_bullet:
+                        # Format as bullet point
+                        bullet_text = f"{bullet_char} {text}"
+                        story.append(Paragraph(bullet_text, bullet_style))
+                    else:
+                        # Check for special highlighting keywords
+                        text_lower = text.lower()
+                        if any(kw in text_lower for kw in ['warning:', 'caution:', 'risk:', 'danger:']):
+                            story.append(Paragraph(text, danger_style))
+                        elif any(kw in text_lower for kw in ['note:', 'important:', 'tip:']):
+                            story.append(Paragraph(text, highlight_style))
+                        elif any(kw in text_lower for kw in ['success:', 'profit:', 'gain:']):
+                            story.append(Paragraph(text, success_style))
+                        else:
+                            story.append(Paragraph(text, body_style))
                 except:
                     # If paragraph fails, just skip this line
                     pass
             else:
                 # Empty line
-                story.append(Spacer(1, 0.1*inch))
+                story.append(Spacer(1, 0.08*inch))
 
         # Handle any remaining table at end of document
         if in_table and table_lines:
