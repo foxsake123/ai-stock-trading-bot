@@ -1474,7 +1474,10 @@ Position Count: {portfolio['position_count']}
 {history_text if history_text else "No historical data available"}
 
 TASK:
-Generate a comprehensive Daily Deep Research Report following your system prompt structure.
+Generate a comprehensive DAILY Deep Research Report following your system prompt structure.
+
+IMPORTANT: This is a DAILY report, NOT weekly. Use "Daily Deep Research Report" as the title.
+Do NOT use the word "weekly" anywhere in the report. This report is generated every trading day.
 
 Focus on:
 1. {"Quality assessment of current holdings, beta management, rebalancing needs" if bot_name == "DEE-BOT" else "Catalyst proximity, momentum status, new opportunities"}
@@ -1813,6 +1816,8 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
         in_code_block = False
         code_lines = []
+        in_table = False
+        table_lines = []
 
         for line in lines:
             # Handle code blocks
@@ -1829,6 +1834,26 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             if in_code_block:
                 code_lines.append(line)
                 continue
+
+            # Handle markdown tables
+            stripped = line.strip()
+            if stripped.startswith('|') and stripped.endswith('|'):
+                # This is a table row
+                if not in_table:
+                    in_table = True
+                    table_lines = []
+                table_lines.append(stripped)
+                continue
+            elif in_table:
+                # End of table - process it
+                if table_lines:
+                    table_element = self._parse_markdown_table(table_lines)
+                    if table_element:
+                        story.append(table_element)
+                        story.append(Spacer(1, 0.15*inch))
+                in_table = False
+                table_lines = []
+                # Continue processing this line below
 
             # Handle headings
             if line.startswith('# ') and not line.startswith('## '):
@@ -1870,8 +1895,137 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
                 # Empty line
                 story.append(Spacer(1, 0.1*inch))
 
+        # Handle any remaining table at end of document
+        if in_table and table_lines:
+            table_element = self._parse_markdown_table(table_lines)
+            if table_element:
+                story.append(table_element)
+                story.append(Spacer(1, 0.15*inch))
+
         # Build PDF
         doc.build(story)
+
+    def _parse_markdown_table(self, table_lines: List[str]) -> Optional[Table]:
+        """
+        Parse markdown table lines and convert to a formatted PDF table.
+
+        Args:
+            table_lines: List of markdown table rows (starting and ending with |)
+
+        Returns:
+            ReportLab Table object, or None if parsing fails
+        """
+        try:
+            if len(table_lines) < 2:
+                return None
+
+            # Parse rows
+            rows = []
+            header_row = None
+            separator_idx = -1
+
+            for idx, line in enumerate(table_lines):
+                # Split by | and clean up
+                cells = [cell.strip() for cell in line.split('|')]
+                # Remove empty first and last elements from split
+                cells = [c for c in cells if c or idx == 0]  # Keep header even if empty cells
+                if cells and cells[0] == '':
+                    cells = cells[1:]
+                if cells and cells[-1] == '':
+                    cells = cells[:-1]
+
+                # Check if this is a separator row (contains only dashes and colons)
+                is_separator = all(set(cell.strip()).issubset({'-', ':', ' '}) for cell in cells if cell.strip())
+
+                if is_separator:
+                    separator_idx = idx
+                    continue
+
+                if cells:
+                    rows.append(cells)
+
+            if not rows:
+                return None
+
+            # First row is header
+            header = rows[0] if rows else []
+            data_rows = rows[1:] if len(rows) > 1 else []
+
+            # Build table data
+            table_data = [header] + data_rows
+
+            # Normalize column count
+            max_cols = max(len(row) for row in table_data) if table_data else 0
+            table_data = [row + [''] * (max_cols - len(row)) for row in table_data]
+
+            if not table_data or max_cols == 0:
+                return None
+
+            # Calculate column widths based on content
+            available_width = 7.0 * inch  # Page width minus margins
+            col_widths = []
+
+            for col_idx in range(max_cols):
+                max_len = max(len(str(row[col_idx])) for row in table_data)
+                # Scale width based on content, min 0.6", max 2"
+                width = min(max(0.6 * inch, max_len * 0.08 * inch), 2.0 * inch)
+                col_widths.append(width)
+
+            # Scale to fit page
+            total_width = sum(col_widths)
+            if total_width > available_width:
+                scale = available_width / total_width
+                col_widths = [w * scale for w in col_widths]
+
+            # Create table
+            table = Table(table_data, colWidths=col_widths)
+
+            # Apply styling
+            style_commands = [
+                # Header row styling
+                ('BACKGROUND', (0, 0), (-1, 0), HexColor('#2c3e50')),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 9),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
+                ('TOPPADDING', (0, 0), (-1, 0), 8),
+
+                # Data row styling
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 8),
+                ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
+                ('TOPPADDING', (0, 1), (-1, -1), 5),
+                ('BOTTOMPADDING', (0, 1), (-1, -1), 5),
+
+                # Grid and alternating rows
+                ('GRID', (0, 0), (-1, -1), 0.5, HexColor('#bdc3c7')),
+                ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, HexColor('#f8f9fa')]),
+
+                # Left-align first column (usually symbol/ticker)
+                ('ALIGN', (0, 1), (0, -1), 'LEFT'),
+            ]
+
+            # Color P&L columns if they exist (look for % or $ in header)
+            for col_idx, header_cell in enumerate(header):
+                header_lower = header_cell.lower()
+                if 'p&l' in header_lower or 'profit' in header_lower or 'return' in header_lower:
+                    # Apply conditional coloring for this column
+                    for row_idx, row in enumerate(data_rows, start=1):
+                        if col_idx < len(row):
+                            cell_text = str(row[col_idx])
+                            if cell_text.startswith('+') or (cell_text.replace('$', '').replace('%', '').replace(',', '').replace('.', '').lstrip('-').isdigit() and not cell_text.startswith('-')):
+                                if '+' in cell_text or (not cell_text.startswith('-') and any(c.isdigit() for c in cell_text)):
+                                    style_commands.append(('TEXTCOLOR', (col_idx, row_idx), (col_idx, row_idx), HexColor('#27ae60')))
+                            elif cell_text.startswith('-'):
+                                style_commands.append(('TEXTCOLOR', (col_idx, row_idx), (col_idx, row_idx), HexColor('#e74c3c')))
+
+            table.setStyle(TableStyle(style_commands))
+            return table
+
+        except Exception as e:
+            print(f"    [!] Failed to parse markdown table: {e}")
+            return None
 
     def _create_portfolio_dashboard(self, portfolio_data: Dict, bot_name: str, styles) -> List:
         """
