@@ -83,6 +83,10 @@ DEE_BOT_LIVE_CONFIG = {
 # DEE-BOT LIVE TRADING SETTINGS ($10K S&P 100 Account)
 DEE_LIVE_TRADING = False  # DISABLED until user creates account and provides API keys
 DEE_CAPITAL = 10000.0  # Live account capital ($10K invested)
+
+# Safety Settings (Issue #4 and #7 fixes)
+REQUIRE_LIVE_CONFIRMATION = os.getenv('REQUIRE_LIVE_CONFIRMATION', 'true').lower() == 'true'  # Require confirmation for live trades
+MAX_RETRY_ATTEMPTS = 3  # Maximum retry attempts per trade (Issue #7 fix)
 DEE_MAX_POSITION_SIZE = 1000.0  # $1,000 max per position (10% of capital)
 DEE_MIN_POSITION_SIZE = 400.0  # $400 minimum position size (4%)
 DEE_CASH_BUFFER = 500.0  # Keep $500 buffer for emergencies
@@ -200,6 +204,37 @@ class DailyTradeExecutor:
             except:
                 pass
             return False
+
+    def _confirm_live_trades(self, bot_name, trades_count, total_value):
+        """
+        Prompt user to confirm live trades (Issue #4 fix).
+        Can be bypassed with REQUIRE_LIVE_CONFIRMATION=false in .env
+        """
+        if not REQUIRE_LIVE_CONFIRMATION:
+            print(f"[INFO] Live confirmation bypassed (REQUIRE_LIVE_CONFIRMATION=false)")
+            return True
+
+        print("\n" + "=" * 60)
+        print(f"[LIVE TRADE CONFIRMATION REQUIRED] - {bot_name}")
+        print("=" * 60)
+        print(f"About to execute {trades_count} LIVE trades")
+        print(f"Estimated value: ${total_value:,.2f}")
+        print(f"\nThis will trade REAL MONEY on your live account!")
+        print("=" * 60)
+
+        try:
+            response = input("\nType 'YES' to confirm, anything else to cancel: ").strip()
+            if response == 'YES':
+                print("[CONFIRMED] Proceeding with live trades...")
+                return True
+            else:
+                print("[CANCELLED] Live trades cancelled by user")
+                self._send_telegram_alert(f"{bot_name} live trades CANCELLED by user confirmation", is_critical=False)
+                return False
+        except EOFError:
+            # Running in non-interactive mode (e.g., Task Scheduler)
+            print("[INFO] Non-interactive mode - bypassing confirmation")
+            return True
 
     def _init_shorgan_tracking(self):
         """Initialize SHORGAN daily performance tracking"""
@@ -390,6 +425,29 @@ class DailyTradeExecutor:
 
         print("\n[TLH] Tax-loss harvesting complete")
         print("=" * 70 + "\n")
+
+    def _validate_research_freshness(self, file_path, trades_file_date):
+        """
+        Issue #9 fix: Validate that research is fresh enough for execution.
+        Warns if trades are from stale research (older than 1 trading day).
+        """
+        try:
+            today = datetime.now().strftime('%Y-%m-%d')
+            if trades_file_date != today:
+                days_old = (datetime.now() - datetime.strptime(trades_file_date, '%Y-%m-%d')).days
+                if days_old >= 1:
+                    warning_msg = f"STALE RESEARCH: Trades file is {days_old} day(s) old! Catalyst dates may have passed."
+                    print(f"[WARNING] {warning_msg}")
+                    self._send_telegram_alert(warning_msg, is_critical=False)
+
+                    # For live accounts, block execution of stale research
+                    if 'LIVE' in str(file_path).upper():
+                        print("[BLOCKED] Live account trades blocked - research too stale")
+                        return False
+            return True
+        except Exception as e:
+            print(f"[WARNING] Could not validate research freshness: {e}")
+            return True  # Allow execution if we can't validate
 
     def find_todays_trades_file(self, file_type="main"):
         """Find today's trades file
@@ -886,7 +944,28 @@ class DailyTradeExecutor:
             print(f"[ERROR] Failed to {side} {trade_info['symbol']}: {e}")
             return None
 
-    def place_stop_loss_order(self, api, symbol, shares, entry_price, bot_name="DEE-BOT"):
+    def _send_telegram_alert(self, message, is_critical=False):
+        """Send Telegram alert for important events (Issue #6 fix)"""
+        try:
+            import requests
+            bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
+            chat_id = os.getenv("TELEGRAM_CHAT_ID")
+            if not bot_token or not chat_id:
+                return False
+
+            prefix = "[CRITICAL] " if is_critical else "[ALERT] "
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            response = requests.post(url, data={
+                "chat_id": chat_id,
+                "text": prefix + message,
+                "parse_mode": "HTML"
+            }, timeout=10)
+            return response.status_code == 200
+        except Exception as e:
+            print(f"[WARNING] Failed to send Telegram alert: {e}")
+            return False
+
+    def place_stop_loss_order(self, api, symbol, shares, entry_price, bot_name="DEE-BOT", stop_loss_pct=None):
         """
         Place a GTC stop-loss order after a BUY fills.
         Stop-loss percentages:
@@ -894,7 +973,9 @@ class DailyTradeExecutor:
         - SHORGAN: 18% (aggressive catalyst plays)
         """
         try:
-            if bot_name == "DEE-BOT":
+            if stop_loss_pct:
+                stop_pct = stop_loss_pct
+            elif bot_name == "DEE-BOT" or bot_name == "DEE-BOT-LIVE":
                 stop_pct = 0.11  # 11% stop for defensive portfolio
             else:
                 stop_pct = 0.18  # 18% stop for aggressive catalyst plays
@@ -913,10 +994,13 @@ class DailyTradeExecutor:
             print(f"    [STOP-LOSS] SUCCESS: Order {stop_order.id} placed for {symbol}")
             return stop_order
         except Exception as e:
+            error_msg = f"STOP LOSS FAILED: {bot_name} - {symbol} ({shares} shares @ ${entry_price:.2f})\nError: {str(e)}"
             print(f"    [STOP-LOSS] WARNING: Failed to place stop for {symbol}: {e}")
+            # Send Telegram alert for stop loss failure (Issue #6 fix)
+            self._send_telegram_alert(error_msg, is_critical=True)
             return None
 
-    def place_stop_losses_for_executed_buys(self, api, bot_name="DEE-BOT"):
+    def place_stop_losses_for_executed_buys(self, api, bot_name="DEE-BOT", stop_loss_pct=None):
         """
         Place stop-loss orders for all successfully executed BUY orders in this session.
         Called after all trades are executed.
@@ -939,7 +1023,7 @@ class DailyTradeExecutor:
             entry_price = trade.get('limit_price') or trade.get('fill_price', 0)
 
             if entry_price > 0 and shares > 0:
-                result = self.place_stop_loss_order(api, symbol, shares, entry_price, bot_name)
+                result = self.place_stop_loss_order(api, symbol, shares, entry_price, bot_name, stop_loss_pct)
                 if result:
                     stops_placed += 1
                 time.sleep(0.5)  # Rate limiting
@@ -1044,52 +1128,75 @@ class DailyTradeExecutor:
             # Find and parse DEE Live file
             dee_live_file = self.find_todays_trades_file(file_type="dee_live")
             if dee_live_file:
-                dee_live_trades, _ = self.parse_trades_file(dee_live_file)
+                # Issue #9 fix: Validate research freshness for live trades
+                date_match = re.search(r'(\d{4}-\d{2}-\d{2})', str(dee_live_file))
+                file_date = date_match.group(1) if date_match else datetime.now().strftime('%Y-%m-%d')
+                if not self._validate_research_freshness(dee_live_file, file_date):
+                    print("[SKIPPED] DEE Live trades skipped - stale research")
+                else:
+                    dee_live_trades, _ = self.parse_trades_file(dee_live_file)
 
-                if dee_live_trades['sell'] or dee_live_trades['buy']:
-                    print("-" * 40)
-                    print("DEE-BOT LIVE TRADES (REAL MONEY)")
-                    print("-" * 40)
+                    if dee_live_trades['sell'] or dee_live_trades['buy']:
+                        print("-" * 40)
+                        print("DEE-BOT LIVE TRADES (REAL MONEY)")
+                        print("-" * 40)
 
-                    # Check circuit breakers before executing
-                    if not self.check_dee_live_daily_loss_limit():
-                        print("[CIRCUIT BREAKER] Skipping all DEE Live trades due to daily loss limit")
-                    elif not self.check_dee_live_position_count_limit():
-                        print("[POSITION LIMIT] Skipping new DEE Live buy trades")
-                        # Still execute sells
-                        for trade in dee_live_trades['sell']:
-                            result = self.execute_trade(self.dee_live_api, trade, 'sell')
-                            if result is None:
-                                retry_queue.append(('dee_live', trade, 'sell'))
-                            time.sleep(1)
-                    else:
-                        # Execute sells first
-                        for trade in dee_live_trades['sell']:
-                            result = self.execute_trade(self.dee_live_api, trade, 'sell')
-                            if result is None:
-                                retry_queue.append(('dee_live', trade, 'sell'))
-                            time.sleep(1)
+                        # Calculate total trade value for confirmation
+                        total_trades = len(dee_live_trades['sell']) + len(dee_live_trades['buy'])
+                        total_value = sum(t.get('shares', 0) * t.get('limit_price', 0) for t in dee_live_trades['buy'])
 
-                        # Execute buys with position sizing
-                        trades_executed = 0
-                        for trade in dee_live_trades['buy']:
-                            if trades_executed >= DEE_MAX_TRADES_PER_DAY:
-                                print(f"[LIMIT] Reached max trades per day ({DEE_MAX_TRADES_PER_DAY})")
-                                break
-
-                            # Apply position sizing
-                            price = trade.get('limit_price', 50.0)
-                            original_shares = trade.get('shares', 10)
-                            adjusted_shares = self.calculate_dee_live_position_size(price, original_shares)
-
-                            if adjusted_shares > 0:
-                                trade['shares'] = adjusted_shares
-                                result = self.execute_trade(self.dee_live_api, trade, 'buy')
+                        # Require confirmation for live trades (Issue #4 fix)
+                        if not self._confirm_live_trades("DEE-BOT", total_trades, total_value):
+                            print("[SKIPPED] DEE Live trades skipped - user declined confirmation")
+                        # Check circuit breakers before executing
+                        elif not self.check_dee_live_daily_loss_limit():
+                            print("[CIRCUIT BREAKER] Skipping all DEE Live trades due to daily loss limit")
+                        elif not self.check_dee_live_position_count_limit():
+                            print("[POSITION LIMIT] Skipping new DEE Live buy trades")
+                            # Still execute sells
+                            for trade in dee_live_trades['sell']:
+                                result = self.execute_trade(self.dee_live_api, trade, 'sell')
                                 if result is None:
-                                    retry_queue.append(('dee_live', trade, 'buy'))
-                                else:
-                                    trades_executed += 1
-                            time.sleep(1)
+                                    retry_queue.append(('dee_live', trade, 'sell'))
+                                time.sleep(1)
+                        else:
+                            # Execute sells first
+                            for trade in dee_live_trades['sell']:
+                                result = self.execute_trade(self.dee_live_api, trade, 'sell')
+                                if result is None:
+                                    retry_queue.append(('dee_live', trade, 'sell'))
+                                time.sleep(1)
+
+                            # Execute buys with position sizing
+                            trades_executed = 0
+                            for trade in dee_live_trades['buy']:
+                                if trades_executed >= DEE_MAX_TRADES_PER_DAY:
+                                    print(f"[LIMIT] Reached max trades per day ({DEE_MAX_TRADES_PER_DAY})")
+                                    break
+
+                                # Re-check circuit breaker BEFORE each trade (Issue #5 fix)
+                                if not self.check_dee_live_daily_loss_limit():
+                                    print("[CIRCUIT BREAKER] Stopping DEE Live - daily loss limit hit during execution")
+                                    break
+
+                                # Re-check position limit BEFORE each trade (Issue #3 fix)
+                                if not self.check_dee_live_position_count_limit():
+                                    print("[POSITION LIMIT] Stopping DEE Live - max positions reached during execution")
+                                    break
+
+                                # Apply position sizing
+                                price = trade.get('limit_price', 50.0)
+                                original_shares = trade.get('shares', 10)
+                                adjusted_shares = self.calculate_dee_live_position_size(price, original_shares)
+
+                                if adjusted_shares > 0:
+                                    trade['shares'] = adjusted_shares
+                                    result = self.execute_trade(self.dee_live_api, trade, 'buy')
+                                    if result is None:
+                                        retry_queue.append(('dee_live', trade, 'buy'))
+                                    else:
+                                        trades_executed += 1
+                                time.sleep(1)
             else:
                 print("[INFO] No DEE-BOT Live trades file found")
 
@@ -1125,58 +1232,94 @@ class DailyTradeExecutor:
             # Find and parse SHORGAN Live file
             shorgan_live_file = self.find_todays_trades_file(file_type="shorgan_live")
             if shorgan_live_file:
-                _, shorgan_live_trades = self.parse_trades_file(shorgan_live_file)
+                # Issue #9 fix: Validate research freshness for live trades
+                date_match = re.search(r'(\d{4}-\d{2}-\d{2})', str(shorgan_live_file))
+                file_date = date_match.group(1) if date_match else datetime.now().strftime('%Y-%m-%d')
+                if not self._validate_research_freshness(shorgan_live_file, file_date):
+                    print("[SKIPPED] SHORGAN Live trades skipped - stale research")
+                else:
+                    _, shorgan_live_trades = self.parse_trades_file(shorgan_live_file)
 
-                if shorgan_live_trades['sell'] or shorgan_live_trades['buy']:
-                    print("-" * 40)
-                    print("SHORGAN-BOT LIVE TRADES (REAL MONEY)")
-                    print("-" * 40)
+                    if shorgan_live_trades['sell'] or shorgan_live_trades['buy']:
+                        print("-" * 40)
+                        print("SHORGAN-BOT LIVE TRADES (REAL MONEY)")
+                        print("-" * 40)
 
-                    # Check circuit breakers before executing
-                    if not self.check_shorgan_daily_loss_limit():
-                        print("[CIRCUIT BREAKER] Skipping all SHORGAN Live trades due to daily loss limit")
-                    elif not self.check_shorgan_position_count_limit():
-                        print("[POSITION LIMIT] Skipping new SHORGAN Live buy trades")
-                        # Still execute sells
-                        for trade in shorgan_live_trades['sell']:
-                            result = self.execute_trade(self.shorgan_live_api, trade, 'sell')
-                            if result is None:
-                                retry_queue.append(('shorgan_live', trade, 'sell'))
-                            time.sleep(1)
-                    else:
-                        # Execute sells first
-                        for trade in shorgan_live_trades['sell']:
-                            result = self.execute_trade(self.shorgan_live_api, trade, 'sell')
-                            if result is None:
-                                retry_queue.append(('shorgan_live', trade, 'sell'))
-                            time.sleep(1)
+                        # Calculate total trade value for confirmation
+                        total_trades = len(shorgan_live_trades['sell']) + len(shorgan_live_trades['buy'])
+                        total_value = sum(t.get('shares', 0) * t.get('limit_price', 0) for t in shorgan_live_trades['buy'])
 
-                        # Execute buys with position sizing
-                        trades_executed = 0
-                        for trade in shorgan_live_trades['buy']:
-                            if trades_executed >= SHORGAN_MAX_TRADES_PER_DAY:
-                                print(f"[LIMIT] Reached max trades per day ({SHORGAN_MAX_TRADES_PER_DAY})")
-                                break
+                        # Require confirmation for live trades (Issue #4 fix)
+                        if not self._confirm_live_trades("SHORGAN-BOT", total_trades, total_value):
+                            print("[SKIPPED] SHORGAN Live trades skipped - user declined confirmation")
+                        # Check circuit breakers before executing
+                        elif not self.check_shorgan_daily_loss_limit():
+                            print("[CIRCUIT BREAKER] Skipping all SHORGAN Live trades due to daily loss limit")
+                        elif not self.check_shorgan_position_count_limit():
+                            print("[POSITION LIMIT] Skipping new SHORGAN Live buy trades")
+                            # Still execute sells
+                            for trade in shorgan_live_trades['sell']:
+                                result = self.execute_trade(self.shorgan_live_api, trade, 'sell')
+                                if result is None:
+                                    retry_queue.append(('shorgan_live', trade, 'sell'))
+                                time.sleep(1)
+                        else:
+                            # Execute sells first
+                            for trade in shorgan_live_trades['sell']:
+                                result = self.execute_trade(self.shorgan_live_api, trade, 'sell')
+                                if result is None:
+                                    retry_queue.append(('shorgan_live', trade, 'sell'))
+                                time.sleep(1)
 
-                            result = self.execute_trade(self.shorgan_live_api, trade, 'buy')
-                            if result is None:
-                                retry_queue.append(('shorgan_live', trade, 'buy'))
-                            else:
-                                trades_executed += 1
-                            time.sleep(1)
+                            # Execute buys with position sizing
+                            trades_executed = 0
+                            for trade in shorgan_live_trades['buy']:
+                                if trades_executed >= SHORGAN_MAX_TRADES_PER_DAY:
+                                    print(f"[LIMIT] Reached max trades per day ({SHORGAN_MAX_TRADES_PER_DAY})")
+                                    break
+
+                                # Re-check circuit breaker BEFORE each trade (Issue #5 fix)
+                                if not self.check_shorgan_daily_loss_limit():
+                                    print("[CIRCUIT BREAKER] Stopping - daily loss limit hit during execution")
+                                    break
+
+                                # Re-check position limit BEFORE each trade (Issue #3 fix)
+                                if not self.check_shorgan_position_count_limit():
+                                    print("[POSITION LIMIT] Stopping - max positions reached during execution")
+                                    break
+
+                                result = self.execute_trade(self.shorgan_live_api, trade, 'buy')
+                                if result is None:
+                                    retry_queue.append(('shorgan_live', trade, 'buy'))
+                                else:
+                                    trades_executed += 1
+                                time.sleep(1)
             else:
                 print("[INFO] No SHORGAN-BOT Live trades file found")
 
-        # Retry failed trades if any
+        # Retry failed trades if any (Issue #7 fix - limit total retries)
+        retry_attempts = {}  # Track retry attempts per symbol
         if retry_queue and max_retries > 0:
             print()
             print("-" * 40)
-            print(f"RETRYING {len(retry_queue)} FAILED TRADES")
+            print(f"RETRYING {len(retry_queue)} FAILED TRADES (max {MAX_RETRY_ATTEMPTS} attempts each)")
             print("-" * 40)
             time.sleep(5)  # Wait before retry
 
             for bot_type, trade, side in retry_queue:
-                print(f"\n[RETRY] {side.upper()} {trade['shares']} {trade['symbol']}")
+                symbol = trade['symbol']
+                retry_key = f"{symbol}_{side}"
+
+                # Check if we've exceeded max retries for this symbol (Issue #7 fix)
+                if retry_key not in retry_attempts:
+                    retry_attempts[retry_key] = 0
+                retry_attempts[retry_key] += 1
+
+                if retry_attempts[retry_key] > MAX_RETRY_ATTEMPTS:
+                    print(f"[MAX RETRIES] {symbol} - exceeded {MAX_RETRY_ATTEMPTS} attempts, giving up")
+                    continue
+
+                print(f"\n[RETRY {retry_attempts[retry_key]}/{MAX_RETRY_ATTEMPTS}] {side.upper()} {trade['shares']} {trade['symbol']}")
                 if bot_type == 'dee':
                     api = self.dee_api
                 elif bot_type == 'dee_live':
@@ -1198,7 +1341,7 @@ class DailyTradeExecutor:
                         if f['symbol'] != trade['symbol'] or f['side'] != side
                     ]
                 else:
-                    print(f"[RETRY FAILED] {trade['symbol']} - will not retry again")
+                    print(f"[RETRY FAILED] {trade['symbol']} - attempt {retry_attempts[retry_key]}/{MAX_RETRY_ATTEMPTS}")
                 time.sleep(1)
 
         # Summary

@@ -4,21 +4,26 @@ September 11, 2025
 Monitors all positions and calculates risk metrics for both bots
 """
 
+import os
 import alpaca_trade_api as tradeapi
 import json
 from datetime import datetime, date
 from pathlib import Path
+from dotenv import load_dotenv
 
-# Bot credentials
+# Load environment variables
+load_dotenv()
+
+# Bot credentials from environment variables (NEVER hardcode!)
 DEE_BOT = {
-    'API_KEY': 'PK6FZK4DAQVTD7DYVH78',
-    'SECRET_KEY': 'JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt',
+    'API_KEY': os.getenv("ALPACA_API_KEY_DEE"),
+    'SECRET_KEY': os.getenv("ALPACA_SECRET_KEY_DEE"),
     'name': 'DEE-BOT'
 }
 
 SHORGAN_BOT = {
-    'API_KEY': 'PKJRLSB2MFEJUSK6UK2E',
-    'SECRET_KEY': 'QBpREJmZ7HgHS1tHptvHgwjH4MtjFSoEcQ0wmGic',
+    'API_KEY': os.getenv("ALPACA_API_KEY_SHORGAN"),
+    'SECRET_KEY': os.getenv("ALPACA_SECRET_KEY_SHORGAN"),
     'name': 'SHORGAN-BOT'
 }
 

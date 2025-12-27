@@ -738,7 +738,12 @@ class MultiAgentTradeValidator:
 
             # HYBRID APPROVAL: Simple threshold on final confidence
             # No special paths, no overrides - just one consistent rule
-            APPROVAL_THRESHOLD = 0.55  # Calibrated for 30-50% approval with DIVERSE research
+            # Issue #8 fix: Higher threshold for live accounts (65% vs 55% for paper)
+            if account_type == "live":
+                APPROVAL_THRESHOLD = 0.65  # Stricter threshold for REAL MONEY trades
+                print(f"    [LIVE ACCOUNT] Using higher approval threshold: {APPROVAL_THRESHOLD:.0%}")
+            else:
+                APPROVAL_THRESHOLD = 0.55  # Calibrated for 30-50% approval with DIVERSE research
             # NOTE: Nov 11 showed 100% approval because ALL trades were MEDIUM conviction with ~23% internal
             # Real trading will have mix of HIGH/MEDIUM/LOW convictions → expected 30-50% approval
 
