@@ -166,7 +166,16 @@ Pushed to `origin/master`
 
 ## Next Session Recommendations
 
-1. Test the new confirmation prompt with a manual execution
-2. Verify Telegram alerts work for stop loss failures
-3. Run research generation to test the higher live threshold
-4. Consider running the full test suite
+### Immediate (Before Next Trading Session)
+1. **Test live confirmation prompt** - Run `execute_daily_trades.py` manually to verify "YES" confirmation
+2. **Verify Telegram alerts** - Ensure `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` are set
+3. **Run full test suite** - `python -m pytest tests/ -v` to check for regressions
+
+### This Week (High Value)
+4. **Generate fresh research** - Test the system with `daily_claude_research.py`
+5. **PROD-001: Daily P&L Email** - 2 hr, automated daily summary
+6. **PROD-020: Portfolio Heat Map** - 2 hr, visual risk concentration
+
+### Longer Term
+7. **Cloud deployment (AWS/GCP)** - 6 hr, eliminates sleep/wake issues
+8. **ML model training** - After 100+ trades collected
