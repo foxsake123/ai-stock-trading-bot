@@ -87,6 +87,15 @@
 
 | Date | Enhancement | Description |
 |------|-------------|-------------|
+| Dec 27 | Security: Remove hardcoded API keys | Replaced hardcoded keys in `src/risk/*.py` with `os.getenv()` |
+| Dec 27 | Live trade confirmation prompt | Added `_confirm_live_trades()` requiring "YES" to proceed |
+| Dec 27 | Circuit breaker re-check | Re-check daily loss limit before EACH live trade |
+| Dec 27 | Position limit re-check | Re-check position count before EACH live trade |
+| Dec 27 | Stop loss failure alerts | Telegram alert when stop loss placement fails |
+| Dec 27 | Max retry limit | Added MAX_RETRY_ATTEMPTS=3 to prevent infinite retries |
+| Dec 27 | Higher live threshold | Increased approval threshold from 55% to 65% for live |
+| Dec 27 | Research freshness check | Block stale research (>1 day old) for live trades |
+| Dec 27 | Clean up .env duplicates | Removed duplicate ALPACA_API_KEY_SHORGAN entries |
 | Dec 3 | Dynamic date injection | System prompts now auto-generate dates (no more manual updates) |
 | Dec 3 | Pre-market trading | Extended hours trading enabled (4:00-9:30 AM, 4:00-8:00 PM ET) |
 | Dec 3 | BUG-001 fix | Division by zero in market data - added zero-checks |
@@ -208,4 +217,4 @@ Based on value/effort ratio:
 
 ---
 
-*Last Updated: December 2, 2025 (Evening)*
+*Last Updated: December 27, 2025*
