@@ -2430,13 +2430,15 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         """Convert markdown formatting to ReportLab XML tags."""
         import re
 
-        # Escape & first
+        # Escape XML special characters FIRST (before adding any tags)
         text = text.replace('&', '&amp;')
+        text = text.replace('<', '&lt;')
+        text = text.replace('>', '&gt;')
 
-        # Convert **bold** to markers (before escaping < >)
+        # Convert **bold** to XML tags
         text = re.sub(r'\*\*([^*]+)\*\*', r'<b>\1</b>', text)
 
-        # Convert *italic* to markers
+        # Convert *italic* to XML tags
         text = re.sub(r'\*([^*]+)\*', r'<i>\1</i>', text)
 
         # Apply P&L coloring
@@ -2708,7 +2710,14 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
             # If line ends with ``` but isn't just ```, extract the non-code part first
             if line_stripped.endswith('```') and not line_stripped.startswith('```') and len(line_stripped) > 3:
-                # Process the text before the ``` as regular content, then toggle code block
+                # If we're in a code block, render accumulated code FIRST before toggling
+                if in_code_block and code_lines:
+                    code_text = '\n'.join(code_lines)
+                    story.append(Preformatted(code_text, code_style))
+                    story.append(Spacer(1, 0.1*inch))
+                    code_lines = []
+
+                # Process the text before the ``` as regular content
                 text_before = line_stripped[:-3].strip()
                 if text_before:
                     # This is likely a heading with ``` appended - process heading first
