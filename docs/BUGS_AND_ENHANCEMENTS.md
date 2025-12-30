@@ -36,6 +36,21 @@
 - **Resolution**: No fix needed - skip inactive assets in future
 - **Discovered**: Dec 2, 2025
 
+### BUG-004: Task Scheduler Wrong Python Path
+- **Status**: OPEN - MANUAL FIX REQUIRED
+- **Priority**: HIGH
+- **Description**: 3 Task Scheduler tasks have wrong Python path
+- **Affected Tasks**:
+  - AI Trading - Weekend Research
+  - AI Trading - Keep Awake
+  - AI Trading - Performance Graph
+- **Wrong Path**: `C:\Users\shorg\AppData\Local\Programs\Python\Python313\python.exe`
+- **Correct Path**: `C:\Python313\python.exe`
+- **Impact**: Weekend Research failed Dec 28, no trades generated Dec 29
+- **Error Code**: 2147942402 (0x80070002 = File not found)
+- **Fix**: Manual - Task Scheduler → Properties → Actions → Edit → Change path
+- **Discovered**: Dec 29, 2025
+
 ---
 
 ## Enhancement Backlog
@@ -217,4 +232,4 @@ Based on value/effort ratio:
 
 ---
 
-*Last Updated: December 27, 2025*
+*Last Updated: December 29, 2025*

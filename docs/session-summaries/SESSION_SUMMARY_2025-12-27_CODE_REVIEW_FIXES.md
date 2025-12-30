@@ -179,3 +179,38 @@ Pushed to `origin/master`
 ### Longer Term
 7. **Cloud deployment (AWS/GCP)** - 6 hr, eliminates sleep/wake issues
 8. **ML model training** - After 100+ trades collected
+
+---
+
+## December 29, 2025 - Automation Failure Diagnosis
+
+### Issue Discovered
+- Research and trades did NOT process on Monday Dec 29
+- Morning Trade Generation ran at 8:30 AM but found no research
+- Weekend Research task FAILED on Saturday Dec 28
+
+### Root Cause
+**Wrong Python path** in 3 Task Scheduler tasks:
+
+| Task | Wrong Path | Correct Path |
+|------|------------|--------------|
+| AI Trading - Weekend Research | `C:\Users\shorg\AppData\Local\Programs\Python\Python313\python.exe` | `C:\Python313\python.exe` |
+| AI Trading - Keep Awake | `C:\Users\shorg\AppData\Local\Programs\Python\Python313\python.exe` | `C:\Python313\python.exe` |
+| AI Trading - Performance Graph | `C:\Users\shorg\AppData\Local\Programs\Python\Python313\python.exe` | `C:\Python313\python.exe` |
+
+Error code `2147942402` (0x80070002) = "File not found"
+
+### Manual Fix Required
+1. Open Task Scheduler (Win+R → `taskschd.msc`)
+2. For each of the 3 tasks above:
+   - Right-click → Properties → Actions tab → Edit
+   - Change Program/script to: `C:\Python313\python.exe`
+   - Click OK twice
+
+### Recovery Actions Taken
+- Manually ran research generation (all 3 bots completed)
+- Research for Dec 30 saved and sent to Telegram
+- Trade generation will work tomorrow at 8:30 AM
+
+### Commit
+- `1b27eca` - docs: update session summary with prioritized next steps
