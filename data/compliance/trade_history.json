@@ -1834,5 +1834,50 @@
     "timestamp": "2026-01-02T14:28:40.390993",
     "account": "SHORGAN-LIVE",
     "order_id": "61e9cb2c-e8e6-4b0f-a455-a86f67f75978"
+  },
+  {
+    "symbol": "KO",
+    "action": "SELL",
+    "qty": 56,
+    "price": 68.03,
+    "timestamp": "2026-01-05T13:22:19.531997",
+    "account": "DEE-BOT",
+    "order_id": "de393854-36c6-4168-b5f6-e8c37fcdeff1"
+  },
+  {
+    "symbol": "T",
+    "action": "SELL",
+    "qty": 122,
+    "price": 24.55,
+    "timestamp": "2026-01-05T13:22:20.671253",
+    "account": "DEE-BOT",
+    "order_id": "2bb208bb-1555-4d20-9a42-b95657b96525"
+  },
+  {
+    "symbol": "JPM",
+    "action": "SELL",
+    "qty": 4,
+    "price": 338.0,
+    "timestamp": "2026-01-05T13:22:22.918369",
+    "account": "DEE-BOT",
+    "order_id": "f1ad30cc-5132-48ca-b4f2-c77f478c8ae4"
+  },
+  {
+    "symbol": "T",
+    "action": "SELL",
+    "qty": 122,
+    "price": 24.55,
+    "timestamp": "2026-01-05T13:22:28.362567",
+    "account": "SHORGAN-LIVE",
+    "order_id": "24dfd8d7-e9ee-4f9d-94b3-2057be0495c6"
+  },
+  {
+    "symbol": "AAPL",
+    "action": "BUY",
+    "qty": 30,
+    "price": 267.0,
+    "timestamp": "2026-01-05T13:22:31.672059",
+    "account": "SHORGAN-LIVE",
+    "order_id": "2aae0330-7b86-4f12-87ef-0b46b19afb6f"
   }
 ]
