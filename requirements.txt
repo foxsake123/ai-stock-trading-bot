@@ -28,3 +28,6 @@ cryptography>=41.0.0
 
 # HTTP client
 httpx>=0.25.0
+
+# Scheduling
+schedule>=1.2.0
