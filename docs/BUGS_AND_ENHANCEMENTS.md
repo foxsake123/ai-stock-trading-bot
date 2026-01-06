@@ -232,4 +232,22 @@ Based on value/effort ratio:
 
 ---
 
-*Last Updated: December 29, 2025*
+---
+
+## Recent Session Log (Jan 2026)
+
+### Jan 5-6, 2026 - Trading Pipeline & Rebalancing
+- Ran full trading pipeline manually
+- Trade results: DEE-BOT 8/0 approved, SHORGAN Paper 6/2, SHORGAN Live 0/9
+- 5 successful executions
+- SHORGAN Live rebalanced: 13 positions -> 9 positions
+- Created `assess_shorgan_live.py` and `rebalance_shorgan_live.py` utility scripts
+- All SHORGAN Live positions now profitable except NCNO (-0.8%)
+- Total unrealized P&L: ~$194
+
+### Outstanding: BUG-004 Still Requires Manual Fix
+3 Task Scheduler tasks still have wrong Python path - requires admin action.
+
+---
+
+*Last Updated: January 6, 2026*
