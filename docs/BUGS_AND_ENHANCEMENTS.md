@@ -37,7 +37,7 @@
 - **Discovered**: Dec 2, 2025
 
 ### BUG-004: Task Scheduler Wrong Python Path
-- **Status**: OPEN - MANUAL FIX REQUIRED
+- **Status**: FIXED ✅
 - **Priority**: HIGH
 - **Description**: 3 Task Scheduler tasks have wrong Python path
 - **Affected Tasks**:
@@ -50,6 +50,7 @@
 - **Error Code**: 2147942402 (0x80070002 = File not found)
 - **Fix**: Manual - Task Scheduler → Properties → Actions → Edit → Change path
 - **Discovered**: Dec 29, 2025
+- **Fixed**: Jan 6, 2026
 
 ---
 
@@ -245,8 +246,8 @@ Based on value/effort ratio:
 - All SHORGAN Live positions now profitable except NCNO (-0.8%)
 - Total unrealized P&L: ~$194
 
-### Outstanding: BUG-004 Still Requires Manual Fix
-3 Task Scheduler tasks still have wrong Python path - requires admin action.
+### BUG-004 Fixed (Jan 6, 2026)
+User manually updated all 3 Task Scheduler paths. All tasks now show "Status: Ready".
 
 ---
 
