@@ -1,9 +1,30 @@
-# Stock-Bot MCP Server - Minimal Dependencies for Railway
-# Last Updated: 2025-12-03
+# AI Trading Bot - Railway Deployment Requirements
+# Last Updated: 2026-01-06
 
+# Core APIs
+anthropic>=0.18.0
+alpaca-py>=0.13.0
+requests>=2.31.0
+
+# Environment & Config
+python-dotenv>=1.0.0
+pytz>=2024.1
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# PDF Generation
+reportlab>=4.0.0
+markdown>=3.5.0
+matplotlib>=3.7.0
+
+# Async Support (for MCP server)
 aiohttp>=3.9.0
 aiohttp-cors>=0.7.0
-alpaca-py>=0.13.0
+
+# Security
 cryptography>=41.0.0
-python-dotenv>=1.0.0
-requests>=2.31.0
+
+# HTTP client
+httpx>=0.25.0
