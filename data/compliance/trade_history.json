@@ -2203,5 +2203,158 @@
     "timestamp": "2026-01-06T17:46:39.189982",
     "account": "SHORGAN-LIVE",
     "order_id": "ed94911b-c4ff-4842-95b0-c9d270eae714"
+  },
+  {
+    "symbol": "AAPL",
+    "action": "BUY",
+    "qty": 10,
+    "price": 266.0,
+    "timestamp": "2026-01-07T09:30:08.946341",
+    "account": "DEE-BOT",
+    "order_id": "e42ee2ed-b00e-4e94-81fd-9deda9673a63"
+  },
+  {
+    "symbol": "ARQT",
+    "action": "SELL",
+    "qty": 1,
+    "price": 30.15,
+    "timestamp": "2026-01-07T09:30:13.994200",
+    "account": "SHORGAN-LIVE",
+    "order_id": "c3a4e7a9-8f5a-469b-840d-d14e1a094b3d"
+  },
+  {
+    "symbol": "PLUG",
+    "action": "SELL",
+    "qty": 1000,
+    "price": 2.46,
+    "timestamp": "2026-01-07T09:30:16.933454",
+    "account": "SHORGAN-LIVE",
+    "order_id": "1a1edd97-6719-4531-9fec-5a95e6160b91"
+  },
+  {
+    "symbol": "AMD",
+    "action": "BUY",
+    "qty": 25,
+    "price": 218.0,
+    "timestamp": "2026-01-07T09:30:20.344521",
+    "account": "SHORGAN-LIVE",
+    "order_id": "f3a4fdb8-eee2-4110-8887-72e500c99e8d"
+  },
+  {
+    "symbol": "SOUN",
+    "action": "BUY",
+    "qty": 400,
+    "price": 11.2,
+    "timestamp": "2026-01-07T09:30:21.492265",
+    "account": "SHORGAN-LIVE",
+    "order_id": "7237974a-aafa-4995-978c-f76ef3af9a8b"
+  },
+  {
+    "symbol": "CRSP",
+    "action": "BUY",
+    "qty": 100,
+    "price": 57.0,
+    "timestamp": "2026-01-07T09:30:22.627060",
+    "account": "SHORGAN-LIVE",
+    "order_id": "4292623e-ea7e-4482-b6a5-0933f2c3d503"
+  },
+  {
+    "symbol": "SMCI",
+    "action": "BUY",
+    "qty": 150,
+    "price": 30.5,
+    "timestamp": "2026-01-07T09:30:23.798630",
+    "account": "SHORGAN-LIVE",
+    "order_id": "b434289c-6a36-43b8-acb6-19f8a37faabc"
+  },
+  {
+    "symbol": "PLUG",
+    "action": "SELL",
+    "qty": 1000,
+    "price": 2.46,
+    "timestamp": "2026-01-07T10:40:30.951330",
+    "account": "SHORGAN-LIVE",
+    "order_id": "f170b9a6-f196-47ab-bfd3-5ca0517be84d"
+  },
+  {
+    "symbol": "AMD",
+    "action": "BUY",
+    "qty": 25,
+    "price": 218.0,
+    "timestamp": "2026-01-07T10:40:34.936252",
+    "account": "SHORGAN-LIVE",
+    "order_id": "e56dcdd9-c2a2-4cb4-b85e-d2f360d34d9e"
+  },
+  {
+    "symbol": "SOUN",
+    "action": "BUY",
+    "qty": 400,
+    "price": 11.2,
+    "timestamp": "2026-01-07T10:40:36.481370",
+    "account": "SHORGAN-LIVE",
+    "order_id": "bf29b5ce-a860-4cca-b3d1-4211a53bb1cc"
+  },
+  {
+    "symbol": "CRSP",
+    "action": "BUY",
+    "qty": 100,
+    "price": 57.0,
+    "timestamp": "2026-01-07T10:40:37.888530",
+    "account": "SHORGAN-LIVE",
+    "order_id": "7df7a9d5-51a9-4a82-87da-cc725704e796"
+  },
+  {
+    "symbol": "SMCI",
+    "action": "BUY",
+    "qty": 150,
+    "price": 30.5,
+    "timestamp": "2026-01-07T10:40:39.315015",
+    "account": "SHORGAN-LIVE",
+    "order_id": "77a4ecb0-9a80-4c30-8153-f1bddaa9947a"
+  },
+  {
+    "symbol": "NCNO",
+    "action": "SELL",
+    "qty": 11,
+    "price": 24.46,
+    "timestamp": "2026-01-07T10:40:43.155846",
+    "account": "SHORGAN-LIVE",
+    "order_id": "18d8c428-f4d4-40a4-96a7-479f43f8961e"
+  },
+  {
+    "symbol": "RIVN",
+    "action": "SELL",
+    "qty": 3,
+    "price": 19.62,
+    "timestamp": "2026-01-07T10:40:44.825921",
+    "account": "SHORGAN-LIVE",
+    "order_id": "8c05ba80-1f0d-4ac1-8e35-314c46cc01f1"
+  },
+  {
+    "symbol": "SOFI",
+    "action": "SELL",
+    "qty": 10,
+    "price": 28.0,
+    "timestamp": "2026-01-07T10:40:46.264368",
+    "account": "SHORGAN-LIVE",
+    "order_id": "ade4abca-8d50-417f-938e-e8428901efb1"
+  },
+  {
+    "symbol": "ROKU",
+    "action": "SELL",
+    "qty": 2,
+    "price": 113.4,
+    "timestamp": "2026-01-07T10:40:48.183434",
+    "account": "SHORGAN-LIVE",
+    "order_id": "931c4578-22c9-46d5-8b9c-e8ed5a6dce30"
+  },
+  {
+    "symbol": "BEAM",
+    "action": "SELL",
+    "qty": 3,
+    "price": 28.5,
+    "timestamp": "2026-01-07T10:40:49.586486",
+    "account": "SHORGAN-LIVE",
+    "order_id": "49b71e67-21c0-40b1-abd0-e1a0753ba64f"
   }
 ]
