@@ -2356,5 +2356,23 @@
     "timestamp": "2026-01-07T10:40:49.586486",
     "account": "SHORGAN-LIVE",
     "order_id": "49b71e67-21c0-40b1-abd0-e1a0753ba64f"
+  },
+  {
+    "symbol": "PLUG",
+    "action": "SELL",
+    "qty": 1000,
+    "price": 2.46,
+    "timestamp": "2026-01-08T12:01:35.252460",
+    "account": "SHORGAN-LIVE",
+    "order_id": "b040771d-68e6-4849-abae-8b21535aa1ae"
+  },
+  {
+    "symbol": "CRSP",
+    "action": "BUY",
+    "qty": 100,
+    "price": 57.0,
+    "timestamp": "2026-01-08T12:01:42.870386",
+    "account": "SHORGAN-LIVE",
+    "order_id": "8e48928b-cab9-47c7-bd1f-39c0ea16e528"
   }
 ]
