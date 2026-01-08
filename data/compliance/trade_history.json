@@ -2374,5 +2374,95 @@
     "timestamp": "2026-01-08T12:01:42.870386",
     "account": "SHORGAN-LIVE",
     "order_id": "8e48928b-cab9-47c7-bd1f-39c0ea16e528"
+  },
+  {
+    "symbol": "CVX",
+    "action": "SELL",
+    "qty": 10,
+    "price": 159.89,
+    "timestamp": "2026-01-08T16:54:27.511476",
+    "account": "DEE-BOT",
+    "order_id": "dc6fdf61-2a54-43af-b3b6-f0464bd4de87"
+  },
+  {
+    "symbol": "INCY",
+    "action": "SELL",
+    "qty": 1,
+    "price": 105.45,
+    "timestamp": "2026-01-08T16:54:32.964940",
+    "account": "SHORGAN-LIVE",
+    "order_id": "9b15a616-9265-4141-93d1-72822c623d17"
+  },
+  {
+    "symbol": "DAKT",
+    "action": "BUY",
+    "qty": 371,
+    "price": 20.62,
+    "timestamp": "2026-01-08T16:54:40.099533",
+    "account": "SHORGAN-LIVE",
+    "order_id": "2381f16a-f7ea-4e37-8bf3-13356daa6d8d"
+  },
+  {
+    "symbol": "ABNB",
+    "action": "BUY",
+    "qty": 50,
+    "price": 138.3,
+    "timestamp": "2026-01-08T16:54:42.962409",
+    "account": "SHORGAN-LIVE",
+    "order_id": "b1648a2d-9c95-41c2-8deb-f7efdf8453c8"
+  },
+  {
+    "symbol": "BAC",
+    "action": "BUY",
+    "qty": 150,
+    "price": 56.4,
+    "timestamp": "2026-01-08T16:54:44.438646",
+    "account": "SHORGAN-LIVE",
+    "order_id": "e11036f5-e389-4e4e-81c1-8a8c1b5f9502"
+  },
+  {
+    "symbol": "SCHW",
+    "action": "BUY",
+    "qty": 80,
+    "price": 101.5,
+    "timestamp": "2026-01-08T16:54:46.045075",
+    "account": "SHORGAN-LIVE",
+    "order_id": "feb31012-f7d5-4da7-80bb-01ded228cba6"
+  },
+  {
+    "symbol": "PYPL",
+    "action": "BUY",
+    "qty": 120,
+    "price": 58.5,
+    "timestamp": "2026-01-08T16:54:49.277512",
+    "account": "SHORGAN-LIVE",
+    "order_id": "fdd5a8b5-d34f-4507-a1c6-fadb3e4c214c"
+  },
+  {
+    "symbol": "LCID",
+    "action": "BUY",
+    "qty": 400,
+    "price": 11.2,
+    "timestamp": "2026-01-08T16:54:50.914639",
+    "account": "SHORGAN-LIVE",
+    "order_id": "d0949fca-056c-4c8b-a3fe-c8497e396844"
+  },
+  {
+    "symbol": "PLUG",
+    "action": "SELL",
+    "qty": 100,
+    "price": 2.32,
+    "timestamp": "2026-01-08T16:54:54.136287",
+    "account": "SHORGAN-LIVE",
+    "order_id": "f40cd741-0ff1-4da1-a2a4-f79765fc1a6a"
+  },
+  {
+    "symbol": "SOFI",
+    "action": "SELL",
+    "qty": 9,
+    "price": 27.72,
+    "timestamp": "2026-01-08T16:54:55.687000",
+    "account": "SHORGAN-LIVE",
+    "order_id": "ae9303b4-3ec2-48aa-92ff-766dddd16989"
   }
 ]
