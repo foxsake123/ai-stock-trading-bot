@@ -19,10 +19,14 @@ import schedule
 from datetime import datetime
 from pathlib import Path
 
-# Set up paths
+# Set up paths - ensure src module is importable
 PROJECT_ROOT = Path(__file__).parent
 os.chdir(PROJECT_ROOT)
 sys.path.insert(0, str(PROJECT_ROOT))
+# Also add explicit path for src module
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+os.environ['PYTHONPATH'] = str(PROJECT_ROOT)
 
 # Load environment variables
 from dotenv import load_dotenv
