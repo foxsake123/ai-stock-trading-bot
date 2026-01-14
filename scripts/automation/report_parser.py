@@ -77,14 +77,24 @@ class ExternalReportParser:
         recommendations = []
 
         # Try parsing ORDER BLOCK section first (various formats)
-        # Match variations like "# EXACT ORDER BLOCK", "## 4. ORDER BLOCK", "## **7. EXACT ORDER BLOCK**", "## 8. EXACT ORDER BLOCK FOR $3K ACCOUNT"
-        # Handle optional bold formatting with ** and allow extra text after ORDER BLOCK
-        # Use #{1,2} to match both single and double hash headings
-        order_block_pattern = r'#{1,2}\s*\*{0,2}\s*(?:\d+\.\s*)?(?:EXACT\s+|Exact\s+)?ORDER\s+BLOCK[^#\n]*(.*?)(?=\n#{1,2}\s+[A-Z*0-9]|$)'
-        match = re.search(order_block_pattern, content, re.DOTALL | re.IGNORECASE)
+        # Find ORDER BLOCK heading/marker, then extract content until next section
 
-        if match:
-            order_block = match.group(1)
+        # Match: "## 9. EXACT ORDER BLOCK", "# ORDER BLOCK", "ORDER BLOCKS:" etc
+        order_heading_pattern = r'(?:#{1,2}\s*\*{0,2}\s*(?:\d+\.\s*)?(?:EXACT\s+)?ORDER\s+BLOCK[^\n]*|^ORDER\s+BLOCKS?:?\s*$)'
+        heading_match = re.search(order_heading_pattern, content, re.IGNORECASE | re.MULTILINE)
+
+        order_block = ""
+        if heading_match:
+            # Get content after the heading until next section (## N. or ---)
+            start_pos = heading_match.end()
+            rest_content = content[start_pos:]
+            next_section = re.search(r'\n(?:## \d+\.|---\s*$)', rest_content)
+            if next_section:
+                order_block = rest_content[:next_section.start()]
+            else:
+                order_block = rest_content
+
+        if order_block:
 
             # Extract individual trade blocks
             trade_pattern = r'```\s*(.*?)\s*```'
@@ -283,15 +293,19 @@ class ExternalReportParser:
                     data['shares'] = int(value)
                 except ValueError:
                     pass
-            elif key == 'limit_price':
+            elif key in ['limit_price', 'entry_price', 'exit_price']:
                 try:
-                    data['entry_price'] = float(value.replace('$', '').replace(',', ''))
+                    # Handle "Market" as entry price (will use current market price)
+                    if value.upper() != 'MARKET':
+                        data['entry_price'] = float(value.replace('$', '').replace(',', ''))
                 except ValueError:
                     pass
             elif key == 'stop_loss':
                 if not value.upper().startswith('N/A'):
                     try:
-                        data['stop_loss'] = float(value.replace('$', '').replace(',', ''))
+                        # Handle formats like "$1.91 (15% max)" - extract just the price
+                        price_part = value.split('(')[0].strip()
+                        data['stop_loss'] = float(price_part.replace('$', '').replace(',', ''))
                     except ValueError:
                         pass
             elif key == 'target_price':
