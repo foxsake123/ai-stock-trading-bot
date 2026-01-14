@@ -2,6 +2,11 @@
 """
 Daily Trade Execution System
 Automatically executes trades from TODAYS_TRADES markdown file
+
+Enhanced with:
+- Retry logic with exponential backoff
+- Order fill verification
+- Circuit breaker for API resilience
 """
 
 import os
@@ -9,6 +14,7 @@ import re
 import sys
 import json
 import time
+import logging
 import alpaca_trade_api as tradeapi
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -39,6 +45,27 @@ try:
 except ImportError:
     TLH_AVAILABLE = False
     print("[WARNING] Tax-loss harvesting module not available")
+
+# Import core utilities for retry logic, order verification, and circuit breaker
+try:
+    from scripts.core import (
+        retry_with_backoff,
+        alpaca_circuit,
+        CircuitBreakerOpenError,
+        OrderVerifier,
+        FillStatus
+    )
+    CORE_UTILS_AVAILABLE = True
+except ImportError:
+    CORE_UTILS_AVAILABLE = False
+    print("[WARNING] Core utilities not available - running without retry/verification")
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 # Alpaca API Configuration (from environment variables)
 DEE_BOT_CONFIG = {
@@ -891,10 +918,41 @@ class DailyTradeExecutor:
             else:
                 print(f"[EXECUTING] {side.upper()} {shares} {symbol} @ {f'${limit_price}' if limit_price else 'market'}")
 
-            order = api.submit_order(**order_params)
+            # Check circuit breaker before submitting (if available)
+            if CORE_UTILS_AVAILABLE and not alpaca_circuit.can_execute():
+                raise Exception(f"Alpaca circuit breaker OPEN - too many recent failures")
+
+            # Submit order with retry logic (if available)
+            if CORE_UTILS_AVAILABLE:
+                @retry_with_backoff(max_attempts=3, initial_delay=1.0, backoff_factor=2.0)
+                def submit_with_retry():
+                    return api.submit_order(**order_params)
+                order = submit_with_retry()
+            else:
+                order = api.submit_order(**order_params)
+
+            # Record success in circuit breaker
+            if CORE_UTILS_AVAILABLE:
+                alpaca_circuit.record_success()
 
             # Determine bot name for stop-loss and logging
             bot_name = "DEE-BOT" if api == self.dee_api else "SHORGAN-BOT"
+
+            # Verify order fill (if available and market order)
+            fill_status = None
+            fill_price = None
+            if CORE_UTILS_AVAILABLE and order_type == 'market':
+                try:
+                    verifier = OrderVerifier(api, max_wait_seconds=30)
+                    result = verifier.verify_order(order.id)
+                    fill_status = result.status.value
+                    fill_price = result.filled_price
+                    if result.status == FillStatus.FILLED:
+                        logger.info(f"[VERIFIED] {symbol} filled @ ${fill_price}")
+                    elif result.status == FillStatus.PARTIAL:
+                        logger.warning(f"[PARTIAL] {symbol} partially filled: {result.filled_qty}/{shares}")
+                except Exception as e:
+                    logger.warning(f"[VERIFY ERROR] Could not verify {symbol}: {e}")
 
             trade_record = {
                 'symbol': symbol,
@@ -904,14 +962,15 @@ class DailyTradeExecutor:
                 'limit_price': limit_price,
                 'order_id': order.id,
                 'timestamp': datetime.now().isoformat(),
-                'status': 'submitted',
+                'status': fill_status or 'submitted',
+                'fill_price': fill_price,
                 'extended_hours': order_params.get('extended_hours', False),
                 'rationale': trade_info.get('rationale', ''),
                 'bot': bot_name
             }
 
             self.executed_trades.append(trade_record)
-            print(f"[SUCCESS] Order ID: {order.id}")
+            print(f"[SUCCESS] Order ID: {order.id}" + (f" - Filled @ ${fill_price}" if fill_price else ""))
 
             # Record trade for regulatory compliance tracking
             if COMPLIANCE_AVAILABLE:
@@ -933,6 +992,10 @@ class DailyTradeExecutor:
             return order
 
         except Exception as e:
+            # Record failure in circuit breaker
+            if CORE_UTILS_AVAILABLE:
+                alpaca_circuit.record_failure()
+
             error_record = {
                 'symbol': trade_info['symbol'],
                 'shares': trade_info['shares'],
@@ -941,7 +1004,7 @@ class DailyTradeExecutor:
                 'timestamp': datetime.now().isoformat()
             }
             self.failed_trades.append(error_record)
-            print(f"[ERROR] Failed to {side} {trade_info['symbol']}: {e}")
+            logger.error(f"[ERROR] Failed to {side} {trade_info['symbol']}: {e}")
             return None
 
     def _send_telegram_alert(self, message, is_critical=False):

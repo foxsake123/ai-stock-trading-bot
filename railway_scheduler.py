@@ -10,12 +10,19 @@ Schedule (ET):
 - Mon-Fri 8:30 AM: Trade generation
 - Mon-Fri 9:30 AM: Trade execution
 - Mon-Fri 4:30 PM: Performance graph
+
+Enhanced with:
+- Health monitoring and task tracking
+- Retry logic with exponential backoff
+- Circuit breakers for API resilience
+- Telegram alerting for failures
 """
 
 import os
 import sys
 import time
 import schedule
+import logging
 from datetime import datetime
 from pathlib import Path
 
@@ -34,7 +41,25 @@ load_dotenv()
 
 import pytz
 
+# Import core utilities for health monitoring and retry logic
+from scripts.core import (
+    get_health_monitor,
+    retry_with_backoff,
+    anthropic_circuit,
+    alpaca_circuit,
+    AlertLevel
+)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 ET = pytz.timezone('America/New_York')
+
+# Global health monitor
+health_monitor = get_health_monitor()
 
 
 def get_et_time():
@@ -56,76 +81,149 @@ def send_telegram(message: str):
 
 
 def run_research():
-    """Run research generation."""
-    print(f"[{get_et_time()}] Starting research generation...")
+    """Run research generation with health monitoring."""
+    logger.info("Starting research generation...")
     send_telegram("🔬 *Railway* - Starting research generation...")
+
     try:
-        from scripts.automation.daily_claude_research import main as research_main
-        research_main()
-        send_telegram("✅ *Railway* - Research complete!")
-        print(f"[{get_et_time()}] Research complete!")
+        with health_monitor.track_task("research_generation") as tracker:
+            # Check circuit breaker before proceeding
+            if not anthropic_circuit.can_execute():
+                raise Exception("Anthropic circuit breaker is OPEN - too many recent failures")
+
+            from scripts.automation.daily_claude_research import main as research_main
+            research_main()
+
+            tracker.add_detail("status", "success")
+            send_telegram("✅ *Railway* - Research complete!")
+            logger.info("Research generation complete!")
+
     except Exception as e:
-        send_telegram(f"❌ *Railway* - Research failed: {str(e)[:100]}")
-        print(f"[{get_et_time()}] Research failed: {e}")
+        anthropic_circuit.record_failure()
+        error_msg = str(e)[:100]
+        send_telegram(f"❌ *Railway* - Research failed: {error_msg}")
+        logger.error(f"Research generation failed: {e}")
+        health_monitor.send_alert(AlertLevel.HIGH, f"Research generation failed: {error_msg}")
 
 
 def run_trades():
-    """Run trade generation."""
-    print(f"[{get_et_time()}] Starting trade generation...")
+    """Run trade generation with health monitoring."""
+    logger.info("Starting trade generation...")
     send_telegram("📊 *Railway* - Starting trade generation...")
+
     try:
-        from scripts.automation.generate_todays_trades_v2 import main as trades_main
-        trades_main()
-        send_telegram("✅ *Railway* - Trades generated!")
-        print(f"[{get_et_time()}] Trades generated!")
+        with health_monitor.track_task("trade_generation") as tracker:
+            from scripts.automation.generate_todays_trades_v2 import main as trades_main
+            trades_main()
+
+            tracker.add_detail("status", "success")
+            send_telegram("✅ *Railway* - Trades generated!")
+            logger.info("Trade generation complete!")
+
     except Exception as e:
-        send_telegram(f"❌ *Railway* - Trade generation failed: {str(e)[:100]}")
-        print(f"[{get_et_time()}] Trade generation failed: {e}")
+        error_msg = str(e)[:100]
+        send_telegram(f"❌ *Railway* - Trade generation failed: {error_msg}")
+        logger.error(f"Trade generation failed: {e}")
+        health_monitor.send_alert(AlertLevel.HIGH, f"Trade generation failed: {error_msg}")
 
 
 def run_execute():
-    """Run trade execution."""
-    print(f"[{get_et_time()}] Starting trade execution...")
+    """Run trade execution with health monitoring and circuit breaker."""
+    logger.info("Starting trade execution...")
     send_telegram("💰 *Railway* - Starting trade execution...")
+
     try:
-        from scripts.automation.execute_daily_trades import main as execute_main
-        execute_main()
-        send_telegram("✅ *Railway* - Trades executed!")
-        print(f"[{get_et_time()}] Trades executed!")
+        with health_monitor.track_task("trade_execution") as tracker:
+            # Check circuit breaker before proceeding
+            if not alpaca_circuit.can_execute():
+                raise Exception("Alpaca circuit breaker is OPEN - too many recent failures")
+
+            from scripts.automation.execute_daily_trades import main as execute_main
+            execute_main()
+
+            alpaca_circuit.record_success()
+            tracker.add_detail("status", "success")
+            send_telegram("✅ *Railway* - Trades executed!")
+            logger.info("Trade execution complete!")
+
     except Exception as e:
-        send_telegram(f"❌ *Railway* - Execution failed: {str(e)[:100]}")
-        print(f"[{get_et_time()}] Execution failed: {e}")
+        alpaca_circuit.record_failure()
+        error_msg = str(e)[:100]
+        send_telegram(f"❌ *Railway* - Execution failed: {error_msg}")
+        logger.error(f"Trade execution failed: {e}")
+        health_monitor.send_alert(AlertLevel.CRITICAL, f"Trade execution failed: {error_msg}")
 
 
 def run_performance():
-    """Run performance graph update."""
-    print(f"[{get_et_time()}] Starting performance update...")
+    """Run performance graph update with health monitoring."""
+    logger.info("Starting performance update...")
     send_telegram("📈 *Railway* - Updating performance...")
+
     try:
-        from scripts.performance.generate_performance_graph import main as perf_main
-        perf_main()
-        send_telegram("✅ *Railway* - Performance updated!")
-        print(f"[{get_et_time()}] Performance updated!")
+        with health_monitor.track_task("performance_update") as tracker:
+            from scripts.performance.generate_performance_graph import main as perf_main
+            perf_main()
+
+            tracker.add_detail("status", "success")
+            send_telegram("✅ *Railway* - Performance updated!")
+            logger.info("Performance update complete!")
+
     except Exception as e:
-        send_telegram(f"❌ *Railway* - Performance failed: {str(e)[:100]}")
-        print(f"[{get_et_time()}] Performance failed: {e}")
+        error_msg = str(e)[:100]
+        send_telegram(f"❌ *Railway* - Performance failed: {error_msg}")
+        logger.error(f"Performance update failed: {e}")
+        health_monitor.send_alert(AlertLevel.WARNING, f"Performance update failed: {error_msg}")
 
 
 def heartbeat():
-    """Send hourly heartbeat to confirm service is running."""
+    """Send hourly heartbeat with health status."""
     now = get_et_time()
     if now.hour == 9 and now.minute < 5:  # Only at 9 AM ET
-        send_telegram(f"💓 *Railway Scheduler* - Running ({now.strftime('%Y-%m-%d %H:%M ET')})")
+        # Include health status in heartbeat
+        health = health_monitor.get_system_health()
+        status_emoji = {
+            "healthy": "💚",
+            "degraded": "💛",
+            "unhealthy": "🟠",
+            "critical": "🔴"
+        }.get(health["overall"], "⚪")
+
+        summary = health["summary"]
+        msg = (
+            f"💓 *Railway Scheduler* - Running\n"
+            f"Time: {now.strftime('%Y-%m-%d %H:%M ET')}\n"
+            f"Health: {status_emoji} {health['overall'].upper()}\n"
+            f"Tasks: ✅{summary['healthy']} ⚠️{summary['stale']} ❌{summary['failed']}"
+        )
+        send_telegram(msg)
+
+
+def run_health_check():
+    """Run daily health check and send alert if issues found."""
+    health = health_monitor.get_system_health()
+
+    if health["overall"] in ["unhealthy", "critical"]:
+        issues_text = "\n".join(health["issues"][:5])
+        health_monitor.send_alert(
+            AlertLevel.HIGH if health["overall"] == "unhealthy" else AlertLevel.CRITICAL,
+            f"Daily Health Check - {health['overall'].upper()}\n\n{issues_text}"
+        )
 
 
 def main():
-    """Main scheduler loop."""
+    """Main scheduler loop with health monitoring."""
     print("=" * 60)
-    print("Railway Scheduler Starting")
+    print("Railway Scheduler Starting (with Health Monitoring)")
     print(f"Current time (ET): {get_et_time()}")
     print("=" * 60)
 
-    send_telegram("🚀 *Railway Scheduler* - Service started!")
+    # Get initial health status
+    health = health_monitor.get_system_health()
+    send_telegram(
+        f"🚀 *Railway Scheduler* - Service started!\n"
+        f"Health: {health['overall'].upper()}\n"
+        f"Circuit breakers: Alpaca={alpaca_circuit.state}, Anthropic={anthropic_circuit.state}"
+    )
 
     # Schedule tasks (ET times)
     # Research: Saturday 12:00 PM
@@ -155,11 +253,22 @@ def main():
     # Heartbeat every hour
     schedule.every().hour.do(heartbeat)
 
+    # Daily health check at 5 PM ET
+    schedule.every().monday.at("17:00").do(run_health_check)
+    schedule.every().tuesday.at("17:00").do(run_health_check)
+    schedule.every().wednesday.at("17:00").do(run_health_check)
+    schedule.every().thursday.at("17:00").do(run_health_check)
+    schedule.every().friday.at("17:00").do(run_health_check)
+
     print("\nScheduled tasks:")
     print("- Research: Saturday 12:00 PM ET")
     print("- Trades: Mon-Fri 8:30 AM ET")
     print("- Execute: Mon-Fri 9:30 AM ET")
     print("- Performance: Mon-Fri 4:30 PM ET")
+    print("- Health Check: Mon-Fri 5:00 PM ET")
+    print("\nHealth monitoring enabled:")
+    print(f"- Circuit breakers: Alpaca, Anthropic, Financial Datasets")
+    print(f"- Task tracking: research, trade_gen, execute, performance")
     print("\nWaiting for scheduled times...")
 
     # Run forever

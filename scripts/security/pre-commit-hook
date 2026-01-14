@@ -1,0 +1,54 @@
+#!/bin/bash
+# Pre-commit hook to detect potential secrets
+# Install: cp scripts/security/pre-commit-secrets .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+echo "Checking for potential secrets..."
+
+# Patterns to detect
+PATTERNS=(
+    "sk-ant-"           # Anthropic API keys
+    "sk-proj-"          # OpenAI API keys
+    "PKXXXXXXXX"        # Placeholder not replaced
+    "secret_key.*=.*['\"][a-zA-Z0-9]{20,}"  # Generic secrets
+    "api_key.*=.*['\"][a-zA-Z0-9]{20,}"     # API keys
+    "password.*=.*['\"][^'\"]{8,}"          # Passwords
+    "token.*=.*['\"][a-zA-Z0-9:_-]{30,}"    # Tokens
+)
+
+# Files to check (staged files)
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(py|js|json|yaml|yml|env|sh|bat)$')
+
+if [ -z "$STAGED_FILES" ]; then
+    exit 0
+fi
+
+FOUND_SECRETS=0
+
+for pattern in "${PATTERNS[@]}"; do
+    MATCHES=$(echo "$STAGED_FILES" | xargs grep -l -i "$pattern" 2>/dev/null || true)
+    if [ -n "$MATCHES" ]; then
+        echo "ERROR: Potential secret pattern found: $pattern"
+        echo "  Files: $MATCHES"
+        FOUND_SECRETS=1
+    fi
+done
+
+# Also check for .env files being committed
+if echo "$STAGED_FILES" | grep -q "\.env$"; then
+    echo "ERROR: .env file staged for commit!"
+    echo "  The .env file contains secrets and should NOT be committed."
+    echo "  Use .env.example instead."
+    FOUND_SECRETS=1
+fi
+
+if [ $FOUND_SECRETS -eq 1 ]; then
+    echo ""
+    echo "=== COMMIT BLOCKED ==="
+    echo "Remove secrets from staged files before committing."
+    echo ""
+    echo "If this is a false positive, use: git commit --no-verify"
+    exit 1
+fi
+
+echo "No secrets detected. Proceeding with commit."
+exit 0
