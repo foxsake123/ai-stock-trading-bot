@@ -6,7 +6,7 @@ Runs continuously on Railway and executes tasks at scheduled times.
 This replaces the need for Railway's cron feature.
 
 Schedule (ET):
-- Saturday 12:00 PM: Research generation
+- Mon-Fri 6:00 AM: Research generation
 - Mon-Fri 8:30 AM: Trade generation
 - Mon-Fri 9:30 AM: Trade execution
 - Mon-Fri 4:30 PM: Performance graph
@@ -226,8 +226,12 @@ def main():
     )
 
     # Schedule tasks (ET times)
-    # Research: Saturday 12:00 PM
-    schedule.every().saturday.at("12:00").do(run_research)
+    # Research: Mon-Fri 6:00 AM (before market open)
+    schedule.every().monday.at("06:00").do(run_research)
+    schedule.every().tuesday.at("06:00").do(run_research)
+    schedule.every().wednesday.at("06:00").do(run_research)
+    schedule.every().thursday.at("06:00").do(run_research)
+    schedule.every().friday.at("06:00").do(run_research)
 
     # Trades: Mon-Fri 8:30 AM
     schedule.every().monday.at("08:30").do(run_trades)
@@ -261,7 +265,7 @@ def main():
     schedule.every().friday.at("17:00").do(run_health_check)
 
     print("\nScheduled tasks:")
-    print("- Research: Saturday 12:00 PM ET")
+    print("- Research: Mon-Fri 6:00 AM ET")
     print("- Trades: Mon-Fri 8:30 AM ET")
     print("- Execute: Mon-Fri 9:30 AM ET")
     print("- Performance: Mon-Fri 4:30 PM ET")
