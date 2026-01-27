@@ -88,18 +88,22 @@ def run_research():
     try:
         with health_monitor.track_task("research_generation") as tracker:
             # Check circuit breaker before proceeding
-            if not anthropic_circuit.can_execute():
+            if anthropic_circuit.state == "OPEN":
                 raise Exception("Anthropic circuit breaker is OPEN - too many recent failures")
 
             from scripts.automation.daily_claude_research import main as research_main
             research_main()
 
+            anthropic_circuit.record_success()
             tracker.add_detail("status", "success")
             send_telegram("✅ *Railway* - Research complete!")
             logger.info("Research generation complete!")
 
     except Exception as e:
-        anthropic_circuit.record_failure()
+        try:
+            anthropic_circuit.record_failure(e)
+        except Exception:
+            pass
         error_msg = str(e)[:100]
         send_telegram(f"❌ *Railway* - Research failed: {error_msg}")
         logger.error(f"Research generation failed: {e}")
@@ -135,7 +139,7 @@ def run_execute():
     try:
         with health_monitor.track_task("trade_execution") as tracker:
             # Check circuit breaker before proceeding
-            if not alpaca_circuit.can_execute():
+            if alpaca_circuit.state == "OPEN":
                 raise Exception("Alpaca circuit breaker is OPEN - too many recent failures")
 
             from scripts.automation.execute_daily_trades import main as execute_main
@@ -147,7 +151,10 @@ def run_execute():
             logger.info("Trade execution complete!")
 
     except Exception as e:
-        alpaca_circuit.record_failure()
+        try:
+            alpaca_circuit.record_failure(e)
+        except Exception:
+            pass
         error_msg = str(e)[:100]
         send_telegram(f"❌ *Railway* - Execution failed: {error_msg}")
         logger.error(f"Trade execution failed: {e}")
