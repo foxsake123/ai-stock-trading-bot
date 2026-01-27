@@ -96,7 +96,31 @@ Railway had been down since Jan 20 crash. CLI session had expired.
 - Check for 9 AM heartbeat Telegram message to confirm Railway is running
 - If no heartbeat: `railway logs --lines 20` to diagnose
 
+### System Tightening (SHORGAN Controls)
+All changes committed (01134c3) and deployed to Railway:
+
+**SHORGAN Paper (37% win rate, -$111K margin):**
+- Margin floor: cash must stay above -$30K
+- Position cap: 20 max (was 30, no limit)
+- Conviction minimum: 7+ for new entries
+- New opportunities: 5-8 (was 8-12)
+- Stop losses: 10% stocks (was 12%), 12% shorts (was 15%)
+- Exit triggers: catalyst passed 5 days (was 7), loss 7% (was 10%)
+
+**SHORGAN Live (33% win rate, -4.5%):**
+- Hard cap: 12 positions
+- Exit: >5% loss + no catalyst in 14 days
+- Drifting loser rule: >3% loss + no catalyst -> exit
+- Instruction: aggressive exits, selective entries
+
+**Validation Code:**
+- Filter 7: blocks buys when at max positions
+- Filter 8: blocks LOW conviction SHORGAN buys
+
+**Documentation:**
+- Created `docs/LESSONS_LEARNED.md` (15 mistakes, root causes, prevention)
+- Updated `docs/BUGS_AND_ENHANCEMENTS.md` (BUG-005/006/007)
+
 ### Known Issues
 - S&P 500 benchmark uses synthetic data (yfinance/Alpha Vantage failing)
-- Railway CLI session tokens expire periodically - deployments run independently but CLI access needs `railway login`
-- Performance chart error: `Extra data: line 2599` appeared in PDF generation for all 3 bots - this is the same corrupted JSON being read by the Railway deployment (old deployment, now fixed locally but Railway has its own copy)
+- Railway CLI session tokens expire periodically - deployments run independently
