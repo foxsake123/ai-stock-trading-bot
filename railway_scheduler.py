@@ -275,9 +275,18 @@ def main():
     print(f"- Task tracking: research, trade_gen, execute, performance")
     print("\nWaiting for scheduled times...")
 
-    # Run forever
+    # Run forever with crash protection
+    consecutive_errors = 0
     while True:
-        schedule.run_pending()
+        try:
+            schedule.run_pending()
+            consecutive_errors = 0  # Reset on success
+        except Exception as e:
+            consecutive_errors += 1
+            logger.error(f"Scheduler loop error #{consecutive_errors}: {e}")
+            if consecutive_errors >= 5:
+                send_telegram(f"🔴 *Railway* - {consecutive_errors} consecutive scheduler errors! Last: {str(e)[:100]}")
+                consecutive_errors = 0  # Reset after alerting
         time.sleep(30)  # Check every 30 seconds
 
 

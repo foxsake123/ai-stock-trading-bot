@@ -251,4 +251,24 @@ User manually updated all 3 Task Scheduler paths. All tasks now show "Status: Re
 
 ---
 
-*Last Updated: January 6, 2026*
+### Jan 26, 2026 - Performance Assessment & System Tightening
+
+**Issues Found:**
+- BUG-005: Performance history JSON corruption (FIXED - duplicate record outside array)
+- BUG-006: Railway using `web:` instead of `worker:` causing crashes (FIXED)
+- BUG-007: SHORGAN Paper at 30 positions with -$111K margin (FIXED - caps added)
+
+**Fixes Applied:**
+- Fixed corrupted `performance_history.json` (109 data points restored)
+- Railway: Changed to `worker:` type, `ALWAYS` restart, crash-proof main loop
+- SHORGAN Paper: Added margin floor (-$30K), position cap (20), conviction min (7+)
+- SHORGAN Paper: Tightened stops (12% -> 10%), exit rules (7 day -> 5 day)
+- SHORGAN Live: Tightened exit rules (>5% loss + no catalyst -> exit)
+- Added validation Filter 7 (position count cap) and Filter 8 (conviction minimum)
+- Created `docs/LESSONS_LEARNED.md` - central mistake/prevention reference
+
+**See also:** `docs/LESSONS_LEARNED.md` for comprehensive root cause analysis
+
+---
+
+*Last Updated: January 26, 2026*

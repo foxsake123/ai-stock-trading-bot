@@ -803,6 +803,25 @@ class MultiAgentTradeValidator:
                     print(f"    [WARNING] Adding to {rec.ticker} which is up {existing_gain_pct:.1f}% - consider TRIM instead")
                     # Don't block, just warn - research might have valid reason
 
+            # Filter 7: SHORGAN position count cap
+            # Prevent SHORGAN from accumulating too many positions (was 30, target 15-20)
+            if bot_name in ["SHORGAN-BOT", "SHORGAN-BOT-LIVE"]:
+                current_positions = market_data.get('current_position_count', 0)
+                max_positions = 20 if bot_name == "SHORGAN-BOT" else 12
+                if rec.action in ['BUY', 'LONG', 'buy', 'BUY_TO_OPEN'] and current_positions >= max_positions:
+                    quality_filters_passed = False
+                    rejection_reasons.append(f"Position count {current_positions} at max ({max_positions}) - must EXIT before adding")
+                    print(f"    [POSITION CAP] BLOCKED: {current_positions} positions >= {max_positions} max")
+
+            # Filter 8: SHORGAN minimum conviction enforcement
+            # Only allow conviction 7+ for new SHORGAN entries (tighter selection)
+            if bot_name in ["SHORGAN-BOT", "SHORGAN-BOT-LIVE"]:
+                if rec.action in ['BUY', 'LONG', 'buy', 'BUY_TO_OPEN']:
+                    if rec.conviction == 'LOW':
+                        quality_filters_passed = False
+                        rejection_reasons.append("LOW conviction trades blocked for SHORGAN (min MEDIUM required)")
+                        print(f"    [CONVICTION] BLOCKED: LOW conviction not allowed for SHORGAN buys")
+
             approved = quality_filters_passed
             rejection_summary = "; ".join(rejection_reasons) if rejection_reasons else "All checks passed"
             status_text = "APPROVED" if approved else "REJECTED"

@@ -1,3 +1,3 @@
 # Railway Procfile - AI Trading Bot
-# Always-on scheduler service
-web: python railway_scheduler.py
+# Always-on scheduler service (worker = no HTTP health checks)
+worker: python railway_scheduler.py

@@ -6,6 +6,7 @@ Based on ChatGPT-Micro-Cap-Experiment methodology
 """
 
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import pandas as pd
 import yfinance as yf
 import alpaca_trade_api as tradeapi
@@ -593,6 +594,14 @@ def plot_performance_comparison(df):
 
     # Format y-axis as currency
     ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x:.2f}'))
+
+    # Fix axis label rotation
+    ax.tick_params(axis='y', labelrotation=0)  # Y-axis labels horizontal
+    ax.tick_params(axis='x', labelrotation=45)  # X-axis labels at 45 degrees
+
+    # Format x-axis dates properly
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+    ax.xaxis.set_major_locator(mdates.AutoDateLocator(minticks=6, maxticks=12))
 
     # Add horizontal line at starting value ($100)
     ax.axhline(y=100, color='gray', linestyle='--',

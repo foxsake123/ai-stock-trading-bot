@@ -523,6 +523,9 @@ CONSTRAINTS:
 - Allowable: Long stocks, short stocks, options (calls/puts, spreads)
 - Max single position: $10,000 (10% of capital)
 - Cash buffer target: $15,000-$25,000
+- **MARGIN LIMIT: Net cash must NEVER go below -$30,000. If margin exceeds this, EXIT positions to reduce.**
+- **MAX POSITIONS: 15-20 total. If above 20, EXIT lowest-conviction positions first.**
+- **QUALITY OVER QUANTITY: Only enter trades with conviction score 7+ out of 10. No speculative flyers.**
 
 COMPREHENSIVE RESEARCH REQUIREMENTS:
 
@@ -608,9 +611,12 @@ For EACH position:
 **Rules Applied:**
 | Rule | Condition | Threshold | Action |
 |------|-----------|-----------|--------|
-| EXIT | Catalyst passed + loss | >7 days + >10% | Sell 100% |
+| EXIT | Catalyst passed + loss | >5 days + >7% | Sell 100% |
 | EXIT | Thesis broken | Any | Sell 100% |
-| TRIM | Strong winner | >25% gain | Sell 50% |
+| EXIT | No catalyst + loss | >10% loss + no event in 14 days | Sell 100% |
+| EXIT | Margin too high | Cash below -$30K | Sell lowest conviction |
+| EXIT | Too many positions | >20 positions | Sell bottom 5 by conviction |
+| TRIM | Strong winner | >20% gain | Sell 50% |
 | TRIM | Overweight | >8% allocation | Reduce to 6% |
 | HOLD | Catalyst pending | <7 days | Maintain |
 | COVER | Short thesis failed | Stop hit | Cover 100% |
@@ -647,7 +653,7 @@ Rank ALL positions by conviction (1-10):
 
 ## 7. TOP CATALYST OPPORTUNITIES (150-200 lines)
 
-For 8-12 high-conviction ideas:
+For 5-8 high-conviction ideas (conviction 7+ ONLY, quality over quantity):
 
 ### [TICKER] - [Company]
 
@@ -714,10 +720,13 @@ Format per standard (see below).
 
 - **Max Position**: $10,000 (10% of capital)
 - **Max Sector**: 25% concentration
-- **Stop Loss Rules**: 12% stocks, 15% shorts
+- **Stop Loss Rules**: 10% stocks, 12% shorts (TIGHTENED)
 - **Options Limit**: 20% of portfolio
 - **Cash Target**: $15,000-$25,000
+- **MARGIN FLOOR**: Cash must stay above -$30,000
 - **Daily Loss Limit**: $5,000
+- **MAX POSITIONS**: 15-20 total (currently 30 - REDUCE)
+- **MIN CONVICTION**: 7/10 required for new entries
 
 WRITING STYLE:
 - Aggressive hedge fund trader tone
@@ -761,10 +770,13 @@ ACCOUNT SPECIFICATIONS:
 - Beginning Capital: $3,000 (REAL MONEY - Margin Account)
 - Account Type: MARGIN with shorting and options enabled (Level 3)
 - Position sizing: $75-$300 per trade (3-10% of capital)
-- Maximum positions: 8-12 concurrent trades
+- Maximum positions: 8-12 concurrent trades (HARD CAP: 12)
 - Daily loss limit: $300 (10% max drawdown per day)
 - Cash buffer target: $400-$600 reserved for opportunities
 - Options exposure limit: 15% of portfolio max
+- **QUALITY OVER QUANTITY: Only conviction 7+ trades. With $3K, every dollar matters.**
+- **CUT LOSERS FAST: Exit any position down >5% with no catalyst in next 14 days.**
+- **CURRENT ISSUE: Account is -4.5%. Be aggressive on exits, selective on entries.**
 
 COMPREHENSIVE RESEARCH REPORT STRUCTURE:
 
@@ -863,9 +875,11 @@ For EACH position, use this exact format:
 
 | Rule | Condition | Threshold | Action |
 |------|-----------|-----------|--------|
-| EXIT | No catalyst + loss | >10% loss | Sell 100% |
-| EXIT | Catalyst passed | >7 days ago | Sell 100% |
+| EXIT | No catalyst + loss | >5% loss | Sell 100% |
+| EXIT | Catalyst passed | >5 days ago | Sell 100% |
 | EXIT | Thesis broken | Any loss | Sell 100% |
+| EXIT | Drifting loser | >3% loss + no catalyst in 14 days | Sell 100% |
+| EXIT | Too many positions | >12 positions | Sell lowest conviction |
 | TRIM | Gain + no upcoming event | >15% gain | Sell 50% |
 | TRIM | Overweight position | >12% allocation | Reduce to 10% |
 | HOLD | Catalyst within 7 days | Any P&L | Maintain |
