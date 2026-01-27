@@ -79,8 +79,8 @@ class ExternalReportParser:
         # Try parsing ORDER BLOCK section first (various formats)
         # Find ORDER BLOCK heading/marker, then extract content until next section
 
-        # Match: "## 9. EXACT ORDER BLOCK", "# ORDER BLOCK", "ORDER BLOCKS:" etc
-        order_heading_pattern = r'(?:#{1,2}\s*\*{0,2}\s*(?:\d+\.\s*)?(?:EXACT\s+)?ORDER\s+BLOCK[^\n]*|^ORDER\s+BLOCKS?:?\s*$)'
+        # Match: "## 9. EXACT ORDER BLOCK", "# ORDER BLOCK", "### ORDER BLOCKS", "ORDER BLOCKS:" etc
+        order_heading_pattern = r'(?:#{1,3}\s*\*{0,2}\s*(?:\d+\.\s*)?(?:EXACT\s+)?ORDER\s+BLOCK[^\n]*|^ORDER\s+BLOCKS?:?\s*$)'
         heading_match = re.search(order_heading_pattern, content, re.IGNORECASE | re.MULTILINE)
 
         order_block = ""
@@ -97,8 +97,15 @@ class ExternalReportParser:
         if order_block:
 
             # Extract individual trade blocks
+            # First try code-fenced blocks (``` ... ```)
             trade_pattern = r'```\s*(.*?)\s*```'
             trade_blocks = re.findall(trade_pattern, order_block, re.DOTALL)
+
+            # If no code-fenced blocks found, try plain text format
+            # (SHORGAN Live sometimes uses plain text ORDER BLOCKS without code fences)
+            if not trade_blocks and re.search(r'^Action:', order_block, re.MULTILINE | re.IGNORECASE):
+                # Treat the entire order_block as one big block with multiple trades
+                trade_blocks = [order_block]
 
             for block in trade_blocks:
                 # Check if this block contains multiple trades (SHORGAN-BOT format)
