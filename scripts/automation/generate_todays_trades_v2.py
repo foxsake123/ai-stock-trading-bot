@@ -1521,6 +1521,12 @@ class AutomatedTradeGeneratorV2:
             return None
 
 
+def main(date_str=None):
+    """Entry point for Railway scheduler and direct invocation."""
+    generator = AutomatedTradeGeneratorV2()
+    generator.run(date_str)
+
+
 if __name__ == "__main__":
     import argparse
 
@@ -1531,6 +1537,4 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-
-    generator = AutomatedTradeGeneratorV2()
-    generator.run(args.date)
+    main(args.date)
