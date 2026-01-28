@@ -75,8 +75,8 @@ def get_current_prices(tickers: List[str]) -> Dict[str, float]:
         from dotenv import load_dotenv
         load_dotenv()
 
-        api_key = os.environ.get('ALPACA_API_KEY') or os.environ.get('ALPACA_API_KEY_DEE')
-        api_secret = os.environ.get('ALPACA_SECRET_KEY') or os.environ.get('ALPACA_SECRET_KEY_DEE')
+        api_key = os.environ.get('ALPACA_API_KEY_DEE') or os.environ.get('ALPACA_API_KEY')
+        api_secret = os.environ.get('ALPACA_SECRET_KEY_DEE') or os.environ.get('ALPACA_SECRET_KEY')
 
         if not api_key or not api_secret:
             print("[WARNING] Alpaca API keys not found for price fetching")
