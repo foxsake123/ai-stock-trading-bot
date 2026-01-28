@@ -557,6 +557,18 @@ class MultiAgentTradeValidator:
 
         return True, ""
 
+    @staticmethod
+    def _make_rejection(rec, reason):
+        """Build a standard rejection result dict."""
+        return {
+            'recommendation': rec,
+            'approved': False,
+            'rejection_reason': reason,
+            'combined_confidence': 0.0,
+            'external_confidence': 0.0,
+            'internal_confidence': 0.0
+        }
+
     def validate_recommendation(self, rec: StockRecommendation, portfolio_value: float, bot_name: str = None, account_type: str = "paper") -> Dict:
         """
         Validate external recommendation through multi-agent consensus
@@ -572,64 +584,32 @@ class MultiAgentTradeValidator:
         """
         print(f"  [*] Validating {rec.ticker} ({rec.source.upper()})...")
 
-        # Apply DEE-BOT filters if applicable
-        if bot_name == "DEE-BOT":
-            passes_filters, filter_reason = self._check_dee_bot_filters(rec)
-            if not passes_filters:
-                print(f"    [X] {rec.ticker} REJECTED - {filter_reason}")
-                return {
-                    'recommendation': rec,
-                    'approved': False,
-                    'rejection_reason': filter_reason,
-                    'combined_confidence': 0.0,
-                    'external_confidence': 0.0,
-                    'internal_confidence': 0.0
-                }
+        # Apply pre-validation filters that reject before agent analysis.
+        # Check cheap filters first to avoid unnecessary API calls.
 
-        # Fetch real market data using Financial Datasets API
+        # DEE-BOT S&P 100 filter (no API call needed)
+        if bot_name == "DEE-BOT":
+            passes, reason = self._check_dee_bot_filters(rec)
+            if not passes:
+                print(f"    [X] {rec.ticker} REJECTED - {reason}")
+                return self._make_rejection(rec, reason)
+
+        # Fetch real market data (needed for SHORGAN filters and agent analysis)
         market_data = self._fetch_market_data(rec, portfolio_value)
 
-        # Apply SHORGAN-BOT filters if applicable
+        # Remaining pre-checks that require market data or portfolio state
+        pre_checks = []
         if bot_name == "SHORGAN-BOT":
-            passes_filters, filter_reason = self._check_shorgan_filters(rec, market_data)
-            if not passes_filters:
-                print(f"    [X] {rec.ticker} REJECTED - {filter_reason}")
-                return {
-                    'recommendation': rec,
-                    'approved': False,
-                    'rejection_reason': filter_reason,
-                    'combined_confidence': 0.0,
-                    'external_confidence': 0.0,
-                    'internal_confidence': 0.0
-                }
-
-        # NEW Dec 2025: Position concentration check (portfolio-aware validation)
-        passes_concentration, concentration_reason = self._check_position_concentration(
+            pre_checks.append(self._check_shorgan_filters(rec, market_data))
+        pre_checks.append(self._check_position_concentration(
             rec, bot_name, portfolio_value, account_type
-        )
-        if not passes_concentration:
-            print(f"    [X] {rec.ticker} REJECTED - {concentration_reason}")
-            return {
-                'recommendation': rec,
-                'approved': False,
-                'rejection_reason': concentration_reason,
-                'combined_confidence': 0.0,
-                'external_confidence': 0.0,
-                'internal_confidence': 0.0
-            }
+        ))
+        pre_checks.append(self._check_catalyst_timing(rec))
 
-        # NEW Dec 2025: Catalyst timing check (reject if catalyst already passed)
-        passes_catalyst, catalyst_reason = self._check_catalyst_timing(rec)
-        if not passes_catalyst:
-            print(f"    [X] {rec.ticker} REJECTED - {catalyst_reason}")
-            return {
-                'recommendation': rec,
-                'approved': False,
-                'rejection_reason': catalyst_reason,
-                'combined_confidence': 0.0,
-                'external_confidence': 0.0,
-                'internal_confidence': 0.0
-            }
+        for passes, reason in pre_checks:
+            if not passes:
+                print(f"    [X] {rec.ticker} REJECTED - {reason}")
+                return self._make_rejection(rec, reason)
 
         # Prepare supplemental data (external research context)
         supplemental_data = {
@@ -1074,24 +1054,16 @@ class AutomatedTradeGeneratorV2:
             return {'approved': [], 'rejected': []}
 
         # Get external recommendations
-        # Determine which Claude file to use based on bot and account type
-        if bot_name == "DEE-BOT":
-            if account_type == "live":
-                claude_path = reports.get('claude_dee_live')
-                print(f"[*] Using DEE-BOT LIVE research file")
-            else:
-                claude_path = reports.get('claude_dee')
-                print(f"[*] Using DEE-BOT PAPER research file")
-        elif bot_name == "SHORGAN-BOT":
-            # Use live-specific research for live account, paper research for paper account
-            if account_type == "live":
-                claude_path = reports.get('claude_shorgan_live')
-                print(f"[*] Using SHORGAN-BOT LIVE research file")
-            else:
-                claude_path = reports.get('claude_shorgan')
-                print(f"[*] Using SHORGAN-BOT PAPER research file")
-        else:
-            claude_path = reports.get('claude')
+        # Select the correct research file based on bot and account type
+        research_key_map = {
+            ("DEE-BOT", "live"): "claude_dee_live",
+            ("DEE-BOT", "paper"): "claude_dee",
+            ("SHORGAN-BOT", "live"): "claude_shorgan_live",
+            ("SHORGAN-BOT", "paper"): "claude_shorgan",
+        }
+        research_key = research_key_map.get((bot_name, account_type), "claude")
+        claude_path = reports.get(research_key)
+        print(f"[*] Using {bot_name} {account_type.upper()} research file")
 
         recommendations = self.parser.get_recommendations_for_bot(
             bot_name,
@@ -1117,23 +1089,14 @@ class AutomatedTradeGeneratorV2:
         rejected = []
 
         # Select portfolio value based on bot and account type
-        if bot_name == "DEE-BOT":
-            if account_type == "live":
-                portfolio_value = self.dee_bot_live_capital  # $10K
-                print(f"[*] Using DEE-BOT LIVE capital: ${portfolio_value:,.0f}")
-            else:
-                portfolio_value = self.dee_bot_capital  # $100K
-                print(f"[*] Using DEE-BOT PAPER capital: ${portfolio_value:,.0f}")
-        elif bot_name == "SHORGAN-BOT":
-            if account_type == "live":
-                portfolio_value = self.shorgan_bot_live_capital  # $3K
-                print(f"[*] Using SHORGAN-BOT LIVE capital: ${portfolio_value:,.0f}")
-            else:
-                portfolio_value = self.shorgan_bot_paper_capital  # $100K
-                print(f"[*] Using SHORGAN-BOT PAPER capital: ${portfolio_value:,.0f}")
-        else:
-            portfolio_value = self.dee_bot_capital
-            print(f"[*] Using default capital: ${portfolio_value:,.0f}")
+        capital_map = {
+            ("DEE-BOT", "live"): self.dee_bot_live_capital,
+            ("DEE-BOT", "paper"): self.dee_bot_capital,
+            ("SHORGAN-BOT", "live"): self.shorgan_bot_live_capital,
+            ("SHORGAN-BOT", "paper"): self.shorgan_bot_paper_capital,
+        }
+        portfolio_value = capital_map.get((bot_name, account_type), self.dee_bot_capital)
+        print(f"[*] Using {bot_name} {account_type.upper()} capital: ${portfolio_value:,.0f}")
 
         for rec in recommendations:
             try:

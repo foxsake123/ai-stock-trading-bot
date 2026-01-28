@@ -337,6 +337,18 @@ class ExternalReportParser:
 
         return None
 
+    @staticmethod
+    def _extract_price(content, label):
+        """Extract a dollar price value from content by label (e.g. 'Entry Price')."""
+        match = re.search(rf'{label}.*?\$?([\d.,-]+)', content, re.IGNORECASE)
+        if match:
+            try:
+                cleaned = match.group(1).replace(',', '').replace('$', '').split('-')[0]
+                return float(cleaned)
+            except ValueError:
+                pass
+        return None
+
     def _parse_narrative_trade(self, ticker: str, content: str, source: str, bot: str) -> Optional[StockRecommendation]:
         """Parse trade from narrative section"""
         data = {
@@ -346,37 +358,27 @@ class ExternalReportParser:
         }
 
         # Determine action
-        if 'SHORT' in content.upper() or 'SELL SHORT' in content.upper():
+        upper_content = content.upper()
+        if 'SHORT' in upper_content or 'SELL SHORT' in upper_content:
             data['action'] = 'SHORT'
-        elif 'BUY' in content.upper() or 'LONG' in content.upper():
+        elif 'BUY' in upper_content or 'LONG' in upper_content:
             data['action'] = 'BUY'
         else:
             data['action'] = 'HOLD'
 
         # Extract prices
-        entry_match = re.search(r'Entry Price.*?\$?([\d.,-]+)', content, re.IGNORECASE)
-        if entry_match:
-            try:
-                data['entry_price'] = float(entry_match.group(1).replace(',', '').replace('$', '').split('-')[0])
-            except ValueError:
-                pass
-
-        target_match = re.search(r'Target Price.*?\$?([\d.,-]+)', content, re.IGNORECASE)
-        if target_match:
-            try:
-                data['target_price'] = float(target_match.group(1).replace(',', '').replace('$', ''))
-            except ValueError:
-                pass
-
-        stop_match = re.search(r'Stop Loss.*?\$?([\d.,-]+)', content, re.IGNORECASE)
-        if stop_match:
-            try:
-                data['stop_loss'] = float(stop_match.group(1).replace(',', '').replace('$', ''))
-            except ValueError:
-                pass
+        entry = self._extract_price(content, 'Entry Price')
+        if entry is not None:
+            data['entry_price'] = entry
+        target = self._extract_price(content, 'Target Price')
+        if target is not None:
+            data['target_price'] = target
+        stop = self._extract_price(content, 'Stop Loss')
+        if stop is not None:
+            data['stop_loss'] = stop
 
         # Extract position size
-        size_match = re.search(r'Position Size.*?([\d.]+)[-–]?([\d.]+)?%', content, re.IGNORECASE)
+        size_match = re.search(r'Position Size.*?([\d.]+)[-\u2013]?([\d.]+)?%', content, re.IGNORECASE)
         if size_match:
             try:
                 data['position_size_pct'] = float(size_match.group(1))

@@ -16,6 +16,7 @@ import json
 import time
 import logging
 import alpaca_trade_api as tradeapi
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 from dotenv import load_dotenv
@@ -122,6 +123,45 @@ DEE_MAX_DAILY_LOSS = 500.0  # Stop trading if lose $500 in one day (5%)
 DEE_MAX_TRADES_PER_DAY = 5  # Execute top 5 highest-confidence trades only
 DEE_STOP_LOSS_PCT = 0.08  # 8% hard stop loss on all positions
 
+@dataclass
+class LiveAccountSettings:
+    """Configuration for a live trading account, used to avoid duplicating
+    daily-loss-limit, position-count, and position-size checks."""
+    name: str
+    enabled: bool
+    capital: float
+    max_position_size: float
+    min_position_size: float
+    max_positions: int
+    max_daily_loss: float
+    max_trades_per_day: int
+    stop_loss_pct: float = 0.18
+
+SHORGAN_LIVE_SETTINGS = LiveAccountSettings(
+    name="SHORGAN-BOT",
+    enabled=SHORGAN_LIVE_TRADING,
+    capital=SHORGAN_CAPITAL,
+    max_position_size=SHORGAN_MAX_POSITION_SIZE,
+    min_position_size=SHORGAN_MIN_POSITION_SIZE,
+    max_positions=SHORGAN_MAX_POSITIONS,
+    max_daily_loss=SHORGAN_MAX_DAILY_LOSS,
+    max_trades_per_day=SHORGAN_MAX_TRADES_PER_DAY,
+    stop_loss_pct=0.18,
+)
+
+DEE_LIVE_SETTINGS = LiveAccountSettings(
+    name="DEE-BOT",
+    enabled=DEE_LIVE_TRADING,
+    capital=DEE_CAPITAL,
+    max_position_size=DEE_MAX_POSITION_SIZE,
+    min_position_size=DEE_MIN_POSITION_SIZE,
+    max_positions=DEE_MAX_POSITIONS,
+    max_daily_loss=DEE_MAX_DAILY_LOSS,
+    max_trades_per_day=DEE_MAX_TRADES_PER_DAY,
+    stop_loss_pct=DEE_STOP_LOSS_PCT,
+)
+
+
 # Validate API keys are loaded
 if not DEE_BOT_CONFIG['API_KEY'] or not DEE_BOT_CONFIG['SECRET_KEY']:
     raise ValueError("DEE-BOT API keys not found in environment variables. Check your .env file.")
@@ -181,8 +221,34 @@ class DailyTradeExecutor:
         self.enable_extended_hours = True  # Allow pre-market and after-hours trading
 
         # Initialize tracking for live accounts
-        self._init_shorgan_tracking()
-        self._init_dee_live_tracking()
+        self.shorgan_starting_equity = None
+        self.dee_starting_equity = None
+        self.dee_live_trades_today = 0
+        self._init_live_tracking(self.shorgan_live_api, SHORGAN_LIVE_SETTINGS)
+        self._init_live_tracking(self.dee_live_api, DEE_LIVE_SETTINGS)
+        if not DEE_LIVE_TRADING:
+            print(f"[INFO] DEE-BOT Live trading is DISABLED (enable with DEE_LIVE_TRADING=True)")
+
+    def _init_live_tracking(self, api, settings):
+        """Initialize daily performance tracking for a live account."""
+        if not settings.enabled or not api:
+            return
+        try:
+            account = api.get_account()
+            starting_equity = float(account.last_equity)
+            # Store on self using the settings name as key
+            if "SHORGAN" in settings.name:
+                self.shorgan_starting_equity = starting_equity
+            else:
+                self.dee_starting_equity = starting_equity
+            print(f"\n[LIVE] {settings.name} LIVE TRADING ACTIVE")
+            print(f"Starting Equity: ${starting_equity:,.2f}")
+            print(f"Daily Loss Limit: ${settings.max_daily_loss:.2f}")
+            print(f"Max Trades Today: {settings.max_trades_per_day}")
+            if settings.stop_loss_pct < 0.18:
+                print(f"Stop Loss: {settings.stop_loss_pct*100:.0f}%")
+        except Exception as e:
+            print(f"[ERROR] Could not get {settings.name} starting equity: {e}")
 
     def is_extended_hours(self, api=None):
         """
@@ -263,164 +329,85 @@ class DailyTradeExecutor:
             print("[INFO] Non-interactive mode - bypassing confirmation")
             return True
 
-    def _init_shorgan_tracking(self):
-        """Initialize SHORGAN daily performance tracking"""
-        # Track SHORGAN daily performance for circuit breaker
-        self.shorgan_starting_equity = None
-        if SHORGAN_LIVE_TRADING and self.shorgan_live_api:
-            try:
-                account = self.shorgan_live_api.get_account()
-                self.shorgan_starting_equity = float(account.last_equity)
-                print(f"\n[LIVE] SHORGAN-BOT LIVE TRADING ACTIVE")
-                print(f"Starting Equity: ${self.shorgan_starting_equity:,.2f}")
-                print(f"Daily Loss Limit: ${SHORGAN_MAX_DAILY_LOSS:.2f}")
-                print(f"Max Trades Today: {SHORGAN_MAX_TRADES_PER_DAY}")
-            except Exception as e:
-                print(f"[ERROR] Could not get SHORGAN starting equity: {e}")
-
-    def _init_dee_live_tracking(self):
-        """Initialize DEE-BOT Live daily performance tracking"""
-        self.dee_starting_equity = None
-        self.dee_live_trades_today = 0
-        if DEE_LIVE_TRADING and self.dee_live_api:
-            try:
-                account = self.dee_live_api.get_account()
-                self.dee_starting_equity = float(account.last_equity)
-                print(f"\n[LIVE] DEE-BOT LIVE TRADING ACTIVE")
-                print(f"Starting Equity: ${self.dee_starting_equity:,.2f}")
-                print(f"Daily Loss Limit: ${DEE_MAX_DAILY_LOSS:.2f}")
-                print(f"Max Trades Today: {DEE_MAX_TRADES_PER_DAY}")
-                print(f"Stop Loss: {DEE_STOP_LOSS_PCT*100:.0f}%")
-            except Exception as e:
-                print(f"[ERROR] Could not get DEE-BOT Live starting equity: {e}")
-        else:
-            print(f"[INFO] DEE-BOT Live trading is DISABLED (enable with DEE_LIVE_TRADING=True)")
-
-    def check_shorgan_daily_loss_limit(self):
-        """Circuit breaker: Stop trading if daily loss exceeds limit"""
-        if not SHORGAN_LIVE_TRADING or not self.shorgan_live_api or self.shorgan_starting_equity is None:
+    def _check_daily_loss_limit(self, api, settings, starting_equity):
+        """Circuit breaker: Stop trading if daily loss exceeds limit.
+        Returns True if trading can continue, False if loss limit hit."""
+        if not settings.enabled or not api or starting_equity is None:
             return True
 
         try:
-            account = self.shorgan_live_api.get_account()
+            account = api.get_account()
             current_equity = float(account.equity)
-            daily_pnl = current_equity - self.shorgan_starting_equity
+            daily_pnl = current_equity - starting_equity
 
-            if daily_pnl < -SHORGAN_MAX_DAILY_LOSS:
-                print(f"\n[CIRCUIT BREAKER] TRIGGERED - SHORGAN-BOT")
+            if daily_pnl < -settings.max_daily_loss:
+                print(f"\n[CIRCUIT BREAKER] TRIGGERED - {settings.name}")
                 print(f"Daily Loss: ${-daily_pnl:.2f}")
-                print(f"Loss Limit: ${SHORGAN_MAX_DAILY_LOSS:.2f}")
-                print(f"[ALERT] STOPPING ALL SHORGAN TRADING FOR TODAY")
+                print(f"Loss Limit: ${settings.max_daily_loss:.2f}")
+                print(f"[ALERT] STOPPING ALL {settings.name} TRADING FOR TODAY")
                 return False
 
-            print(f"[OK] Daily P&L Check: ${daily_pnl:+.2f} (Limit: -${SHORGAN_MAX_DAILY_LOSS:.2f})")
+            print(f"[OK] {settings.name} Daily P&L: ${daily_pnl:+.2f} (Limit: -${settings.max_daily_loss:.2f})")
             return True
         except Exception as e:
-            print(f"[ERROR] Could not check daily loss limit: {e}")
+            print(f"[ERROR] Could not check {settings.name} daily loss limit: {e}")
             return False  # Err on side of caution
+
+    def _check_position_count_limit(self, api, settings):
+        """Don't exceed max concurrent positions. Returns True if within limit."""
+        if not settings.enabled or not api:
+            return True
+
+        try:
+            positions = api.list_positions()
+            position_count = len(positions)
+
+            if position_count >= settings.max_positions:
+                print(f"\n[WARNING] {settings.name} position limit reached: {position_count}/{settings.max_positions}")
+                print(f"Cannot open new positions until existing ones close")
+                return False
+
+            print(f"[OK] {settings.name} Position Count: {position_count}/{settings.max_positions}")
+            return True
+        except Exception as e:
+            print(f"[ERROR] Could not check {settings.name} position count: {e}")
+            return False
+
+    def _calculate_position_size(self, price, shares_recommended, settings):
+        """Calculate safe position size for a live account.
+        Returns 0 if position is too small, otherwise the adjusted share count."""
+        if not settings.enabled:
+            return shares_recommended  # Use recommended size for paper
+
+        max_shares = int(settings.max_position_size / price)
+
+        if max_shares * price < settings.min_position_size:
+            print(f"[SKIP] {settings.name} position too small: ${max_shares * price:.2f} < ${settings.min_position_size}")
+            return 0
+
+        final_shares = min(shares_recommended, max_shares)
+        position_value = final_shares * price
+        print(f"[INFO] {settings.name} Position: {final_shares} shares @ ${price:.2f} = ${position_value:.2f}")
+        return final_shares
+
+    # Backward-compatible wrappers that delegate to the unified methods
+    def check_shorgan_daily_loss_limit(self):
+        return self._check_daily_loss_limit(self.shorgan_live_api, SHORGAN_LIVE_SETTINGS, self.shorgan_starting_equity)
 
     def check_shorgan_position_count_limit(self):
-        """Don't exceed max concurrent positions"""
-        if not SHORGAN_LIVE_TRADING or not self.shorgan_live_api:
-            return True
-
-        try:
-            positions = self.shorgan_live_api.list_positions()
-            position_count = len(positions)
-
-            if position_count >= SHORGAN_MAX_POSITIONS:
-                print(f"\n[WARNING] Position limit reached: {position_count}/{SHORGAN_MAX_POSITIONS}")
-                print(f"Cannot open new positions until existing ones close")
-                return False
-
-            print(f"[OK] Position Count: {position_count}/{SHORGAN_MAX_POSITIONS}")
-            return True
-        except Exception as e:
-            print(f"[ERROR] Could not check position count: {e}")
-            return False
+        return self._check_position_count_limit(self.shorgan_live_api, SHORGAN_LIVE_SETTINGS)
 
     def calculate_shorgan_position_size(self, price, shares_recommended):
-        """Calculate safe position size for $3,000 live account"""
-        if not SHORGAN_LIVE_TRADING:
-            return shares_recommended  # Use recommended size for paper
-
-        # Calculate affordable shares based on position size limit
-        max_shares = int(SHORGAN_MAX_POSITION_SIZE / price)
-
-        # Don't buy if position would be too small
-        if max_shares * price < SHORGAN_MIN_POSITION_SIZE:
-            print(f"[SKIP] Position too small: ${max_shares * price:.2f} < ${SHORGAN_MIN_POSITION_SIZE}")
-            return 0
-
-        # Use the smaller of recommended or max affordable
-        final_shares = min(shares_recommended, max_shares)
-        position_value = final_shares * price
-
-        print(f"[INFO] Position Size: {final_shares} shares @ ${price:.2f} = ${position_value:.2f}")
-        return final_shares
+        return self._calculate_position_size(price, shares_recommended, SHORGAN_LIVE_SETTINGS)
 
     def check_dee_live_daily_loss_limit(self):
-        """Circuit breaker: Stop DEE Live trading if daily loss exceeds limit"""
-        if not DEE_LIVE_TRADING or not self.dee_live_api or self.dee_starting_equity is None:
-            return True
-
-        try:
-            account = self.dee_live_api.get_account()
-            current_equity = float(account.equity)
-            daily_pnl = current_equity - self.dee_starting_equity
-
-            if daily_pnl < -DEE_MAX_DAILY_LOSS:
-                print(f"\n[CIRCUIT BREAKER] TRIGGERED - DEE-BOT LIVE")
-                print(f"Daily Loss: ${-daily_pnl:.2f}")
-                print(f"Loss Limit: ${DEE_MAX_DAILY_LOSS:.2f}")
-                print(f"[ALERT] STOPPING ALL DEE-BOT LIVE TRADING FOR TODAY")
-                return False
-
-            print(f"[OK] DEE Live Daily P&L: ${daily_pnl:+.2f} (Limit: -${DEE_MAX_DAILY_LOSS:.2f})")
-            return True
-        except Exception as e:
-            print(f"[ERROR] Could not check DEE Live daily loss limit: {e}")
-            return False  # Err on side of caution
+        return self._check_daily_loss_limit(self.dee_live_api, DEE_LIVE_SETTINGS, self.dee_starting_equity)
 
     def check_dee_live_position_count_limit(self):
-        """Don't exceed max concurrent positions for DEE Live"""
-        if not DEE_LIVE_TRADING or not self.dee_live_api:
-            return True
-
-        try:
-            positions = self.dee_live_api.list_positions()
-            position_count = len(positions)
-
-            if position_count >= DEE_MAX_POSITIONS:
-                print(f"\n[WARNING] DEE Live position limit reached: {position_count}/{DEE_MAX_POSITIONS}")
-                print(f"Cannot open new positions until existing ones close")
-                return False
-
-            print(f"[OK] DEE Live Position Count: {position_count}/{DEE_MAX_POSITIONS}")
-            return True
-        except Exception as e:
-            print(f"[ERROR] Could not check DEE Live position count: {e}")
-            return False
+        return self._check_position_count_limit(self.dee_live_api, DEE_LIVE_SETTINGS)
 
     def calculate_dee_live_position_size(self, price, shares_recommended):
-        """Calculate safe position size for $10,000 DEE Live account"""
-        if not DEE_LIVE_TRADING or not self.dee_live_api:
-            return shares_recommended  # Use recommended size for paper
-
-        # Calculate affordable shares based on position size limit
-        max_shares = int(DEE_MAX_POSITION_SIZE / price)
-
-        # Don't buy if position would be too small
-        if max_shares * price < DEE_MIN_POSITION_SIZE:
-            print(f"[SKIP] DEE Live position too small: ${max_shares * price:.2f} < ${DEE_MIN_POSITION_SIZE}")
-            return 0
-
-        # Use the smaller of recommended or max affordable
-        final_shares = min(shares_recommended, max_shares)
-        position_value = final_shares * price
-
-        print(f"[INFO] DEE Live Position: {final_shares} shares @ ${price:.2f} = ${position_value:.2f}")
-        return final_shares
+        return self._calculate_position_size(price, shares_recommended, DEE_LIVE_SETTINGS)
 
     def _run_tax_loss_harvesting(self):
         """Run tax-loss harvesting for all live accounts before regular trades."""
@@ -525,6 +512,65 @@ class DailyTradeExecutor:
 
         return None
 
+    @staticmethod
+    def _parse_dollar_value(text):
+        """Parse a dollar value string like '$123.45' into a float, or None."""
+        cleaned = text.replace('$', '').replace(',', '')
+        if cleaned.replace('.', '').isdigit():
+            return float(cleaned)
+        return None
+
+    @staticmethod
+    def _is_table_data_row(row):
+        """Return True if a markdown table row contains data (not header/separator)."""
+        return '|' in row and not row.strip().startswith('|--') and '-----' not in row
+
+    def _parse_table_rows(self, section_content, header_pattern, min_columns):
+        """
+        Extract rows from a legacy markdown table section.
+
+        Args:
+            section_content: The markdown text to search within
+            header_pattern: Regex pattern for the table header (e.g. '### SELL ORDERS')
+            min_columns: Minimum number of columns a row must have
+
+        Returns:
+            List of lists, where each inner list is the parsed column values
+        """
+        table_match = re.search(
+            rf'{header_pattern}.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)',
+            section_content, re.DOTALL
+        )
+        if not table_match:
+            return []
+
+        rows = []
+        for row in table_match.group(1).strip().split('\n'):
+            if self._is_table_data_row(row):
+                parts = [p.strip() for p in row.split('|') if p.strip()]
+                if len(parts) >= min_columns:
+                    rows.append(parts)
+        return rows
+
+    def _build_sell_trade(self, parts):
+        """Build a sell trade dict from parsed table columns."""
+        return {
+            'symbol': parts[0],
+            'shares': int(parts[1]) if parts[1].isdigit() else 0,
+            'limit_price': self._parse_dollar_value(parts[2]),
+            'rationale': parts[3] if len(parts) > 3 else ''
+        }
+
+    def _build_buy_trade(self, parts):
+        """Build a buy trade dict from parsed table columns."""
+        return {
+            'symbol': parts[0],
+            'shares': int(parts[1]) if parts[1].isdigit() else 0,
+            'limit_price': self._parse_dollar_value(parts[2]),
+            'stop_loss': self._parse_dollar_value(parts[3]) if len(parts) > 3 else None,
+            'rationale': parts[4] if len(parts) > 4 else ''
+        }
+
     def parse_trades_file(self, file_path):
         """Parse trades from markdown file"""
         if not file_path or not file_path.exists():
@@ -565,34 +611,10 @@ class DailyTradeExecutor:
                     })
 
             # Also check for table format (legacy)
-            sell_table_match = re.search(r'### SELL ORDERS.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', dee_content, re.DOTALL)
-            if sell_table_match:
-                sell_rows = sell_table_match.group(1).strip().split('\n')
-                for row in sell_rows:
-                    if '|' in row and not row.strip().startswith('|--') and not '-----' in row:
-                        parts = [p.strip() for p in row.split('|') if p.strip()]
-                        if len(parts) >= 3:
-                            dee_trades['sell'].append({
-                                'symbol': parts[0],
-                                'shares': int(parts[1]) if parts[1].isdigit() else 0,
-                                'limit_price': float(parts[2].replace('$', '')) if parts[2].replace('$', '').replace('.', '').isdigit() else None,
-                                'rationale': parts[3] if len(parts) > 3 else ''
-                            })
-
-            buy_table_match = re.search(r'### BUY ORDERS.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', dee_content, re.DOTALL)
-            if buy_table_match:
-                buy_rows = buy_table_match.group(1).strip().split('\n')
-                for row in buy_rows:
-                    if '|' in row and not row.strip().startswith('|--') and not '-----' in row:
-                        parts = [p.strip() for p in row.split('|') if p.strip()]
-                        if len(parts) >= 4:
-                            dee_trades['buy'].append({
-                                'symbol': parts[0],
-                                'shares': int(parts[1]) if parts[1].isdigit() else 0,
-                                'limit_price': float(parts[2].replace('$', '')) if parts[2].replace('$', '').replace('.', '').isdigit() else None,
-                                'stop_loss': float(parts[3].replace('$', '')) if parts[3].replace('$', '').replace('.', '').isdigit() else None,
-                                'rationale': parts[4] if len(parts) > 4 else ''
-                            })
+            for parts in self._parse_table_rows(dee_content, '### SELL ORDERS', min_columns=3):
+                dee_trades['sell'].append(self._build_sell_trade(parts))
+            for parts in self._parse_table_rows(dee_content, '### BUY ORDERS', min_columns=4):
+                dee_trades['buy'].append(self._build_buy_trade(parts))
 
         # Find SHORGAN-BOT section (with or without emoji)
         shorgan_section_match = re.search(r'## (?:🚀 )?SHORGAN-BOT.*?(?=^## 📋|^## \[|^---|\Z)', content, re.DOTALL | re.MULTILINE)
@@ -627,49 +649,12 @@ class DailyTradeExecutor:
                     })
 
             # Also check for table format (legacy)
-            sell_table_match = re.search(r'### SELL ORDERS.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', shorgan_content, re.DOTALL)
-            if sell_table_match:
-                sell_rows = sell_table_match.group(1).strip().split('\n')
-                for row in sell_rows:
-                    if '|' in row and not row.strip().startswith('|--') and not '-----' in row:
-                        parts = [p.strip() for p in row.split('|') if p.strip()]
-                        if len(parts) >= 3:
-                            shorgan_trades['sell'].append({
-                                'symbol': parts[0],
-                                'shares': int(parts[1]) if parts[1].isdigit() else 0,
-                                'limit_price': float(parts[2].replace('$', '')) if parts[2].replace('$', '').replace('.', '').isdigit() else None,
-                                'rationale': parts[3] if len(parts) > 3 else ''
-                            })
-
-            buy_table_match = re.search(r'### BUY ORDERS.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', shorgan_content, re.DOTALL)
-            if buy_table_match:
-                buy_rows = buy_table_match.group(1).strip().split('\n')
-                for row in buy_rows:
-                    if '|' in row and not row.strip().startswith('|--') and not '-----' in row:
-                        parts = [p.strip() for p in row.split('|') if p.strip()]
-                        if len(parts) >= 4:
-                            shorgan_trades['buy'].append({
-                                'symbol': parts[0],
-                                'shares': int(parts[1]) if parts[1].isdigit() else 0,
-                                'limit_price': float(parts[2].replace('$', '')) if parts[2].replace('$', '').replace('.', '').isdigit() else None,
-                                'stop_loss': float(parts[3].replace('$', '')) if parts[3].replace('$', '').replace('.', '').isdigit() else None,
-                                'rationale': parts[4] if len(parts) > 4 else ''
-                            })
-
-            short_table_match = re.search(r'### SHORT SELL.*?\n\|.*?\n\|(.*?)(?=\n### |\n## |\Z)', shorgan_content, re.DOTALL)
-            if short_table_match:
-                short_rows = short_table_match.group(1).strip().split('\n')
-                for row in short_rows:
-                    if '|' in row and not row.strip().startswith('|--') and not '-----' in row:
-                        parts = [p.strip() for p in row.split('|') if p.strip()]
-                        if len(parts) >= 4:
-                            shorgan_trades['short'].append({
-                                'symbol': parts[0],
-                                'shares': int(parts[1]) if parts[1].isdigit() else 0,
-                                'limit_price': float(parts[2].replace('$', '')) if parts[2].replace('$', '').replace('.', '').isdigit() else None,
-                                'stop_loss': float(parts[3].replace('$', '')) if parts[3].replace('$', '').replace('.', '').isdigit() else None,
-                                'rationale': parts[4] if len(parts) > 4 else ''
-                            })
+            for parts in self._parse_table_rows(shorgan_content, '### SELL ORDERS', min_columns=3):
+                shorgan_trades['sell'].append(self._build_sell_trade(parts))
+            for parts in self._parse_table_rows(shorgan_content, '### BUY ORDERS', min_columns=4):
+                shorgan_trades['buy'].append(self._build_buy_trade(parts))
+            for parts in self._parse_table_rows(shorgan_content, '### SHORT SELL', min_columns=4):
+                shorgan_trades['short'].append(self._build_buy_trade(parts))
 
         return dee_trades, shorgan_trades
 

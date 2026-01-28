@@ -154,8 +154,9 @@ class HealthMonitor:
         self._save_status()
         logger.info(f"Task started: {task_name}")
 
-    def record_success(self, task_name: str, details: Optional[Dict] = None):
-        """Record successful task completion"""
+    def _record_completion(self, task_name: str, status: TaskStatus,
+                           error: Optional[str] = None, details: Optional[Dict] = None):
+        """Record task completion (success or failure) with duration tracking."""
         started_at = self._status["tasks"].get(task_name, {}).get("started_at")
         completed_at = datetime.now()
 
@@ -165,40 +166,7 @@ class HealthMonitor:
             duration = (completed_at - start).total_seconds()
 
         self._status["tasks"][task_name] = {
-            "status": TaskStatus.SUCCESS.value,
-            "started_at": started_at,
-            "completed_at": completed_at.isoformat(),
-            "duration_seconds": duration,
-            "error": None,
-            "details": details
-        }
-        self._save_status()
-
-        # Record in history
-        execution = TaskExecution(
-            task_name=task_name,
-            status=TaskStatus.SUCCESS.value,
-            started_at=started_at or completed_at.isoformat(),
-            completed_at=completed_at.isoformat(),
-            duration_seconds=duration,
-            details=details
-        )
-        self._append_history(execution)
-
-        logger.info(f"Task completed: {task_name} (duration: {duration:.1f}s)")
-
-    def record_failure(self, task_name: str, error: str, details: Optional[Dict] = None):
-        """Record task failure"""
-        started_at = self._status["tasks"].get(task_name, {}).get("started_at")
-        completed_at = datetime.now()
-
-        duration = None
-        if started_at:
-            start = datetime.fromisoformat(started_at)
-            duration = (completed_at - start).total_seconds()
-
-        self._status["tasks"][task_name] = {
-            "status": TaskStatus.FAILED.value,
+            "status": status.value,
             "started_at": started_at,
             "completed_at": completed_at.isoformat(),
             "duration_seconds": duration,
@@ -207,10 +175,9 @@ class HealthMonitor:
         }
         self._save_status()
 
-        # Record in history
         execution = TaskExecution(
             task_name=task_name,
-            status=TaskStatus.FAILED.value,
+            status=status.value,
             started_at=started_at or completed_at.isoformat(),
             completed_at=completed_at.isoformat(),
             duration_seconds=duration,
@@ -219,7 +186,18 @@ class HealthMonitor:
         )
         self._append_history(execution)
 
-        logger.error(f"Task failed: {task_name} - {error}")
+        if status == TaskStatus.SUCCESS:
+            logger.info(f"Task completed: {task_name} (duration: {duration:.1f}s)")
+        else:
+            logger.error(f"Task failed: {task_name} - {error}")
+
+    def record_success(self, task_name: str, details: Optional[Dict] = None):
+        """Record successful task completion"""
+        self._record_completion(task_name, TaskStatus.SUCCESS, details=details)
+
+    def record_failure(self, task_name: str, error: str, details: Optional[Dict] = None):
+        """Record task failure"""
+        self._record_completion(task_name, TaskStatus.FAILED, error=error, details=details)
 
     def track_task(self, task_name: str):
         """Context manager for tracking task execution"""
