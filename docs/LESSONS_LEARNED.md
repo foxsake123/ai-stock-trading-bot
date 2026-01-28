@@ -110,6 +110,23 @@ This document captures every significant mistake, root cause, and prevention str
 - **Fix**: Run `railway login` when needed
 - **Prevention**: This is normal behavior. The deployment continues running regardless.
 
+### MISTAKE A-007: CircuitBreaker API Mismatch Crashes Railway
+- **When**: Jan 27, 2026
+- **Impact**: Railway stuck in infinite retry loop since 6 AM, Telegram spam every 30 seconds
+- **Root Cause**: `railway_scheduler.py` called `can_execute()` (doesn't exist) and `record_failure()` (needs exception arg). Code was written assuming a different API than what `CircuitBreaker` class actually implements.
+- **Fix Applied**:
+  - Changed `can_execute()` to `state == "OPEN"`
+  - Wrapped `record_failure(e)` in try/except
+  - Added 23 smoke tests to verify API contract
+- **Prevention**: Run `pytest tests/test_railway_scheduler_smoke.py -v` before every Railway deployment. Tests verify exact CircuitBreaker method signatures.
+
+### MISTAKE A-008: Missing main() Function Blocks Railway Trade Gen
+- **When**: Jan 27, 2026 (caught before crash)
+- **Impact**: Would have crashed Railway's 8:30 AM trade generation on Jan 28
+- **Root Cause**: `generate_todays_trades_v2.py` only had a `__main__` block, no `main()` function. Railway scheduler does `from ... import main`.
+- **Fix Applied**: Added `main(date_str=None)` wrapper function
+- **Prevention**: Smoke test `TestRunTrades::test_success_path` catches this by mocking the import path.
+
 ---
 
 ## CATEGORY 3: DATA & CONFIGURATION ISSUES
