@@ -310,56 +310,45 @@ def download_sp500(start_date: pd.Timestamp, end_date: pd.Timestamp) -> pd.DataF
     except Exception as e:
         print(f"Alpaca API failed: {e}")
 
-    # Method 3: Try Financial Datasets API (premium, $49/month)
+    # Method 3: Try Financial Datasets API (single request for full range)
     try:
         print("Attempting to fetch SPY data from Financial Datasets API...")
         import requests
 
         FD_API_KEY = os.getenv('FINANCIAL_DATASETS_API_KEY', 'c93a9274-4183-446e-a9e1-6befeba1003b')
 
-        # Financial Datasets endpoint for historical prices
-        dates = []
-        closes = []
+        # Fetch full date range in single request
+        start_str = start_date.strftime('%Y-%m-%d')
+        end_str = end_date.strftime('%Y-%m-%d')
 
-        current_date = start_date
-        while current_date <= end_date:
-            date_str = current_date.strftime('%Y-%m-%d')
+        url = f"https://api.financialdatasets.ai/prices/?ticker=SPY&interval=day&interval_multiplier=1&start_date={start_str}&end_date={end_str}"
 
-            # Financial Datasets API endpoint
-            url = f"https://api.financialdatasets.ai/prices/?ticker=SPY&interval=day&interval_multiplier=1&start_date={date_str}&end_date={date_str}"
+        headers = {
+            'X-API-KEY': FD_API_KEY,
+            'Accept': 'application/json'
+        }
 
-            headers = {
-                'X-API-KEY': FD_API_KEY,
-                'Accept': 'application/json'
-            }
+        response = requests.get(url, headers=headers, timeout=30)
 
-            response = requests.get(url, headers=headers, timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            if data.get('prices') and len(data['prices']) > 0:
+                dates = [pd.to_datetime(p['time']) for p in data['prices']]
+                closes = [float(p['close']) for p in data['prices']]
 
-            if response.status_code == 200:
-                data = response.json()
-                if data.get('prices') and len(data['prices']) > 0:
-                    price_data = data['prices'][0]
-                    dates.append(pd.to_datetime(price_data['time']))
-                    closes.append(float(price_data['close']))
+                sp500 = pd.DataFrame({
+                    'date': dates,
+                    'Close': closes
+                }).sort_values('date').reset_index(drop=True)
 
-            current_date += pd.Timedelta(days=1)
+                # Normalize to match starting capital
+                sp500_baseline = sp500['Close'].iloc[0]
+                sp500['sp500_value'] = (sp500['Close'] / sp500_baseline) * INITIAL_CAPITAL_COMBINED
 
-            # Rate limiting
-            import time
-            time.sleep(0.1)
-
-        if dates and closes:
-            sp500 = pd.DataFrame({
-                'date': dates,
-                'Close': closes
-            }).sort_values('date').reset_index(drop=True)
-
-            # Normalize to match starting capital
-            sp500_baseline = sp500['Close'].iloc[0]
-            sp500['sp500_value'] = (sp500['Close'] / sp500_baseline) * INITIAL_CAPITAL_COMBINED
-
-            print(f"Successfully downloaded SPY data from Financial Datasets API ({len(sp500)} bars)")
-            return sp500[['date', 'sp500_value']]
+                print(f"Successfully downloaded SPY data from Financial Datasets API ({len(sp500)} bars)")
+                return sp500[['date', 'sp500_value']]
+        else:
+            print(f"Financial Datasets API returned status {response.status_code}")
 
     except Exception as e:
         print(f"Financial Datasets API failed: {e}")
@@ -1096,13 +1085,10 @@ def main():
         print(f"S&P 500 benchmark data merged successfully")
         print(f"S&P 500 values: {portfolio_df['sp500_value'].tolist()}")
     else:
-        # Use synthetic benchmark when live data unavailable
-        print("S&P 500 data unavailable - creating synthetic benchmark...")
-        sp500_df = create_synthetic_sp500_benchmark(portfolio_df)
-
-        if not sp500_df.empty:
-            portfolio_df = pd.merge(portfolio_df, sp500_df, on='date', how='left')
-            print(f"Synthetic S&P 500 benchmark added successfully")
+        # S&P 500 data unavailable - do NOT use synthetic data
+        print("[ERROR] S&P 500 data unavailable from all sources!")
+        print("[ERROR] Check Financial Datasets API key and subscription status")
+        portfolio_df['sp500_value'] = None
 
     # Generate visualization
     fig, metrics = plot_performance_comparison(portfolio_df)
