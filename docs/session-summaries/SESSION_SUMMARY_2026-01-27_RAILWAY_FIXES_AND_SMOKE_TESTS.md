@@ -1,9 +1,9 @@
 # Session Summary - January 27, 2026
-## Railway CircuitBreaker Fix + Smoke Tests + Parser Fix
+## Railway CircuitBreaker Fix + Smoke Tests + Parser Fix + Refactoring
 
 **Date**: Monday, January 27, 2026
-**Duration**: ~1.5 hours
-**Focus**: Fix Railway crash (CircuitBreaker API mismatch), add smoke tests, fix parser
+**Duration**: ~2 hours
+**Focus**: Fix Railway crash (CircuitBreaker API mismatch), add smoke tests, fix parser, refactor core files
 
 ---
 
@@ -57,6 +57,17 @@
 - Trade files generated: `docs/TODAYS_TRADES_2026-01-28*.md`
 - No trades executed today (research was generated for tomorrow's market)
 
+### 6. Code Refactoring (5 files, -93 net lines)
+Ran code-refactorer agent across core files. All behavior preserved, 23 smoke + 20 parser tests pass.
+
+| File | Refactoring | Lines Saved |
+|------|-------------|-------------|
+| `railway_scheduler.py` | `run_scheduled_task()` consolidates 4 duplicated task runners; loop-based schedule registration; removed unused import | ~60 |
+| `execute_daily_trades.py` | `LiveAccountSettings` dataclass; 6 methods unified to 3; table parsing helpers extracted | ~80 |
+| `generate_todays_trades_v2.py` | `_make_rejection()` helper; filter check loop; dict lookups replace if/elif chains | ~30 |
+| `health_monitor.py` | `_record_completion()` unifies success/failure recording | ~25 |
+| `report_parser.py` | `_extract_price()` replaces 3 copy-pasted price extraction blocks | ~10 |
+
 ---
 
 ## Bugs Found & Fixed
@@ -75,9 +86,11 @@
 
 | Hash | Message |
 |------|---------|
-| (earlier) | fix: circuit breaker API calls in Railway scheduler |
+| f6ab914 | fix: circuit breaker API calls in Railway scheduler |
 | 9f41083 | fix: parser now handles ### ORDER BLOCKS and plain text trade formats |
 | e3051e4 | feat: add Railway scheduler smoke tests + fix missing main() |
+| 83be7a6 | docs: update session summary with SHORGAN tightening details |
+| b57eb7e | refactor: reduce duplication across 5 core files |
 
 All pushed to origin/master and deployed to Railway.
 
@@ -87,10 +100,13 @@ All pushed to origin/master and deployed to Railway.
 
 | File | Change |
 |------|--------|
-| `railway_scheduler.py` | Fixed CircuitBreaker API calls (earlier commit) |
-| `scripts/automation/report_parser.py` | `#{1,3}` heading + plain text fallback |
-| `scripts/automation/generate_todays_trades_v2.py` | Added `main()` function |
+| `railway_scheduler.py` | Fixed CircuitBreaker API + refactored to `run_scheduled_task()` |
+| `scripts/automation/report_parser.py` | `#{1,3}` heading + plain text fallback + `_extract_price()` |
+| `scripts/automation/generate_todays_trades_v2.py` | Added `main()` + `_make_rejection()` + dict lookups |
+| `scripts/automation/execute_daily_trades.py` | `LiveAccountSettings` dataclass + unified methods |
+| `scripts/core/health_monitor.py` | `_record_completion()` consolidation |
 | `tests/test_railway_scheduler_smoke.py` | 23 smoke tests (NEW) |
+| `docs/LESSONS_LEARNED.md` | Added A-007 (CircuitBreaker crash), A-008 (missing main) |
 
 ---
 
