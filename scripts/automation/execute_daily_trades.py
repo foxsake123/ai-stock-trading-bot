@@ -904,7 +904,7 @@ class DailyTradeExecutor:
                 print(f"[EXECUTING] {side.upper()} {shares} {symbol} @ {f'${limit_price}' if limit_price else 'market'}")
 
             # Check circuit breaker before submitting (if available)
-            if CORE_UTILS_AVAILABLE and not alpaca_circuit.can_execute():
+            if CORE_UTILS_AVAILABLE and alpaca_circuit.state == "OPEN":
                 raise Exception(f"Alpaca circuit breaker OPEN - too many recent failures")
 
             # Submit order with retry logic (if available)
@@ -979,7 +979,10 @@ class DailyTradeExecutor:
         except Exception as e:
             # Record failure in circuit breaker
             if CORE_UTILS_AVAILABLE:
-                alpaca_circuit.record_failure()
+                try:
+                    alpaca_circuit.record_failure(e)
+                except Exception:
+                    pass  # Don't let circuit breaker errors mask the real error
 
             error_record = {
                 'symbol': trade_info['symbol'],
