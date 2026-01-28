@@ -1,6 +1,6 @@
 # Lessons Learned & Recurring Issues
 ## AI Trading Bot - Central Reference Document
-## Last Updated: January 26, 2026
+## Last Updated: January 27, 2026
 
 This document captures every significant mistake, root cause, and prevention strategy. It is the system's institutional memory. Reference this before making changes.
 
@@ -126,6 +126,20 @@ This document captures every significant mistake, root cause, and prevention str
 - **Root Cause**: `generate_todays_trades_v2.py` only had a `__main__` block, no `main()` function. Railway scheduler does `from ... import main`.
 - **Fix Applied**: Added `main(date_str=None)` wrapper function
 - **Prevention**: Smoke test `TestRunTrades::test_success_path` catches this by mocking the import path.
+
+### MISTAKE A-009: Dead API Key Takes Priority Over Working Key
+- **When**: Jan 27, 2026 (caught during pipeline verification)
+- **Impact**: DEE-BOT Paper Alpaca connection would fail on Railway during trade validation
+- **Root Cause**: `generate_todays_trades_v2.py` used `os.environ.get('ALPACA_API_KEY') or os.environ.get('ALPACA_API_KEY_DEE')`. The dead key `ALPACA_API_KEY` (rotated but still set in env) is non-None, so the `or` fallback to the working `ALPACA_API_KEY_DEE` never triggers.
+- **Fix Applied**: Swapped priority to `os.environ.get('ALPACA_API_KEY_DEE') or os.environ.get('ALPACA_API_KEY')`
+- **Prevention**: When rotating API keys, remove the old env var entirely rather than leaving it set. Pre-deployment pipeline verification catches connectivity issues.
+
+### MISTAKE A-010: CircuitBreaker API Mismatch in execute_daily_trades.py
+- **When**: Jan 28, 2026 (discovered during manual trade execution)
+- **Impact**: Trade execution crashed immediately on first trade
+- **Root Cause**: Same bug as A-007 but in different file. `execute_daily_trades.py` called `can_execute()` (doesn't exist) and `record_failure()` (needs exception arg).
+- **Fix Applied**: Changed `can_execute()` to `state == "OPEN"`, wrapped `record_failure(e)` in try/except
+- **Prevention**: The smoke tests (A-007) caught the scheduler, but didn't cover the executor. Need smoke tests for execute_daily_trades.py too.
 
 ---
 

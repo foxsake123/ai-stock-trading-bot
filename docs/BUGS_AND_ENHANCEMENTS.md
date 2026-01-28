@@ -77,9 +77,9 @@
 
 | ID | Enhancement | Effort | Status |
 |----|-------------|--------|--------|
-| ENH-020 | Health monitoring with Telegram alerts | 1 hr | TODO |
-| ENH-021 | Retry logic with exponential backoff | 1 hr | TODO |
-| ENH-022 | Execution verification (confirm fills) | 1 hr | TODO |
+| ENH-020 | Health monitoring with Telegram alerts | 1 hr | ✅ DONE (Jan 14) |
+| ENH-021 | Retry logic with exponential backoff | 1 hr | ✅ DONE (Jan 14) |
+| ENH-022 | Execution verification (confirm fills) | 1 hr | ✅ DONE (Jan 14) |
 
 ### Priority 4: Performance (3-4 hours total)
 
@@ -207,7 +207,7 @@
 
 | ID | Enhancement | Value | Effort | Description |
 |----|-------------|-------|--------|-------------|
-| PROD-040 | Cloud Deployment | HIGH | 6 hr | Move to AWS/GCP for 24/7 reliability (no sleep issues) |
+| PROD-040 | Cloud Deployment | HIGH | 6 hr | ✅ DONE - Railway always-on worker deployed |
 | PROD-041 | Graceful Degradation | MEDIUM | 2 hr | Continue with cached data if API fails |
 | PROD-042 | Multi-Broker Support | LOW | 8 hr | Add support for IBKR, Schwab as backup |
 | PROD-043 | Paper-to-Live Sync | MEDIUM | 3 hr | Auto-sync successful paper strategies to live account |
@@ -271,4 +271,46 @@ User manually updated all 3 Task Scheduler paths. All tasks now show "Status: Re
 
 ---
 
-*Last Updated: January 26, 2026*
+### Jan 27, 2026 - Railway CircuitBreaker Fix + Smoke Tests + Pipeline Verification
+
+**Bugs Fixed:**
+- BUG-008: CircuitBreaker `can_execute()` doesn't exist (CRITICAL - Railway infinite loop)
+- BUG-009: CircuitBreaker `record_failure()` needs exception arg (CRITICAL)
+- BUG-010: Parser `#{1,2}` regex misses `### ORDER BLOCKS` (HIGH - SHORGAN Live 0 trades)
+- BUG-011: Parser misses plain text (non-code-fenced) trade blocks (HIGH)
+- BUG-012: `generate_todays_trades_v2.py` missing `main()` function (HIGH - would crash Railway)
+- BUG-013: Dead `ALPACA_API_KEY` takes priority over working `ALPACA_API_KEY_DEE` (HIGH)
+
+**Enhancements Completed:**
+- ENH-020: Health monitoring with Telegram alerts - ✅ DONE (integrated into Railway scheduler)
+- ENH-021: Retry logic with exponential backoff - ✅ DONE (circuit breakers operational)
+- Added 23 Railway scheduler smoke tests (`tests/test_railway_scheduler_smoke.py`)
+- Code refactoring across 5 core files (-93 net lines of duplication)
+- Full 9-step pipeline verification for Jan 28 trading
+
+**See also:** `docs/LESSONS_LEARNED.md` (A-007, A-008, A-009)
+
+---
+
+### Jan 28, 2026 - Trade Execution Recovery + CircuitBreaker Fix
+
+**Issues Found:**
+- BUG-014: CircuitBreaker API mismatch in `execute_daily_trades.py` (same as BUG-008/009 but different file)
+- BUG-015: SHORGAN Live showed 0/0 trades despite parser fix being deployed - Railway not updated with latest code
+
+**Fixes Applied:**
+- Fixed `execute_daily_trades.py`: `can_execute()` → `state == "OPEN"`, `record_failure()` → `record_failure(e)` with try/except
+- Regenerated SHORGAN Live trades locally: 6 approved (3 sells, 3 buys)
+
+**Trade Execution Results:**
+| Account | Executed | Failed | Notes |
+|---------|----------|--------|-------|
+| DEE-BOT Paper | 6 | 5 | Sells: VZ, XOM, MO; Buys: AAPL, KO, T |
+| SHORGAN Paper | 17 | 2 | 11 sells + 6 buys |
+| SHORGAN Live | 3 | 3 | Sells: BCRX, NFLX, NU (position limit blocked buys) |
+
+**See also:** `docs/LESSONS_LEARNED.md` (A-010)
+
+---
+
+*Last Updated: January 28, 2026*
