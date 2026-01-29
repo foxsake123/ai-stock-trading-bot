@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: stock-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python stock_bot_server.py
+    envVars:
+      - key: MASTER_KEY
+        value: PTU0qkUU2s8SbyLgFcSV8x3iXwVBoODqV849jcG-6Mk
+      - key: SIGNUP_PASSWORD
+        value: stockbot2026
+      - key: ADMIN_PASSWORD
+        value: stockbot-admin-2024

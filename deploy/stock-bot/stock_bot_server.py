@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-STOCK-BOT MCP Server - Hosted Web Service Version
+SHORGAN-BOT MCP Server - Hosted Web Service Version
 ==================================================
 
 A hosted MCP server that allows multiple users to connect their
@@ -11,8 +11,8 @@ DEPLOYMENT:
     python stock_bot_server.py
 
     # Docker
-    docker build -t stock-bot .
-    docker run -p 8000:8000 -e MASTER_KEY=your-key stock-bot
+    docker build -t shorgan-bot .
+    docker run -p 8000:8000 -e MASTER_KEY=your-key shorgan-bot
 
     # Cloud (Railway, Render, Fly.io, etc.)
     Set MASTER_KEY environment variable and deploy
@@ -21,7 +21,7 @@ USAGE:
     Users add to Claude Desktop config:
     {
       "mcpServers": {
-        "stock-bot": {
+        "shorgan-bot": {
           "url": "https://your-server.com/mcp",
           "headers": {
             "Authorization": "Bearer user-api-key"
@@ -78,7 +78,7 @@ class Config:
     # Security
     MIN_KEY_LEN = 32
     PBKDF2_ITERS = 480000
-    API_KEY_PREFIX = "sb_"  # stock-bot API key prefix
+    API_KEY_PREFIX = "sb_"  # shorgan-bot API key prefix
 
     # Rate limiting
     RATE_LIMIT = 60  # requests per minute
@@ -108,7 +108,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s"
 )
-log = logging.getLogger("stock-bot")
+log = logging.getLogger("shorgan-bot")
 
 # =============================================================================
 # ENCRYPTION
@@ -624,7 +624,7 @@ async def auth_middleware(request, handler):
 # --- Routes ---
 
 async def handle_health(request):
-    return web.json_response({"ok": True, "service": "stock-bot", "version": "2.1"})
+    return web.json_response({"ok": True, "service": "shorgan-bot", "version": "2.1"})
 
 async def handle_register(request):
     """Register new user, get API key"""
@@ -648,7 +648,7 @@ async def handle_register(request):
 
         # Send Telegram alert (async, non-blocking)
         asyncio.create_task(send_telegram_alert(
-            f"<b>New Stock-Bot User!</b>\n\n"
+            f"<b>New Shorgan-Bot User!</b>\n\n"
             f"Email: <code>{email}</code>\n"
             f"User ID: <code>{user.user_id}</code>\n"
             f"Time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}"
@@ -918,7 +918,7 @@ async def handle_landing(request):
     if index_file.exists():
         return web.FileResponse(index_file)
     # Fallback if no static file
-    return web.json_response({"ok": True, "service": "stock-bot", "version": "2.0", "docs": "/docs"})
+    return web.json_response({"ok": True, "service": "shorgan-bot", "version": "2.0", "docs": "/docs"})
 
 # =============================================================================
 # ADMIN DASHBOARD
@@ -1042,7 +1042,7 @@ def create_app():
 
 def main():
     print("=" * 50)
-    print("STOCK-BOT Hosted Server v2.1")
+    print("SHORGAN-BOT Hosted Server v2.1")
     print("=" * 50)
 
     if not init():

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock-Bot - AI Trading for Claude</title>
+    <title>Shorgan-Bot - AI Trading for Claude</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -223,14 +223,14 @@
 <body>
     <div class="container">
         <header>
-            <div class="logo">Stock-Bot</div>
+            <div class="logo">Shorgan-Bot</div>
             <p class="tagline">AI-Powered Trading for Claude Desktop</p>
         </header>
 
         <div class="card">
-            <h2>What is Stock-Bot?</h2>
+            <h2>What is Shorgan-Bot?</h2>
             <p style="color: #a0a0a0; line-height: 1.8;">
-                Stock-Bot connects your Alpaca brokerage account to Claude Desktop,
+                Shorgan-Bot connects your Alpaca brokerage account to Claude Desktop,
                 enabling AI-assisted trading with two proven strategies. Just chat with
                 Claude to check your portfolio, get recommendations, or execute trades.
             </p>
@@ -292,7 +292,7 @@
 <span class="comment">// Add to your config file:</span>
 {
   <span class="key">"mcpServers"</span>: {
-    <span class="key">"stock-bot"</span>: {
+    <span class="key">"shorgan-bot"</span>: {
       <span class="key">"url"</span>: <span class="string">"<span id="serverUrl">https://your-server.com</span>/mcp"</span>,
       <span class="key">"headers"</span>: {
         <span class="key">"Authorization"</span>: <span class="string">"Bearer <span id="configApiKey">YOUR_API_KEY</span>"</span>
@@ -367,7 +367,7 @@
             </div>
 
             <div class="warning">
-                <strong>Disclaimer:</strong> Stock-Bot is for educational purposes.
+                <strong>Disclaimer:</strong> Shorgan-Bot is for educational purposes.
                 Trading involves risk of loss. Start with paper trading.
                 Not financial advice.
             </div>
@@ -429,7 +429,7 @@
             const apiKey = document.getElementById('configApiKey').textContent;
             const config = {
                 mcpServers: {
-                    "stock-bot": {
+                    "shorgan-bot": {
                         url: serverUrl + "/mcp",
                         headers: {
                             Authorization: "Bearer " + apiKey
