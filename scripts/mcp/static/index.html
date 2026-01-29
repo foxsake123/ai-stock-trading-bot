@@ -268,8 +268,9 @@
                         <h3>Register for an API Key</h3>
                         <p>Enter your email below to get your personal API key. This key authenticates your requests.</p>
 
-                        <form class="register-form" id="registerForm">
-                            <input type="email" id="email" placeholder="you@example.com" required>
+                        <form class="register-form" id="registerForm" style="flex-wrap: wrap;">
+                            <input type="email" id="email" placeholder="you@example.com" required style="flex: 2; min-width: 200px;">
+                            <input type="password" id="signupPassword" placeholder="Signup Password" style="flex: 1; min-width: 120px;">
                             <button type="submit" id="registerBtn">Get API Key</button>
                         </form>
 
@@ -389,6 +390,7 @@
             const btn = document.getElementById('registerBtn');
             const result = document.getElementById('result');
             const email = document.getElementById('email').value;
+            const password = document.getElementById('signupPassword').value;
 
             btn.disabled = true;
             btn.textContent = 'Registering...';
@@ -397,7 +399,7 @@
                 const response = await fetch('/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
+                    body: JSON.stringify({ email, password })
                 });
 
                 const data = await response.json();

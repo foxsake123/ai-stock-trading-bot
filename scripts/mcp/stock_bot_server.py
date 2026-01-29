@@ -88,6 +88,9 @@ class Config:
     TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
+    # Signup password protection (optional - leave blank to disable)
+    SIGNUP_PASSWORD = os.environ.get("SIGNUP_PASSWORD", "")
+
     @classmethod
     def validate(cls):
         errors = []
@@ -628,8 +631,14 @@ async def handle_register(request):
     try:
         data = await request.json()
         email = data.get("email")
+        password = data.get("password", "")
+
         if not email:
             return web.json_response({"ok": False, "error": "Email required"}, status=400)
+
+        # Check signup password if configured
+        if Config.SIGNUP_PASSWORD and password != Config.SIGNUP_PASSWORD:
+            return web.json_response({"ok": False, "error": "Invalid signup password"}, status=401)
 
         user, api_key = await user_store.create_user(email)
 
