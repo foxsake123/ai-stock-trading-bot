@@ -1,3 +1,4 @@
 # Railway Procfile - AI Trading Bot
-# Always-on scheduler service (worker = no HTTP health checks)
-worker: python railway_scheduler.py
+# trading-bot: Always-on scheduler service (worker = no HTTP health checks)
+# stock-bot: Uses RAILWAY_START_COMMAND from service variables
+worker: bash start.sh

@@ -1,0 +1,12 @@
+# Nixpacks configuration for Railway
+# Default is to use the start command from environment or Procfile
+
+[phases.setup]
+nixPkgs = ["python311"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[start]
+# This will be overridden by RAILWAY_START_COMMAND if set
+cmd = "python railway_scheduler.py"
