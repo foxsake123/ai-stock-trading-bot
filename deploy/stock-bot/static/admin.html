@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock-Bot Admin Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #00d4ff; margin-bottom: 20px; }
+
+        .login-form {
+            background: #161b22;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            margin: 100px auto;
+        }
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            background: #0d1117;
+            color: #fff;
+        }
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .dashboard { display: none; }
+        .dashboard.active { display: block; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+        }
+        .stat-card h3 { color: #8b949e; font-size: 0.9rem; margin-bottom: 5px; }
+        .stat-card .value { font-size: 2rem; font-weight: 700; color: #00d4ff; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #161b22;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #30363d;
+        }
+        th { background: #21262d; color: #8b949e; font-weight: 600; }
+        tr:hover { background: #21262d; }
+
+        .positive { color: #3fb950; }
+        .negative { color: #f85149; }
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        .badge.paper { background: rgba(0,212,255,0.2); color: #00d4ff; }
+        .badge.live { background: rgba(255,136,0,0.2); color: #ff8800; }
+
+        .refresh-btn {
+            padding: 10px 20px;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .refresh-btn:hover { background: #30363d; }
+
+        .error { color: #f85149; }
+        .loading { color: #8b949e; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-form" id="loginForm">
+            <h2 style="margin-bottom: 20px; color: #00d4ff;">Admin Login</h2>
+            <input type="password" id="password" placeholder="Admin Password">
+            <button onclick="login()">Login</button>
+            <p id="loginError" class="error" style="margin-top: 10px;"></p>
+        </div>
+
+        <div class="dashboard" id="dashboard">
+            <h1>Stock-Bot Admin Dashboard</h1>
+            <button class="refresh-btn" onclick="loadData()">Refresh Data</button>
+
+            <div class="stats" id="stats">
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <div class="value" id="totalUsers">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Connected Accounts</h3>
+                    <div class="value" id="totalAccounts">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Paper Accounts</h3>
+                    <div class="value" id="paperAccounts">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Live Accounts</h3>
+                    <div class="value" id="liveAccounts">-</div>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 15px;">Registered Users</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Email</th>
+                        <th>Registered</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTable">
+                    <tr><td colspan="3" class="loading">Loading...</td></tr>
+                </tbody>
+            </table>
+
+            <h2 style="margin-bottom: 15px;">Portfolio Performance</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Account</th>
+                        <th>User</th>
+                        <th>Type</th>
+                        <th>Value</th>
+                        <th>Cash</th>
+                        <th>Positions</th>
+                        <th>P&L</th>
+                    </tr>
+                </thead>
+                <tbody id="portfoliosTable">
+                    <tr><td colspan="7" class="loading">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let adminPassword = '';
+
+        function login() {
+            adminPassword = document.getElementById('password').value;
+            loadData();
+        }
+
+        async function loadData() {
+            try {
+                const response = await fetch(`/admin/data?password=${encodeURIComponent(adminPassword)}`);
+                const data = await response.json();
+
+                if (!data.ok) {
+                    document.getElementById('loginError').textContent = data.error;
+                    return;
+                }
+
+                // Show dashboard
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+
+                // Update stats
+                document.getElementById('totalUsers').textContent = data.stats.total_users;
+                document.getElementById('totalAccounts').textContent = data.stats.total_accounts;
+                document.getElementById('paperAccounts').textContent = data.stats.paper_accounts;
+                document.getElementById('liveAccounts').textContent = data.stats.live_accounts;
+
+                // Update users table
+                const usersTable = document.getElementById('usersTable');
+                if (data.users.length === 0) {
+                    usersTable.innerHTML = '<tr><td colspan="3">No users yet</td></tr>';
+                } else {
+                    usersTable.innerHTML = data.users.map(u => `
+                        <tr>
+                            <td><code>${u.user_id}</code></td>
+                            <td>${u.email}</td>
+                            <td>${new Date(u.created).toLocaleString()}</td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Update portfolios table
+                const portfoliosTable = document.getElementById('portfoliosTable');
+                if (data.portfolios.length === 0) {
+                    portfoliosTable.innerHTML = '<tr><td colspan="7">No connected accounts yet</td></tr>';
+                } else {
+                    portfoliosTable.innerHTML = data.portfolios.map(p => {
+                        if (p.error) {
+                            return `<tr><td>${p.account_id}</td><td>${p.user_id}</td><td colspan="5" class="error">${p.error}</td></tr>`;
+                        }
+                        const pnlClass = p.pnl >= 0 ? 'positive' : 'negative';
+                        const pnlStr = p.pnl !== null ? `<span class="${pnlClass}">$${p.pnl.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>` : '-';
+                        return `
+                            <tr>
+                                <td><code>${p.nickname || p.account_id}</code></td>
+                                <td>${p.user_id}</td>
+                                <td><span class="badge ${p.paper ? 'paper' : 'live'}">${p.paper ? 'Paper' : 'LIVE'}</span></td>
+                                <td>$${p.value.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                                <td>$${p.cash.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                                <td>${p.positions}</td>
+                                <td>${pnlStr}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            } catch (err) {
+                document.getElementById('loginError').textContent = 'Connection error: ' + err.message;
+            }
+        }
+
+        // Check for stored password
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+</body>
+</html>

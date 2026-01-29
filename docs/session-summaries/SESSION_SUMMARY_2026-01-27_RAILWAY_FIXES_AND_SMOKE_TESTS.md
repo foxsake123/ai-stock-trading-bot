@@ -1,9 +1,9 @@
 # Session Summary - January 27, 2026
-## Railway CircuitBreaker Fix + Smoke Tests + Parser Fix + Refactoring
+## Railway CircuitBreaker Fix + Smoke Tests + Parser Fix + Refactoring + Pipeline Verification
 
 **Date**: Monday, January 27, 2026
-**Duration**: ~2 hours
-**Focus**: Fix Railway crash (CircuitBreaker API mismatch), add smoke tests, fix parser, refactor core files
+**Duration**: ~3 hours
+**Focus**: Fix Railway crash (CircuitBreaker API mismatch), add smoke tests, fix parser, refactor core files, full pipeline verification for Jan 28
 
 ---
 
@@ -52,12 +52,34 @@
   - `test_record_failure_requires_exception` - verifies signature
   - `test_record_failure_without_args_raises` - catches misuse
 
-### 5. Research & Trade Generation for Jan 28
+### 5. Dead API Key Priority Fix
+- **Problem**: `generate_todays_trades_v2.py` used `os.environ.get('ALPACA_API_KEY') or os.environ.get('ALPACA_API_KEY_DEE')` — the dead key `PKOWM6VC...` is non-None so the working `ALPACA_API_KEY_DEE` was never reached
+- **Fix**: Swapped order to prefer `ALPACA_API_KEY_DEE` over `ALPACA_API_KEY`
+- **Impact**: DEE-BOT Paper would have failed validation on Railway without this fix
+
+### 6. Full 9-Step Pipeline Verification
+Verified every link in the automation chain for Jan 28:
+
+| Step | Check | Result |
+|------|-------|--------|
+| 1 | Main module imports | 4/4 `main()` functions resolve |
+| 2 | Environment variables | 10/10 API keys present |
+| 3 | Research files for Jan 28 | 3/3 files staged |
+| 4 | Parser extraction | DEE: 9, SHORGAN Paper: 21, SHORGAN Live: 6 |
+| 5 | Validation agents | `AutomatedTradeGeneratorV2` initializes |
+| 6 | Trade executor | All 3 Alpaca clients initialize |
+| 7 | Alpaca connectivity | 3/3 accounts accessible |
+| 8 | Executor dry-run | DEE, SHORGAN Paper, SHORGAN Live all OK |
+| 9 | Railway deployment | Redeployed with all fixes |
+
+- **Verdict**: All systems go for Jan 28 automated trading
+
+### 7. Research & Trade Generation for Jan 28
 - Research generated for all 3 bots (DEE-BOT: 9 trades, SHORGAN Paper: 21 trades, SHORGAN Live: 6 trades)
 - Trade files generated: `docs/TODAYS_TRADES_2026-01-28*.md`
 - No trades executed today (research was generated for tomorrow's market)
 
-### 6. Code Refactoring (5 files, -93 net lines)
+### 8. Code Refactoring (5 files, -93 net lines)
 Ran code-refactorer agent across core files. All behavior preserved, 23 smoke + 20 parser tests pass.
 
 | File | Refactoring | Lines Saved |
@@ -79,6 +101,7 @@ Ran code-refactorer agent across core files. All behavior preserved, 23 smoke + 
 | Parser `#{1,2}` misses `### ORDER BLOCKS` | HIGH | Fixed |
 | Parser misses plain text (non-code-fenced) trade blocks | HIGH | Fixed |
 | `generate_todays_trades_v2.py` missing `main()` | HIGH | Fixed |
+| Dead `ALPACA_API_KEY` takes priority over working `ALPACA_API_KEY_DEE` | HIGH | Fixed |
 
 ---
 
@@ -91,6 +114,8 @@ Ran code-refactorer agent across core files. All behavior preserved, 23 smoke + 
 | e3051e4 | feat: add Railway scheduler smoke tests + fix missing main() |
 | 83be7a6 | docs: update session summary with SHORGAN tightening details |
 | b57eb7e | refactor: reduce duplication across 5 core files |
+| 9bc6165 | docs: final session summary with refactoring details |
+| a998711 | fix: prefer ALPACA_API_KEY_DEE over dead ALPACA_API_KEY |
 
 All pushed to origin/master and deployed to Railway.
 
@@ -102,7 +127,7 @@ All pushed to origin/master and deployed to Railway.
 |------|--------|
 | `railway_scheduler.py` | Fixed CircuitBreaker API + refactored to `run_scheduled_task()` |
 | `scripts/automation/report_parser.py` | `#{1,3}` heading + plain text fallback + `_extract_price()` |
-| `scripts/automation/generate_todays_trades_v2.py` | Added `main()` + `_make_rejection()` + dict lookups |
+| `scripts/automation/generate_todays_trades_v2.py` | Added `main()` + `_make_rejection()` + dict lookups + API key priority fix |
 | `scripts/automation/execute_daily_trades.py` | `LiveAccountSettings` dataclass + unified methods |
 | `scripts/core/health_monitor.py` | `_record_completion()` consolidation |
 | `tests/test_railway_scheduler_smoke.py` | 23 smoke tests (NEW) |
