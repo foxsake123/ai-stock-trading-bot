@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-SHORGAN-BOT MCP Server - Hosted Web Service Version
+shorgan-bot MCP Server - Hosted Web Service Version
 ==================================================
 
 A hosted MCP server that allows multiple users to connect their
@@ -648,7 +648,7 @@ async def handle_register(request):
 
         # Send Telegram alert (async, non-blocking)
         asyncio.create_task(send_telegram_alert(
-            f"<b>New Shorgan-Bot User!</b>\n\n"
+            f"<b>New shorgan-bot User!</b>\n\n"
             f"Email: <code>{email}</code>\n"
             f"User ID: <code>{user.user_id}</code>\n"
             f"Time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}"
@@ -1042,7 +1042,7 @@ def create_app():
 
 def main():
     print("=" * 50)
-    print("SHORGAN-BOT Hosted Server v2.1")
+    print("shorgan-bot Hosted Server v2.1")
     print("=" * 50)
 
     if not init():

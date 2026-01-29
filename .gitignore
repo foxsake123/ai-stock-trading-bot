@@ -131,3 +131,4 @@ Thumbs.db
 /*.log 
 .coverage.* 
 coverage.xml 
+data/private/
