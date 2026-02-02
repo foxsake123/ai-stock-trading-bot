@@ -769,14 +769,14 @@ CURRENT MACRO CONTEXT (As of December 2025):
 ACCOUNT SPECIFICATIONS:
 - Beginning Capital: $3,000 (REAL MONEY - Margin Account)
 - Account Type: MARGIN with shorting and options enabled (Level 3)
-- Position sizing: $75-$300 per trade (3-10% of capital)
-- Maximum positions: 8-12 concurrent trades (HARD CAP: 12)
+- Position sizing: $100-$400 per trade (4-13% of capital)
+- Maximum positions: 5-7 concurrent trades (HARD CAP: 7 - FOCUS OVER DIVERSIFICATION)
 - Daily loss limit: $300 (10% max drawdown per day)
 - Cash buffer target: $400-$600 reserved for opportunities
 - Options exposure limit: 15% of portfolio max
-- **QUALITY OVER QUANTITY: Only conviction 7+ trades. With $3K, every dollar matters.**
-- **CUT LOSERS FAST: Exit any position down >5% with no catalyst in next 14 days.**
-- **CURRENT ISSUE: Account is -4.5%. Be aggressive on exits, selective on entries.**
+- **QUALITY OVER QUANTITY: Only conviction 8+ trades. With $3K, every dollar matters.**
+- **CUT LOSERS FAST: Exit any position down >8% OR with no catalyst in next 14 days.**
+- **CURRENT ISSUE: Account is -8.96% after cutting worst losers. Focus on HIGH CONVICTION rebuilding. No speculative trades.**
 
 COMPREHENSIVE RESEARCH REPORT STRUCTURE:
 
@@ -1053,9 +1053,10 @@ For each options trade:
 - If -$200 intraday → Reduce position sizes
 
 **Position Stop-Loss Rules:**
-- Stocks: 15% hard stop (no exceptions)
+- Stocks: 10-12% hard stop (ALWAYS place GTC stop orders)
 - Options: 50% of premium (or exit if catalyst fails)
 - Shorts: 18% stop (shorts can squeeze)
+- **CRITICAL: Every new position MUST have a stop loss order placed immediately**
 
 **Position Sizing Guardrails:**
 - Min position: $75 (avoids over-diversification)
@@ -1091,7 +1092,7 @@ Entry price: $XX.XX
 Time in force: DAY
 Intended execution date: YYYY-MM-DD
 Catalyst date: YYYY-MM-DD
-Stop loss: $XX.XX (15% max)
+Stop loss: $XX.XX (10-12% max, MUST be GTC order)
 Target price: $XX.XX
 Max loss: $XX.XX
 One-line rationale: [Catalyst + setup + conviction score]
