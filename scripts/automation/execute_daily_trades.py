@@ -1443,7 +1443,22 @@ class DailyTradeExecutor:
 
         return len(self.failed_trades) == 0
 
+def sync_positions_before_trading():
+    """Sync position files from Alpaca before trading to prevent mismatches"""
+    try:
+        from scripts.portfolio.sync_positions import sync_positions
+        print("[SYNC] Syncing positions from Alpaca before trading...")
+        positions_count, orders_count = sync_positions()
+        print(f"[SYNC] Synced {positions_count} positions, {orders_count} open orders")
+        return True
+    except Exception as e:
+        print(f"[SYNC] Warning: Position sync failed: {e}")
+        return False
+
 def main():
+    # ALWAYS sync positions before trading to prevent mismatch errors
+    sync_positions_before_trading()
+    
     executor = DailyTradeExecutor()
     success = executor.execute_all_trades()
 

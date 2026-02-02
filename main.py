@@ -11,13 +11,13 @@ import json
 # Import Financial Datasets integration instead of yfinance
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), 'scripts-and-data', 'automation'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'scripts', 'automation'))
 from financial_datasets_integration import FinancialDatasetsAPI
 
 # Import communication components
-from communication.message_bus import MessageBus
+from src.agents.communication.message_bus import MessageBus
 from src.agents.communication.coordinator import Coordinator
-from communication.protocols import AgentMessage
+from src.agents.communication.protocols import AgentMessage
 
 # Import all agents
 from src.agents.fundamental_analyst import FundamentalAnalystAgent
