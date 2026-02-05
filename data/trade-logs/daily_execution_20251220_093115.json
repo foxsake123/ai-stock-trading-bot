@@ -1,0 +1,290 @@
+{
+  "execution_time": "2025-12-20T09:31:15.337205",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-20.md",
+  "executed_trades": [
+    {
+      "symbol": "T",
+      "shares": 50,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 24.2,
+      "order_id": "fdeaa986-2e23-4ce9-948c-05a10f6b38eb",
+      "timestamp": "2025-12-20T09:30:09.065863",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "BMY",
+      "shares": 20,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 54.2,
+      "order_id": "57bc3879-4cde-4d22-8700-3229924156cc",
+      "timestamp": "2025-12-20T09:30:10.599854",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 101.45,
+      "order_id": "817d6df3-fb65-48c4-93fd-e0d3e98a5011",
+      "timestamp": "2025-12-20T09:30:12.312418",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 37.33,
+      "order_id": "d66311a2-5378-45bf-96c8-d27469859868",
+      "timestamp": "2025-12-20T09:30:14.901783",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ABBV",
+      "shares": 15,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 227.0,
+      "order_id": "3a10e161-e9fa-4db9-95da-962a17450e8f",
+      "timestamp": "2025-12-20T09:30:18.100786",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 60,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 54.88,
+      "order_id": "7ec44ebd-a05e-405d-82b8-08f92d7d4a9a",
+      "timestamp": "2025-12-20T09:30:20.410699",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "NEE",
+      "shares": 40,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 80.93,
+      "order_id": "55702b36-fabe-4e22-a6c1-096acd8f8595",
+      "timestamp": "2025-12-20T09:30:24.963243",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "SO",
+      "shares": 30,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 86.51,
+      "order_id": "5c9728ef-077d-452b-93a7-a72dbc1481a8",
+      "timestamp": "2025-12-20T09:30:27.212879",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ROKU",
+      "shares": 2,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 111.5,
+      "order_id": "3922f9f9-e66d-4318-9bbb-220f777a111c",
+      "timestamp": "2025-12-20T09:30:44.149992",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "UPST",
+      "shares": 5,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 49.25,
+      "order_id": "817ece4f-f31c-4522-9e61-59b273848e51",
+      "timestamp": "2025-12-20T09:30:45.818506",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SNAP",
+      "shares": 38,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 7.55,
+      "order_id": "6fb5a9c9-4d79-4479-b534-cba27ac8a0ab",
+      "timestamp": "2025-12-20T09:30:47.129819",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "CHWY",
+      "shares": 8,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 32.75,
+      "order_id": "25cd3bf1-8b3b-4875-b62c-7b705a14261d",
+      "timestamp": "2025-12-20T09:30:48.429236",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-20T09:30:28.279024"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-20T09:30:29.349459"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-20T09:30:30.408210"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-20T09:30:31.657909"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-20T09:30:32.750388"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 6,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-20T09:30:35.895241"
+    },
+    {
+      "symbol": "CRDO",
+      "shares": 7,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $1050.07 exceeds 10.0% limit ($300.00)",
+      "timestamp": "2025-12-20T09:30:42.307908"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $3404.40, have $401.52",
+      "timestamp": "2025-12-20T09:30:50.279383"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 10,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-20T09:30:52.020589"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-20T09:30:59.884789"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-20T09:31:01.042258"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-20T09:31:02.121055"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-20T09:31:03.243711"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-20T09:31:04.319981"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 6,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-20T09:31:06.465277"
+    },
+    {
+      "symbol": "CRDO",
+      "shares": 7,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $1050.07, have $401.52",
+      "timestamp": "2025-12-20T09:31:07.621660"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $3404.40, have $401.52",
+      "timestamp": "2025-12-20T09:31:08.687799"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 10,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-20T09:31:10.157292"
+    }
+  ]
+}

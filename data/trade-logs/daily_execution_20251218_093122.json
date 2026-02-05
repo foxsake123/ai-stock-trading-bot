@@ -1,0 +1,360 @@
+{
+  "execution_time": "2025-12-18T09:31:22.583138",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-18.md",
+  "executed_trades": [
+    {
+      "symbol": "GOOGL",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 299.5,
+      "order_id": "7a00fd25-fe00-4398-9111-caabf15d6776",
+      "timestamp": "2025-12-18T09:30:19.980271",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 15,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 98.5,
+      "order_id": "bb9e8776-4559-40d8-8bcb-d50b1fd8b4fd",
+      "timestamp": "2025-12-18T09:30:23.411518",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 25,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 148.3,
+      "order_id": "4aa00202-ab75-4374-9c58-9e57f9f3293e",
+      "timestamp": "2025-12-18T09:30:24.878596",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 25.22,
+      "order_id": "652ff5d0-e497-47b4-898c-ba4aaf7a29e4",
+      "timestamp": "2025-12-18T09:30:26.127764",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 11,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 25.12,
+      "order_id": "974dbd28-b15a-49ec-87ad-fb58e81eb26b",
+      "timestamp": "2025-12-18T09:30:38.980610",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "PRTA",
+      "shares": 29,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 9.75,
+      "order_id": "17d24d06-ea8f-4de8-83fb-145bb6d4e93f",
+      "timestamp": "2025-12-18T09:30:40.304075",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DNLI",
+      "shares": 17,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 16.85,
+      "order_id": "b4c0877c-ac55-401d-9bcf-e8e96d0bf3d2",
+      "timestamp": "2025-12-18T09:30:42.743709",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "BCRX",
+      "shares": 38,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 7.5,
+      "order_id": "1ab1c01d-d197-4aab-8a31-6f7ed752d745",
+      "timestamp": "2025-12-18T09:30:43.927755",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "IMVT",
+      "shares": 10,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 26.8,
+      "order_id": "730a01b0-8208-457d-8325-9d45cd507e92",
+      "timestamp": "2025-12-18T09:30:45.081717",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "FDX",
+      "shares": 1,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 286.0,
+      "order_id": "334e2da2-38ad-4e86-8c06-6f3a5d736887",
+      "timestamp": "2025-12-18T09:30:46.383333",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "NKE",
+      "shares": 3,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 78.5,
+      "order_id": "e3e65a4c-6859-431e-aeb9-b3412dc7f4e7",
+      "timestamp": "2025-12-18T09:30:47.626971",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "XOM",
+      "shares": 2,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 119.0,
+      "order_id": "69137dc7-979a-4bfe-bcac-6eb5928c5ee2",
+      "timestamp": "2025-12-18T09:30:48.938338",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "T",
+      "shares": 150,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 150 but only have 50.0",
+      "timestamp": "2025-12-18T09:30:21.113945"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 20,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 20 but only have 15.0",
+      "timestamp": "2025-12-18T09:30:22.248884"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:30:27.525625"
+    },
+    {
+      "symbol": "RGTI",
+      "shares": 11,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:30:28.661851"
+    },
+    {
+      "symbol": "QSI",
+      "shares": 228,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:30:29.746442"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:30:30.964954"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:30:32.213387"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:30:33.379197"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:30:34.469049"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 10 but only have 6.0",
+      "timestamp": "2025-12-18T09:30:36.657870"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:30:37.743885"
+    },
+    {
+      "symbol": "MU",
+      "shares": 3,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $772.38 exceeds 10.0% limit ($300.00)",
+      "timestamp": "2025-12-18T09:30:41.560921"
+    },
+    {
+      "symbol": "MU",
+      "shares": 82,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $21111.72, have $790.80",
+      "timestamp": "2025-12-18T09:30:50.214015"
+    },
+    {
+      "symbol": "MU",
+      "shares": 161,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $41451.06, have $791.00",
+      "timestamp": "2025-12-18T09:30:51.344555"
+    },
+    {
+      "symbol": "T",
+      "shares": 150,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 150 but only have 50.0",
+      "timestamp": "2025-12-18T09:30:57.602437"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 20,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 20 but only have 15.0",
+      "timestamp": "2025-12-18T09:30:58.732402"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:30:59.811911"
+    },
+    {
+      "symbol": "RGTI",
+      "shares": 11,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:31:00.910785"
+    },
+    {
+      "symbol": "QSI",
+      "shares": 228,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:31:02.000263"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:31:03.147165"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:31:04.259265"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:31:05.403378"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:31:06.499887"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 10 but only have 6.0",
+      "timestamp": "2025-12-18T09:31:08.867660"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T09:31:10.014524"
+    },
+    {
+      "symbol": "MU",
+      "shares": 3,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $763.86 exceeds 10.0% limit ($300.00)",
+      "timestamp": "2025-12-18T09:31:11.196864"
+    },
+    {
+      "symbol": "MU",
+      "shares": 82,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $20878.84, have $794.18",
+      "timestamp": "2025-12-18T09:31:12.288294"
+    },
+    {
+      "symbol": "MU",
+      "shares": 161,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $40993.82, have $793.44",
+      "timestamp": "2025-12-18T09:31:13.387827"
+    }
+  ]
+}

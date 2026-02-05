@@ -1,0 +1,274 @@
+{
+  "execution_time": "2026-01-31T09:31:03.662772",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-31.md",
+  "executed_trades": [
+    {
+      "symbol": "PEP",
+      "shares": 15,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 150.3,
+      "order_id": "9e3f6906-1e8e-4ae2-a838-13edefa8b077",
+      "timestamp": "2026-01-31T09:30:13.832546",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 400,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 12.74,
+      "order_id": "967ccc4b-3f4b-4c28-a11c-1026d0551539",
+      "timestamp": "2026-01-31T09:30:15.122515",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "COIN",
+      "shares": 40,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 192.4,
+      "order_id": "c26d53cc-a491-495d-9eb5-84116e34d81d",
+      "timestamp": "2026-01-31T09:30:16.296591",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SOUN",
+      "shares": 400,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 8.57,
+      "order_id": "55f7783b-6c2d-4a47-9b59-e8995f84ff0b",
+      "timestamp": "2026-01-31T09:30:17.472059",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 140,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 52.85,
+      "order_id": "9a1db86b-b237-45c5-a093-1c9b2acb4da7",
+      "timestamp": "2026-01-31T09:30:18.653220",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "PYPL",
+      "shares": 120,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 52.23,
+      "order_id": "2328903c-a450-49c2-9119-3cc4630fcfa3",
+      "timestamp": "2026-01-31T09:30:19.823578",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 150,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 22.83,
+      "order_id": "61fff655-9069-4b55-b0ee-a7a3d776c457",
+      "timestamp": "2026-01-31T09:30:27.769199",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "STLA",
+      "shares": 400,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 9.79,
+      "order_id": "d109e144-7df7-4ca5-85aa-f7d458d0d1a9",
+      "timestamp": "2026-01-31T09:30:28.943995",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 15,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 256.0,
+      "order_id": "ac6c18e1-9f06-4d6e-8c3b-4018f00d667a",
+      "timestamp": "2026-01-31T09:30:30.099236",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "AMZN",
+      "shares": 40,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 243.0,
+      "order_id": "2924e92c-d44f-4058-8007-800dbb5cf7db",
+      "timestamp": "2026-01-31T09:30:32.528921",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "MA",
+      "shares": 16,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 587.0,
+      "order_id": "d93005f4-2c9c-434b-a7fd-3842a4ba18ea",
+      "timestamp": "2026-01-31T09:30:33.689648",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 80,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 121.5,
+      "order_id": "aad8a267-5b46-478f-b4cf-1eab6b6bb0ce",
+      "timestamp": "2026-01-31T09:30:34.854054",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-01-31T09:30:07.288828"
+    },
+    {
+      "symbol": "V",
+      "shares": 14,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 14, available: 0)",
+      "timestamp": "2026-01-31T09:30:11.511391"
+    },
+    {
+      "symbol": "VZ",
+      "shares": 150,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $5485.16, need $6678.00",
+      "timestamp": "2026-01-31T09:30:12.683737"
+    },
+    {
+      "symbol": "ABNB",
+      "shares": 40,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: ABNB purchased on 2026-01-29 has not settled. Wait 0 more days (settles 2026-01-31).",
+      "timestamp": "2026-01-31T09:30:20.962065"
+    },
+    {
+      "symbol": "CRSP",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-01-31T09:30:25.361856"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 75,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-31T09:30:26.576443"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-31T09:30:31.378430"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-01-31T09:30:45.258587"
+    },
+    {
+      "symbol": "V",
+      "shares": 14,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 14, available: 0)",
+      "timestamp": "2026-01-31T09:30:49.511516"
+    },
+    {
+      "symbol": "VZ",
+      "shares": 150,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $5485.16, need $6678.00",
+      "timestamp": "2026-01-31T09:30:50.619114"
+    },
+    {
+      "symbol": "ABNB",
+      "shares": 40,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: ABNB purchased on 2026-01-29 has not settled. Wait 0 more days (settles 2026-01-31).",
+      "timestamp": "2026-01-31T09:30:51.738591"
+    },
+    {
+      "symbol": "CRSP",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-01-31T09:30:55.844428"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 75,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-31T09:30:56.916768"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-31T09:30:58.005496"
+    }
+  ]
+}

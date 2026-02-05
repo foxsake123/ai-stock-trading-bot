@@ -1,0 +1,196 @@
+{
+  "execution_time": "2025-12-03T06:32:45.340868",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-03.md",
+  "executed_trades": [
+    {
+      "symbol": "AAPL",
+      "shares": 12,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 280.0,
+      "order_id": "1e3e8e1a-aae7-48cb-8aea-65cda48fd768",
+      "timestamp": "2025-12-03T06:32:17.463711",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "BMY",
+      "shares": 50,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 47.5,
+      "order_id": "c41fa86b-207e-4378-b720-16b8e3bb61ef",
+      "timestamp": "2025-12-03T06:32:18.591539",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "GILD",
+      "shares": 40,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 122.0,
+      "order_id": "fc0cc377-f406-4033-b114-ed81846fa7e6",
+      "timestamp": "2025-12-03T06:32:19.718694",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 30,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 148.0,
+      "order_id": "b5c8ed03-0ad4-425e-ba00-ffb898ef2713",
+      "timestamp": "2025-12-03T06:32:20.841388",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "T",
+      "shares": 200,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 24.25,
+      "order_id": "d0eb0bd5-da78-4617-8c10-bce3e9d47ffc",
+      "timestamp": "2025-12-03T06:32:23.091180",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "SRRK",
+      "shares": 6,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 41.5,
+      "order_id": "c7078bcb-cd47-4f44-9a55-8e64525090b4",
+      "timestamp": "2025-12-03T06:32:27.471578",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "SAVA",
+      "shares": 100,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 2.9,
+      "order_id": "30cd92eb-acd2-405a-855d-6e542f4e03d5",
+      "timestamp": "2025-12-03T06:32:28.582471",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 12,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 23.5,
+      "order_id": "4ca5684a-0834-4a3d-88ee-f7db40cc3406",
+      "timestamp": "2025-12-03T06:32:29.699820",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "OPEN",
+      "shares": 40,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 7.1,
+      "order_id": "97a675f0-2463-40c4-a94f-68451a414db6",
+      "timestamp": "2025-12-03T06:32:30.816431",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 16,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 17.5,
+      "order_id": "f106aad1-d125-41e4-b019-bd06ddd4380a",
+      "timestamp": "2025-12-03T06:32:32.947931",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 8,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 33.5,
+      "order_id": "783dfd3f-5566-4af4-a236-03d4905c63f7",
+      "timestamp": "2025-12-03T06:32:34.066613",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "SO",
+      "shares": 110,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $9793.85 exceeds 8.0% limit ($8289.17)",
+      "timestamp": "2025-12-03T06:32:21.969328"
+    },
+    {
+      "symbol": "HIMS",
+      "shares": 8,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-03T06:32:24.156761"
+    },
+    {
+      "symbol": "MFIC",
+      "shares": 24,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-03T06:32:25.223065"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-03T06:32:26.282539"
+    },
+    {
+      "symbol": "SO",
+      "shares": 110,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $9793.85 exceeds 8.0% limit ($8289.17)",
+      "timestamp": "2025-12-03T06:32:40.144947"
+    },
+    {
+      "symbol": "HIMS",
+      "shares": 8,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-03T06:32:41.214173"
+    },
+    {
+      "symbol": "MFIC",
+      "shares": 24,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-03T06:32:42.280949"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-03T06:32:43.339506"
+    }
+  ]
+}

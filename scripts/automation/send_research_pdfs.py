@@ -78,6 +78,11 @@ def find_research_pdfs(date, bot=None):
         if shorgan_pdf.exists():
             pdfs.append(('SHORGAN-BOT', shorgan_pdf))
 
+    if bot is None or bot == 'live':
+        live_pdf = base_path / f"claude_research_shorgan_bot_live_{date}.pdf"
+        if live_pdf.exists():
+            pdfs.append(('SHORGAN-BOT-LIVE', live_pdf))
+
     return pdfs
 
 
@@ -85,7 +90,7 @@ def main():
     """Main function"""
     parser = argparse.ArgumentParser(description='Send research PDFs via Telegram')
     parser.add_argument('--date', type=str, help='Date for research (YYYY-MM-DD)', default=None)
-    parser.add_argument('--bot', type=str, choices=['dee', 'shorgan'], help='Specific bot (dee or shorgan)', default=None)
+    parser.add_argument('--bot', type=str, choices=['dee', 'shorgan', 'live'], help='Specific bot (dee, shorgan, or live)', default=None)
     args = parser.parse_args()
 
     # Get date (tomorrow's trading date by default)

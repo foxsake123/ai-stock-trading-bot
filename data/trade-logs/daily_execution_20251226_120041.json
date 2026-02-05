@@ -1,0 +1,318 @@
+{
+  "execution_time": "2025-12-26T12:00:41.357206",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-26.md",
+  "executed_trades": [
+    {
+      "symbol": "BAC",
+      "shares": 50,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 56.19,
+      "order_id": "4e82e25b-5ba1-4435-b26e-ac61a9ba871c",
+      "timestamp": "2025-12-26T11:59:03.769281",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 12,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 69.75,
+      "order_id": "10aa3118-79f9-4b7a-952f-506e0920dcf7",
+      "timestamp": "2025-12-26T11:59:36.965823",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 35,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 29.1,
+      "order_id": "fb00aa49-f6b4-4a10-81a5-1de59bae6c92",
+      "timestamp": "2025-12-26T11:59:38.275914",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "MFIC",
+      "shares": 770,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 11.44,
+      "order_id": "43cf8971-93a4-4658-b959-93892881daa3",
+      "timestamp": "2025-12-26T11:59:43.380760",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 150,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 47.5,
+      "order_id": "865bddf9-f778-49a5-ac94-2510787ec815",
+      "timestamp": "2025-12-26T11:59:46.229650",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 400,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 17.0,
+      "order_id": "362e1a67-efe2-4ae8-a974-089abd7913ac",
+      "timestamp": "2025-12-26T11:59:47.708564",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "XBI",
+      "shares": 70,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 94.5,
+      "order_id": "bf3c5c61-09cb-48e1-a220-3a3587268cd2",
+      "timestamp": "2025-12-26T11:59:49.211965",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 200,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 31.25,
+      "order_id": "c85ad6f2-0ef5-41d2-ba6f-bc0763466737",
+      "timestamp": "2025-12-26T11:59:50.527383",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "RGTI",
+      "shares": 250,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 23.5,
+      "order_id": "a6f0ff8f-ddae-42a0-a1cd-0ebdcfc984cd",
+      "timestamp": "2025-12-26T11:59:51.824918",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "AFRM",
+      "shares": 80,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 75.0,
+      "order_id": "257ae8e2-0e43-4cd9-a9a3-bf1800a2d21f",
+      "timestamp": "2025-12-26T11:59:53.146596",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "OXY",
+      "shares": 150,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 46.5,
+      "order_id": "e8c2e951-a97d-4f24-89b6-f6bfa453fedb",
+      "timestamp": "2025-12-26T11:59:54.451266",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 2,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 207.1,
+      "order_id": "631bf8a2-0c3d-4ba2-ad78-1399a06ebe46",
+      "timestamp": "2025-12-26T12:00:23.934583",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-26T11:59:06.127399"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $3353.10",
+      "timestamp": "2025-12-26T11:59:30.348891"
+    },
+    {
+      "symbol": "WFC",
+      "shares": 20,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $1902.10",
+      "timestamp": "2025-12-26T11:59:31.929041"
+    },
+    {
+      "symbol": "MDT",
+      "shares": 12,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $1154.88",
+      "timestamp": "2025-12-26T11:59:33.100463"
+    },
+    {
+      "symbol": "T",
+      "shares": 29,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $715.87",
+      "timestamp": "2025-12-26T11:59:34.364151"
+    },
+    {
+      "symbol": "ZM",
+      "shares": 300,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: ZM purchased on 2025-12-26 has not settled. Wait 1 more days (settles 2025-12-28).",
+      "timestamp": "2025-12-26T11:59:35.672037"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 15,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 15, available: 7)",
+      "timestamp": "2025-12-26T11:59:39.823317"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 2500,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: PLUG purchased on 2025-12-26 has not settled. Wait 1 more days (settles 2025-12-28).",
+      "timestamp": "2025-12-26T11:59:41.769323"
+    },
+    {
+      "symbol": "BYND",
+      "shares": 500,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: BYND purchased on 2025-12-26 has not settled. Wait 1 more days (settles 2025-12-28).",
+      "timestamp": "2025-12-26T11:59:44.667768"
+    },
+    {
+      "symbol": "XBI",
+      "shares": 2857,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $356753.59, have $126369.49",
+      "timestamp": "2025-12-26T11:59:55.620950"
+    },
+    {
+      "symbol": "XBI",
+      "shares": 6666,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $832383.42, have $126471.80",
+      "timestamp": "2025-12-26T11:59:56.794181"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-26T12:00:22.527868"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $3351.90",
+      "timestamp": "2025-12-26T12:00:25.122285"
+    },
+    {
+      "symbol": "WFC",
+      "shares": 20,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $1902.00",
+      "timestamp": "2025-12-26T12:00:26.331616"
+    },
+    {
+      "symbol": "MDT",
+      "shares": 12,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $1154.76",
+      "timestamp": "2025-12-26T12:00:27.477010"
+    },
+    {
+      "symbol": "T",
+      "shares": 29,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $715.28",
+      "timestamp": "2025-12-26T12:00:28.659976"
+    },
+    {
+      "symbol": "ZM",
+      "shares": 300,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: ZM purchased on 2025-12-26 has not settled. Wait 1 more days (settles 2025-12-28).",
+      "timestamp": "2025-12-26T12:00:29.854850"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 15,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 15, available: 7)",
+      "timestamp": "2025-12-26T12:00:31.211488"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 2500,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: PLUG purchased on 2025-12-26 has not settled. Wait 1 more days (settles 2025-12-28).",
+      "timestamp": "2025-12-26T12:00:32.447419"
+    },
+    {
+      "symbol": "BYND",
+      "shares": 500,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: BYND purchased on 2025-12-26 has not settled. Wait 1 more days (settles 2025-12-28).",
+      "timestamp": "2025-12-26T12:00:33.711857"
+    },
+    {
+      "symbol": "XBI",
+      "shares": 2857,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $356667.88, have $126471.80",
+      "timestamp": "2025-12-26T12:00:34.935480"
+    },
+    {
+      "symbol": "XBI",
+      "shares": 6666,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $832183.44, have $126471.80",
+      "timestamp": "2025-12-26T12:00:36.259262"
+    }
+  ]
+}

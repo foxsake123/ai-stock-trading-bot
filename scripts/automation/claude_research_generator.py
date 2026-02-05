@@ -767,16 +767,18 @@ CURRENT MACRO CONTEXT (As of December 2025):
 {DATE_INSTRUCTION}
 
 ACCOUNT SPECIFICATIONS:
-- Beginning Capital: $3,000 (REAL MONEY - Margin Account)
-- Account Type: MARGIN with shorting and options enabled (Level 3)
-- Position sizing: $100-$400 per trade (4-13% of capital)
+- Beginning Capital: $3,000 (REAL MONEY - Cash Account)
+- Account Type: CASH - NO MARGIN, NO SHORTING ALLOWED (Feb 2026 update)
+- **CRITICAL: Maximum position size is $300 (10% of capital) - HARD LIMIT**
+- Position sizing: $90-$300 per trade (3-10% of capital)
 - Maximum positions: 5-7 concurrent trades (HARD CAP: 7 - FOCUS OVER DIVERSIFICATION)
 - Daily loss limit: $300 (10% max drawdown per day)
 - Cash buffer target: $400-$600 reserved for opportunities
-- Options exposure limit: 15% of portfolio max
+- Options exposure limit: 15% of portfolio max (if enabled)
+- **CRITICAL: DO NOT recommend trades costing more than $300 - they will be rejected**
 - **QUALITY OVER QUANTITY: Only conviction 8+ trades. With $3K, every dollar matters.**
 - **CUT LOSERS FAST: Exit any position down >8% OR with no catalyst in next 14 days.**
-- **CURRENT ISSUE: Account is -8.96% after cutting worst losers. Focus on HIGH CONVICTION rebuilding. No speculative trades.**
+- **NO SHORTS: This is a CASH account - shorting is NOT available.**
 
 COMPREHENSIVE RESEARCH REPORT STRUCTURE:
 
@@ -1058,11 +1060,12 @@ For each options trade:
 - Shorts: 18% stop (shorts can squeeze)
 - **CRITICAL: Every new position MUST have a stop loss order placed immediately**
 
-**Position Sizing Guardrails:**
-- Min position: $75 (avoids over-diversification)
-- Max position: $300 (limits single-name risk)
-- Max single stock: 12% of portfolio
+**Position Sizing Guardrails (STRICT ENFORCEMENT):**
+- Min position: $90 (avoids over-diversification)
+- **Max position: $300 - ABSOLUTE LIMIT (any trade >$300 WILL BE REJECTED)**
+- Max single stock: 10% of portfolio
 - Max sector concentration: 30%
+- **IMPORTANT: Before recommending any BUY, verify: shares × price ≤ $300**
 
 **Cash Buffer Target**: $400-$600
 - Allows entry on unexpected opportunities
@@ -1099,20 +1102,9 @@ One-line rationale: [Catalyst + setup + conviction score]
 ```
 
 **For SHORT Trades:**
-```
-Action: sell_short, buy_to_cover
-Ticker: SYMBOL
-Shares: X (actual share count - keep small!)
-Total position value: $XXX.XX
-Entry price: $XX.XX (short entry)
-Time in force: DAY
-Intended execution date: YYYY-MM-DD
-Catalyst date: YYYY-MM-DD
-Stop loss: $XX.XX (18% max - tighter for shorts!)
-Cover target: $XX.XX
-Max loss: $XX.XX
-One-line rationale: [Bearish catalyst + technical breakdown + risk]
-```
+**NOTE: SHORGAN-LIVE is a CASH ACCOUNT - SHORTING IS NOT AVAILABLE**
+DO NOT recommend short trades for SHORGAN-LIVE. They will be rejected.
+If you see a bearish setup, recommend AVOIDING the stock or using put options instead.
 
 **For Options Trades:**
 ```
@@ -1129,13 +1121,16 @@ Target: +50% premium
 One-line rationale: [Binary catalyst + expected move + IV context]
 ```
 
-CRITICAL RULES FOR $3K ACCOUNT:
+CRITICAL RULES FOR $3K ACCOUNT (Feb 2026 Update):
 - This is REAL MONEY - every trade must have clear justification
+- **ABSOLUTE LIMIT: No single trade can cost more than $300**
 - Show EXACT share counts and dollar amounts
 - Every new buy must be funded by an exit (small account constraint)
+- **NO SHORTING: This is a cash account - no margin, no shorts**
 - Follow the conviction scorecard - only trade top-ranked ideas
 - Rules-based rebalancing - no emotional decisions
 - Risk management is PARAMOUNT - one bad trade = -10% account
+- **VERIFY: shares × limit_price ≤ $300 before recommending**
 - Use your full thinking budget for comprehensive analysis
 
 TOOL USAGE REQUIREMENTS:

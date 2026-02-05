@@ -1,0 +1,306 @@
+{
+  "execution_time": "2026-01-07T10:41:14.045683",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-07.md",
+  "executed_trades": [
+    {
+      "symbol": "PLUG",
+      "shares": 1000,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 2.46,
+      "order_id": "f170b9a6-f196-47ab-bfd3-5ca0517be84d",
+      "timestamp": "2026-01-07T10:40:30.950385",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "AMD",
+      "shares": 25,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 218.0,
+      "order_id": "e56dcdd9-c2a2-4cb4-b85e-d2f360d34d9e",
+      "timestamp": "2026-01-07T10:40:34.934957",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SOUN",
+      "shares": 400,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 11.2,
+      "order_id": "bf29b5ce-a860-4cca-b3d1-4211a53bb1cc",
+      "timestamp": "2026-01-07T10:40:36.480422",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "CRSP",
+      "shares": 100,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 57.0,
+      "order_id": "7df7a9d5-51a9-4a82-87da-cc725704e796",
+      "timestamp": "2026-01-07T10:40:37.887548",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 150,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 30.5,
+      "order_id": "77a4ecb0-9a80-4c30-8153-f1bddaa9947a",
+      "timestamp": "2026-01-07T10:40:39.312676",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 11,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 24.46,
+      "order_id": "18d8c428-f4d4-40a4-96a7-479f43f8961e",
+      "timestamp": "2026-01-07T10:40:43.154892",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 3,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 19.62,
+      "order_id": "8c05ba80-1f0d-4ac1-8e35-314c46cc01f1",
+      "timestamp": "2026-01-07T10:40:44.824582",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 28.0,
+      "order_id": "ade4abca-8d50-417f-938e-e8428901efb1",
+      "timestamp": "2026-01-07T10:40:46.262590",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ROKU",
+      "shares": 2,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 113.4,
+      "order_id": "931c4578-22c9-46d5-8b9c-e8ed5a6dce30",
+      "timestamp": "2026-01-07T10:40:48.182357",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 3,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 28.5,
+      "order_id": "49b71e67-21c0-40b1-abd0-e1a0753ba64f",
+      "timestamp": "2026-01-07T10:40:49.585482",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-07T10:40:20.590409"
+    },
+    {
+      "symbol": "HD",
+      "shares": 7,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 7, available: 0)",
+      "timestamp": "2026-01-07T10:40:21.995311"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.09, need $2615.45",
+      "timestamp": "2026-01-07T10:40:23.354884"
+    },
+    {
+      "symbol": "KO",
+      "shares": 50,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.09, need $3378.00",
+      "timestamp": "2026-01-07T10:40:24.565387"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-07T10:40:26.058380"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 3,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-07T10:40:27.211383"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-07T10:40:28.360532"
+    },
+    {
+      "symbol": "INCY",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 15 but only have 1.0",
+      "timestamp": "2026-01-07T10:40:29.565715"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 23,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-07T10:40:32.370017"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-07T10:40:33.560869"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 2857,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $1976472.60, have $166107.38",
+      "timestamp": "2026-01-07T10:40:40.529207"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 8333,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $5764769.40, have $166128.95",
+      "timestamp": "2026-01-07T10:40:41.685352"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-07T10:40:56.375430"
+    },
+    {
+      "symbol": "HD",
+      "shares": 7,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 7, available: 0)",
+      "timestamp": "2026-01-07T10:40:57.778269"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.09, need $2615.45",
+      "timestamp": "2026-01-07T10:40:59.035314"
+    },
+    {
+      "symbol": "KO",
+      "shares": 50,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.09, need $3379.00",
+      "timestamp": "2026-01-07T10:41:00.246572"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-07T10:41:01.678393"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 3,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-07T10:41:02.855722"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-07T10:41:03.986299"
+    },
+    {
+      "symbol": "INCY",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 15 but only have 1.0",
+      "timestamp": "2026-01-07T10:41:05.208084"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 23,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-07T10:41:06.468138"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-07T10:41:07.744741"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 2857,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $1977443.98, have $166128.95",
+      "timestamp": "2026-01-07T10:41:08.951068"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 8333,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $5767602.62, have $166128.95",
+      "timestamp": "2026-01-07T10:41:10.103195"
+    }
+  ]
+}

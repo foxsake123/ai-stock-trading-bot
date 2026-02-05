@@ -1,0 +1,140 @@
+{
+  "execution_time": "2025-12-05T17:39:32.399414",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-04_LIVE.md",
+  "executed_trades": [
+    {
+      "symbol": "PLUG",
+      "shares": 50,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 2.2,
+      "order_id": "7f0a3302-e8b7-437f-a5b3-43656c64448c",
+      "timestamp": "2025-12-05T17:39:16.498174",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 131,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 2.2,
+      "order_id": "8662d990-82d5-4d3e-a176-11818523b467",
+      "timestamp": "2025-12-05T17:39:17.661960",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "EDIT",
+      "shares": 60,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 2.4,
+      "order_id": "c766143b-84de-48c4-af6d-e521dce79adb",
+      "timestamp": "2025-12-05T17:39:18.808922",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 10,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 27.79,
+      "order_id": "2febacd4-286d-4ecd-b2b9-ef3b413c7eca",
+      "timestamp": "2025-12-05T17:39:19.957770",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "STEM",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:09.919204"
+    },
+    {
+      "symbol": "OPEN",
+      "shares": 40,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:10.998887"
+    },
+    {
+      "symbol": "STXS",
+      "shares": 119,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:12.072690"
+    },
+    {
+      "symbol": "RVMD",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:13.143695"
+    },
+    {
+      "symbol": "NERV",
+      "shares": 5,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:14.216646"
+    },
+    {
+      "symbol": "FUBO",
+      "shares": 25,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:15.298096"
+    },
+    {
+      "symbol": "STEM",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:26.030548"
+    },
+    {
+      "symbol": "OPEN",
+      "shares": 40,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:27.103307"
+    },
+    {
+      "symbol": "STXS",
+      "shares": 119,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:28.170613"
+    },
+    {
+      "symbol": "RVMD",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:29.245839"
+    },
+    {
+      "symbol": "NERV",
+      "shares": 5,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:30.326670"
+    },
+    {
+      "symbol": "FUBO",
+      "shares": 25,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-05T17:39:31.398900"
+    }
+  ]
+}

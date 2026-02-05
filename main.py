@@ -323,20 +323,31 @@ class TradingSystem:
 
 async def main():
     """Main entry point"""
+    import sys
+    
     # Create trading system
     system = TradingSystem()
     
     # Initialize
     await system.initialize()
     
-    # Example: Analyze a single stock
-    result = await system.analyze_stock("AAPL")
-    print(json.dumps(result, indent=2))
+    # Check for continuous mode
+    continuous = "--continuous" in sys.argv or "--loop" in sys.argv
     
-    # Example: Batch analysis
-    # batch_results = await system.run_batch_analysis(["AAPL", "GOOGL", "MSFT"])
-    # for result in batch_results:
-    #     print(f"{result['ticker']}: {result['analysis'].get('action', 'ERROR')}")
+    # Watchlist
+    tickers = ["AAPL", "NVDA", "TSLA", "META", "MSFT", "GOOGL", "AMZN", "AMD"]
+    
+    if continuous:
+        # Run continuous monitoring (every 5 minutes)
+        logger.info("Starting continuous monitoring mode...")
+        try:
+            await system.start_monitoring(tickers, interval=300)
+        except KeyboardInterrupt:
+            logger.info("Interrupted by user")
+    else:
+        # Single analysis
+        result = await system.analyze_stock("AAPL")
+        print(json.dumps(result, indent=2))
     
     # Shutdown
     await system.shutdown()

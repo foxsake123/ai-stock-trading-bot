@@ -123,6 +123,10 @@ DEE_MAX_DAILY_LOSS = 500.0  # Stop trading if lose $500 in one day (5%)
 DEE_MAX_TRADES_PER_DAY = 5  # Execute top 5 highest-confidence trades only
 DEE_STOP_LOSS_PCT = 0.08  # 8% hard stop loss on all positions
 
+# Research Freshness Settings (Feb 2026 fix)
+RESEARCH_MAX_AGE_HOURS = 24  # Block execution if research is older than 24 hours
+STRICT_RESEARCH_VALIDATION = True  # Enable strict research validation for live accounts
+
 @dataclass
 class LiveAccountSettings:
     """Configuration for a live trading account, used to avoid duplicating
@@ -213,6 +217,9 @@ class DailyTradeExecutor:
 
         self.executed_trades = []
         self.failed_trades = []
+        
+        # Track stop-loss orders placed for verification
+        self.stop_loss_orders = []
 
         # DEE-BOT is LONG-ONLY - no shorting allowed
         self.dee_bot_long_only = True
@@ -389,6 +396,210 @@ class DailyTradeExecutor:
         position_value = final_shares * price
         print(f"[INFO] {settings.name} Position: {final_shares} shares @ ${price:.2f} = ${position_value:.2f}")
         return final_shares
+
+    def pre_filter_impossible_trades(self, api, trades_dict, is_live_account=False, max_position_cost=None):
+        """
+        CRITICAL FIX (Feb 2026): Pre-filter trades BEFORE hitting API.
+        
+        This prevents circuit breaker trips from repeated failed API calls
+        for trades that are guaranteed to fail (no position to sell, cost too high, etc.)
+        
+        Args:
+            api: Alpaca API client
+            trades_dict: Dictionary with 'sell', 'buy', 'short' lists
+            is_live_account: Whether this is a live (real money) account
+            max_position_cost: Maximum cost per position (for live accounts)
+            
+        Returns:
+            Tuple of (filtered_trades_dict, skipped_trades_list)
+        """
+        filtered = {'sell': [], 'buy': [], 'short': []}
+        skipped = []
+        
+        # Get current positions once (avoid multiple API calls)
+        try:
+            positions = {p.symbol: float(p.qty) for p in api.list_positions()}
+        except Exception as e:
+            logger.warning(f"[PRE-FILTER] Could not fetch positions: {e}")
+            positions = {}
+        
+        # Get current buying power
+        try:
+            account = api.get_account()
+            buying_power = float(account.buying_power)
+            cash = float(account.cash)
+        except Exception as e:
+            logger.warning(f"[PRE-FILTER] Could not fetch account: {e}")
+            buying_power = 0
+            cash = 0
+            
+        # Filter SELL orders - check if position exists
+        for trade in trades_dict.get('sell', []):
+            symbol = trade.get('symbol', '')
+            shares_to_sell = trade.get('shares', 0)
+            
+            current_qty = positions.get(symbol, 0)
+            
+            if current_qty <= 0:
+                skip_reason = f"No position to sell (have {current_qty} shares)"
+                logger.info(f"[PRE-FILTER] SKIP SELL {symbol}: {skip_reason}")
+                skipped.append({'trade': trade, 'side': 'sell', 'reason': skip_reason})
+                continue
+                
+            if shares_to_sell > current_qty:
+                # Adjust to available quantity
+                logger.info(f"[PRE-FILTER] ADJUST SELL {symbol}: {shares_to_sell} -> {int(current_qty)} shares")
+                trade['shares'] = int(current_qty)
+                
+            filtered['sell'].append(trade)
+            
+        # Filter BUY orders
+        for trade in trades_dict.get('buy', []):
+            symbol = trade.get('symbol', '')
+            shares = trade.get('shares', 0)
+            price = trade.get('limit_price', 0)
+            
+            if shares <= 0:
+                skipped.append({'trade': trade, 'side': 'buy', 'reason': 'Invalid share count'})
+                continue
+                
+            estimated_cost = shares * price if price else shares * 50  # Estimate if no price
+            
+            # For LIVE accounts with max position cost limit
+            if is_live_account and max_position_cost:
+                if estimated_cost > max_position_cost:
+                    # Calculate max affordable shares
+                    max_shares = int(max_position_cost / price) if price > 0 else 0
+                    if max_shares <= 0:
+                        skip_reason = f"Cost ${estimated_cost:.2f} exceeds max ${max_position_cost:.2f}, can't afford any shares"
+                        logger.info(f"[PRE-FILTER] SKIP BUY {symbol}: {skip_reason}")
+                        skipped.append({'trade': trade, 'side': 'buy', 'reason': skip_reason})
+                        continue
+                    else:
+                        logger.info(f"[PRE-FILTER] ADJUST BUY {symbol}: {shares} -> {max_shares} shares (cost limit)")
+                        trade['shares'] = max_shares
+                        
+            # Check against buying power (universal)
+            final_cost = trade['shares'] * price if price else trade['shares'] * 50
+            if final_cost > buying_power:
+                skip_reason = f"Insufficient buying power: need ${final_cost:.2f}, have ${buying_power:.2f}"
+                logger.info(f"[PRE-FILTER] SKIP BUY {symbol}: {skip_reason}")
+                skipped.append({'trade': trade, 'side': 'buy', 'reason': skip_reason})
+                continue
+                
+            filtered['buy'].append(trade)
+            
+        # Filter SHORT orders (only for paper/margin accounts)
+        for trade in trades_dict.get('short', []):
+            symbol = trade.get('symbol', '')
+            
+            # SHORGAN Live is a cash account - no shorting
+            if is_live_account and 'SHORGAN' in str(api):
+                skip_reason = "Cash account cannot short"
+                logger.info(f"[PRE-FILTER] SKIP SHORT {symbol}: {skip_reason}")
+                skipped.append({'trade': trade, 'side': 'short', 'reason': skip_reason})
+                continue
+                
+            filtered['short'].append(trade)
+            
+        # Log summary
+        total_original = len(trades_dict.get('sell', [])) + len(trades_dict.get('buy', [])) + len(trades_dict.get('short', []))
+        total_filtered = len(filtered['sell']) + len(filtered['buy']) + len(filtered['short'])
+        logger.info(f"[PRE-FILTER] Filtered {total_original} -> {total_filtered} trades ({len(skipped)} skipped)")
+        
+        return filtered, skipped
+
+    def _validate_research_freshness_strict(self, file_path, max_age_hours=24):
+        """
+        CRITICAL FIX (Feb 2026): Strict research freshness validation.
+        
+        For LIVE accounts, BLOCK execution if research is stale.
+        This prevents executing trades based on outdated catalysts.
+        
+        Args:
+            file_path: Path to the trades/research file
+            max_age_hours: Maximum age in hours before blocking
+            
+        Returns:
+            Tuple of (is_fresh, age_hours, message)
+        """
+        try:
+            file_path = Path(file_path)
+            if not file_path.exists():
+                return False, 999, "Research file does not exist"
+                
+            # Check file modification time
+            file_mtime = datetime.fromtimestamp(file_path.stat().st_mtime)
+            age = datetime.now() - file_mtime
+            age_hours = age.total_seconds() / 3600
+            
+            # Also check date in filename
+            date_match = re.search(r'(\d{4}-\d{2}-\d{2})', str(file_path))
+            if date_match:
+                file_date = datetime.strptime(date_match.group(1), '%Y-%m-%d')
+                today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+                days_old = (today - file_date).days
+                
+                if days_old > 1:
+                    msg = f"Research dated {file_date.strftime('%Y-%m-%d')} is {days_old} days old"
+                    return False, days_old * 24, msg
+                    
+            if age_hours > max_age_hours:
+                msg = f"Research file is {age_hours:.1f} hours old (max: {max_age_hours}h)"
+                return False, age_hours, msg
+                
+            return True, age_hours, f"Research is fresh ({age_hours:.1f}h old)"
+            
+        except Exception as e:
+            return False, 999, f"Could not validate freshness: {e}"
+
+    def verify_stop_loss_placed(self, api, symbol, expected_qty, bot_name="BOT"):
+        """
+        CRITICAL FIX (Feb 2026): Verify stop-loss was actually placed after BUY.
+        
+        This ensures every buy position has a protective stop-loss order.
+        Sends alert if stop-loss is missing.
+        
+        Args:
+            api: Alpaca API client
+            symbol: Stock symbol to check
+            expected_qty: Expected number of shares with stop-loss
+            bot_name: Name for logging/alerts
+            
+        Returns:
+            True if stop-loss found, False otherwise
+        """
+        try:
+            # Wait briefly for order to propagate
+            time.sleep(1)
+            
+            # Check for open stop orders for this symbol
+            orders = api.list_orders(status='open', symbols=[symbol])
+            
+            stop_orders = [o for o in orders if o.type == 'stop' and o.side == 'sell']
+            
+            if not stop_orders:
+                error_msg = f"MISSING STOP-LOSS: {bot_name} - {symbol} has NO stop order!"
+                logger.error(f"[STOP VERIFY] {error_msg}")
+                self._send_telegram_alert(error_msg, is_critical=True)
+                return False
+                
+            # Check if stop covers the right quantity
+            total_stop_qty = sum(float(o.qty) for o in stop_orders)
+            if total_stop_qty < expected_qty:
+                error_msg = f"PARTIAL STOP-LOSS: {bot_name} - {symbol} stop covers only {total_stop_qty}/{expected_qty} shares"
+                logger.warning(f"[STOP VERIFY] {error_msg}")
+                self._send_telegram_alert(error_msg, is_critical=False)
+                return False
+                
+            logger.info(f"[STOP VERIFY] OK: {symbol} has stop-loss covering {total_stop_qty} shares")
+            return True
+            
+        except Exception as e:
+            error_msg = f"STOP VERIFY ERROR: {bot_name} - {symbol}: {e}"
+            logger.error(f"[STOP VERIFY] {error_msg}")
+            self._send_telegram_alert(error_msg, is_critical=True)
+            return False
 
     # Backward-compatible wrappers that delegate to the unified methods
     def check_shorgan_daily_loss_limit(self):
@@ -1283,13 +1494,39 @@ class DailyTradeExecutor:
             # Find and parse SHORGAN Live file
             shorgan_live_file = self.find_todays_trades_file(file_type="shorgan_live")
             if shorgan_live_file:
-                # Issue #9 fix: Validate research freshness for live trades
-                date_match = re.search(r'(\d{4}-\d{2}-\d{2})', str(shorgan_live_file))
-                file_date = date_match.group(1) if date_match else datetime.now().strftime('%Y-%m-%d')
-                if not self._validate_research_freshness(shorgan_live_file, file_date):
-                    print("[SKIPPED] SHORGAN Live trades skipped - stale research")
+                # CRITICAL FIX (Feb 2026): Strict research freshness validation
+                is_fresh, age_hours, freshness_msg = self._validate_research_freshness_strict(
+                    shorgan_live_file, 
+                    max_age_hours=RESEARCH_MAX_AGE_HOURS if STRICT_RESEARCH_VALIDATION else 48
+                )
+                if not is_fresh:
+                    print(f"[BLOCKED] SHORGAN Live trades blocked - {freshness_msg}")
+                    self._send_telegram_alert(f"SHORGAN-LIVE BLOCKED: {freshness_msg}", is_critical=True)
                 else:
+                    print(f"[OK] Research freshness validated: {freshness_msg}")
                     _, shorgan_live_trades = self.parse_trades_file(shorgan_live_file)
+                    
+                    # CRITICAL FIX (Feb 2026): Pre-filter impossible trades BEFORE API calls
+                    print("[PRE-FILTER] Filtering SHORGAN Live trades...")
+                    shorgan_live_trades, skipped_trades = self.pre_filter_impossible_trades(
+                        self.shorgan_live_api,
+                        shorgan_live_trades,
+                        is_live_account=True,
+                        max_position_cost=SHORGAN_MAX_POSITION_SIZE  # $300 max
+                    )
+                    
+                    # Log skipped trades
+                    if skipped_trades:
+                        print(f"[PRE-FILTER] Skipped {len(skipped_trades)} impossible trades:")
+                        for skip in skipped_trades:
+                            print(f"  - {skip['side'].upper()} {skip['trade'].get('symbol')}: {skip['reason']}")
+                            self.failed_trades.append({
+                                'symbol': skip['trade'].get('symbol'),
+                                'shares': skip['trade'].get('shares', 0),
+                                'side': skip['side'],
+                                'error': f"Pre-filter: {skip['reason']}",
+                                'timestamp': datetime.now().isoformat()
+                            })
 
                     if shorgan_live_trades['sell'] or shorgan_live_trades['buy']:
                         print("-" * 40)
@@ -1344,6 +1581,13 @@ class DailyTradeExecutor:
                                     retry_queue.append(('shorgan_live', trade, 'buy'))
                                 else:
                                     trades_executed += 1
+                                    # CRITICAL FIX (Feb 2026): Track for stop-loss verification
+                                    self.stop_loss_orders.append({
+                                        'symbol': trade.get('symbol'),
+                                        'shares': trade.get('shares'),
+                                        'api': self.shorgan_live_api,
+                                        'bot_name': 'SHORGAN-BOT-LIVE'
+                                    })
                                 time.sleep(1)
             else:
                 print("[INFO] No SHORGAN-BOT Live trades file found")
@@ -1424,6 +1668,30 @@ class DailyTradeExecutor:
         self.place_stop_losses_for_executed_buys(self.shorgan_paper_api, "SHORGAN-BOT")
         if SHORGAN_LIVE_TRADING and self.shorgan_live_api:
             self.place_stop_losses_for_executed_buys(self.shorgan_live_api, "SHORGAN-BOT-LIVE")
+
+        # CRITICAL FIX (Feb 2026): Verify stop-losses were actually placed for LIVE accounts
+        if self.stop_loss_orders:
+            print("\n" + "=" * 80)
+            print("STOP-LOSS VERIFICATION (LIVE ACCOUNTS)")
+            print("=" * 80)
+            time.sleep(2)  # Wait for orders to propagate
+            
+            verification_failures = 0
+            for stop_info in self.stop_loss_orders:
+                if not self.verify_stop_loss_placed(
+                    stop_info['api'],
+                    stop_info['symbol'],
+                    stop_info['shares'],
+                    stop_info['bot_name']
+                ):
+                    verification_failures += 1
+                    
+            if verification_failures > 0:
+                alert_msg = f"ALERT: {verification_failures} positions may be MISSING stop-loss orders!"
+                print(f"\n[WARNING] {alert_msg}")
+                self._send_telegram_alert(alert_msg, is_critical=True)
+            else:
+                print("\n[OK] All stop-loss orders verified successfully")
 
         # Save execution log
         log_data = {

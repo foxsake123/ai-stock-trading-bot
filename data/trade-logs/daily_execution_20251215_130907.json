@@ -1,0 +1,254 @@
+{
+  "execution_time": "2025-12-15T13:09:07.106632",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-15.md",
+  "executed_trades": [
+    {
+      "symbol": "GILD",
+      "shares": 40,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 120.5,
+      "order_id": "b064d6d7-8cf8-45ce-9178-be1cca75b132",
+      "timestamp": "2025-12-15T13:08:28.290437",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "BRK.B",
+      "shares": 6,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 502.0,
+      "order_id": "77e8fb2d-b9d0-4aae-b0b5-65a23cf2ffdb",
+      "timestamp": "2025-12-15T13:08:29.433740",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "T",
+      "shares": 150,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 24.4,
+      "order_id": "293f431d-a8f4-40fa-989c-1a2c401f1c85",
+      "timestamp": "2025-12-15T13:08:30.563549",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 357.0,
+      "order_id": "50780104-7ef5-48e9-ad20-f32e03a322ed",
+      "timestamp": "2025-12-15T13:08:31.736630",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "UNH",
+      "shares": 15,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 338.5,
+      "order_id": "9f9b0a85-24c9-4176-8887-b1b2c22c9c2c",
+      "timestamp": "2025-12-15T13:08:32.865993",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "V",
+      "shares": 14,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 346.0,
+      "order_id": "e206e02c-f540-4769-924e-f45e9334df3b",
+      "timestamp": "2025-12-15T13:08:33.994668",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "WOLF",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:35.049647"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:36.094016"
+    },
+    {
+      "symbol": "QSI",
+      "shares": 230,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:37.139731"
+    },
+    {
+      "symbol": "LOVE",
+      "shares": 22,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:38.198850"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:39.356878"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:40.417340"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:41.486726"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 11,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $273.13, have $187.12",
+      "timestamp": "2025-12-15T13:08:42.591779"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 6,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $275.40, have $187.09",
+      "timestamp": "2025-12-15T13:08:43.640728"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 9,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $284.85, have $187.17",
+      "timestamp": "2025-12-15T13:08:44.686561"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $297.85, have $186.95",
+      "timestamp": "2025-12-15T13:08:45.729065"
+    },
+    {
+      "symbol": "ABNB",
+      "shares": 2,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $261.50, have $187.11",
+      "timestamp": "2025-12-15T13:08:46.784576"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:52.833781"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:53.882150"
+    },
+    {
+      "symbol": "QSI",
+      "shares": 230,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:54.931918"
+    },
+    {
+      "symbol": "LOVE",
+      "shares": 22,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:55.984118"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:57.033823"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:58.080044"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-15T13:08:59.121604"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 11,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $273.02, have $185.38",
+      "timestamp": "2025-12-15T13:09:00.202752"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 6,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $275.01, have $185.34",
+      "timestamp": "2025-12-15T13:09:01.288530"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 9,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $284.62, have $185.31",
+      "timestamp": "2025-12-15T13:09:02.343068"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $298.00, have $185.39",
+      "timestamp": "2025-12-15T13:09:03.488976"
+    },
+    {
+      "symbol": "ABNB",
+      "shares": 2,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $261.50, have $185.25",
+      "timestamp": "2025-12-15T13:09:04.543923"
+    }
+  ]
+}

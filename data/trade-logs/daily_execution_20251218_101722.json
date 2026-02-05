@@ -1,0 +1,368 @@
+{
+  "execution_time": "2025-12-18T10:17:22.951469",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-18.md",
+  "executed_trades": [
+    {
+      "symbol": "MRK",
+      "shares": 15,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 98.5,
+      "order_id": "be2d2d51-8bfc-40f3-863c-0f313bdecfb3",
+      "timestamp": "2025-12-18T10:16:25.649082",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 25,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 148.3,
+      "order_id": "c01973d7-8e0c-4a79-8b65-de53d9213e28",
+      "timestamp": "2025-12-18T10:16:26.876537",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 11,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 25.12,
+      "order_id": "7c50fa95-2079-4ae7-82ac-708f99734434",
+      "timestamp": "2025-12-18T10:16:39.810197",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DNLI",
+      "shares": 17,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 16.85,
+      "order_id": "e9b20db0-71de-4cef-bffd-b802ed0a6e93",
+      "timestamp": "2025-12-18T10:16:43.184911",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "GOOGL",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:16:22.274699"
+    },
+    {
+      "symbol": "T",
+      "shares": 150,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 150 but only have 50.0",
+      "timestamp": "2025-12-18T10:16:23.351564"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 20,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 20 but only have 15.0",
+      "timestamp": "2025-12-18T10:16:24.474638"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-18T10:16:27.993618"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:16:29.109104"
+    },
+    {
+      "symbol": "RGTI",
+      "shares": 11,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:16:30.177349"
+    },
+    {
+      "symbol": "QSI",
+      "shares": 228,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:16:31.234662"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:16:32.301569"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:16:33.364930"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:16:34.428033"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:16:35.482920"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 10 but only have 6.0",
+      "timestamp": "2025-12-18T10:16:37.563126"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:16:38.627496"
+    },
+    {
+      "symbol": "PRTA",
+      "shares": 29,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-18T10:16:40.899487"
+    },
+    {
+      "symbol": "MU",
+      "shares": 3,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $750.60, have $289.82",
+      "timestamp": "2025-12-18T10:16:41.986325"
+    },
+    {
+      "symbol": "BCRX",
+      "shares": 38,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $272.46, have $3.47",
+      "timestamp": "2025-12-18T10:16:44.257445"
+    },
+    {
+      "symbol": "IMVT",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $262.25, have $3.33",
+      "timestamp": "2025-12-18T10:16:45.343124"
+    },
+    {
+      "symbol": "FDX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $285.31, have $3.26",
+      "timestamp": "2025-12-18T10:16:46.411237"
+    },
+    {
+      "symbol": "NKE",
+      "shares": 3,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $199.97, have $2.95",
+      "timestamp": "2025-12-18T10:16:47.484325"
+    },
+    {
+      "symbol": "XOM",
+      "shares": 2,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $233.62, have $2.95",
+      "timestamp": "2025-12-18T10:16:48.544373"
+    },
+    {
+      "symbol": "MU",
+      "shares": 82,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $20516.40, have $3.35",
+      "timestamp": "2025-12-18T10:16:49.598294"
+    },
+    {
+      "symbol": "MU",
+      "shares": 161,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $40282.20, have $2.81",
+      "timestamp": "2025-12-18T10:16:50.672465"
+    },
+    {
+      "symbol": "GOOGL",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:16:56.729923"
+    },
+    {
+      "symbol": "T",
+      "shares": 150,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 150 but only have 50.0",
+      "timestamp": "2025-12-18T10:16:57.835201"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 20,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 20 but only have 15.0",
+      "timestamp": "2025-12-18T10:16:58.936305"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-18T10:17:00.011579"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:17:01.079656"
+    },
+    {
+      "symbol": "RGTI",
+      "shares": 11,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:17:02.156055"
+    },
+    {
+      "symbol": "QSI",
+      "shares": 228,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:17:03.219305"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:17:04.280949"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:17:05.345604"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:17:06.546636"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:17:07.609108"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 10 but only have 6.0",
+      "timestamp": "2025-12-18T10:17:09.711901"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-18T10:17:10.780284"
+    },
+    {
+      "symbol": "PRTA",
+      "shares": 29,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $273.03, have $0.19",
+      "timestamp": "2025-12-18T10:17:11.868773"
+    },
+    {
+      "symbol": "MU",
+      "shares": 3,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $746.85, have $0.12",
+      "timestamp": "2025-12-18T10:17:12.957313"
+    },
+    {
+      "symbol": "BCRX",
+      "shares": 38,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $271.89, have $0.60",
+      "timestamp": "2025-12-18T10:17:14.011101"
+    },
+    {
+      "symbol": "IMVT",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $261.70, have $0.82",
+      "timestamp": "2025-12-18T10:17:15.077667"
+    },
+    {
+      "symbol": "FDX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $285.31, have $1.41",
+      "timestamp": "2025-12-18T10:17:16.129241"
+    },
+    {
+      "symbol": "NKE",
+      "shares": 3,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $200.08, have $0.80",
+      "timestamp": "2025-12-18T10:17:17.187405"
+    },
+    {
+      "symbol": "XOM",
+      "shares": 2,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $233.48, have $0.87",
+      "timestamp": "2025-12-18T10:17:18.252387"
+    },
+    {
+      "symbol": "MU",
+      "shares": 82,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $20413.90, have $0.87",
+      "timestamp": "2025-12-18T10:17:19.313870"
+    },
+    {
+      "symbol": "MU",
+      "shares": 161,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $40080.95, have $0.00",
+      "timestamp": "2025-12-18T10:17:20.384573"
+    }
+  ]
+}

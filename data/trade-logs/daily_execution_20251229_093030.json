@@ -1,0 +1,158 @@
+{
+  "execution_time": "2025-12-29T09:30:30.313321",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-27.md",
+  "executed_trades": [
+    {
+      "symbol": "JNJ",
+      "shares": 10,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 207.0,
+      "order_id": "49d64553-8045-433a-9a28-620d942d9056",
+      "timestamp": "2025-12-29T09:30:04.791223",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ZM",
+      "shares": 300,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 87.75,
+      "order_id": "494ce6d9-d51e-4a10-b89c-99e026997e7a",
+      "timestamp": "2025-12-29T09:30:06.064913",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 15,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 115.5,
+      "order_id": "a08ad67e-f70c-4a82-b3aa-f112e1e2398b",
+      "timestamp": "2025-12-29T09:30:09.469514",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "BYND",
+      "shares": 500,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 0.95,
+      "order_id": "33317073-a1e6-49fa-a57f-09a42d81314a",
+      "timestamp": "2025-12-29T09:30:10.591639",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "BAC",
+      "shares": 63,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 63, available: 57)",
+      "timestamp": "2025-12-29T09:30:03.601789"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 9,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 9, available: 3)",
+      "timestamp": "2025-12-29T09:30:07.218499"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 18,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 18, available: 17)",
+      "timestamp": "2025-12-29T09:30:08.344955"
+    },
+    {
+      "symbol": "CIVI",
+      "shares": 76,
+      "side": "buy",
+      "error": "insufficient qty available for order (requested: 76, available: 0)",
+      "timestamp": "2025-12-29T09:30:11.751244"
+    },
+    {
+      "symbol": "EMBC",
+      "shares": 68,
+      "side": "buy",
+      "error": "insufficient qty available for order (requested: 68, available: 0)",
+      "timestamp": "2025-12-29T09:30:12.883135"
+    },
+    {
+      "symbol": "GPK",
+      "shares": 142,
+      "side": "buy",
+      "error": "insufficient qty available for order (requested: 142, available: 0)",
+      "timestamp": "2025-12-29T09:30:14.023197"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 174,
+      "side": "buy",
+      "error": "insufficient qty available for order (requested: 174, available: 0)",
+      "timestamp": "2025-12-29T09:30:15.171364"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 63,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 63, available: 57)",
+      "timestamp": "2025-12-29T09:30:21.322389"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 9,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 9, available: 3)",
+      "timestamp": "2025-12-29T09:30:22.536843"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 18,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 18, available: 17)",
+      "timestamp": "2025-12-29T09:30:23.655207"
+    },
+    {
+      "symbol": "CIVI",
+      "shares": 76,
+      "side": "buy",
+      "error": "insufficient qty available for order (requested: 76, available: 0)",
+      "timestamp": "2025-12-29T09:30:24.776554"
+    },
+    {
+      "symbol": "EMBC",
+      "shares": 68,
+      "side": "buy",
+      "error": "insufficient qty available for order (requested: 68, available: 0)",
+      "timestamp": "2025-12-29T09:30:25.890876"
+    },
+    {
+      "symbol": "GPK",
+      "shares": 142,
+      "side": "buy",
+      "error": "insufficient qty available for order (requested: 142, available: 0)",
+      "timestamp": "2025-12-29T09:30:27.097938"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 174,
+      "side": "buy",
+      "error": "insufficient qty available for order (requested: 174, available: 0)",
+      "timestamp": "2025-12-29T09:30:28.319780"
+    }
+  ]
+}

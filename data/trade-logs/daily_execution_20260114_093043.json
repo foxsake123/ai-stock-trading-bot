@@ -1,0 +1,198 @@
+{
+  "execution_time": "2026-01-14T09:30:43.288255",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-13.md",
+  "executed_trades": [
+    {
+      "symbol": "ENPH",
+      "shares": 100,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 36.5,
+      "order_id": "9a71928d-5691-4c61-940d-e4f28643a8c4",
+      "timestamp": "2026-01-14T09:30:13.718420",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DAKT",
+      "shares": 371,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 21.0,
+      "order_id": "a9c160f3-706e-472a-84d3-dce5c45ee6c4",
+      "timestamp": "2026-01-14T09:30:16.370131",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "STT",
+      "shares": 75,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 132.5,
+      "order_id": "618c3f44-b6de-4f28-b5c6-afcc0862ce91",
+      "timestamp": "2026-01-14T09:30:17.551465",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "NFLX",
+      "shares": 110,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 88.75,
+      "order_id": "d4d9fffa-c311-4898-a37b-4a23426e5936",
+      "timestamp": "2026-01-14T09:30:18.786168",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "STLA",
+      "shares": 900,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 10.6,
+      "order_id": "f49b3ec4-fc99-4f7d-a5bf-a60e6aa43c59",
+      "timestamp": "2026-01-14T09:30:20.106330",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "PYPL",
+      "shares": 120,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 57.0,
+      "order_id": "4bad8867-e39a-4c02-82f4-bf600622d697",
+      "timestamp": "2026-01-14T09:30:36.225468",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "CSCO",
+      "shares": 90,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 90, available: 0)",
+      "timestamp": "2026-01-14T09:30:04.995776"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 50,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 50, available: 0)",
+      "timestamp": "2026-01-14T09:30:06.332607"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-14T09:30:07.409164"
+    },
+    {
+      "symbol": "KO",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $4859.01, need $7121.00",
+      "timestamp": "2026-01-14T09:30:08.997300"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 300,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-14T09:30:10.206236"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-14T09:30:11.383237"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 10,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 10, available: 0)",
+      "timestamp": "2026-01-14T09:30:15.098404"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-14T09:30:21.265848"
+    },
+    {
+      "symbol": "CSCO",
+      "shares": 90,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 90, available: 0)",
+      "timestamp": "2026-01-14T09:30:28.232125"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 50,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 50, available: 0)",
+      "timestamp": "2026-01-14T09:30:30.008996"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-14T09:30:31.404978"
+    },
+    {
+      "symbol": "KO",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $4859.01, need $7121.00",
+      "timestamp": "2026-01-14T09:30:32.660000"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 300,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-14T09:30:33.821776"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-14T09:30:35.049349"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 10,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 10, available: 0)",
+      "timestamp": "2026-01-14T09:30:37.407554"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-14T09:30:38.485421"
+    }
+  ]
+}

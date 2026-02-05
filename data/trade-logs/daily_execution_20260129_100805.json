@@ -1,0 +1,428 @@
+{
+  "execution_time": "2026-01-29T10:08:05.836584",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-28.md",
+  "executed_trades": [
+    {
+      "symbol": "XOM",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 134.5,
+      "order_id": "a68348be-4179-418b-9f13-611e8a8479fe",
+      "timestamp": "2026-01-29T10:06:46.504737",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "MO",
+      "shares": 26,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 62.9,
+      "order_id": "ea5e3bd3-14b9-4aca-931f-4ae3bf83a8cb",
+      "timestamp": "2026-01-29T10:06:51.896174",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 30,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 252.0,
+      "order_id": "91aeebd6-afa2-4df9-bf22-caba40200efd",
+      "timestamp": "2026-01-29T10:06:53.136458",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "KO",
+      "shares": 63,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 71.5,
+      "order_id": "b17a8dec-0dfa-4d4c-a9c0-d7f686c8f54a",
+      "timestamp": "2026-01-29T10:06:54.319441",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "T",
+      "shares": 128,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 23.44,
+      "order_id": "f316e3fe-a904-4ae0-9c4d-1a890bb7aeb2",
+      "timestamp": "2026-01-29T10:06:55.492334",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ENPH",
+      "shares": 100,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 39.25,
+      "order_id": "aa045a8a-099b-460b-ba65-7584f6d35221",
+      "timestamp": "2026-01-29T10:07:00.982449",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "RIG",
+      "shares": 750,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 4.88,
+      "order_id": "7dcde104-2e9f-4039-b069-9193abc6282b",
+      "timestamp": "2026-01-29T10:07:02.187532",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "STT",
+      "shares": 75,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 127.25,
+      "order_id": "6884d15d-55ac-4c2a-b4f3-d5fa4efa355c",
+      "timestamp": "2026-01-29T10:07:04.799725",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "COIN",
+      "shares": 40,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 212.5,
+      "order_id": "36f2e862-96c2-4b76-8669-870519ee3476",
+      "timestamp": "2026-01-29T10:07:05.982824",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 400,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 14.85,
+      "order_id": "36a3878b-a9cc-4a40-9196-3ad1bf531957",
+      "timestamp": "2026-01-29T10:07:07.186351",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 140,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 57.55,
+      "order_id": "a0a84f10-49e9-4e78-876f-d1aac8a2757d",
+      "timestamp": "2026-01-29T10:07:08.401000",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DAKT",
+      "shares": 1,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 21.52,
+      "order_id": "e79d7ece-75a2-41fc-b72b-9c2cb523502e",
+      "timestamp": "2026-01-29T10:07:22.275036",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "NVDA",
+      "shares": 10,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 820.0,
+      "order_id": "557e3778-2d1e-4342-9422-491f784b6203",
+      "timestamp": "2026-01-29T10:07:24.523952",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ABNB",
+      "shares": 40,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 194.0,
+      "order_id": "382fe92a-473c-4721-accd-4f2cf29084ad",
+      "timestamp": "2026-01-29T10:07:25.704755",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DIS",
+      "shares": 35,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 215.0,
+      "order_id": "61e68e8a-dcc2-4684-8c60-324f5f50dff0",
+      "timestamp": "2026-01-29T10:07:26.900638",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-01-29T10:06:39.908598"
+    },
+    {
+      "symbol": "VZ",
+      "shares": 100,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-29T10:06:40.977268"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 67,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 67, available: 27)",
+      "timestamp": "2026-01-29T10:06:45.317922"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 30,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 30, available: 0)",
+      "timestamp": "2026-01-29T10:06:50.701435"
+    },
+    {
+      "symbol": "AMD",
+      "shares": 25,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 25, available: 0)",
+      "timestamp": "2026-01-29T10:06:59.825331"
+    },
+    {
+      "symbol": "STLA",
+      "shares": 1000,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 1000 but only have 800.0",
+      "timestamp": "2026-01-29T10:07:03.569084"
+    },
+    {
+      "symbol": "SOUN",
+      "shares": 800,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 800, available: 400)",
+      "timestamp": "2026-01-29T10:07:12.618029"
+    },
+    {
+      "symbol": "LCID",
+      "shares": 400,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-29T10:07:13.673982"
+    },
+    {
+      "symbol": "AI",
+      "shares": 700,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-29T10:07:14.785835"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 50,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 50, available: 0)",
+      "timestamp": "2026-01-29T10:07:18.861499"
+    },
+    {
+      "symbol": "CIVI",
+      "shares": 76,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-29T10:07:19.921057"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-29T10:07:21.115997"
+    },
+    {
+      "symbol": "HIMS",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-29T10:07:23.375865"
+    },
+    {
+      "symbol": "MU",
+      "shares": 80,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $34976.00 exceeds 10.0% limit ($10465.05)",
+      "timestamp": "2026-01-29T10:07:28.019166"
+    },
+    {
+      "symbol": "XPEV",
+      "shares": 300,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-29T10:07:29.159581"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-01-29T10:07:38.459403"
+    },
+    {
+      "symbol": "VZ",
+      "shares": 100,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-29T10:07:39.731763"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 67,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 67, available: 27)",
+      "timestamp": "2026-01-29T10:07:43.856690"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 30,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 30, available: 0)",
+      "timestamp": "2026-01-29T10:07:48.237302"
+    },
+    {
+      "symbol": "AMD",
+      "shares": 25,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-01-29T10:07:49.424815"
+    },
+    {
+      "symbol": "STLA",
+      "shares": 1000,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 1000 but only have 800.0",
+      "timestamp": "2026-01-29T10:07:50.527156"
+    },
+    {
+      "symbol": "SOUN",
+      "shares": 800,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-01-29T10:07:51.727069"
+    },
+    {
+      "symbol": "LCID",
+      "shares": 400,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-29T10:07:52.797495"
+    },
+    {
+      "symbol": "AI",
+      "shares": 700,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-29T10:07:53.851141"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 50,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-01-29T10:07:55.096101"
+    },
+    {
+      "symbol": "CIVI",
+      "shares": 76,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-29T10:07:56.266156"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-29T10:07:57.366796"
+    },
+    {
+      "symbol": "HIMS",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-29T10:07:58.483049"
+    },
+    {
+      "symbol": "MU",
+      "shares": 80,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $34976.00 exceeds 10.0% limit ($10464.96)",
+      "timestamp": "2026-01-29T10:07:59.566951"
+    },
+    {
+      "symbol": "XPEV",
+      "shares": 300,
+      "side": "buy",
+      "error": "Validation failed: Validation error: ('Connection aborted.', ConnectionAbortedError(10053, 'An established connection was aborted by the software in your host machine', None, 10053, None))",
+      "timestamp": "2026-01-29T10:08:01.139988"
+    }
+  ]
+}

@@ -1,0 +1,295 @@
+{
+  "execution_time": "2025-12-21T09:31:09.094006",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-20.md",
+  "executed_trades": [
+    {
+      "symbol": "BMY",
+      "shares": 20,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 54.2,
+      "order_id": "e474a39b-a451-4108-a6f0-62c3a5fbe56f",
+      "timestamp": "2025-12-21T09:30:10.131396",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 101.45,
+      "order_id": "5d7f1718-3425-4871-8b53-fa0296d8ebe8",
+      "timestamp": "2025-12-21T09:30:11.294418",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ABBV",
+      "shares": 15,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 227.0,
+      "order_id": "23bc81a4-de89-4e1e-bc01-ec80c74b1980",
+      "timestamp": "2025-12-21T09:30:13.634875",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 60,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 54.88,
+      "order_id": "5eb3c5f6-9c6a-47aa-9042-480ca4471668",
+      "timestamp": "2025-12-21T09:30:14.783617",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "NEE",
+      "shares": 40,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 80.93,
+      "order_id": "fd3cafb4-ff2e-4254-83b2-f19f0e377354",
+      "timestamp": "2025-12-21T09:30:15.926636",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "SO",
+      "shares": 30,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 86.51,
+      "order_id": "337c6a57-917e-445e-bf4d-de6406ef6539",
+      "timestamp": "2025-12-21T09:30:17.284089",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ROKU",
+      "shares": 2,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 111.5,
+      "order_id": "77c6d71b-0bf0-409d-832b-a910d193d1dc",
+      "timestamp": "2025-12-21T09:30:27.122037",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "T",
+      "shares": 50,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 50, available: 0)",
+      "timestamp": "2025-12-21T09:30:08.980713"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-21T09:30:12.461051"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-21T09:30:18.376407"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-21T09:30:19.452946"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-21T09:30:20.522018"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-21T09:30:21.591652"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-21T09:30:22.657638"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 6,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-21T09:30:24.895216"
+    },
+    {
+      "symbol": "CRDO",
+      "shares": 7,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $1050.07, have $401.52",
+      "timestamp": "2025-12-21T09:30:25.974215"
+    },
+    {
+      "symbol": "UPST",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $237.80, have $178.51",
+      "timestamp": "2025-12-21T09:30:28.208729"
+    },
+    {
+      "symbol": "SNAP",
+      "shares": 38,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $287.66, have $178.51",
+      "timestamp": "2025-12-21T09:30:29.309537"
+    },
+    {
+      "symbol": "CHWY",
+      "shares": 8,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $259.84, have $178.51",
+      "timestamp": "2025-12-21T09:30:30.377535"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $3404.40, have $178.51",
+      "timestamp": "2025-12-21T09:30:31.447301"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 10,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-21T09:30:32.607567"
+    },
+    {
+      "symbol": "T",
+      "shares": 50,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 50, available: 0)",
+      "timestamp": "2025-12-21T09:30:43.190114"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-21T09:30:44.458549"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-21T09:30:47.188005"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-21T09:30:48.293122"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-21T09:30:49.425618"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-21T09:30:54.145577"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-21T09:30:55.494689"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 6,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-21T09:30:58.004986"
+    },
+    {
+      "symbol": "CRDO",
+      "shares": 7,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $1050.07, have $178.51",
+      "timestamp": "2025-12-21T09:30:59.245072"
+    },
+    {
+      "symbol": "UPST",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $237.80, have $178.51",
+      "timestamp": "2025-12-21T09:31:00.375093"
+    },
+    {
+      "symbol": "SNAP",
+      "shares": 38,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $287.66, have $178.51",
+      "timestamp": "2025-12-21T09:31:01.458002"
+    },
+    {
+      "symbol": "CHWY",
+      "shares": 8,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $259.84, have $178.51",
+      "timestamp": "2025-12-21T09:31:02.751005"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $3404.40, have $178.51",
+      "timestamp": "2025-12-21T09:31:03.902581"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 10,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-21T09:31:05.431808"
+    }
+  ]
+}

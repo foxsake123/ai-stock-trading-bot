@@ -1,0 +1,197 @@
+{
+  "execution_time": "2026-01-13T09:30:59.354406",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-13.md",
+  "executed_trades": [
+    {
+      "symbol": "AAPL",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 259.5,
+      "order_id": "604671e8-2913-49dd-a9e3-3faeeee8f5fe",
+      "timestamp": "2026-01-13T09:30:12.632293",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 300,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 33.7,
+      "order_id": "a53b5861-65e5-40dd-99c6-5f844c0dcd0f",
+      "timestamp": "2026-01-13T09:30:16.082200",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ENPH",
+      "shares": 100,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 36.5,
+      "order_id": "212bda15-bcb6-4fe1-8c6e-6fb828b29065",
+      "timestamp": "2026-01-13T09:30:21.508999",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DAKT",
+      "shares": 371,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 21.0,
+      "order_id": "810c0c36-2d91-413d-9f1a-fbcf3a9b980f",
+      "timestamp": "2026-01-13T09:30:25.448928",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "STT",
+      "shares": 75,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 132.5,
+      "order_id": "fe6aab87-7679-4984-8ebe-0f18c4d5b480",
+      "timestamp": "2026-01-13T09:30:27.074546",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "NFLX",
+      "shares": 110,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 88.75,
+      "order_id": "c1544138-9d58-4d57-9824-f20fdbc30ebb",
+      "timestamp": "2026-01-13T09:30:29.044252",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "STLA",
+      "shares": 900,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 10.6,
+      "order_id": "ecf4c88b-0f8e-45fe-b1a3-f5c5a631274c",
+      "timestamp": "2026-01-13T09:30:31.260504",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "CSCO",
+      "shares": 90,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 90, available: 0)",
+      "timestamp": "2026-01-13T09:30:08.465987"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 50,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 50, available: 0)",
+      "timestamp": "2026-01-13T09:30:10.741407"
+    },
+    {
+      "symbol": "KO",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $2262.46, need $7047.00",
+      "timestamp": "2026-01-13T09:30:14.228556"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-13T09:30:18.152519"
+    },
+    {
+      "symbol": "PYPL",
+      "shares": 120,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: PYPL purchased on 2026-01-12 has not settled. Wait 1 more days (settles 2026-01-14).",
+      "timestamp": "2026-01-13T09:30:19.473717"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 10,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 10, available: 0)",
+      "timestamp": "2026-01-13T09:30:23.435111"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-13T09:30:32.647276"
+    },
+    {
+      "symbol": "CSCO",
+      "shares": 90,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 90, available: 0)",
+      "timestamp": "2026-01-13T09:30:40.326137"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 50,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 50, available: 0)",
+      "timestamp": "2026-01-13T09:30:41.951499"
+    },
+    {
+      "symbol": "KO",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $2262.46, need $7047.00",
+      "timestamp": "2026-01-13T09:30:43.349090"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-13T09:30:45.273742"
+    },
+    {
+      "symbol": "PYPL",
+      "shares": 120,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: PYPL purchased on 2026-01-12 has not settled. Wait 0 more days (settles 2026-01-14).",
+      "timestamp": "2026-01-13T09:30:46.865324"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 10,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 10, available: 0)",
+      "timestamp": "2026-01-13T09:30:49.247693"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-13T09:30:50.449728"
+    }
+  ]
+}

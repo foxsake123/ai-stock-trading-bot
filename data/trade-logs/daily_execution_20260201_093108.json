@@ -1,0 +1,274 @@
+{
+  "execution_time": "2026-02-01T09:31:08.542100",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-31.md",
+  "executed_trades": [
+    {
+      "symbol": "PEP",
+      "shares": 15,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 150.3,
+      "order_id": "6118204e-00fe-4828-a5aa-078bc08afc27",
+      "timestamp": "2026-02-01T09:30:15.014539",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-02-01T09:30:08.539509"
+    },
+    {
+      "symbol": "V",
+      "shares": 14,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 14, available: 0)",
+      "timestamp": "2026-02-01T09:30:12.698670"
+    },
+    {
+      "symbol": "VZ",
+      "shares": 150,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $5485.16, need $6678.00",
+      "timestamp": "2026-02-01T09:30:13.853937"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-02-01T09:30:19.402779"
+    },
+    {
+      "symbol": "COIN",
+      "shares": 40,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 40, available: 0)",
+      "timestamp": "2026-02-01T09:30:23.574163"
+    },
+    {
+      "symbol": "SOUN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-02-01T09:30:27.698669"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 140,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:28.825752"
+    },
+    {
+      "symbol": "PYPL",
+      "shares": 120,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:30.013484"
+    },
+    {
+      "symbol": "ABNB",
+      "shares": 40,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: ABNB purchased on 2026-01-30 has not settled. Wait 0 more days (settles 2026-02-01).",
+      "timestamp": "2026-02-01T09:30:31.119998"
+    },
+    {
+      "symbol": "CRSP",
+      "shares": 100,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:32.253960"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 75,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-02-01T09:30:33.323900"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 150,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:34.448593"
+    },
+    {
+      "symbol": "STLA",
+      "shares": 400,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:35.583833"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 15,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:36.726649"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-02-01T09:30:37.851553"
+    },
+    {
+      "symbol": "AMZN",
+      "shares": 40,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:38.984210"
+    },
+    {
+      "symbol": "MA",
+      "shares": 16,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:40.120825"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 80,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:41.251700"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:47.406141"
+    },
+    {
+      "symbol": "V",
+      "shares": 14,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:48.573672"
+    },
+    {
+      "symbol": "VZ",
+      "shares": 150,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $5485.16, need $6678.00",
+      "timestamp": "2026-02-01T09:30:49.669451"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 400,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:50.813597"
+    },
+    {
+      "symbol": "COIN",
+      "shares": 40,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:51.947055"
+    },
+    {
+      "symbol": "SOUN",
+      "shares": 400,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:53.088898"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 140,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:54.221939"
+    },
+    {
+      "symbol": "PYPL",
+      "shares": 120,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:55.356508"
+    },
+    {
+      "symbol": "ABNB",
+      "shares": 40,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:56.488982"
+    },
+    {
+      "symbol": "CRSP",
+      "shares": 100,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:57.640901"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 75,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-02-01T09:30:58.725940"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 150,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:30:59.856909"
+    },
+    {
+      "symbol": "STLA",
+      "shares": 400,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:31:01.000965"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 15,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:31:02.132390"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-02-01T09:31:03.222984"
+    },
+    {
+      "symbol": "AMZN",
+      "shares": 40,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:31:04.352548"
+    },
+    {
+      "symbol": "MA",
+      "shares": 16,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:31:05.485692"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 80,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-01T09:31:06.613535"
+    }
+  ]
+}

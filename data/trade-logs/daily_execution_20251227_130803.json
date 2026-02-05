@@ -1,0 +1,154 @@
+{
+  "execution_time": "2025-12-27T13:08:03.181374",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-27.md",
+  "executed_trades": [
+    {
+      "symbol": "JNJ",
+      "shares": 10,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 207.0,
+      "order_id": "4acb0e9a-4ee0-4ddf-afa0-8778fb45f98c",
+      "timestamp": "2025-12-27T09:30:07.327638",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 18,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 29.1,
+      "order_id": "c7b2c03d-8c96-4680-a0a2-6d1265abd808",
+      "timestamp": "2025-12-27T09:30:33.508855",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 15,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 115.5,
+      "order_id": "911e1feb-ee89-47c3-84b1-04863bde9f13",
+      "timestamp": "2025-12-27T09:30:34.856767",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "CIVI",
+      "shares": 76,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 26.6,
+      "order_id": "bcbf1538-c2c3-48f0-9d1c-990af11da36f",
+      "timestamp": "2025-12-27T09:30:37.758694",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "EMBC",
+      "shares": 68,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 12.06,
+      "order_id": "22be2a7d-1f9e-4200-8ec8-03079c3e535b",
+      "timestamp": "2025-12-27T09:30:39.188577",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "GPK",
+      "shares": 142,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 15.14,
+      "order_id": "f4308e84-74dd-4170-8226-5ed0f0e3d011",
+      "timestamp": "2025-12-27T09:30:40.505670",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 174,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 26.16,
+      "order_id": "5ff65c58-c4a2-4914-af15-d2e2af174ccd",
+      "timestamp": "2025-12-27T09:30:41.836037",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 9,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 70.0,
+      "order_id": "5d157c25-4482-4eb6-8d63-8e3bf9724191",
+      "timestamp": "2025-12-27T13:07:54.747200",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "BAC",
+      "shares": 63,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 63, available: 57)",
+      "timestamp": "2025-12-27T09:30:05.523059"
+    },
+    {
+      "symbol": "ZM",
+      "shares": 300,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: ZM purchased on 2025-12-26 has not settled. Wait 1 more days (settles 2025-12-28).",
+      "timestamp": "2025-12-27T09:30:09.420206"
+    },
+    {
+      "symbol": "BYND",
+      "shares": 500,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: BYND purchased on 2025-12-26 has not settled. Wait 0 more days (settles 2025-12-28).",
+      "timestamp": "2025-12-27T09:30:36.381864"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 63,
+      "side": "sell",
+      "error": "Validation failed: Validation error: HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Read timed out. (read timeout=None)",
+      "timestamp": "2025-12-27T13:07:32.540912"
+    },
+    {
+      "symbol": "ZM",
+      "shares": 300,
+      "side": "sell",
+      "error": "Validation failed: Validation error: HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Read timed out. (read timeout=None)",
+      "timestamp": "2025-12-27T13:07:52.779804"
+    },
+    {
+      "symbol": "BYND",
+      "shares": 500,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: BYND purchased on 2025-12-26 has not settled. Wait 0 more days (settles 2025-12-28).",
+      "timestamp": "2025-12-27T13:07:56.043474"
+    }
+  ]
+}

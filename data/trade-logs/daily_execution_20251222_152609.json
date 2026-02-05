@@ -1,0 +1,295 @@
+{
+  "execution_time": "2025-12-22T15:26:09.031881",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-22.md",
+  "executed_trades": [
+    {
+      "symbol": "UNH",
+      "shares": 15,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 324.84,
+      "order_id": "9f87ed98-c291-420e-a3df-d0c00b803cc8",
+      "timestamp": "2025-12-22T15:25:19.219418",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 15,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 112.33,
+      "order_id": "724c71aa-34a3-4de0-a062-d6a18a5ca2de",
+      "timestamp": "2025-12-22T15:25:22.861969",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 207.5,
+      "order_id": "8513be08-66d6-4ee4-b643-4de9a704ae23",
+      "timestamp": "2025-12-22T15:25:27.189696",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 12,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 270.85,
+      "order_id": "19454427-97be-491b-9259-4a60e659e2f5",
+      "timestamp": "2025-12-22T15:25:28.525100",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 50,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 104.08,
+      "order_id": "629b50a5-3a1e-46c1-ae51-dadf0aeb469c",
+      "timestamp": "2025-12-22T15:25:31.160284",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "AMT",
+      "shares": 30,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 172.0,
+      "order_id": "e49de3df-67c0-46be-a84a-76830f40d127",
+      "timestamp": "2025-12-22T15:25:32.315897",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ZM",
+      "shares": 3,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 89.75,
+      "order_id": "a3f32af7-8139-42cc-8faa-205ccf434844",
+      "timestamp": "2025-12-22T15:25:43.481233",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-12-22T15:25:20.382242"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-22T15:25:21.544137"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "Validation failed: Validation error: ('Connection aborted.', ConnectionAbortedError(10053, 'An established connection was aborted by the software in your host machine', None, 10053, None))",
+      "timestamp": "2025-12-22T15:25:24.506294"
+    },
+    {
+      "symbol": "HD",
+      "shares": 7,
+      "side": "sell",
+      "error": "Validation failed: Validation error: HTTPSConnectionPool(host='paper-api.alpaca.markets', port=443): Max retries exceeded with url: /v2/account (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x00000158535DF4D0>: Failed to resolve 'paper-api.alpaca.markets' ([Errno 11001] getaddrinfo failed)\"))",
+      "timestamp": "2025-12-22T15:25:25.512284"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 107,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $5274.50, need $5991.47",
+      "timestamp": "2025-12-22T15:25:30.014264"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T15:25:33.453804"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T15:25:34.525748"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 9,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T15:25:35.601646"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T15:25:36.661440"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 13,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T15:25:37.727037"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 75,
+      "side": "buy",
+      "error": "insufficient buying power",
+      "timestamp": "2025-12-22T15:25:39.966552"
+    },
+    {
+      "symbol": "MU",
+      "shares": 3,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $827.49, have $278.67",
+      "timestamp": "2025-12-22T15:25:41.092182"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 13,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $284.63, have $278.81",
+      "timestamp": "2025-12-22T15:25:42.199333"
+    },
+    {
+      "symbol": "BYND",
+      "shares": 34,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $36.21, have $9.44",
+      "timestamp": "2025-12-22T15:25:44.614139"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-12-22T15:25:50.774087"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-22T15:25:52.506699"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-22T15:25:53.647540"
+    },
+    {
+      "symbol": "HD",
+      "shares": 7,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 7, available: 0)",
+      "timestamp": "2025-12-22T15:25:54.799160"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 107,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $5274.50, need $5991.47",
+      "timestamp": "2025-12-22T15:25:55.878333"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T15:25:56.936697"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T15:25:57.993787"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 9,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T15:25:59.053144"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T15:26:00.105887"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 13,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T15:26:01.169550"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 75,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $159.38, have $9.18",
+      "timestamp": "2025-12-22T15:26:03.220931"
+    },
+    {
+      "symbol": "MU",
+      "shares": 3,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $826.56, have $9.18",
+      "timestamp": "2025-12-22T15:26:04.289025"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 13,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $284.96, have $9.18",
+      "timestamp": "2025-12-22T15:26:05.365703"
+    },
+    {
+      "symbol": "BYND",
+      "shares": 34,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $36.21, have $9.59",
+      "timestamp": "2025-12-22T15:26:06.456342"
+    }
+  ]
+}

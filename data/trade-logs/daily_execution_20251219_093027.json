@@ -1,0 +1,118 @@
+{
+  "execution_time": "2025-12-19T09:30:27.590777",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-18_LIVE.md",
+  "executed_trades": [
+    {
+      "symbol": "RIVN",
+      "shares": 7,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 17.62,
+      "order_id": "f9633d8e-3932-4ae3-8599-61294cdc966a",
+      "timestamp": "2025-12-19T09:30:10.727745",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "VKTX",
+      "shares": 4,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 34.29,
+      "order_id": "696e90d9-8e63-4dcc-bc1e-f72d7a0ff39b",
+      "timestamp": "2025-12-19T09:30:14.182778",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "CIVI",
+      "shares": 9,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-19T09:30:04.331765"
+    },
+    {
+      "symbol": "BILI",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-19T09:30:05.436577"
+    },
+    {
+      "symbol": "KPTI",
+      "shares": 25,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-19T09:30:06.785367"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 9,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 9 but only have 4.0",
+      "timestamp": "2025-12-19T09:30:08.832799"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 31,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-19T09:30:11.805551"
+    },
+    {
+      "symbol": "HOLO",
+      "shares": 50,
+      "side": "buy",
+      "error": "asset \"HOLO\" is not tradable",
+      "timestamp": "2025-12-19T09:30:13.037664"
+    },
+    {
+      "symbol": "CIVI",
+      "shares": 9,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-19T09:30:20.252904"
+    },
+    {
+      "symbol": "BILI",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-19T09:30:21.299036"
+    },
+    {
+      "symbol": "KPTI",
+      "shares": 25,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-19T09:30:22.356301"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 9,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 9 but only have 4.0",
+      "timestamp": "2025-12-19T09:30:23.426665"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 31,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-19T09:30:24.495879"
+    },
+    {
+      "symbol": "HOLO",
+      "shares": 50,
+      "side": "buy",
+      "error": "asset \"HOLO\" is not tradable",
+      "timestamp": "2025-12-19T09:30:25.662615"
+    }
+  ]
+}

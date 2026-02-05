@@ -1,0 +1,251 @@
+{
+  "execution_time": "2025-12-10T09:30:43.682633",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-10.md",
+  "executed_trades": [
+    {
+      "symbol": "NEE",
+      "shares": 100,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 79.59,
+      "order_id": "1f2dc8f6-fa61-49ef-b7e9-fcb40e910af0",
+      "timestamp": "2025-12-10T09:30:04.037066",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "GILD",
+      "shares": 20,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 119.36,
+      "order_id": "ee6b57a8-ee38-4f1c-a3a6-c9587e78eff2",
+      "timestamp": "2025-12-10T09:30:07.486283",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 5,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 115.08,
+      "order_id": "2c5f9b44-1123-42ea-b543-f2a62b6564f3",
+      "timestamp": "2025-12-10T09:30:08.658759",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "JPM",
+      "shares": 2,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 300.5,
+      "order_id": "5dcf67a5-ffa8-4227-9e09-b6efb2df7fa6",
+      "timestamp": "2025-12-10T09:30:09.817669",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ABBV",
+      "shares": 20,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 218.0,
+      "order_id": "d5f293e6-a4c7-49ac-8a11-4ec358ee01d9",
+      "timestamp": "2025-12-10T09:30:13.226570",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 16,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 17.55,
+      "order_id": "ddcc97a6-a064-4da4-97d3-57e8fc695cf7",
+      "timestamp": "2025-12-10T09:30:18.707192",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DAKT",
+      "shares": 16,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 18.04,
+      "order_id": "368944fa-f146-4c02-92ee-579cde330889",
+      "timestamp": "2025-12-10T09:30:20.148821",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ARDX",
+      "shares": 23,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 12.55,
+      "order_id": "6d95c1bb-f795-4bb7-982c-6b68ae2e12f4",
+      "timestamp": "2025-12-10T09:30:21.695613",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 5,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 55.5,
+      "order_id": "962524b3-e75d-460b-b238-eb41e5da32fe",
+      "timestamp": "2025-12-10T09:30:23.275423",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-12-10T09:30:05.198821"
+    },
+    {
+      "symbol": "T",
+      "shares": 100,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: T purchased on 2025-12-08 has not settled. Wait 0 more days (settles 2025-12-10).",
+      "timestamp": "2025-12-10T09:30:06.324730"
+    },
+    {
+      "symbol": "MSFT",
+      "shares": 15,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $6164.40, need $7254.45",
+      "timestamp": "2025-12-10T09:30:10.965749"
+    },
+    {
+      "symbol": "GOOGL",
+      "shares": 20,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $6164.40, need $6343.00",
+      "timestamp": "2025-12-10T09:30:12.073975"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 9,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-10T09:30:14.297043"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-10T09:30:15.390524"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-10T09:30:16.449593"
+    },
+    {
+      "symbol": "RIG",
+      "shares": 65,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-10T09:30:17.508537"
+    },
+    {
+      "symbol": "CVNA",
+      "shares": 7,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $3194.38, have $646.70",
+      "timestamp": "2025-12-10T09:30:24.470829"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-12-10T09:30:31.182585"
+    },
+    {
+      "symbol": "T",
+      "shares": 100,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: T purchased on 2025-12-08 has not settled. Wait 0 more days (settles 2025-12-10).",
+      "timestamp": "2025-12-10T09:30:32.374590"
+    },
+    {
+      "symbol": "MSFT",
+      "shares": 15,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $6164.40, need $7254.45",
+      "timestamp": "2025-12-10T09:30:33.550345"
+    },
+    {
+      "symbol": "GOOGL",
+      "shares": 20,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $6164.40, need $6343.00",
+      "timestamp": "2025-12-10T09:30:34.632639"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 9,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-10T09:30:35.699164"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-10T09:30:36.776464"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-10T09:30:37.848954"
+    },
+    {
+      "symbol": "RIG",
+      "shares": 65,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-10T09:30:38.925324"
+    },
+    {
+      "symbol": "CVNA",
+      "shares": 7,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $3194.38, have $646.35",
+      "timestamp": "2025-12-10T09:30:40.008474"
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "timestamp": "2025-12-08T15:09:17.442917",
+  "account": "SHORGAN-PAPER",
+  "executed": [
+    {
+      "symbol": "ARWR",
+      "side": "sell",
+      "shares": 100,
+      "price": 69.5,
+      "order_id": "57c805de-9136-44b4-92de-4082b3d3e9fc"
+    },
+    {
+      "symbol": "ARQQ",
+      "side": "sell",
+      "shares": 175,
+      "price": 29.15,
+      "order_id": "f07143d6-7f27-4b0b-9abe-997b12e6ca22"
+    },
+    {
+      "symbol": "ORCL",
+      "side": "sell",
+      "shares": 10,
+      "price": 218.75,
+      "order_id": "2fe51d90-b197-4eaa-91df-25cdeb2a6dfb"
+    },
+    {
+      "symbol": "SRRK",
+      "side": "buy",
+      "shares": 193,
+      "price": 45.75,
+      "order_id": "4b5c1dd1-19ae-4c03-bb3e-358ba11c3889"
+    },
+    {
+      "symbol": "BEAM",
+      "side": "buy",
+      "shares": 500,
+      "price": 27.5,
+      "order_id": "3493938c-6af2-449d-ac08-915261b9596f"
+    },
+    {
+      "symbol": "LOVE",
+      "side": "buy",
+      "shares": 400,
+      "price": 13.75,
+      "order_id": "ea0d28e5-a62f-4d85-9ed5-3f19e5292c20"
+    },
+    {
+      "symbol": "DOCU",
+      "side": "buy",
+      "shares": 200,
+      "price": 65.5,
+      "order_id": "ed3f253d-82a6-4dac-ba88-ab1144370aea"
+    },
+    {
+      "symbol": "IONQ",
+      "side": "buy",
+      "shares": 200,
+      "price": 54.0,
+      "order_id": "8723ef4e-85b5-4593-bdb9-06e7879e8277"
+    },
+    {
+      "symbol": "RIG",
+      "side": "buy",
+      "shares": 750,
+      "price": 4.45,
+      "order_id": "92e0aecc-232f-4e28-9339-6ba35d4c9e32"
+    },
+    {
+      "symbol": "ENPH",
+      "side": "buy",
+      "shares": 300,
+      "price": 31.25,
+      "order_id": "ccb36549-3a02-47ab-86d7-899d239ff3ab"
+    },
+    {
+      "symbol": "ORCL",
+      "side": "buy",
+      "shares": 72,
+      "price": 219.0,
+      "order_id": "74b14aed-b161-4f35-8411-3c4cb8a9c68b"
+    }
+  ],
+  "failed": []
+}

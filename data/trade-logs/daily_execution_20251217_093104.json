@@ -1,0 +1,374 @@
+{
+  "execution_time": "2025-12-17T09:31:04.280788",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-17.md",
+  "executed_trades": [
+    {
+      "symbol": "CVX",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 147.2,
+      "order_id": "f982aa84-dbe1-4ff1-a13c-e3a7ac7333ef",
+      "timestamp": "2025-12-17T09:30:05.006627",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 25.09,
+      "order_id": "f0722d1f-4c63-4cf5-98c2-051d06feb742",
+      "timestamp": "2025-12-17T09:30:06.184497",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 25,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 115.98,
+      "order_id": "265b3cb2-7fb3-43f1-89c5-f4f0c372ac02",
+      "timestamp": "2025-12-17T09:30:07.362840",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "BMY",
+      "shares": 30,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 53.96,
+      "order_id": "903de07d-5023-4bb4-a90f-abeb7ad4797a",
+      "timestamp": "2025-12-17T09:30:08.545384",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "GOOGL",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 305.55,
+      "order_id": "5bba97fb-8d29-4e15-9061-3fefac58e973",
+      "timestamp": "2025-12-17T09:30:09.719731",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "T",
+      "shares": 100,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 24.3,
+      "order_id": "81bee789-57d8-448e-9830-4bddc62bb9d9",
+      "timestamp": "2025-12-17T09:30:10.902874",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ABBV",
+      "shares": 20,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 222.0,
+      "order_id": "664981e0-88ab-4cf5-82e0-a670f75d0165",
+      "timestamp": "2025-12-17T09:30:13.178514",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 37.3,
+      "order_id": "3ea24a6a-791b-4872-a1f3-f9c835986bfc",
+      "timestamp": "2025-12-17T09:30:14.340111",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "AXSM",
+      "shares": 2,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 144.5,
+      "order_id": "6451da2c-cb89-402b-bbcd-ed8fde49fa4f",
+      "timestamp": "2025-12-17T09:30:27.378915",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 11,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 26.0,
+      "order_id": "409bf1e0-2da1-4a09-a12c-39144386a2d2",
+      "timestamp": "2025-12-17T09:30:28.551080",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 9,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 29.25,
+      "order_id": "33886db7-f6c5-4af3-8e35-0d27d246ce0e",
+      "timestamp": "2025-12-17T09:30:30.785206",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "NU",
+      "shares": 17,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 16.3,
+      "order_id": "628a4923-dd70-419d-8096-eb5117e88805",
+      "timestamp": "2025-12-17T09:30:31.948620",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "CSCO",
+      "shares": 90,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $4570.83, need $6977.70",
+      "timestamp": "2025-12-17T09:30:12.039537"
+    },
+    {
+      "symbol": "QSI",
+      "shares": 243,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:15.416112"
+    },
+    {
+      "symbol": "RGTI",
+      "shares": 12,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:16.476224"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:17.534663"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 9,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: SMCI purchased on 2025-12-16 has not settled. Wait 1 more days (settles 2025-12-18).",
+      "timestamp": "2025-12-17T09:30:18.638846"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:19.700136"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:20.766245"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:21.824511"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 13,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:22.883332"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 10 but only have 6.0",
+      "timestamp": "2025-12-17T09:30:24.968030"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:26.204944"
+    },
+    {
+      "symbol": "SAVA",
+      "shares": 103,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $301.79 exceeds 10.0% limit ($300.00)",
+      "timestamp": "2025-12-17T09:30:29.636209"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 123,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $280.44, have $95.21",
+      "timestamp": "2025-12-17T09:30:33.017588"
+    },
+    {
+      "symbol": "AXSM",
+      "shares": 64,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $9408.00, have $95.40",
+      "timestamp": "2025-12-17T09:30:34.126906"
+    },
+    {
+      "symbol": "AXSM",
+      "shares": 193,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $28371.00, have $95.23",
+      "timestamp": "2025-12-17T09:30:35.320900"
+    },
+    {
+      "symbol": "CSCO",
+      "shares": 90,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $4570.83, need $6977.70",
+      "timestamp": "2025-12-17T09:30:41.583769"
+    },
+    {
+      "symbol": "QSI",
+      "shares": 243,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:42.901233"
+    },
+    {
+      "symbol": "RGTI",
+      "shares": 12,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:44.123743"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:45.277904"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 9,
+      "side": "sell",
+      "error": "Regulatory compliance: FREE-RIDING WARNING: SMCI purchased on 2025-12-16 has not settled. Wait 0 more days (settles 2025-12-18).",
+      "timestamp": "2025-12-17T09:30:46.631709"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:48.475366"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:50.209714"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:51.269766"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 13,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:52.330952"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 10 but only have 6.0",
+      "timestamp": "2025-12-17T09:30:54.461119"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-17T09:30:55.514622"
+    },
+    {
+      "symbol": "SAVA",
+      "shares": 103,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $301.79, have $102.52",
+      "timestamp": "2025-12-17T09:30:56.582041"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 123,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $280.44, have $102.38",
+      "timestamp": "2025-12-17T09:30:57.845566"
+    },
+    {
+      "symbol": "AXSM",
+      "shares": 64,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $9408.00, have $102.24",
+      "timestamp": "2025-12-17T09:30:58.903336"
+    },
+    {
+      "symbol": "AXSM",
+      "shares": 193,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $28371.00, have $102.15",
+      "timestamp": "2025-12-17T09:30:59.965737"
+    }
+  ]
+}

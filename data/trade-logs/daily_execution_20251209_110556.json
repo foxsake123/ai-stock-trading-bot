@@ -1,0 +1,224 @@
+{
+  "execution_time": "2025-12-09T11:05:56.972843",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-09.md",
+  "executed_trades": [
+    {
+      "symbol": "CVX",
+      "shares": 20,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 147.5,
+      "order_id": "beb49f97-befe-43de-867b-d7a8c903771f",
+      "timestamp": "2025-12-09T11:05:14.123890",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 15,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 202.0,
+      "order_id": "3002806e-25bc-4ea8-b92b-7f62a9facb76",
+      "timestamp": "2025-12-09T11:05:16.207860",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "T",
+      "shares": 200,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 24.8,
+      "order_id": "1d3dc079-6373-466b-89ff-9db19df802bc",
+      "timestamp": "2025-12-09T11:05:19.996358",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "SRRK",
+      "shares": 6,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 45.75,
+      "order_id": "450f916a-1796-4a28-8904-1ac5a91e41c7",
+      "timestamp": "2025-12-09T11:05:26.927067",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "UNH",
+      "shares": 34,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $10979.11 exceeds 8.0% limit ($8205.83)",
+      "timestamp": "2025-12-09T11:05:17.914246"
+    },
+    {
+      "symbol": "PG",
+      "shares": 20,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-09T11:05:21.606005"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-09T11:05:22.937810"
+    },
+    {
+      "symbol": "ARQQ",
+      "shares": 9,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-09T11:05:24.178179"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-09T11:05:25.356707"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $266.90, have $206.86",
+      "timestamp": "2025-12-09T11:05:28.140166"
+    },
+    {
+      "symbol": "LOVE",
+      "shares": 21,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $284.65, have $206.86",
+      "timestamp": "2025-12-09T11:05:29.336895"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 4,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $276.82, have $206.79",
+      "timestamp": "2025-12-09T11:05:30.619914"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $273.70, have $207.07",
+      "timestamp": "2025-12-09T11:05:31.754325"
+    },
+    {
+      "symbol": "RIG",
+      "shares": 65,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $292.18, have $206.99",
+      "timestamp": "2025-12-09T11:05:32.978419"
+    },
+    {
+      "symbol": "ENPH",
+      "shares": 9,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $292.14, have $207.06",
+      "timestamp": "2025-12-09T11:05:34.372542"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $220.10, have $206.83",
+      "timestamp": "2025-12-09T11:05:35.620956"
+    },
+    {
+      "symbol": "UNH",
+      "shares": 34,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $10979.11 exceeds 8.0% limit ($8206.32)",
+      "timestamp": "2025-12-09T11:05:42.068331"
+    },
+    {
+      "symbol": "PG",
+      "shares": 20,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-09T11:05:43.447754"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-09T11:05:44.689224"
+    },
+    {
+      "symbol": "ARQQ",
+      "shares": 9,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-09T11:05:45.916561"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-09T11:05:47.249284"
+    },
+    {
+      "symbol": "BEAM",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $266.90, have $207.00",
+      "timestamp": "2025-12-09T11:05:48.429928"
+    },
+    {
+      "symbol": "LOVE",
+      "shares": 21,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $284.65, have $207.18",
+      "timestamp": "2025-12-09T11:05:49.680690"
+    },
+    {
+      "symbol": "DOCU",
+      "shares": 4,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $276.82, have $207.03",
+      "timestamp": "2025-12-09T11:05:50.919464"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $273.70, have $206.91",
+      "timestamp": "2025-12-09T11:05:52.055899"
+    },
+    {
+      "symbol": "RIG",
+      "shares": 65,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $292.18, have $206.91",
+      "timestamp": "2025-12-09T11:05:53.270188"
+    },
+    {
+      "symbol": "ENPH",
+      "shares": 9,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $292.14, have $206.77",
+      "timestamp": "2025-12-09T11:05:54.708860"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $220.10, have $206.58",
+      "timestamp": "2025-12-09T11:05:55.972139"
+    }
+  ]
+}

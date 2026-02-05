@@ -1,0 +1,118 @@
+{
+  "execution_time": "2025-12-08T15:00:43.986104",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-09_LIVE.md",
+  "executed_trades": [
+    {
+      "symbol": "BILI",
+      "shares": 10,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 26.01,
+      "order_id": "375732d5-01c9-4fbe-b2b3-24619b0142af",
+      "timestamp": "2025-12-08T15:00:27.349969",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "ASTS",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-08T15:00:22.930918"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-08T15:00:23.979198"
+    },
+    {
+      "symbol": "NIO",
+      "shares": 18,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 18, available: 0)",
+      "timestamp": "2025-12-08T15:00:25.125935"
+    },
+    {
+      "symbol": "PTON",
+      "shares": 36,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-08T15:00:26.180258"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 13,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $248.76, have $85.74",
+      "timestamp": "2025-12-08T15:00:28.402235"
+    },
+    {
+      "symbol": "SAVA",
+      "shares": 89,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $288.36, have $85.51",
+      "timestamp": "2025-12-08T15:00:29.459679"
+    },
+    {
+      "symbol": "CHWY",
+      "shares": 8,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $276.28, have $85.29",
+      "timestamp": "2025-12-08T15:00:30.511606"
+    },
+    {
+      "symbol": "ASTS",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-08T15:00:36.563847"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-08T15:00:37.614901"
+    },
+    {
+      "symbol": "NIO",
+      "shares": 18,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 18, available: 0)",
+      "timestamp": "2025-12-08T15:00:38.750729"
+    },
+    {
+      "symbol": "PTON",
+      "shares": 36,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-08T15:00:39.811315"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 13,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $248.76, have $85.19",
+      "timestamp": "2025-12-08T15:00:40.868164"
+    },
+    {
+      "symbol": "SAVA",
+      "shares": 89,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $288.36, have $85.15",
+      "timestamp": "2025-12-08T15:00:41.930063"
+    },
+    {
+      "symbol": "CHWY",
+      "shares": 8,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $276.28, have $85.15",
+      "timestamp": "2025-12-08T15:00:42.985477"
+    }
+  ]
+}

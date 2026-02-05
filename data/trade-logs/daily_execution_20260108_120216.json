@@ -1,0 +1,244 @@
+{
+  "execution_time": "2026-01-08T12:02:16.023472",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-08.md",
+  "executed_trades": [
+    {
+      "symbol": "PLUG",
+      "shares": 1000,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 2.46,
+      "order_id": "b040771d-68e6-4849-abae-8b21535aa1ae",
+      "timestamp": "2026-01-08T12:01:35.249995",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "CRSP",
+      "shares": 100,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 57.0,
+      "order_id": "8e48928b-cab9-47c7-bd1f-39c0ea16e528",
+      "timestamp": "2026-01-08T12:01:42.868254",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-08T12:01:21.912572"
+    },
+    {
+      "symbol": "HD",
+      "shares": 7,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 7, available: 0)",
+      "timestamp": "2026-01-08T12:01:23.408768"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.08, need $2577.70",
+      "timestamp": "2026-01-08T12:01:24.823077"
+    },
+    {
+      "symbol": "KO",
+      "shares": 50,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.08, need $3455.75",
+      "timestamp": "2026-01-08T12:01:26.170467"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-08T12:01:28.896902"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 3,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-08T12:01:30.671504"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-08T12:01:32.135499"
+    },
+    {
+      "symbol": "INCY",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 15 but only have 1.0",
+      "timestamp": "2026-01-08T12:01:33.529561"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 23,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-08T12:01:36.615433"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-08T12:01:38.020365"
+    },
+    {
+      "symbol": "AMD",
+      "shares": 25,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-08T12:01:39.839118"
+    },
+    {
+      "symbol": "SOUN",
+      "shares": 400,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-08T12:01:41.521864"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 150,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-08T12:01:44.131603"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 2857,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $1970444.33, have $164953.68",
+      "timestamp": "2026-01-08T12:01:45.378691"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 8333,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $5747186.77, have $164953.68",
+      "timestamp": "2026-01-08T12:01:46.611479"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-08T12:01:54.342677"
+    },
+    {
+      "symbol": "HD",
+      "shares": 7,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 7, available: 0)",
+      "timestamp": "2026-01-08T12:01:55.693061"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.08, need $2577.70",
+      "timestamp": "2026-01-08T12:01:56.964025"
+    },
+    {
+      "symbol": "KO",
+      "shares": 50,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.08, need $3455.75",
+      "timestamp": "2026-01-08T12:01:58.215407"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-08T12:02:00.358738"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 3,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-08T12:02:01.973766"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-08T12:02:03.513875"
+    },
+    {
+      "symbol": "INCY",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 15 but only have 1.0",
+      "timestamp": "2026-01-08T12:02:04.905696"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 23,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-08T12:02:06.127712"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-08T12:02:07.466439"
+    },
+    {
+      "symbol": "AMD",
+      "shares": 25,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-08T12:02:08.741476"
+    },
+    {
+      "symbol": "SOUN",
+      "shares": 400,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-08T12:02:09.912782"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 150,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-08T12:02:11.195388"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 2857,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $1970415.76, have $164953.68",
+      "timestamp": "2026-01-08T12:02:12.324801"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 8333,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $5747103.44, have $164953.68",
+      "timestamp": "2026-01-08T12:02:13.466490"
+    }
+  ]
+}

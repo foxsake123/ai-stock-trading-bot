@@ -1,0 +1,222 @@
+{
+  "execution_time": "2026-01-02T14:29:11.835334",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-02.md",
+  "executed_trades": [
+    {
+      "symbol": "PEP",
+      "shares": 27,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 142.77,
+      "order_id": "311196a8-cd59-4a93-a107-a2d71be2745c",
+      "timestamp": "2026-01-02T14:28:18.859303",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "CL",
+      "shares": 76,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 77.96,
+      "order_id": "807db4e3-cb4c-46b2-b0ec-e92845b453de",
+      "timestamp": "2026-01-02T14:28:22.077714",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 29,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 206.26,
+      "order_id": "aa03989c-1762-4564-a4b8-be1d62939cc4",
+      "timestamp": "2026-01-02T14:28:23.770483",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 47,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 105.56,
+      "order_id": "2c24b697-3f26-4cda-bad5-32812e29d90b",
+      "timestamp": "2026-01-02T14:28:25.423637",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "MO",
+      "shares": 87,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 57.52,
+      "order_id": "41b1ca0e-ef1c-45ef-b84e-c5bd413b88d9",
+      "timestamp": "2026-01-02T14:28:27.185697",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "T",
+      "shares": 122,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 24.65,
+      "order_id": "e876ce71-e03a-405b-87b7-5cfa6eda7ab5",
+      "timestamp": "2026-01-02T14:28:28.780993",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 29,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 206.26,
+      "order_id": "b886bbcb-0b6b-4f6d-aad1-4d6fe648fbdd",
+      "timestamp": "2026-01-02T14:28:36.267873",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 47,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 105.56,
+      "order_id": "8af09d8f-98c6-4224-bb8e-b433b4497754",
+      "timestamp": "2026-01-02T14:28:37.655781",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "MO",
+      "shares": 87,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 57.52,
+      "order_id": "6849d7e8-da9d-4931-abd9-4d22d7a0d36e",
+      "timestamp": "2026-01-02T14:28:39.015603",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "T",
+      "shares": 122,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 24.65,
+      "order_id": "61e9cb2c-e8e6-4b0f-a455-a86f67f75978",
+      "timestamp": "2026-01-02T14:28:40.387888",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 14, available: 0)",
+      "timestamp": "2026-01-02T14:28:17.411735"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-02T14:28:20.676815"
+    },
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T14:28:30.052799"
+    },
+    {
+      "symbol": "PEP",
+      "shares": 27,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T14:28:31.428317"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T14:28:32.561948"
+    },
+    {
+      "symbol": "CL",
+      "shares": 76,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T14:28:33.768985"
+    },
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 14, available: 0)",
+      "timestamp": "2026-01-02T14:28:48.857024"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-02T14:28:51.209338"
+    },
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T14:28:53.159882"
+    },
+    {
+      "symbol": "PEP",
+      "shares": 27,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T14:28:56.511652"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T14:28:57.780729"
+    },
+    {
+      "symbol": "CL",
+      "shares": 76,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T14:28:59.701754"
+    }
+  ]
+}

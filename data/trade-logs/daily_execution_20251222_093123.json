@@ -1,0 +1,301 @@
+{
+  "execution_time": "2025-12-22T09:31:23.718360",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-20.md",
+  "executed_trades": [],
+  "failed_trades": [
+    {
+      "symbol": "T",
+      "shares": 50,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 50, available: 0)",
+      "timestamp": "2025-12-22T09:30:19.639541"
+    },
+    {
+      "symbol": "BMY",
+      "shares": 20,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 20, available: 0)",
+      "timestamp": "2025-12-22T09:30:21.074668"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 10,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 10, available: 0)",
+      "timestamp": "2025-12-22T09:30:22.696611"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-22T09:30:23.937070"
+    },
+    {
+      "symbol": "ABBV",
+      "shares": 15,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-1916.37, need $3403.57",
+      "timestamp": "2025-12-22T09:30:25.234727"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 60,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-1916.37, need $3314.40",
+      "timestamp": "2025-12-22T09:30:26.524282"
+    },
+    {
+      "symbol": "NEE",
+      "shares": 40,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-1916.37, need $3182.80",
+      "timestamp": "2025-12-22T09:30:27.628125"
+    },
+    {
+      "symbol": "SO",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-3876.89, need $2558.40",
+      "timestamp": "2025-12-22T09:30:28.745859"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:30:29.878246"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:30:30.958360"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:30:32.398192"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:30:34.812387"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:30:35.935038"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 6,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-22T09:30:38.472873"
+    },
+    {
+      "symbol": "CRDO",
+      "shares": 7,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $1050.07, have $216.35",
+      "timestamp": "2025-12-22T09:30:40.853712"
+    },
+    {
+      "symbol": "ROKU",
+      "shares": 2,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $217.54, have $214.74",
+      "timestamp": "2025-12-22T09:30:41.947936"
+    },
+    {
+      "symbol": "UPST",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $237.80, have $214.49",
+      "timestamp": "2025-12-22T09:30:43.024724"
+    },
+    {
+      "symbol": "SNAP",
+      "shares": 38,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $288.80, have $215.24",
+      "timestamp": "2025-12-22T09:30:44.075652"
+    },
+    {
+      "symbol": "CHWY",
+      "shares": 8,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $259.84, have $216.72",
+      "timestamp": "2025-12-22T09:30:45.689316"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $3419.85, have $215.38",
+      "timestamp": "2025-12-22T09:30:48.002226"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 10,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-22T09:30:49.122919"
+    },
+    {
+      "symbol": "T",
+      "shares": 50,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 50, available: 0)",
+      "timestamp": "2025-12-22T09:30:55.440467"
+    },
+    {
+      "symbol": "BMY",
+      "shares": 20,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:30:56.592949"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 10,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 10, available: 0)",
+      "timestamp": "2025-12-22T09:31:01.947773"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-22T09:31:03.436612"
+    },
+    {
+      "symbol": "ABBV",
+      "shares": 15,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-2296.87, need $3387.45",
+      "timestamp": "2025-12-22T09:31:04.493139"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 60,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-2296.87, need $3328.80",
+      "timestamp": "2025-12-22T09:31:05.554218"
+    },
+    {
+      "symbol": "NEE",
+      "shares": 40,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-2296.87, need $3158.40",
+      "timestamp": "2025-12-22T09:31:06.623068"
+    },
+    {
+      "symbol": "SO",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-2296.87, need $2557.20",
+      "timestamp": "2025-12-22T09:31:07.702578"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 16,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:31:08.765509"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:31:09.879231"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:31:11.039970"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:31:12.093887"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-22T09:31:13.157874"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 6,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-22T09:31:15.281127"
+    },
+    {
+      "symbol": "CRDO",
+      "shares": 7,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $1085.56, have $216.08",
+      "timestamp": "2025-12-22T09:31:16.328627"
+    },
+    {
+      "symbol": "ROKU",
+      "shares": 2,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $219.12, have $216.38",
+      "timestamp": "2025-12-22T09:31:17.376703"
+    },
+    {
+      "symbol": "UPST",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $239.45, have $215.38",
+      "timestamp": "2025-12-22T09:31:18.428474"
+    },
+    {
+      "symbol": "SNAP",
+      "shares": 38,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $289.94, have $215.02",
+      "timestamp": "2025-12-22T09:31:19.478963"
+    },
+    {
+      "symbol": "CHWY",
+      "shares": 8,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $259.84, have $215.40",
+      "timestamp": "2025-12-22T09:31:20.528142"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 5,
+      "side": "buy",
+      "error": "Validation failed: Insufficient buying power: need $3419.10, have $215.23",
+      "timestamp": "2025-12-22T09:31:21.577319"
+    },
+    {
+      "symbol": "SAGE",
+      "shares": 10,
+      "side": "buy",
+      "error": "asset SAGE is not active",
+      "timestamp": "2025-12-22T09:31:22.705625"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "execution_time": "2026-01-02T09:30:28.982646",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-30.md",
+  "executed_trades": [
+    {
+      "symbol": "DAKT",
+      "shares": 370,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 19.05,
+      "order_id": "bcb96f9c-6b99-4b9a-98ab-8c7854ab4537",
+      "timestamp": "2026-01-02T09:30:14.357618",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "BAC",
+      "shares": 30,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 30, available: 27)",
+      "timestamp": "2026-01-02T09:30:06.528119"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 20,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $673.53, need $2228.00, Conflicting sell order already exists",
+      "timestamp": "2026-01-02T09:30:07.657628"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 17,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 17, available: 1)",
+      "timestamp": "2026-01-02T09:30:08.859283"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 200,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T09:30:09.938131"
+    },
+    {
+      "symbol": "OXY",
+      "shares": 150,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 150, available: 0)",
+      "timestamp": "2026-01-02T09:30:11.078297"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 200,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T09:30:12.121410"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 3000,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 3000 but only have 2000.0",
+      "timestamp": "2026-01-02T09:30:13.190087"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 30,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 30, available: 27)",
+      "timestamp": "2026-01-02T09:30:20.493628"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 20,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $673.53, need $2228.00, Conflicting sell order already exists",
+      "timestamp": "2026-01-02T09:30:21.562512"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 17,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 17, available: 1)",
+      "timestamp": "2026-01-02T09:30:22.673344"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 200,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T09:30:23.726050"
+    },
+    {
+      "symbol": "OXY",
+      "shares": 150,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 150, available: 0)",
+      "timestamp": "2026-01-02T09:30:24.839877"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 200,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-02T09:30:25.894342"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 3000,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 3000 but only have 2000.0",
+      "timestamp": "2026-01-02T09:30:26.959011"
+    }
+  ]
+}

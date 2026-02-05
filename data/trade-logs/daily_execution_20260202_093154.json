@@ -1,0 +1,316 @@
+{
+  "execution_time": "2026-02-02T09:31:54.982371",
+  "trades_file": "docs\\TODAYS_TRADES_2026-02-02.md",
+  "executed_trades": [
+    {
+      "symbol": "INTC",
+      "shares": 50,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 46.25,
+      "order_id": "215d3d37-12fe-4e7b-9b10-d15f061b8525",
+      "timestamp": "2026-02-02T09:30:07.325769",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "PEP",
+      "shares": 20,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 153.5,
+      "order_id": "478ae8b2-6c65-4295-befa-0a31e45a3202",
+      "timestamp": "2026-02-02T09:30:09.891229",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "MMM",
+      "shares": 20,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 153.0,
+      "order_id": "6e57e76d-1dd9-455a-816f-5e289e8d5f5b",
+      "timestamp": "2026-02-02T09:30:12.092477",
+      "status": "submitted",
+      "fill_price": null,
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "COIN",
+      "shares": 40,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 40, available: 0)",
+      "timestamp": "2026-02-02T09:30:17.922675"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-02-02T09:30:23.508134"
+    },
+    {
+      "symbol": "SOUN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-02-02T09:30:28.915557"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 300,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:30:30.927944"
+    },
+    {
+      "symbol": "STLA",
+      "shares": 800,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:30:32.952829"
+    },
+    {
+      "symbol": "CRSP",
+      "shares": 100,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:30:34.974531"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-02-02T09:30:36.935801"
+    },
+    {
+      "symbol": "TSLA",
+      "shares": 20,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:30:38.992441"
+    },
+    {
+      "symbol": "GOOGL",
+      "shares": 25,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:30:40.977222"
+    },
+    {
+      "symbol": "MU",
+      "shares": 20,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:30:42.956171"
+    },
+    {
+      "symbol": "NFLX",
+      "shares": 3,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:30:46.498063"
+    },
+    {
+      "symbol": "ROKU",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-02-02T09:30:48.011733"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 12,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-02-02T09:30:49.521199"
+    },
+    {
+      "symbol": "CHWY",
+      "shares": 4,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:30:51.647761"
+    },
+    {
+      "symbol": "AFRM",
+      "shares": 4,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:30:55.123767"
+    },
+    {
+      "symbol": "MARA",
+      "shares": 25,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:30:58.240929"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 19,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:00.723800"
+    },
+    {
+      "symbol": "SNAP",
+      "shares": 41,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-02-02T09:31:03.774813"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 12,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:07.405028"
+    },
+    {
+      "symbol": "COIN",
+      "shares": 40,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:14.402309"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 400,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:16.378768"
+    },
+    {
+      "symbol": "SOUN",
+      "shares": 400,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:18.365781"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 300,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:20.380215"
+    },
+    {
+      "symbol": "STLA",
+      "shares": 800,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 800 but only have 411.0",
+      "timestamp": "2026-02-02T09:31:22.030933"
+    },
+    {
+      "symbol": "CRSP",
+      "shares": 100,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:24.018213"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-02-02T09:31:25.664951"
+    },
+    {
+      "symbol": "TSLA",
+      "shares": 20,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:27.653571"
+    },
+    {
+      "symbol": "GOOGL",
+      "shares": 25,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:29.635162"
+    },
+    {
+      "symbol": "MU",
+      "shares": 20,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:31.640872"
+    },
+    {
+      "symbol": "NFLX",
+      "shares": 3,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:34.811436"
+    },
+    {
+      "symbol": "ROKU",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-02-02T09:31:36.410994"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 12,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-02-02T09:31:37.901990"
+    },
+    {
+      "symbol": "CHWY",
+      "shares": 4,
+      "side": "sell",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:39.942407"
+    },
+    {
+      "symbol": "AFRM",
+      "shares": 4,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:42.397461"
+    },
+    {
+      "symbol": "MARA",
+      "shares": 25,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:44.713581"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 19,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:46.948690"
+    },
+    {
+      "symbol": "SNAP",
+      "shares": 41,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-02-02T09:31:48.811176"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 12,
+      "side": "buy",
+      "error": "Alpaca circuit breaker OPEN - too many recent failures",
+      "timestamp": "2026-02-02T09:31:51.440162"
+    }
+  ]
+}

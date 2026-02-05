@@ -1,0 +1,199 @@
+{
+  "execution_time": "2026-01-05T13:22:50.386856",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-05.md",
+  "executed_trades": [
+    {
+      "symbol": "KO",
+      "shares": 56,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 68.03,
+      "order_id": "de393854-36c6-4168-b5f6-e8c37fcdeff1",
+      "timestamp": "2026-01-05T13:22:19.529609",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "T",
+      "shares": 122,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 24.55,
+      "order_id": "2bb208bb-1555-4d20-9a42-b95657b96525",
+      "timestamp": "2026-01-05T13:22:20.670270",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "JPM",
+      "shares": 4,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 338.0,
+      "order_id": "f1ad30cc-5132-48ca-b4f2-c77f478c8ae4",
+      "timestamp": "2026-01-05T13:22:22.916153",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "T",
+      "shares": 122,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 24.55,
+      "order_id": "24dfd8d7-e9ee-4f9d-94b3-2057be0495c6",
+      "timestamp": "2026-01-05T13:22:28.360628",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 30,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 267.0,
+      "order_id": "2aae0330-7b86-4f12-87ef-0b46b19afb6f",
+      "timestamp": "2026-01-05T13:22:31.670280",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-05T13:22:17.229196"
+    },
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 14, available: 0)",
+      "timestamp": "2026-01-05T13:22:18.407857"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-01-05T13:22:21.801613"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-713.10, need $8024.70",
+      "timestamp": "2026-01-05T13:22:24.011855"
+    },
+    {
+      "symbol": "MA",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-541.25, need $5743.20",
+      "timestamp": "2026-01-05T13:22:25.062934"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-05T13:22:26.174033"
+    },
+    {
+      "symbol": "KO",
+      "shares": 56,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-05T13:22:27.217811"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-05T13:22:29.447714"
+    },
+    {
+      "symbol": "JPM",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-05T13:22:30.494697"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-05T13:22:38.845287"
+    },
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 14, available: 0)",
+      "timestamp": "2026-01-05T13:22:39.978123"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-01-05T13:22:41.107430"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-541.25, need $8024.70",
+      "timestamp": "2026-01-05T13:22:42.149777"
+    },
+    {
+      "symbol": "MA",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $-541.25, need $5743.20",
+      "timestamp": "2026-01-05T13:22:43.192778"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-05T13:22:44.245074"
+    },
+    {
+      "symbol": "KO",
+      "shares": 56,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-05T13:22:45.314884"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-05T13:22:46.424646"
+    },
+    {
+      "symbol": "JPM",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-05T13:22:47.470106"
+    }
+  ]
+}

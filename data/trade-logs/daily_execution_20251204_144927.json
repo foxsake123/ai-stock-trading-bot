@@ -1,0 +1,55 @@
+{
+  "execution_time": "2025-12-04T14:49:27.355147",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-04.md",
+  "executed_trades": [
+    {
+      "symbol": "MRK",
+      "shares": 20,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 102.5,
+      "order_id": "b318a82e-0540-4426-b02b-8d053ff4b418",
+      "timestamp": "2025-12-04T14:49:15.046561",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "BMY",
+      "shares": 50,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 51.0,
+      "order_id": "7ad5a691-ea78-4352-a345-394842b7ea97",
+      "timestamp": "2025-12-04T14:49:16.281918",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 60,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 25.6,
+      "order_id": "6911e8c1-052f-48a1-b81a-eb5fe8b6d0eb",
+      "timestamp": "2025-12-04T14:49:17.744363",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "XOM",
+      "shares": 40,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 117.5,
+      "order_id": "169d067e-cee7-4562-b16e-26e822be18e5",
+      "timestamp": "2025-12-04T14:49:19.348346",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    }
+  ],
+  "failed_trades": []
+}

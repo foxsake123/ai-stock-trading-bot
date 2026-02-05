@@ -1,0 +1,265 @@
+{
+  "execution_time": "2026-01-12T09:31:02.385746",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-08.md",
+  "executed_trades": [
+    {
+      "symbol": "CVX",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 159.89,
+      "order_id": "e3e19e20-d85a-4d19-8b7c-3df8dd95bd56",
+      "timestamp": "2026-01-12T09:30:11.875120",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "AI",
+      "shares": 300,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 13.7,
+      "order_id": "cd5777e1-b713-4771-9320-0b026474c69a",
+      "timestamp": "2026-01-12T09:30:19.084287",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "COIN",
+      "shares": 20,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 243.5,
+      "order_id": "e7408f44-5926-4691-b1b9-bf1fc987a852",
+      "timestamp": "2026-01-12T09:30:20.635932",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "CIVI",
+      "shares": 76,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 26.49,
+      "order_id": "7f5e830b-9ad6-4d5c-9eb6-22886cb9c0f4",
+      "timestamp": "2026-01-12T09:30:23.899817",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DAKT",
+      "shares": 371,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 20.62,
+      "order_id": "f5573785-41b6-4141-b33d-1602aca958cd",
+      "timestamp": "2026-01-12T09:30:25.546807",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ABNB",
+      "shares": 50,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 138.3,
+      "order_id": "f2e67b72-348b-4857-9f91-5dfeb4e01643",
+      "timestamp": "2026-01-12T09:30:28.236831",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SCHW",
+      "shares": 80,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 101.5,
+      "order_id": "4f3fec8c-b4b5-4878-9f50-c97ffc777ee8",
+      "timestamp": "2026-01-12T09:30:31.246842",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "PYPL",
+      "shares": 120,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 58.5,
+      "order_id": "d5c4b6cf-5328-4c57-b4e4-93fbcfef03db",
+      "timestamp": "2026-01-12T09:30:34.048897",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "LCID",
+      "shares": 400,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 11.2,
+      "order_id": "2d192e74-99a6-4a8c-8a33-586cad31475b",
+      "timestamp": "2026-01-12T09:30:35.534999",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "CSCO",
+      "shares": 90,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 90, available: 0)",
+      "timestamp": "2026-01-12T09:30:07.584194"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-12T09:30:10.038424"
+    },
+    {
+      "symbol": "KO",
+      "shares": 50,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.08, need $3526.50",
+      "timestamp": "2026-01-12T09:30:13.319243"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.08, need $3315.90",
+      "timestamp": "2026-01-12T09:30:14.831142"
+    },
+    {
+      "symbol": "GOOGL",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.08, need $3262.30",
+      "timestamp": "2026-01-12T09:30:16.315902"
+    },
+    {
+      "symbol": "INCY",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-12T09:30:17.548091"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-12T09:30:22.262454"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-12T09:30:26.873266"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 150,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-12T09:30:29.616786"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 200,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-12T09:30:32.575527"
+    },
+    {
+      "symbol": "CSCO",
+      "shares": 90,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 90, available: 0)",
+      "timestamp": "2026-01-12T09:30:42.021401"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-12T09:30:43.563032"
+    },
+    {
+      "symbol": "KO",
+      "shares": 50,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.08, need $3526.50",
+      "timestamp": "2026-01-12T09:30:45.077092"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.08, need $3315.90",
+      "timestamp": "2026-01-12T09:30:46.936241"
+    },
+    {
+      "symbol": "GOOGL",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $645.08, need $3262.30",
+      "timestamp": "2026-01-12T09:30:49.416866"
+    },
+    {
+      "symbol": "INCY",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-12T09:30:50.748604"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-12T09:30:52.369443"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 1,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-12T09:30:53.744527"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 150,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-12T09:30:55.347964"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 200,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-12T09:30:56.675440"
+    }
+  ]
+}

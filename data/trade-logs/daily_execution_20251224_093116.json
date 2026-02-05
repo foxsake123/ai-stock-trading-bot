@@ -1,0 +1,311 @@
+{
+  "execution_time": "2025-12-24T09:31:16.584757",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-23.md",
+  "executed_trades": [
+    {
+      "symbol": "GKOS",
+      "shares": 23,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 117.0,
+      "order_id": "c2c66ced-48df-4ce7-9efc-8778adae6e2c",
+      "timestamp": "2025-12-24T09:30:38.013051",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 2,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 684.25,
+      "order_id": "f4804183-077f-4aa5-916f-777baa75ebdb",
+      "timestamp": "2025-12-24T09:30:40.568097",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 2500,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 3.82,
+      "order_id": "5861ddd5-d9ec-488f-9635-4d182f61e81d",
+      "timestamp": "2025-12-24T09:30:43.298003",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ZM",
+      "shares": 100,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 89.75,
+      "order_id": "4c0dc1f1-cc77-4632-863a-9277ee60e056",
+      "timestamp": "2025-12-24T09:30:47.881045",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "BYND",
+      "shares": 500,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 8.45,
+      "order_id": "e09e20e3-bb1b-4556-a30a-fe224d61a0dc",
+      "timestamp": "2025-12-24T09:30:49.687242",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "UNH",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-24T09:30:11.248791"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-12-24T09:30:16.761014"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-24T09:30:18.175177"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-24T09:30:19.265381"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-24T09:30:20.600848"
+    },
+    {
+      "symbol": "HD",
+      "shares": 7,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 7, available: 0)",
+      "timestamp": "2025-12-24T09:30:22.721954"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 10 but only have 2.0",
+      "timestamp": "2025-12-24T09:30:25.559047"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 12,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-24T09:30:27.167816"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 107,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $5986.65, Conflicting sell order already exists",
+      "timestamp": "2025-12-24T09:30:28.409237"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 50,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $5253.50",
+      "timestamp": "2025-12-24T09:30:29.701321"
+    },
+    {
+      "symbol": "AMT",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $5235.15",
+      "timestamp": "2025-12-24T09:30:33.244793"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 96,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-24T09:30:34.478765"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 25,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 25 but only have 24.0",
+      "timestamp": "2025-12-24T09:30:35.643808"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 140,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 140 but only have 70.0",
+      "timestamp": "2025-12-24T09:30:36.778783"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 55,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-24T09:30:39.095687"
+    },
+    {
+      "symbol": "MU",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $27627.00 exceeds 10.0% limit ($11276.63)",
+      "timestamp": "2025-12-24T09:30:45.172429"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-24T09:30:46.331106"
+    },
+    {
+      "symbol": "UNH",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-24T09:30:55.859729"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-12-24T09:30:56.989207"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-24T09:30:58.198302"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-24T09:30:59.251133"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-24T09:31:00.397768"
+    },
+    {
+      "symbol": "HD",
+      "shares": 7,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 7, available: 0)",
+      "timestamp": "2025-12-24T09:31:01.541540"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 10 but only have 2.0",
+      "timestamp": "2025-12-24T09:31:02.611125"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 12,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-24T09:31:03.679178"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 107,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $5998.42, Conflicting sell order already exists",
+      "timestamp": "2025-12-24T09:31:04.836772"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 50,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $5267.50",
+      "timestamp": "2025-12-24T09:31:05.979616"
+    },
+    {
+      "symbol": "AMT",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $271.56, need $5234.40",
+      "timestamp": "2025-12-24T09:31:07.047926"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 96,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-24T09:31:08.103994"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 25,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 25 but only have 24.0",
+      "timestamp": "2025-12-24T09:31:09.482644"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 140,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 140 but only have 70.0",
+      "timestamp": "2025-12-24T09:31:10.561174"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 55,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-24T09:31:11.615435"
+    },
+    {
+      "symbol": "MU",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $28090.50 exceeds 10.0% limit ($11272.74)",
+      "timestamp": "2025-12-24T09:31:12.732189"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-24T09:31:13.810979"
+    }
+  ]
+}

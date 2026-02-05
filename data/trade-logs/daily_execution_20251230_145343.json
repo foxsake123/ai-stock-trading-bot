@@ -1,0 +1,117 @@
+{
+  "execution_time": "2025-12-30T14:53:43.404192",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-30.md",
+  "executed_trades": [
+    {
+      "symbol": "WMT",
+      "shares": 20,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 112.6,
+      "order_id": "6ffdc6ca-1da4-43b8-92aa-2eaa3c0ab5cc",
+      "timestamp": "2025-12-30T14:53:20.184324",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 17,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 28.45,
+      "order_id": "f9d49533-fbc3-4050-9b97-ae2eee774efb",
+      "timestamp": "2025-12-30T14:53:21.337995",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "DAKT",
+      "shares": 370,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 19.05,
+      "order_id": "ab66dff2-3145-41fd-9099-cc41e34682cf",
+      "timestamp": "2025-12-30T14:53:26.791643",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "BAC",
+      "shares": 30,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 30, available: 27)",
+      "timestamp": "2025-12-30T14:53:19.025548"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 200,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-30T14:53:22.407315"
+    },
+    {
+      "symbol": "OXY",
+      "shares": 150,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 150, available: 0)",
+      "timestamp": "2025-12-30T14:53:23.518207"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 200,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-30T14:53:24.571898"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 3000,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 3000 but only have 2000.0",
+      "timestamp": "2025-12-30T14:53:25.646602"
+    },
+    {
+      "symbol": "BAC",
+      "shares": 30,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 30, available: 27)",
+      "timestamp": "2025-12-30T14:53:35.227233"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 200,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-30T14:53:36.273822"
+    },
+    {
+      "symbol": "OXY",
+      "shares": 150,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 150, available: 0)",
+      "timestamp": "2025-12-30T14:53:37.376010"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 200,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-30T14:53:38.454208"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 3000,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 3000 but only have 2000.0",
+      "timestamp": "2025-12-30T14:53:39.516605"
+    }
+  ]
+}

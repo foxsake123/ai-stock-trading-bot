@@ -1,0 +1,388 @@
+{
+  "execution_time": "2026-01-06T17:47:21.468114",
+  "trades_file": "docs\\TODAYS_TRADES_2026-01-06.md",
+  "executed_trades": [
+    {
+      "symbol": "JPM",
+      "shares": 4,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 338.0,
+      "order_id": "274ac906-4ea7-4345-994c-d898e236f4e2",
+      "timestamp": "2026-01-06T17:46:01.051635",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "CIVI",
+      "shares": 76,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 26.9,
+      "order_id": "4d95376e-7a1a-4b2d-8c87-5bccfcc4e10d",
+      "timestamp": "2026-01-06T17:46:17.562798",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "AI",
+      "shares": 500,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 13.75,
+      "order_id": "221329ce-05c4-476a-83e7-c167734ab507",
+      "timestamp": "2026-01-06T17:46:19.024252",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "COIN",
+      "shares": 30,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 250.0,
+      "order_id": "c4a3e0cf-421e-4e76-b195-c76fa8846aa3",
+      "timestamp": "2026-01-06T17:46:20.587232",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SE",
+      "shares": 50,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 140.0,
+      "order_id": "4835a95f-4c32-4bf6-a67f-acaa15552851",
+      "timestamp": "2026-01-06T17:46:22.067235",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "PDD",
+      "shares": 60,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 115.0,
+      "order_id": "1d6e083b-d95e-4f8b-ad22-2a6333c24f8e",
+      "timestamp": "2026-01-06T17:46:26.790430",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "UBER",
+      "shares": 85,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 79.0,
+      "order_id": "4e46ff78-1214-48e1-99b8-997bcf7ab6d2",
+      "timestamp": "2026-01-06T17:46:28.354587",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 200,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 29.0,
+      "order_id": "d05832fd-7a8c-4e07-8b27-279a0aefacde",
+      "timestamp": "2026-01-06T17:46:29.825147",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ROKU",
+      "shares": 2,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 113.29,
+      "order_id": "9378e8bf-00e1-4515-81bc-ca7dcfc7c368",
+      "timestamp": "2026-01-06T17:46:31.482761",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SOFI",
+      "shares": 10,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 26.9,
+      "order_id": "bd4e8033-7e21-42ca-a8bd-1ef00435e11e",
+      "timestamp": "2026-01-06T17:46:33.089334",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "HIMS",
+      "shares": 5,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 35.33,
+      "order_id": "c1454ec8-502f-4b89-ba66-7df8a6b122e2",
+      "timestamp": "2026-01-06T17:46:37.451482",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 6,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 35.68,
+      "order_id": "ed94911b-c4ff-4842-95b0-c9d270eae714",
+      "timestamp": "2026-01-06T17:46:39.188892",
+      "status": "submitted",
+      "extended_hours": true,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-06T17:45:51.929117"
+    },
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 14, available: 0)",
+      "timestamp": "2026-01-06T17:45:53.759934"
+    },
+    {
+      "symbol": "KO",
+      "shares": 56,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:45:55.008437"
+    },
+    {
+      "symbol": "T",
+      "shares": 122,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:45:56.697204"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-01-06T17:45:59.155516"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $3268.39, need $7874.70",
+      "timestamp": "2026-01-06T17:46:02.604816"
+    },
+    {
+      "symbol": "MA",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $3268.39, need $5805.20",
+      "timestamp": "2026-01-06T17:46:03.910417"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 6,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:46:05.360947"
+    },
+    {
+      "symbol": "INCY",
+      "shares": 30,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 30 but only have 1.0",
+      "timestamp": "2026-01-06T17:46:06.675704"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-06T17:46:08.225345"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 29,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:46:09.468231"
+    },
+    {
+      "symbol": "T",
+      "shares": 122,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:46:12.375678"
+    },
+    {
+      "symbol": "MO",
+      "shares": 87,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:46:14.555459"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 46,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-06T17:46:16.039624"
+    },
+    {
+      "symbol": "PRTA",
+      "shares": 29,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:46:34.383233"
+    },
+    {
+      "symbol": "VKTX",
+      "shares": 3,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:46:35.671435"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2026-01-06T17:46:45.928978"
+    },
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 14, available: 0)",
+      "timestamp": "2026-01-06T17:46:47.568021"
+    },
+    {
+      "symbol": "KO",
+      "shares": 56,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:46:48.758706"
+    },
+    {
+      "symbol": "T",
+      "shares": 122,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:46:50.004738"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2026-01-06T17:46:51.692492"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 30,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $3268.39, need $7874.70",
+      "timestamp": "2026-01-06T17:46:54.400089"
+    },
+    {
+      "symbol": "MA",
+      "shares": 10,
+      "side": "buy",
+      "error": "Validation failed: DEE-BOT would use margin: cash $3268.39, need $5805.20",
+      "timestamp": "2026-01-06T17:46:56.986637"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 6,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:46:59.253822"
+    },
+    {
+      "symbol": "INCY",
+      "shares": 30,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 30 but only have 1.0",
+      "timestamp": "2026-01-06T17:47:02.181670"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 400, available: 0)",
+      "timestamp": "2026-01-06T17:47:03.624168"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 29,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:47:04.883224"
+    },
+    {
+      "symbol": "T",
+      "shares": 122,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:47:06.164461"
+    },
+    {
+      "symbol": "MO",
+      "shares": 87,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:47:07.468301"
+    },
+    {
+      "symbol": "CVX",
+      "shares": 46,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2026-01-06T17:47:08.786201"
+    },
+    {
+      "symbol": "PRTA",
+      "shares": 29,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:47:10.028472"
+    },
+    {
+      "symbol": "VKTX",
+      "shares": 3,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2026-01-06T17:47:11.203584"
+    }
+  ]
+}

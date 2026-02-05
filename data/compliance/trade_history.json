@@ -3265,5 +3265,59 @@
     "timestamp": "2026-02-02T09:30:12.096495",
     "account": "DEE-BOT",
     "order_id": "6e57e76d-1dd9-455a-816f-5e289e8d5f5b"
+  },
+  {
+    "symbol": "INTC",
+    "action": "SELL",
+    "qty": 50,
+    "price": 46.25,
+    "timestamp": "2026-02-05T09:30:10.154579",
+    "account": "DEE-BOT",
+    "order_id": "ff4a39a7-52c2-4b98-92e4-46515f6d75be"
+  },
+  {
+    "symbol": "COIN",
+    "action": "SELL",
+    "qty": 40,
+    "price": 195.0,
+    "timestamp": "2026-02-05T09:30:13.617865",
+    "account": "SHORGAN-LIVE",
+    "order_id": "3c57ed5b-dbdc-49bb-9894-8dac9c83074d"
+  },
+  {
+    "symbol": "SOFI",
+    "action": "SELL",
+    "qty": 300,
+    "price": 22.8,
+    "timestamp": "2026-02-05T09:30:17.017112",
+    "account": "SHORGAN-LIVE",
+    "order_id": "d67cf808-1678-41a6-9d08-46bbd53640d2"
+  },
+  {
+    "symbol": "TSLA",
+    "action": "BUY",
+    "qty": 20,
+    "price": 430.0,
+    "timestamp": "2026-02-05T09:30:24.902505",
+    "account": "SHORGAN-LIVE",
+    "order_id": "d4d2b8b0-c2d4-4043-bfe8-4409dd16d45c"
+  },
+  {
+    "symbol": "GOOGL",
+    "action": "BUY",
+    "qty": 25,
+    "price": 335.0,
+    "timestamp": "2026-02-05T09:30:26.046652",
+    "account": "SHORGAN-LIVE",
+    "order_id": "eaf386ea-16ef-4115-8dd4-954a4ff1d6c5"
+  },
+  {
+    "symbol": "MU",
+    "action": "BUY",
+    "qty": 20,
+    "price": 415.0,
+    "timestamp": "2026-02-05T09:30:27.275132",
+    "account": "SHORGAN-LIVE",
+    "order_id": "23add98d-e427-4509-875f-fe498b92b954"
   }
 ]

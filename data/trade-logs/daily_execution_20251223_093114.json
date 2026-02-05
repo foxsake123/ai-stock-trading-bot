@@ -1,0 +1,306 @@
+{
+  "execution_time": "2025-12-23T09:31:14.727343",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-23.md",
+  "executed_trades": [
+    {
+      "symbol": "BAC",
+      "shares": 107,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 55.96,
+      "order_id": "ed452f0c-ff0c-43ef-ad85-6a78549bd8f2",
+      "timestamp": "2025-12-23T09:30:16.323918",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "MRK",
+      "shares": 50,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 104.08,
+      "order_id": "2e8b4720-ded7-40c6-a7b0-4d2a7fea8758",
+      "timestamp": "2025-12-23T09:30:17.807555",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "AMT",
+      "shares": 30,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 172.0,
+      "order_id": "61cbe0af-213f-477f-b8d5-ad3771c37e2d",
+      "timestamp": "2025-12-23T09:30:21.369823",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "ARQT",
+      "shares": 140,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 29.65,
+      "order_id": "98b602a1-038e-4089-9122-fb08528da964",
+      "timestamp": "2025-12-23T09:30:29.499329",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 23,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 117.0,
+      "order_id": "545479dd-508d-4d32-8f5e-60d42461a178",
+      "timestamp": "2025-12-23T09:30:33.943247",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 55,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 21.3,
+      "order_id": "482837d5-ff69-40b4-93fb-82b0417f3669",
+      "timestamp": "2025-12-23T09:30:35.555359",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SPY",
+      "shares": 2,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 684.25,
+      "order_id": "a5175ee0-18cd-439a-a34c-ab80f9f957e7",
+      "timestamp": "2025-12-23T09:30:37.036786",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "PLUG",
+      "shares": 2500,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 3.82,
+      "order_id": "1b039ee3-8929-4a16-a779-ee96bb7e2738",
+      "timestamp": "2025-12-23T09:30:38.977821",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ZM",
+      "shares": 100,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 89.75,
+      "order_id": "b78129b9-9ac2-4ba7-8b06-1c028745fe4e",
+      "timestamp": "2025-12-23T09:30:43.464847",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "BYND",
+      "shares": 500,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 8.45,
+      "order_id": "e249093e-d7d4-4d1f-b309-876e4ff3f3a3",
+      "timestamp": "2025-12-23T09:30:46.681189",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "UNH",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-23T09:30:06.660177"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-12-23T09:30:07.907086"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-23T09:30:09.413886"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-23T09:30:10.474682"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-23T09:30:11.669371"
+    },
+    {
+      "symbol": "HD",
+      "shares": 7,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 7, available: 0)",
+      "timestamp": "2025-12-23T09:30:12.816686"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 10 but only have 2.0",
+      "timestamp": "2025-12-23T09:30:14.038148"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 12,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-23T09:30:15.103183"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 96,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-23T09:30:26.877031"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 25,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 25 but only have 24.0",
+      "timestamp": "2025-12-23T09:30:28.299485"
+    },
+    {
+      "symbol": "MU",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $27425.00 exceeds 10.0% limit ($11431.18)",
+      "timestamp": "2025-12-23T09:30:40.186353"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-23T09:30:41.587475"
+    },
+    {
+      "symbol": "UNH",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-23T09:30:56.161646"
+    },
+    {
+      "symbol": "PG",
+      "shares": 31,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 31, available: 0)",
+      "timestamp": "2025-12-23T09:30:57.633658"
+    },
+    {
+      "symbol": "INTC",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-23T09:30:59.653796"
+    },
+    {
+      "symbol": "WMT",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-23T09:31:00.718727"
+    },
+    {
+      "symbol": "PFE",
+      "shares": 100,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 100, available: 0)",
+      "timestamp": "2025-12-23T09:31:01.906315"
+    },
+    {
+      "symbol": "HD",
+      "shares": 7,
+      "side": "sell",
+      "error": "insufficient qty available for order (requested: 7, available: 0)",
+      "timestamp": "2025-12-23T09:31:03.061480"
+    },
+    {
+      "symbol": "JNJ",
+      "shares": 10,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 10 but only have 2.0",
+      "timestamp": "2025-12-23T09:31:04.147107"
+    },
+    {
+      "symbol": "AAPL",
+      "shares": 12,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-23T09:31:05.212147"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 96,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-23T09:31:06.277901"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 25,
+      "side": "sell",
+      "error": "Validation failed: Trying to sell 25 but only have 24.0",
+      "timestamp": "2025-12-23T09:31:07.376518"
+    },
+    {
+      "symbol": "MU",
+      "shares": 100,
+      "side": "buy",
+      "error": "Validation failed: Position too large: $27771.00 exceeds 10.0% limit ($11429.13)",
+      "timestamp": "2025-12-23T09:31:08.451698"
+    },
+    {
+      "symbol": "RIVN",
+      "shares": 400,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-23T09:31:09.534592"
+    }
+  ]
+}

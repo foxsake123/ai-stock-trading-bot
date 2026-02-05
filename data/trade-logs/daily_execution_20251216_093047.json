@@ -1,0 +1,253 @@
+{
+  "execution_time": "2025-12-16T09:30:47.701090",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-16.md",
+  "executed_trades": [
+    {
+      "symbol": "T",
+      "shares": 150,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 24.4,
+      "order_id": "4c6d9e6b-73cc-4f2c-8255-dc65461e29c0",
+      "timestamp": "2025-12-16T09:30:07.384622",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "UNH",
+      "shares": 15,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 338.5,
+      "order_id": "b6ef287c-8075-4d43-97b7-83f62daba214",
+      "timestamp": "2025-12-16T09:30:09.700462",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "DEE-BOT"
+    },
+    {
+      "symbol": "NCNO",
+      "shares": 11,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 24.85,
+      "order_id": "1f83cf9c-bb75-45ce-af50-733b7f321189",
+      "timestamp": "2025-12-16T09:30:21.006386",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 6,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 46.0,
+      "order_id": "935b8566-f5d8-450d-8b42-8e4dd316377a",
+      "timestamp": "2025-12-16T09:30:22.207034",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "SMCI",
+      "shares": 9,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 31.5,
+      "order_id": "57af8930-6a46-4e18-a1e9-5b321185b4b3",
+      "timestamp": "2025-12-16T09:30:23.568297",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "MRNA",
+      "shares": 10,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 29.0,
+      "order_id": "c3f53bda-cbac-40ba-805f-1f546964f8bc",
+      "timestamp": "2025-12-16T09:30:25.226410",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    },
+    {
+      "symbol": "ABNB",
+      "shares": 2,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 130.0,
+      "order_id": "bdb5c0fc-6fa0-4675-a48a-4dc7ffec57fc",
+      "timestamp": "2025-12-16T09:30:26.606230",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%",
+      "bot": "SHORGAN-BOT"
+    }
+  ],
+  "failed_trades": [
+    {
+      "symbol": "GILD",
+      "shares": 40,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:04.991938"
+    },
+    {
+      "symbol": "BRK.B",
+      "shares": 6,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:06.054839"
+    },
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-16T09:30:08.573116"
+    },
+    {
+      "symbol": "V",
+      "shares": 14,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-16T09:30:10.928667"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:12.100064"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:13.425786"
+    },
+    {
+      "symbol": "QSI",
+      "shares": 230,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:14.652572"
+    },
+    {
+      "symbol": "LOVE",
+      "shares": 22,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:15.760962"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:16.839382"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:18.016045"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:19.485318"
+    },
+    {
+      "symbol": "GILD",
+      "shares": 40,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:32.816330"
+    },
+    {
+      "symbol": "BRK.B",
+      "shares": 6,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:33.922556"
+    },
+    {
+      "symbol": "HD",
+      "shares": 14,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-16T09:30:35.002294"
+    },
+    {
+      "symbol": "V",
+      "shares": 14,
+      "side": "buy",
+      "error": "Validation failed: Conflicting sell order already exists",
+      "timestamp": "2025-12-16T09:30:36.067561"
+    },
+    {
+      "symbol": "WOLF",
+      "shares": 15,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:37.154425"
+    },
+    {
+      "symbol": "ORCL",
+      "shares": 1,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:38.254029"
+    },
+    {
+      "symbol": "QSI",
+      "shares": 230,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:39.317739"
+    },
+    {
+      "symbol": "LOVE",
+      "shares": 22,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:40.371361"
+    },
+    {
+      "symbol": "ARWR",
+      "shares": 4,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:41.430764"
+    },
+    {
+      "symbol": "GKOS",
+      "shares": 2,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:42.488265"
+    },
+    {
+      "symbol": "SNDX",
+      "shares": 14,
+      "side": "sell",
+      "error": "Validation failed: No position exists to sell",
+      "timestamp": "2025-12-16T09:30:43.536521"
+    }
+  ]
+}

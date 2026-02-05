@@ -1,0 +1,103 @@
+{
+  "execution_time": "2025-12-08T14:48:57.248572",
+  "trades_file": "docs\\TODAYS_TRADES_2025-12-09_LIVE.md",
+  "executed_trades": [
+    {
+      "symbol": "ASTS",
+      "shares": 1,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 73.53,
+      "order_id": "35129af3-b796-4b3b-8f0b-13ae41a55f41",
+      "timestamp": "2025-12-08T14:48:48.239120",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "IONQ",
+      "shares": 4,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 53.58,
+      "order_id": "5d82525f-57bc-41ff-a43a-43f49dc1fcde",
+      "timestamp": "2025-12-08T14:48:49.366960",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "NIO",
+      "shares": 18,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 5.12,
+      "order_id": "8f65c932-bcd4-43bc-b570-3ab3026dd6c9",
+      "timestamp": "2025-12-08T14:48:50.504481",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "PTON",
+      "shares": 36,
+      "side": "sell",
+      "order_type": "limit",
+      "limit_price": 6.43,
+      "order_id": "c499de59-95c8-491c-b399-8e7704087d81",
+      "timestamp": "2025-12-08T14:48:51.639324",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "BILI",
+      "shares": 10,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 26.01,
+      "order_id": "81607e7a-d637-49cc-b4ca-381fa31a6257",
+      "timestamp": "2025-12-08T14:48:52.817476",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "PATH",
+      "shares": 13,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 19.18,
+      "order_id": "ab41ce07-abc7-4404-bb0c-600fbb72f37d",
+      "timestamp": "2025-12-08T14:48:53.949182",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "SAVA",
+      "shares": 89,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 3.24,
+      "order_id": "ba164e2c-a930-4790-bc36-b0a44e1d6252",
+      "timestamp": "2025-12-08T14:48:55.088312",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    },
+    {
+      "symbol": "CHWY",
+      "shares": 8,
+      "side": "buy",
+      "order_type": "limit",
+      "limit_price": 34.59,
+      "order_id": "f60f0a16-34df-4aac-8d27-9c39ab60259e",
+      "timestamp": "2025-12-08T14:48:56.244917",
+      "status": "submitted",
+      "extended_hours": false,
+      "rationale": "56%"
+    }
+  ],
+  "failed_trades": []
+}
