@@ -52,6 +52,9 @@ try:
     from scripts.core import (
         retry_with_backoff,
         alpaca_circuit,
+        alpaca_dee_circuit,
+        alpaca_shorgan_paper_circuit,
+        alpaca_shorgan_live_circuit,
         CircuitBreakerOpenError,
         OrderVerifier,
         FillStatus
@@ -1114,9 +1117,17 @@ class DailyTradeExecutor:
             else:
                 print(f"[EXECUTING] {side.upper()} {shares} {symbol} @ {f'${limit_price}' if limit_price else 'market'}")
 
-            # Check circuit breaker before submitting (if available)
-            if CORE_UTILS_AVAILABLE and alpaca_circuit.state == "OPEN":
-                raise Exception(f"Alpaca circuit breaker OPEN - too many recent failures")
+            # Select per-account circuit breaker
+            if CORE_UTILS_AVAILABLE:
+                if api == self.dee_api:
+                    account_circuit = alpaca_dee_circuit
+                elif api == self.shorgan_live_api:
+                    account_circuit = alpaca_shorgan_live_circuit
+                else:
+                    account_circuit = alpaca_shorgan_paper_circuit
+
+                if account_circuit.state == "OPEN":
+                    raise Exception(f"Alpaca circuit breaker OPEN for {account_circuit.name} - too many recent failures")
 
             # Submit order with retry logic (if available)
             if CORE_UTILS_AVAILABLE:
@@ -1127,9 +1138,9 @@ class DailyTradeExecutor:
             else:
                 order = api.submit_order(**order_params)
 
-            # Record success in circuit breaker
+            # Record success in per-account circuit breaker
             if CORE_UTILS_AVAILABLE:
-                alpaca_circuit.record_success()
+                account_circuit.record_success()
 
             # Determine bot name for stop-loss and logging
             bot_name = "DEE-BOT" if api == self.dee_api else "SHORGAN-BOT"
@@ -1188,12 +1199,25 @@ class DailyTradeExecutor:
             return order
 
         except Exception as e:
-            # Record failure in circuit breaker
+            # Only record actual API/network errors in circuit breaker,
+            # not business logic errors (insufficient qty, validation, compliance)
             if CORE_UTILS_AVAILABLE:
-                try:
-                    alpaca_circuit.record_failure(e)
-                except Exception:
-                    pass  # Don't let circuit breaker errors mask the real error
+                error_str = str(e).lower()
+                is_api_error = any(keyword in error_str for keyword in [
+                    'connectionpool', 'timeout', 'connection refused',
+                    'name resolution', 'ssl', 'network', 'socket',
+                    'failed to resolve', '500', '502', '503', '429'
+                ])
+                if is_api_error:
+                    try:
+                        if api == self.dee_api:
+                            alpaca_dee_circuit.record_failure(e)
+                        elif api == self.shorgan_live_api:
+                            alpaca_shorgan_live_circuit.record_failure(e)
+                        else:
+                            alpaca_shorgan_paper_circuit.record_failure(e)
+                    except Exception:
+                        pass  # Don't let circuit breaker errors mask the real error
 
             error_record = {
                 'symbol': trade_info['symbol'],

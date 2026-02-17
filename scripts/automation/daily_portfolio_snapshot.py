@@ -3,6 +3,14 @@ Daily Portfolio Snapshot Generator
 Pulls current positions from Alpaca and saves to dated CSV files
 Run this daily at market close to track portfolio history
 """
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
 
 import alpaca_trade_api as tradeapi
 import pandas as pd
@@ -14,7 +22,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Alpaca API Configuration
-API_KEY = 'PK6FZK4DAQVTD7DYVH78'
+API_KEY = os.getenv('ALPACA_API_KEY_DEE')
 API_SECRET = 'OJPdMDllGBYhiWLVpLcRLEFjmof8s6NHKKrKC2C9'
 BASE_URL = 'https://paper-api.alpaca.markets'
 

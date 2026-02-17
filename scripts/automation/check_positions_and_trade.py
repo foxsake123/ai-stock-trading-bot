@@ -1,6 +1,14 @@
 """
 Check current positions and execute new trades avoiding wash trade issues
 """
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
 
 import alpaca_trade_api as tradeapi
 import pandas as pd
@@ -13,7 +21,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Initialize Alpaca
-API_KEY = 'PK6FZK4DAQVTD7DYVH78'
+API_KEY = os.getenv('ALPACA_API_KEY_DEE')
 API_SECRET = 'OJPdMDllGBYhiWLVpLcRLEFjmof8s6NHKKrKC2C9'
 BASE_URL = 'https://paper-api.alpaca.markets'
 

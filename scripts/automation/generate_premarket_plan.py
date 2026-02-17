@@ -1,3 +1,11 @@
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -23,8 +31,8 @@ TELEGRAM_BOT_TOKEN = "8093845586:AAEqytNDQ_dVzVp6ZbDyveMTx7MZMtG6N0c"
 TELEGRAM_CHAT_ID = "7870288896"
 
 # Alpaca API
-API_KEY = 'PKJRLSB2MFEJUSK6UK2E'
-API_SECRET = 'QBpREJmZ7HgHS1tHptvHgwjH4MtjFSoEcQ0wmGic'
+API_KEY = os.getenv('ALPACA_API_KEY_SHORGAN')
+API_SECRET = os.getenv('ALPACA_SECRET_KEY_SHORGAN')
 BASE_URL = 'https://paper-api.alpaca.markets'
 api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL, api_version='v2')
 

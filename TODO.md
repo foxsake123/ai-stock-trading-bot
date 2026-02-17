@@ -10,11 +10,10 @@ Last Updated: 2026-02-04
   - Investigate Windows Task Scheduler permission issues
   - Consider alternative: Cloud hosting (AWS/GCP/Azure)
 
-- [ ] Implement multi-agent validation calibration
-  - Current status: 0% approval rate needs adjustment
-  - Target: 30-50% approval rate
-  - Collect 5 days of production data to calibrate threshold
-  - May need to lower threshold from 0.60 → 0.55-0.57
+- [x] Implement multi-agent validation calibration (calibrated, approval working)
+  - Threshold lowered to 0.55, approval rate now functional
+  - SHORGAN Live: 6/6 approved (Feb 12, 2026)
+  - DEE-BOT: 2/2 approved, SHORGAN Paper: 4/8 approved
 
 ### Security
 - [x] Rotate API keys (completed after Oct 29 exposure)
@@ -155,6 +154,21 @@ Last Updated: 2026-02-04
 
 ## ✅ COMPLETED (Last 30 Days)
 
+### February 2026
+- [x] Fix ORDER BLOCK parser regex bug (report_parser.py line 83)
+  - Bold markdown `**ORDER BLOCKS:**` not matched by regex
+  - Caused intermittent 0-trade days for SHORGAN Live
+- [x] Implement per-account circuit breakers (retry_utils.py)
+  - Paper failures no longer cascade to block Live execution
+  - Separate breakers: alpaca_dee_circuit, alpaca_shorgan_paper_circuit, alpaca_shorgan_live_circuit
+- [x] Smart circuit breaker error classification
+  - Only real API/network errors trip the breaker (timeouts, DNS, 5xx)
+  - Business logic errors (insufficient qty, conflicting orders) no longer count
+- [x] Execute Feb 12 trades manually after automation failure
+  - DEE-BOT: SELL MA, BUY PFE
+  - SHORGAN Paper: SELL AMZN, BUY CRM
+  - SHORGAN Live: SELL MARA/PLUG, BUY SNAP/HIMS (with stop losses)
+
 ### January 2026
 - [x] Add comprehensive system improvements (retry logic, health monitoring, order verification)
 - [x] Create centralized trading configuration module
@@ -217,6 +231,8 @@ Last Updated: 2026-02-04
 - Task Scheduler wake-from-sleep unreliable (use workaround: keep PC on)
 - SHORGAN-BOT Paper sometimes hits 15-turn API limit (increased from 10)
 - Missing performance data: Oct 22 - Nov 10 (accepting gap)
+- GitHub Actions execution can run late and hit DNS issues (Feb 12 incident)
+- SHORGAN Paper has stale position data (OXY/BAC showing in trades with 0 shares in account)
 
 ### System Requirements
 - Windows PC must be on during trading hours (Mon-Fri 8:00 AM - 5:00 PM)

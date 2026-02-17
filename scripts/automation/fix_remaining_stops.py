@@ -1,13 +1,21 @@
 """
 Fix stop orders for KSS and INCY
 """
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
 
 import alpaca_trade_api as tradeapi
 import time
 
 # SHORGAN-BOT credentials
-API_KEY = 'PKJRLSB2MFEJUSK6UK2E'
-SECRET_KEY = 'QBpREJmZ7HgHS1tHptvHgwjH4MtjFSoEcQ0wmGic'
+API_KEY = os.getenv('ALPACA_API_KEY_SHORGAN')
+SECRET_KEY = os.getenv('ALPACA_SECRET_KEY_SHORGAN')
 BASE_URL = 'https://paper-api.alpaca.markets'
 
 api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')

@@ -29,6 +29,7 @@ from src.agents.bear_researcher import BearResearcherAgent
 from src.agents.risk_manager import RiskManagerAgent
 from src.agents.shorgan_catalyst_agent import ShorganCatalystAgent
 from src.agents.options_strategy_agent import OptionsStrategyAgent
+from src.agents.hub_signal_agent import HubSignalAgent
 
 # Configure logging
 logging.basicConfig(
@@ -78,6 +79,9 @@ class TradingSystem:
         # Specialized trading agents
         self.agents['catalyst'] = ShorganCatalystAgent()
         self.agents['options'] = OptionsStrategyAgent()
+        
+        # Intelligence Hub signal agent (aggregates 15+ data sources)
+        self.agents['hub_signals'] = HubSignalAgent()
         
         # Register all agents with coordinator
         for name, agent in self.agents.items():

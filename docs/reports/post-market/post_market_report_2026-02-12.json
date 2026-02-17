@@ -1,0 +1,410 @@
+{
+  "timestamp": "2026-02-12T16:30:07.232273",
+  "dee_bot": {
+    "name": "DEE-BOT",
+    "portfolio_value": 110622.55,
+    "cash": 1005.49,
+    "buying_power": 313214.32,
+    "positions": [
+      {
+        "symbol": "AAPL",
+        "qty": 30,
+        "avg_price": 255.790333,
+        "current_price": 261.7,
+        "market_value": 7851.0,
+        "unrealized_pnl": 177.29001,
+        "unrealized_pnl_pct": 2.3103558804155435,
+        "change_today": -0.05009
+      },
+      {
+        "symbol": "ABBV",
+        "qty": 20,
+        "avg_price": 222.8705,
+        "current_price": 227.5,
+        "market_value": 4550.0,
+        "unrealized_pnl": 92.59,
+        "unrealized_pnl_pct": 2.077215243829937,
+        "change_today": 0.02992
+      },
+      {
+        "symbol": "BAC",
+        "qty": 134,
+        "avg_price": 55.863134,
+        "current_price": 52.56,
+        "market_value": 7043.04,
+        "unrealized_pnl": -442.619956,
+        "unrealized_pnl_pct": -5.912904922233686,
+        "change_today": -0.02396
+      },
+      {
+        "symbol": "BRK.B",
+        "qty": 8,
+        "avg_price": 499.92,
+        "current_price": 500.7881,
+        "market_value": 4006.3048,
+        "unrealized_pnl": 6.9448,
+        "unrealized_pnl_pct": 0.17364778364538325,
+        "change_today": 0.00154
+      },
+      {
+        "symbol": "CSCO",
+        "qty": 90,
+        "avg_price": 76.78,
+        "current_price": 74.84,
+        "market_value": 6735.6,
+        "unrealized_pnl": -174.6,
+        "unrealized_pnl_pct": -2.5266996613701487,
+        "change_today": -0.12509
+      },
+      {
+        "symbol": "HD",
+        "qty": 14,
+        "avg_price": 356.93,
+        "current_price": 390.8,
+        "market_value": 5471.2,
+        "unrealized_pnl": 474.18,
+        "unrealized_pnl_pct": 9.489255596335415,
+        "change_today": 0.00031
+      },
+      {
+        "symbol": "JNJ",
+        "qty": 29,
+        "avg_price": 206.25931,
+        "current_price": 246.13,
+        "market_value": 7137.77,
+        "unrealized_pnl": 1156.25001,
+        "unrealized_pnl_pct": 19.33037107512868,
+        "change_today": 0.02188
+      },
+      {
+        "symbol": "JPM",
+        "qty": 24,
+        "avg_price": 299.23,
+        "current_price": 302.64,
+        "market_value": 7263.36,
+        "unrealized_pnl": 81.84,
+        "unrealized_pnl_pct": 1.139591618487451,
+        "change_today": -0.02632
+      },
+      {
+        "symbol": "KO",
+        "qty": 63,
+        "avg_price": 73.9,
+        "current_price": 79.0,
+        "market_value": 4977.0,
+        "unrealized_pnl": 321.3,
+        "unrealized_pnl_pct": 6.901217861975642,
+        "change_today": 0.00509
+      },
+      {
+        "symbol": "MA",
+        "qty": 15,
+        "avg_price": 540.0,
+        "current_price": 528.0,
+        "market_value": 7920.0,
+        "unrealized_pnl": -180.0,
+        "unrealized_pnl_pct": -2.2222222222222223,
+        "change_today": -0.0176
+      },
+      {
+        "symbol": "MMM",
+        "qty": 20,
+        "avg_price": 152.45,
+        "current_price": 174.61,
+        "market_value": 3492.2,
+        "unrealized_pnl": 443.2,
+        "unrealized_pnl_pct": 14.535913414234175,
+        "change_today": 0.01018
+      },
+      {
+        "symbol": "MO",
+        "qty": 61,
+        "avg_price": 57.52,
+        "current_price": 66.98,
+        "market_value": 4085.78,
+        "unrealized_pnl": 577.06,
+        "unrealized_pnl_pct": 16.44645340751043,
+        "change_today": 0.01608
+      },
+      {
+        "symbol": "MSFT",
+        "qty": 10,
+        "avg_price": 413.912,
+        "current_price": 401.87,
+        "market_value": 4018.7,
+        "unrealized_pnl": -120.42,
+        "unrealized_pnl_pct": -2.9093140570942615,
+        "change_today": -0.00618
+      },
+      {
+        "symbol": "NEE",
+        "qty": 80,
+        "avg_price": 78.933125,
+        "current_price": 91.93,
+        "market_value": 7354.4,
+        "unrealized_pnl": 1039.75,
+        "unrealized_pnl_pct": 16.465679016255848,
+        "change_today": 0.00624
+      },
+      {
+        "symbol": "PEP",
+        "qty": 20,
+        "avg_price": 153.4725,
+        "current_price": 167.17,
+        "market_value": 3343.4,
+        "unrealized_pnl": 273.95,
+        "unrealized_pnl_pct": 8.925051719363404,
+        "change_today": -0.01171
+      },
+      {
+        "symbol": "PFE",
+        "qty": 40,
+        "avg_price": 27.71,
+        "current_price": 27.52,
+        "market_value": 1100.8,
+        "unrealized_pnl": -7.6,
+        "unrealized_pnl_pct": -0.6856730422230242,
+        "change_today": -0.00757
+      },
+      {
+        "symbol": "PG",
+        "qty": 31,
+        "avg_price": 146.236266,
+        "current_price": 161.32,
+        "market_value": 5000.92,
+        "unrealized_pnl": 467.595754,
+        "unrealized_pnl_pct": 10.31463289687662,
+        "change_today": 0.00825
+      },
+      {
+        "symbol": "SO",
+        "qty": 60,
+        "avg_price": 85.227333,
+        "current_price": 92.56,
+        "market_value": 5553.6,
+        "unrealized_pnl": 439.96002,
+        "unrealized_pnl_pct": 8.603656528827436,
+        "change_today": 0.01871
+      },
+      {
+        "symbol": "UNH",
+        "qty": 10,
+        "avg_price": 271.64,
+        "current_price": 284.0387,
+        "market_value": 2840.387,
+        "unrealized_pnl": 123.987,
+        "unrealized_pnl_pct": 4.5643866882638795,
+        "change_today": 0.01839
+      },
+      {
+        "symbol": "V",
+        "qty": 14,
+        "avg_price": 345.44,
+        "current_price": 324.0,
+        "market_value": 4536.0,
+        "unrealized_pnl": -300.16,
+        "unrealized_pnl_pct": -6.2065771190365915,
+        "change_today": -0.01592
+      },
+      {
+        "symbol": "WMT",
+        "qty": 40,
+        "avg_price": 112.248,
+        "current_price": 133.39,
+        "market_value": 5335.6,
+        "unrealized_pnl": 845.68,
+        "unrealized_pnl_pct": 18.835079466894733,
+        "change_today": 0.03588
+      }
+    ],
+    "total_market_value": 109617.0618,
+    "total_unrealized_pnl": 5296.177638,
+    "total_realized_pnl": 0
+  },
+  "shorgan_bot": {
+    "name": "SHORGAN-BOT",
+    "portfolio_value": 95680.19,
+    "cash": 12060.6,
+    "buying_power": 262261.14,
+    "positions": [
+      {
+        "symbol": "AMD",
+        "qty": 25,
+        "avg_price": 208.7036,
+        "current_price": 207.19,
+        "market_value": 5179.75,
+        "unrealized_pnl": -37.84,
+        "unrealized_pnl_pct": -0.725239047146288,
+        "change_today": -0.02992
+      },
+      {
+        "symbol": "AMZN",
+        "qty": 20,
+        "avg_price": 239.63,
+        "current_price": 199.12,
+        "market_value": 3982.4,
+        "unrealized_pnl": -810.2,
+        "unrealized_pnl_pct": -16.905228894545758,
+        "change_today": -0.0243
+      },
+      {
+        "symbol": "BAC",
+        "qty": 150,
+        "avg_price": 56.25,
+        "current_price": 52.56,
+        "market_value": 7884.0,
+        "unrealized_pnl": -553.5,
+        "unrealized_pnl_pct": -6.5600000000000005,
+        "change_today": -0.02396
+      },
+      {
+        "symbol": "COIN",
+        "qty": 30,
+        "avg_price": 160.86,
+        "current_price": 142.0,
+        "market_value": 4260.0,
+        "unrealized_pnl": -565.8,
+        "unrealized_pnl_pct": -11.724480915081434,
+        "change_today": -0.07311
+      },
+      {
+        "symbol": "CVX",
+        "qty": -1,
+        "avg_price": 157.265054,
+        "current_price": 182.58,
+        "market_value": -182.58,
+        "unrealized_pnl": -25.314946,
+        "unrealized_pnl_pct": 16.096993805120878,
+        "change_today": -0.01744
+      },
+      {
+        "symbol": "DKNG",
+        "qty": 150,
+        "avg_price": 27.0,
+        "current_price": 21.8159,
+        "market_value": 3272.385,
+        "unrealized_pnl": -777.615,
+        "unrealized_pnl_pct": -19.200370370370372,
+        "change_today": -0.1705
+      },
+      {
+        "symbol": "MARA",
+        "qty": 400,
+        "avg_price": 7.5823,
+        "current_price": 7.27,
+        "market_value": 2908.0,
+        "unrealized_pnl": -124.92,
+        "unrealized_pnl_pct": -4.1188030017277075,
+        "change_today": -0.03836
+      },
+      {
+        "symbol": "MRK",
+        "qty": 50,
+        "avg_price": 110.575125,
+        "current_price": 119.49,
+        "market_value": 5974.5,
+        "unrealized_pnl": 445.74375,
+        "unrealized_pnl_pct": 8.062278925752965,
+        "change_today": 0.00151
+      },
+      {
+        "symbol": "NU",
+        "qty": 200,
+        "avg_price": 15.63,
+        "current_price": 17.12,
+        "market_value": 3424.0,
+        "unrealized_pnl": 298.0,
+        "unrealized_pnl_pct": 9.532949456174023,
+        "change_today": -0.01666
+      },
+      {
+        "symbol": "NVDA",
+        "qty": 25,
+        "avg_price": 189.9872,
+        "current_price": 187.78,
+        "market_value": 4694.5,
+        "unrealized_pnl": -55.18,
+        "unrealized_pnl_pct": -1.1617624766300043,
+        "change_today": -0.01194
+      },
+      {
+        "symbol": "OXY",
+        "qty": 150,
+        "avg_price": 39.68,
+        "current_price": 45.5471,
+        "market_value": 6832.065,
+        "unrealized_pnl": 880.065,
+        "unrealized_pnl_pct": 14.786038306451612,
+        "change_today": -0.03584
+      },
+      {
+        "symbol": "PANW",
+        "qty": 40,
+        "avg_price": 157.195,
+        "current_price": 162.04,
+        "market_value": 6481.6,
+        "unrealized_pnl": 193.8,
+        "unrealized_pnl_pct": 3.082159101752601,
+        "change_today": -0.01972
+      },
+      {
+        "symbol": "RIOT",
+        "qty": 300,
+        "avg_price": 14.103067,
+        "current_price": 14.2184,
+        "market_value": 4265.52,
+        "unrealized_pnl": 34.5999,
+        "unrealized_pnl_pct": 0.8177866559096685,
+        "change_today": -0.0393
+      },
+      {
+        "symbol": "SMCI",
+        "qty": 200,
+        "avg_price": 30.2239,
+        "current_price": 30.52,
+        "market_value": 6104.0,
+        "unrealized_pnl": 59.22,
+        "unrealized_pnl_pct": 0.9796882599532158,
+        "change_today": -0.04744
+      },
+      {
+        "symbol": "SPY",
+        "qty": 10,
+        "avg_price": 649.101667,
+        "current_price": 682.13,
+        "market_value": 6821.3,
+        "unrealized_pnl": 330.28333,
+        "unrealized_pnl_pct": 5.088314308704433,
+        "change_today": -0.01421
+      },
+      {
+        "symbol": "UBER",
+        "qty": 100,
+        "avg_price": 72.7861,
+        "current_price": 71.1815,
+        "market_value": 7118.15,
+        "unrealized_pnl": -160.46,
+        "unrealized_pnl_pct": -2.2045418012505134,
+        "change_today": 0.00242
+      },
+      {
+        "symbol": "ZM",
+        "qty": 50,
+        "avg_price": 87.875,
+        "current_price": 92.0,
+        "market_value": 4600.0,
+        "unrealized_pnl": 206.25,
+        "unrealized_pnl_pct": 4.694167852062589,
+        "change_today": -0.00163
+      }
+    ],
+    "total_market_value": 83619.59,
+    "total_unrealized_pnl": -662.8679659999998,
+    "total_realized_pnl": 0
+  },
+  "combined": {
+    "total_portfolio": 206302.74,
+    "total_unrealized_pnl": 4633.309672,
+    "total_positions": 38
+  }
+}

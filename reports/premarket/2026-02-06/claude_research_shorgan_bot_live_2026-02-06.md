@@ -2,251 +2,224 @@
 
 ## Thursday, February 05, 2026
 
-### Generated: 2026-02-05 at 10:40 AM ET
+### Generated: 2026-02-05 at 06:09 PM ET
 
 ### Model: Claude Opus 4.1 with Extended Thinking (Anthropic)
 
-### Portfolio Value: $2,679.77
+### Portfolio Value: $2,662.60
 
 ---
 
-# SHORGAN-BOT LIVE: Daily Deep Research Report
-**Date: Thursday, February 5, 2026 | 10:40 AM ET**  
-**Account: Real Money $3,000 Margin Account**  
-**Current Status: -10.7% MTD | Rebuilding Phase**
+I'll generate a comprehensive Daily Deep Research Report for SHORGAN-BOT-LIVE. Let me start by gathering current market data for all holdings and potential new opportunities.Now let me get fundamental and technical data for our holdings:Let me get earnings history and news sentiment for our holdings:Let me check for some potential new opportunities with upcoming catalysts:Let me get price history and fundamentals for some promising candidates:Let me get news sentiment for potential catalyst plays:Let me get valuation multiples for our holdings:Now I'll compile a comprehensive Daily Deep Research Report with all the information gathered:
 
 ---
 
-## 1. PORTFOLIO SNAPSHOT- **Total Value**: $2,678.45
-- **Equity**: $2,678.45
-- **Margin Used**: $0 (0%)
-- **Unrealized P&L**: -$321.55 (-10.72%)
-- **Cash Available**: $1,513.19
-- **Buying Power**: $4,032.31
+# SHORGAN-BOT-LIVE Daily Deep Research Report
+
+### Week 23 - Thursday, February 5, 2026
+
+### Risk-Based Catalyst Trading with $3K Real Money
+
+---
+
+## 1. PORTFOLIO SNAPSHOT
+
+- **Total Value**: $2,662.60
+- **Equity**: $993.04
+- **Margin Used**: $0.00 (0%) - CASH ACCOUNT
+- **Unrealized P&L**: +$26.49 (+2.7%)
+- **Cash Available**: $1,669.56
+- **Buying Power**: $1,669.56 (Cash Account - No Margin)
 
 **Holdings Breakdown Table:**
 | Ticker | Shares | Avg Entry | Current Price | Value | P&L ($) | P&L (%) | Allocation |
 |--------|--------|-----------|---------------|-------|---------|---------|------------|
-| FDX    | 1      | $282.64   | $361.98       | $361.98| +$79.34 | +28.1%  | 13.5%      |
-| LCID   | 20     | $11.04    | $9.95         | $199.00| -$21.80 | -9.9%   | 7.4%       |
-| NFLX   | 3      | $90.00    | $81.32        | $243.96| -$26.04 | -9.7%   | 9.1%       |
-| NU     | 12     | $16.10    | $16.64        | $199.68| +$6.48  | +3.4%   | 7.5%       |
-| PLUG   | 85     | $2.17     | $1.89         | $160.65| -$23.80 | -12.9%  | 6.0%       |
-
-**CRITICAL OBSERVATION**: Account down 10.7% from initial $3,000. FDX position providing buffer with +28.1% gain. Need aggressive catalyst plays to recover.
+| FDX    | 1      | $282.64   | $364.02       | $364  | +$81.38 | +28.8% | 13.7%     |
+| LCID   | 20     | $11.04    | $9.55         | $191  | -$29.80 | -13.5% | 7.2%      |
+| NFLX   | 3      | $90.00    | $80.51        | $242  | -$28.47 | -10.5% | 9.1%      |
+| NU     | 12     | $16.10    | $16.80        | $202  | +$8.40  | +4.3%  | 7.6%      |
 
 ---
 
-## 2. MARKET ENVIRONMENT OVERVIEW- **SPY Commentary**: Currently at $677.20, showing strength above 675 resistance. New all-time highs territory suggests bullish momentum continues despite rate concerns.
+## 2. MARKET ENVIRONMENT OVERVIEW
 
-- **QQQ Commentary**: Tech leadership intact at $596.83. AI momentum and earnings optimism driving tech higher despite elevated valuations.
+**SPY Commentary**: Current level: $674.55 (extended rally)
+- Trading near all-time highs in the mid-670s range
+- Support zone: $660-665
+- Resistance: $680-685
+- Trend: Bullish but extended, caution warranted
 
-- **IWM Commentary**: Small-caps at $257.79 showing relative weakness vs large-caps. This divergence creates opportunities in beaten-down small-cap catalyst plays.
+**QQQ Commentary**: Current level: $591.78
+- Tech sector showing resilience at $590+ levels
+- Support: $580-585 range
+- Resistance: $600 psychological level
+- Momentum: Bullish with consolidation
 
-- **Upcoming Macro Events** (Next 10 Days):
-  - Feb 7: January Jobs Report (critical for Fed path)
-  - Feb 11: January CPI Data (inflation checkpoint)
-  - Feb 12: Retail Sales Data
-  - Multiple Fed speakers throughout week
+**IWM Commentary**: Current level: $256.08
+- Small-caps lagging large-caps significantly
+- Support: $250
+- Resistance: $260
+- Sentiment: Mixed - creating opportunities in oversold names
 
-- **Catalyst-Rich Sectors**: 
-  - Biotech (FDA decisions heating up)
-  - Energy (earnings season)
-  - Consumer (retail earnings wave)
+**Upcoming Macro Events** (Next 10 Days):
+- Feb 6 (Tomorrow): January Employment Report (critical)
+- Feb 11: CPI Inflation Data
+- Feb 12: Retail Sales
+- Feb 13: PPI Data
 
-- **Volatility Regime**: VIX ~14 (low vol continues) = cheap options premium for catalyst plays
+**Catalyst-Rich Sectors**:
+- EV/Clean Energy: Multiple earnings (RIVN, PLUG)
+- Biotech: Several FDA decisions pending
+- Streaming/Entertainment: NFLX competitor reports
+- Fintech: NU and peers reporting
 
-- **IV Rank Context**: Below 20th percentile marketwide = favorable for option buyers
+**Volatility Regime**: VIX ~13-15 (low volatility)
+- Options premiums compressed
+- Favor stock positions over options
+- Expect sharp moves on binary events
 
 ---
 
-## 3. CATALYST CALENDAR (Next 10 Trading Days)```
-[February 5 - Thursday] - TODAY
-  Type: Market Assessment Day
-  Expected Impact: Medium
-  Suggested Trade: Review positions for catalyst alignment
+## 3. CATALYST CALENDAR (Next 10 Trading Days)
 
-[February 6 - Friday] 
-  Type: Options Expiration Day
-  Expected Impact: High (Monthly expiry)
-  Suggested Trade: Close any Feb 6 options, watch for pinning
-
-[February 7 - Monday] - U.S. Jobs Report
+```
+[Feb 6] - Employment Report
   Type: Economic Data
   Expected Impact: High
-  Suggested Trade: SPY straddle if VIX <13
+  Suggested Trade: Hold cash for volatility
 
-[February 10 - Thursday] - LCID Earnings (Expected)
+[Feb 10] - RIVN Earnings (After Close)
   Type: Earnings
   Expected Impact: High
-  Suggested Trade: HOLD current position through report
+  Suggested Trade: Consider entry on weakness pre-earnings
 
-[February 11 - Friday] - January CPI
-  Type: Economic Data  
-  Expected Impact: High
-  Suggested Trade: IWM puts if >260 (small-caps vulnerable)
-
-[February 12 - Monday] - Retail Sales
+[Feb 11] - CPI Data (Pre-Market)
   Type: Economic Data
-  Expected Impact: Medium
-  Suggested Trade: XRT momentum plays
-
-[February 13 - Tuesday] - PLUG Earnings (Expected)
-  Type: Earnings
   Expected Impact: High
-  Suggested Trade: EXIT before report (poor track record)
+  Suggested Trade: Defensive positioning
+
+[Feb 12] - PLUG Earnings (Before Open)
+  Type: Earnings
+  Expected Impact: Medium
+  Suggested Trade: High-risk binary play
+
+[Feb 13] - SOFI Earnings (After Close)
+  Type: Earnings
+  Expected Impact: Medium
+  Suggested Trade: Momentum play if setup improves
 ```
 
-**KEY CATALYST OPPORTUNITIES IDENTIFIED**:
-- Multiple biotech PDUFA dates mid-February
-- Energy earnings wave starting next week
-- Tech earnings momentum continuing
-
 ---
 
-## 4. POSITION-BY-POSITION ANALYSIS### FDX - FedEx Corporation
+## 4. POSITION-BY-POSITION ANALYSIS
 
-**Thesis Status**: STRONG (But Overextended)
+### FDX - FedEx Corporation
+
+**Thesis Status**: WEAKENING (No near-term catalyst)
 
 **Position Details**:
 - Shares: 1 @ $282.64 avg entry
-- Current Price: $361.98
-- Market Value: $361.98
-- P&L: +$79.34 (+28.1%)
-- Allocation: 13.5% of portfolio
+- Current Price: $364.02
+- Market Value: $364.02
+- P&L: +$81.38 (+28.8%)
+- Allocation: 13.7% of portfolio
 
-**Catalyst Timing**: None immediate (Q3 earnings March)
+**Catalyst Timing**: Next earnings not until March
 
 **Technical Pattern**:
-- Support: $340
-- Resistance: $365 (testing now)
-- Trend: Bullish but extended
-- Volume: Normal
+- Support: $350
+- Resistance: $370
+- Trend: Bullish but overextended
+- Volume: Average
 
-**Action**: TRIM 50% (SELL 0.5 shares = round to SELL ALL)
+**Action**: TRIM 100% - Take Profits
 
 **Justification**:
-1. **Fundamental**: Strong margins (62% gross) but growth slowing
-2. **Technical**: +28% gain = take profits per rules
-3. **Risk**: No near-term catalyst, overweight position
+1. **Fundamental**: P/E 20, fairly valued after rally
+2. **Technical**: Up 28.8%, extended from support
+3. **Risk**: No catalyst for 4+ weeks, protect gains
 
-**Proceeds**: $361.98 to redeploy into catalyst plays
+**Proceeds**: $364.02 to redeploy
 
----
+### LCID - Lucid Group Inc.
 
-### LCID - Lucid Group
-
-**Thesis Status**: WEAKENING (EV story losing momentum)
+**Thesis Status**: BROKEN
 
 **Position Details**:
 - Shares: 20 @ $11.04 avg entry
-- Current Price: $9.95
-- Market Value: $199.00
-- P&L: -$21.80 (-9.9%)
-- Allocation: 7.4% of portfolio
+- Current Price: $9.55
+- Market Value: $191.00
+- P&L: -$29.80 (-13.5%)
+- Allocation: 7.2% of portfolio
 
-**Catalyst Timing**: Earnings expected Feb 10
+**Catalyst Timing**: Earnings March (too far)
 
 **Technical Pattern**:
-- Support: $9.50 (critical)
+- Support: $9.00
 - Resistance: $10.50
-- Trend: Bearish below $10
-- Volume: Low
+- Trend: Bearish
+- Volume: Below average
 
-**Action**: HOLD through earnings (5 days away)
+**Action**: EXIT - Cut losses
 
 **Justification**:
-1. **Fundamental**: Cash burn continues but production ramping
-2. **Technical**: Near support, oversold bounce possible
-3. **Risk**: Catalyst in 5 days - worth holding
+1. **Fundamental**: Burning cash, -$2.3B losses
+2. **Technical**: Below all moving averages
+3. **Risk**: No catalyst, trending lower
 
----
+**Proceeds**: $191.00 to redeploy
 
-### NFLX - Netflix
+### NFLX - Netflix Inc.
 
-**Thesis Status**: INTACT (Streaming leader, temporary pullback)
+**Thesis Status**: INTACT (Recent earnings)
 
 **Position Details**:
-- Shares: 3 @ $90.00 avg entry  
-- Current Price: $81.32
-- Market Value: $243.96
-- P&L: -$26.04 (-9.7%)
+- Shares: 3 @ $90.00 avg entry
+- Current Price: $80.51
+- Market Value: $241.53
+- P&L: -$28.47 (-10.5%)
 - Allocation: 9.1% of portfolio
 
-**Catalyst Timing**: Already reported Q4 (Jan 21)
+**Catalyst Timing**: Just reported, next Q3 months
 
 **Technical Pattern**:
-- Support: $80 (holding)
+- Support: $78-80
 - Resistance: $85
-- Trend: Consolidating after earnings
-- Volume: Normal
+- Trend: Consolidating
+- Volume: High post-earnings
 
-**Action**: EXIT (No catalyst, down 9.7%)
+**Action**: HOLD - Give time to recover
 
 **Justification**:
-1. **Fundamental**: Strong sub growth but priced in
-2. **Technical**: Failed to hold $85 post-earnings
-3. **Risk**: No catalyst for 2+ months, dead money
-
-**Proceeds**: $243.96 to redeploy
-
----
+1. **Fundamental**: Strong subscriber growth, margins expanding
+2. **Technical**: Holding support at $80
+3. **Risk**: Small position, stop at $75
 
 ### NU - Nu Holdings
 
-**Thesis Status**: STRONG (Fintech growth intact)
+**Thesis Status**: STRONG
 
 **Position Details**:
 - Shares: 12 @ $16.10 avg entry
-- Current Price: $16.64
-- Market Value: $199.68
-- P&L: +$6.48 (+3.4%)
-- Allocation: 7.5% of portfolio
+- Current Price: $16.80
+- Market Value: $201.60
+- P&L: +$8.40 (+4.3%)
+- Allocation: 7.6% of portfolio
 
-**Catalyst Timing**: Q4 Earnings expected Feb 25
+**Catalyst Timing**: Earnings in early March
 
 **Technical Pattern**:
 - Support: $16.00
-- Resistance: $17.00
-- Trend: Bullish above $16
-- Volume: Average
+- Resistance: $17.50
+- Trend: Bullish
+- Volume: Above average
 
-**Action**: HOLD
-
-**Justification**:
-1. **Fundamental**: 43% gross margins, 18% net margins = quality
-2. **Technical**: Consolidating above support
-3. **Risk**: Earnings catalyst in 20 days
-
----
-
-### PLUG - Plug Power
-
-**Thesis Status**: BROKEN (Hydrogen thesis failing)
-
-**Position Details**:
-- Shares: 85 @ $2.17 avg entry
-- Current Price: $1.89
-- Market Value: $160.65
-- P&L: -$23.80 (-12.9%)
-- Allocation: 6.0% of portfolio
-
-**Catalyst Timing**: Earnings expected Feb 13
-
-**Technical Pattern**:
-- Support: $1.80 (testing)
-- Resistance: $2.00
-- Trend: Bearish
-- Volume: High (capitulation?)
-
-**Action**: EXIT IMMEDIATELY
+**Action**: HOLD - Momentum building
 
 **Justification**:
-1. **Fundamental**: Continuing losses, cash burn crisis
-2. **Technical**: Breaking support, down >12%
-3. **Risk**: Poor earnings history, thesis broken
-
-**Proceeds**: $160.65 to redeploy
+1. **Fundamental**: 18% net margins, rapid growth
+2. **Technical**: Breaking above resistance
+3. **Risk**: Well-positioned, stop at $15.50
 
 ---
 
@@ -257,258 +230,306 @@
 | Rule | Condition | Threshold | Action |
 |------|-----------|-----------|--------|
 | EXIT | No catalyst + loss | >5% loss | Sell 100% |
-| EXIT | Thesis broken | Any loss | Sell 100% |
-| TRIM | Gain + no upcoming event | >20% gain | Sell 50%+ |
-| HOLD | Catalyst within 7 days | Any P&L | Maintain |
+| EXIT | Catalyst passed | >5 days ago | Sell 100% |
+| TRIM | Gain + no upcoming event | >15% gain | Sell 50-100% |
+| EXIT | Broken thesis | Any loss | Sell 100% |
 
 **Positions Being Rebalanced:**
 
 | Ticker | Current Status | Rule Triggered | Action | Proceeds/Cost |
 |--------|----------------|----------------|--------|---------------|
-| FDX    | +28.1% gain    | TRIM (>20%)    | SELL ALL | +$361.98   |
-| NFLX   | -9.7% loss     | EXIT (no cat)  | SELL ALL | +$243.96   |
-| PLUG   | -12.9% loss    | EXIT (broken)  | SELL ALL | +$160.65   |
-| LCID   | -9.9% loss     | HOLD (cat<7d)  | HOLD    | $0         |
-| NU     | +3.4% gain     | HOLD          | HOLD    | $0         |
+| FDX    | +28.8% gain    | TRIM (>15%)    | SELL 100% | +$364.02  |
+| LCID   | -13.5% loss    | EXIT (broken)  | SELL 100% | +$191.00  |
 
 **Cash Summary After Rebalancing:**
-- Starting Cash: $1,513.19
-- Proceeds from Exits/Trims: +$766.59
-- **New Buying Power**: $2,279.78
+- Starting Cash: $1,669.56
+- Proceeds from Exits/Trims: +$555.02
+- **New Buying Power**: $2,224.58
 
 ---
 
-## 6. CONVICTION SCORECARD| Rank | Ticker | Score (1-10) | Catalyst (40%) | Technicals (30%) | Fundamentals (30%) | Action |
+## 6. CONVICTION SCORECARD
+
+Rank ALL positions (existing + new ideas) by conviction:
+
+| Rank | Ticker | Score (1-10) | Catalyst (40%) | Technicals (30%) | Fundamentals (30%) | Action |
 |------|--------|--------------|----------------|------------------|--------------------| -------|
-| 1    | LCID   | 6.5          | 8 (Feb 10 ER)  | 5 (weak)         | 5 (cash burn)      | HOLD   |
-| 2    | NU     | 6.2          | 6 (Feb 25 ER)  | 7 (support)      | 6 (profitable)     | HOLD   |
-| 3    | RIVN   | 7.8          | 9 (Feb 12 ER)  | 7 (base $14)     | 7 (production up)  | BUY    |
-| 4    | SOFI   | 8.2          | 9 (Feb 11 ER)  | 8 (breakout)     | 7 (bank charter)   | BUY    |
-| 5    | PLTR   | 5.0          | 3 (reported)    | 6 (extended)     | 6 (high val)       | AVOID  |
-| 6    | FDX    | 4.0          | 2 (no cat)     | 5 (extended)     | 5 (slowing)        | EXIT   |
-| 7    | NFLX   | 3.5          | 1 (passed)     | 5 (breakdown)    | 5 (priced in)      | EXIT   |
-| 8    | PLUG   | 2.0          | 2 (bad hist)   | 2 (breakdown)    | 2 (losses)         | EXIT   |
+| 1    | NU     | 8.2          | 8 (March earn) | 8 (breakout)     | 9 (growth)         | HOLD   |
+| 2    | PLUG   | 7.8          | 9 (Feb 12)     | 7 (oversold)     | 7 (turnaround)     | BUY    |
+| 3    | RIVN   | 7.5          | 9 (Feb 10)     | 7 (support)      | 6 (improving)      | BUY    |
+| 4    | SOFI   | 7.0          | 8 (Feb 13)     | 7 (momentum)     | 6 (fintech)        | WATCH  |
+| 5    | NFLX   | 6.5          | 3 (passed)     | 8 (support)      | 9 (quality)        | HOLD   |
+| 6    | CRMD   | 6.0          | 8 (FDA Q1)     | 5 (neutral)      | 5 (pipeline)       | WATCH  |
+| 7    | LCID   | 3.5          | 2 (March)      | 4 (breakdown)    | 4 (losses)         | EXIT   |
+| 8    | FDX    | 3.0          | 1 (none)       | 6 (extended)     | 6 (mature)         | EXIT   |
 
-**Bottom 3 = EXIT candidates | Top 2 new ideas = BUY candidates**
+**Bottom 2 = EXIT candidates | Top 2 of new ideas = BUY candidates**
 
 ---
 
-## 7. NEW TRADE SETUPS (2-3 High Conviction Ideas)
+## 7. NEW TRADE SETUPS (2 High Conviction Ideas)
+
+### PLUG - Plug Power Inc.
+
+**Company Overview**: Leading hydrogen fuel cell and green hydrogen company. Building out massive green hydrogen production network. Positioned for Infrastructure Investment Act benefits. Revenue growing but still unprofitable as they scale infrastructure.
+
+**Catalyst**: Q4 Earnings on February 12, 2026 (Tuesday before open)
+
+**Trade Structure:**
+- Current Price: $1.83
+- Entry Price: $1.80 (limit order)
+- Stop Loss: $1.60 (-11.1% from entry)
+- Target 1: $2.20 (+22.2% / Conservative)
+- Target 2: $2.50 (+38.9% / Aggressive)
+
+**Position Sizing for $3K Account:**
+- Recommended Shares: 160 shares
+- Total Position Cost: $288.00
+- Max Risk (at stop): $32.00
+- Reward/Risk Ratio: 2.5:1
+
+**Timeframe**: Hold through February 12 earnings catalyst
+
+**Risk/Reward Math:**
+- If target 1 hit: +$64 (+22.2%)
+- If target 2 hit: +$112 (+38.9%)
+- If stopped out: -$32 (-11.1%)
 
 ### RIVN - Rivian Automotive
 
-**Company Overview**: Rivian is an electric vehicle manufacturer focused on pickup trucks and SUVs. Despite heavy losses, production is ramping with Amazon van deliveries and R1 consumer vehicles gaining traction. Key partnership with Amazon provides revenue stability.
+**Company Overview**: Premium EV manufacturer with Amazon partnership. Production ramping with positive gross margins expected in 2026. R2 platform launch upcoming. Strong cash position to weather EV slowdown.
 
-**Catalyst**: Q4 Earnings on February 12, 2026 (7 days)
+**Catalyst**: Q4 Earnings on February 10, 2026 (Monday after close)
 
 **Trade Structure:**
-- Current Price: $14.15
-- Entry Price: $14.20 (limit order)
-- Stop Loss: $12.50 (-12% from entry)
-- Target 1: $16.00 (+12.7% / Post-earnings pop)
-- Target 2: $17.50 (+23.2% / Breakout scenario)
+- Current Price: $13.72
+- Entry Price: $13.50 (limit order)
+- Stop Loss: $12.00 (-11.1% from entry)
+- Target 1: $16.00 (+18.5% / Conservative)
+- Target 2: $18.00 (+33.3% / Aggressive)
 
 **Position Sizing for $3K Account:**
-- Recommended Shares: 20 shares
-- Total Position Cost: $284.00
-- Max Risk (at stop): $34.00
-- Reward/Risk Ratio: 2.1:1
+- Recommended Shares: 22 shares
+- Total Position Cost: $297.00
+- Max Risk (at stop): $33.00
+- Reward/Risk Ratio: 2.4:1
 
-**Timeframe**: Hold through Feb 12 catalyst (7-day swing)
+**Timeframe**: Hold through February 10 earnings catalyst
 
 **Risk/Reward Math:**
-- If target 1 hit: +$36 (+12.7%)
-- If target 2 hit: +$66 (+23.2%)
-- If stopped out: -$34 (-12%)
+- If target 1 hit: +$55 (+18.5%)
+- If target 2 hit: +$99 (+33.3%)
+- If stopped out: -$33 (-11.1%)
 
 ---
 
-### SOFI - SoFi Technologies
+## 8. SHORT OPPORTUNITIES
 
-**Company Overview**: SoFi is a fintech disruptor with a bank charter enabling higher margins. Strong growth in lending, member acquisition, and financial products. Consecutive profitable quarters with accelerating revenue growth.
+**NOTE: SHORGAN-LIVE is a CASH ACCOUNT - SHORTING IS NOT AVAILABLE**
 
-**Catalyst**: Q4 Earnings on February 11, 2026 (6 days)
+Since we cannot short in this cash account, I'll identify bearish setups to AVOID:
 
-**Trade Structure:**
-- Current Price: $19.50
-- Entry Price: $19.55 (limit order)
-- Stop Loss: $17.60 (-10% from entry)
-- Target 1: $22.00 (+12.5% / Beat scenario)
-- Target 2: $24.00 (+22.8% / Guidance raise)
+### Stocks to AVOID (Bearish Setups):
 
-**Position Sizing for $3K Account:**
-- Recommended Shares: 15 shares
-- Total Position Cost: $293.25
-- Max Risk (at stop): $29.25
-- Reward/Risk Ratio: 2.5:1
+**AMC Entertainment** - Current: $1.39
+- Lockup considerations for recent debt conversions
+- Deteriorating fundamentals
+- Consider: PUT OPTIONS instead (if enabled)
 
-**Timeframe**: Hold through Feb 11 catalyst (6-day swing)
-
-**Risk/Reward Math:**
-- If target 1 hit: +$37.50 (+12.5%)
-- If target 2 hit: +$67.50 (+22.8%)
-- If stopped out: -$29.25 (-10%)
-
----
-
-## 8. SHORT OPPORTUNITIES (1-2 Ideas)
-
-### SNOW - Snowflake SHORT SETUP
-
-**Thesis**: Snowflake faces intense competition from cheaper alternatives. High valuation (>20x revenue) vulnerable to any guidance disappointment. Insider selling continues.
-
-**Catalyst**: Next earnings March 5 - positioning ahead of disappointment
-
-**Trade Structure:**
-- Current Price: $161.11
-- Entry Price: $160.00 (short entry)
-- Stop Loss: $175.00 (+9.4% from entry - TIGHT!)
-- Cover Target 1: $145.00 (-9.4% profit)
-- Cover Target 2: $135.00 (-15.6% profit)
-
-**Position Sizing for $3K Account:**
-- Shares to Short: 2 shares (smaller size - shorts are risky!)
-- Total Position Value: $320.00
-- Max Risk (at stop): $30.00
-
-**Risk Warning**: Wide spread ($7) - use limit orders. Competition heating up but stock still elevated.
+**High-Multiple Tech Names Post-Earnings**
+- Watch for failed breakouts after reports
+- Alternative: Wait for better entries on pullbacks
 
 ---
 
 ## 9. OPTIONS TRADES (Max 2)
 
-### Option Trade #1: LCID CALL
+### Option Trade #1: PLUG Feb 14 $2.00 CALL
 
-**Trade Type**: Long Call (earnings play)
+**Trade Type**: Long Call
 
-**Catalyst Alignment**: LCID reports Feb 10 - potential volatility expansion
+**Catalyst Alignment**: Q4 Earnings on Feb 12 (Tuesday)
 
 **Structure:**
-- Strike: $11
-- Expiry: 2026-02-20 (15 days out)
-- Premium: $0.45 per contract (estimated)
-- Contracts: 2
-- Total Cost: $90
+- Strike: $2.00
+- Expiry: 2026-02-14 (9 days out)
+- Premium: $0.12 per contract (estimated)
+- Contracts: 10
+- Total Cost: $120
 
 **Risk/Reward:**
-- Max Risk: $90 (100% of premium)
+- Max Risk: $120 (100% of premium)
 - Max Profit: Unlimited
-- Breakeven: $11.45
+- Breakeven: $2.12
 - Reward/Risk Ratio: 3:1 potential
 
 **IV Context:**
-- Current IV: ~65% (elevated pre-earnings)
-- IV Rank: 45 percentile
-- IV Assessment: Normal - acceptable for directional play
+- Current IV: ~85% (estimated pre-earnings)
+- IV Rank: 65 percentile
+- IV Assessment: Elevated but reasonable for binary event
 
 **Exit Plan:**
-- Take profits at: +50% premium ($135 total)
-- Stop loss at: -50% premium ($45 total)
-- Exit by: Feb 13 (3 days post-earnings)
+- Take profits at: +50% premium ($0.18)
+- Stop loss at: -50% premium ($0.06)
+- Exit: Immediately after earnings
 
 ---
 
 ## 10. EXECUTION PLAN
 
-**Complete list of all trades for Friday, February 6, 2026:**
+**Complete list of all trades for tomorrow (Friday, February 6, 2026):**
 
 ### EXITS (Execute First - Frees Capital)
 | # | Ticker | Action | Shares | Price | Time in Force | Proceeds |
 |---|--------|--------|--------|-------|---------------|----------|
-| 1 | FDX    | SELL   | 1      | Market| DAY           | +$361.98 |
-| 2 | NFLX   | SELL   | 3      | Market| DAY           | +$243.96 |
-| 3 | PLUG   | SELL   | 85     | Market| DAY           | +$160.65 |
-
-**Total Exit Proceeds: $766.59**
+| 1 | FDX    | SELL   | 1      | Market| DAY           | +$364    |
+| 2 | LCID   | SELL   | 20     | Market| DAY           | +$191    |
 
 ### NEW POSITIONS (Funded by Exits)
 | # | Ticker | Action | Shares | Entry | Stop | Target | Cost |
 |---|--------|--------|--------|-------|------|--------|------|
-| 1 | RIVN   | BUY    | 20     | $14.20| $12.50| $16.00 | -$284.00 |
-| 2 | SOFI   | BUY    | 15     | $19.55| $17.60| $22.00 | -$293.25 |
-
-**Total New Position Cost: $577.25**
-
-### SHORT POSITIONS
-| # | Ticker | Action | Shares | Entry | Stop | Target | Value |
-|---|--------|--------|--------|-------|------|--------|-------|
-| 1 | SNOW   | SELL_SHORT | 2  | $160.00| $175.00| $145.00| $320.00 |
+| 1 | PLUG   | BUY    | 160    | $1.80 | $1.60| $2.20  | -$288|
+| 2 | RIVN   | BUY    | 22     | $13.50| $12.00| $16.00| -$297|
 
 ### OPTIONS
 | # | Ticker | Type | Strike | Expiry | Contracts | Premium | Cost |
 |---|--------|------|--------|--------|-----------|---------|------|
-| 1 | LCID   | CALL | $11    | 02-20  | 2         | $0.45   | -$90 |
+| 1 | PLUG   | CALL | $2     | 02-14  | 10        | $0.12   | -$120|
 
 **Capital Flow Summary:**
-- Starting Cash: $1,513.19
-- Proceeds from Exits: +$766.59
-- Cost of New Positions: -$577.25
-- Options Cost: -$90.00
-- **Ending Cash Buffer**: $1,612.53
-
-**Final Portfolio After Execution:**
-- LCID: 20 shares (holding through earnings)
-- NU: 12 shares (holding for Feb 25 earnings)
-- RIVN: 20 shares (NEW - Feb 12 earnings)
-- SOFI: 15 shares (NEW - Feb 11 earnings) 
-- SNOW: 2 shares SHORT (NEW - competition thesis)
-- LCID $11 Calls: 2 contracts
+- Proceeds from Exits: +$555
+- Cost of New Positions: -$585 (stocks)
+- Cost of Options: -$120
+- Net Cash Change: -$150
+- **Ending Cash Buffer**: $1,519.56
 
 ---
 
 ## 11. RISK MANAGEMENT PROTOCOL
 
 **Daily Loss Limit**: $300 (10% of portfolio)
-- Current unrealized loss: -$321.55 (ALERT: Near limit)
-- If additional -$50 intraday → Exit weakest positions
+- Current unrealized P&L: +$26.49
+- Room for loss today: $326.49
+- Status: SAFE
 
 **Position Stop-Loss Rules:**
-- Stocks: 10-12% hard stop (GTC orders mandatory)
-- Options: 50% of premium ($45 loss on LCID calls)
-- Shorts: 9.4% stop on SNOW (tighter for shorts)
-- **CRITICAL: Place all stop orders immediately after fills**
+- FDX: No stop needed (exiting)
+- LCID: No stop needed (exiting)
+- NFLX: GTC stop at $75.00
+- NU: GTC stop at $15.50
+- PLUG: Will place GTC stop at $1.60
+- RIVN: Will place GTC stop at $12.00
 
 **Position Sizing Guardrails:**
-- Min position: $150 (avoiding over-diversification)
-- Max position: $300 (10% of portfolio max)
-- Current largest: SOFI at $293 (within limits)
-- Max sector concentration: 30% (Tech at 25% - OK)
+- Min position: $90 ✓
+- Max position: $300 ✓
+- Largest new position: $297 (RIVN) ✓
+- Options exposure: $120 (4% of portfolio) ✓
 
 **Cash Buffer Target**: $400-$600
-- Post-execution cash: $1,612.53 (HEALTHY)
-- Allows for 3-4 more opportunistic trades
-- Margin cushion for volatility
-
-**Options Exposure Limit**: 15% of portfolio ($450 max)
-- Current options: $90 (3% - well within limit)
-- Room for 1-2 more options trades if needed
+- Post-trades cash: $1,519.56 ✓
+- Well above target for opportunities
 
 **Review Triggers:**
-- Portfolio already -10.7% → MAXIMUM FOCUS ON EXECUTION
-- Any new position -15% → Mandatory exit
-- If LCID breaks $9.50 → Exit regardless of earnings
-
-**Special Considerations for Recovery Mode:**
-- Only 8+ conviction trades (RIVN/SOFI qualify)
-- Tighter stops on all new positions
-- No averaging down on losers
-- Take profits aggressively on 15%+ winners
+- Employment report volatility tomorrow
+- Monitor NFLX for breakdown below $78
+- Watch for PLUG pre-earnings momentum
 
 ---
 
-**CRITICAL REMINDERS:**
-1. This is REAL MONEY - every trade must be justified
-2. Account is in recovery mode (-10.7%) - no speculation
-3. Execute exits FIRST to free capital
-4. Place GTC stop orders IMMEDIATELY after entry
-5. Monitor LCID closely - earnings volatility expected
-6. SNOW short requires careful monitoring - use alerts
-7. Take partial profits if any position hits +15% quickly
+## ORDER BLOCKS
 
-**Tomorrow's Priority Sequence:**
-1. Exit FDX, NFLX, PLUG at market open
-2. Enter RIVN and SOFI positions with limit orders
-3. Short SNOW only if it rallies to $160
-4. Buy LCID calls after morning volatility settles
-5. Set all stop losses as GTC orders
-6. Review end-of-day for Monday planning
+### EXIT ORDERS:
+
+```
+Action: sell
+Ticker: FDX
+Shares: 1
+Total proceeds: $364.00
+Exit price: MARKET
+Time in force: DAY
+Intended execution date: 2026-02-06
+Catalyst date: N/A
+Stop loss: N/A
+Target price: N/A
+Max loss: N/A
+One-line rationale: Taking 28.8% profit with no catalyst for 4+ weeks
+```
+
+```
+Action: sell
+Ticker: LCID
+Shares: 20
+Total proceeds: $191.00
+Exit price: MARKET
+Time in force: DAY
+Intended execution date: 2026-02-06
+Catalyst date: N/A
+Stop loss: N/A
+Target price: N/A
+Max loss: N/A
+One-line rationale: Cutting -13.5% loss on broken EV thesis with poor fundamentals
+```
+
+### NEW POSITION ORDERS:
+
+```
+Action: buy
+Ticker: PLUG
+Shares: 160
+Total cost: $288.00
+Entry price: $1.80
+Time in force: DAY
+Intended execution date: 2026-02-06
+Catalyst date: 2026-02-12
+Stop loss: $1.60 (GTC order required)
+Target price: $2.20
+Max loss: $32.00
+One-line rationale: Binary earnings play on hydrogen leader with 2.5:1 reward/risk
+```
+
+```
+Action: buy
+Ticker: RIVN
+Shares: 22
+Total cost: $297.00
+Entry price: $13.50
+Time in force: DAY
+Intended execution date: 2026-02-06
+Catalyst date: 2026-02-10
+Stop loss: $12.00 (GTC order required)
+Target price: $16.00
+Max loss: $33.00
+One-line rationale: EV earnings catalyst with production ramp and Amazon partnership
+```
+
+### OPTIONS ORDER:
+
+```
+Action: buy_to_open
+Ticker: PLUG
+Option: CALL $2 strike exp 2026-02-14
+Contracts: 10
+Premium: $0.12 per contract
+Total cost: $120.00
+Catalyst date: 2026-02-12
+IV Rank: 65%
+Max loss: $120.00
+Target: +50% premium
+One-line rationale: Leveraged earnings play with 3:1 potential on hydrogen momentum
+```
+
+---
+
+### SUMMARY
+
+Tomorrow's actions focus on:
+1. Taking profits on FDX (+28.8%) with no near-term catalyst
+2. Cutting losses on LCID (-13.5%) with broken thesis
+3. Entering two high-conviction earnings plays: PLUG and RIVN
+4. Adding leveraged exposure to PLUG via calls
+5. Maintaining strong cash buffer of $1,519 for opportunities
+
+Total trades: 5 (2 exits, 2 new stocks, 1 option)
+Net capital deployment: $150
+Risk/Reward strongly favorable with defined catalysts

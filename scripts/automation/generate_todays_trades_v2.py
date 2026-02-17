@@ -43,6 +43,7 @@ from src.agents.sentiment_analyst import SentimentAnalystAgent
 from src.agents.bull_researcher import BullResearcherAgent
 from src.agents.bear_researcher import BearResearcherAgent
 from src.agents.risk_manager import RiskManagerAgent
+from src.agents.hub_signal_agent import HubSignalAgent
 from src.agents.communication.coordinator import Coordinator
 from src.agents.communication.message_bus import MessageBus
 
@@ -273,7 +274,8 @@ class MultiAgentTradeValidator:
             'sentiment': SentimentAnalystAgent(),
             'bull': BullResearcherAgent(),
             'bear': BearResearcherAgent(),
-            'risk': RiskManagerAgent()
+            'risk': RiskManagerAgent(),
+            'hub_signals': HubSignalAgent()  # Intelligence Hub signal aggregation
         }
 
         # Register agents with coordinator

@@ -12,6 +12,9 @@ from .retry_utils import (
     CircuitBreaker,
     CircuitBreakerOpenError,
     alpaca_circuit,
+    alpaca_dee_circuit,
+    alpaca_shorgan_paper_circuit,
+    alpaca_shorgan_live_circuit,
     anthropic_circuit,
     financial_datasets_circuit
 )
@@ -46,6 +49,9 @@ __all__ = [
     'CircuitBreaker',
     'CircuitBreakerOpenError',
     'alpaca_circuit',
+    'alpaca_dee_circuit',
+    'alpaca_shorgan_paper_circuit',
+    'alpaca_shorgan_live_circuit',
     'anthropic_circuit',
     'financial_datasets_circuit',
 

@@ -2,6 +2,14 @@
 Daily automated update script for DEE-BOT positions from Alpaca
 Runs daily at 4:00 PM ET to sync actual positions
 """
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
 
 import os
 import sys
@@ -11,8 +19,8 @@ import pandas as pd
 import json
 
 # DEE-BOT Alpaca credentials
-API_KEY = "PK6FZK4DAQVTD7DYVH78"
-SECRET_KEY = "JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt"
+API_KEY = os.getenv('ALPACA_API_KEY_DEE')
+SECRET_KEY = os.getenv('ALPACA_SECRET_KEY_DEE')
 
 def update_dee_bot_positions():
     """Fetch and update DEE-BOT positions from Alpaca"""

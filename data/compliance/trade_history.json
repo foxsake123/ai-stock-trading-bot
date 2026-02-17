@@ -3319,5 +3319,896 @@
     "timestamp": "2026-02-05T09:30:27.275132",
     "account": "SHORGAN-LIVE",
     "order_id": "23add98d-e427-4509-875f-fe498b92b954"
+  },
+  {
+    "symbol": "ABBV",
+    "action": "SELL",
+    "qty": 30,
+    "price": 215.0,
+    "timestamp": "2026-02-06T09:30:05.770624",
+    "account": "DEE-BOT",
+    "order_id": "ede650bd-d93c-47d4-99fe-378589d3b608"
+  },
+  {
+    "symbol": "XOM",
+    "action": "SELL",
+    "qty": 10,
+    "price": 143.0,
+    "timestamp": "2026-02-06T09:30:07.134703",
+    "account": "DEE-BOT",
+    "order_id": "1857fbd0-392b-41c1-af76-d6f9ae5715eb"
+  },
+  {
+    "symbol": "CVX",
+    "action": "SELL",
+    "qty": 20,
+    "price": 175.0,
+    "timestamp": "2026-02-06T09:30:08.376548",
+    "account": "DEE-BOT",
+    "order_id": "e04abf0c-84ae-4cff-a853-a281b68e5825"
+  },
+  {
+    "symbol": "UNP",
+    "action": "BUY",
+    "qty": 10,
+    "price": 245.0,
+    "timestamp": "2026-02-06T09:30:12.326469",
+    "account": "DEE-BOT",
+    "order_id": "717716fb-886a-453b-8a7e-ffcf5cb7034f"
+  },
+  {
+    "symbol": "COIN",
+    "action": "SELL",
+    "qty": 40,
+    "price": 154.0,
+    "timestamp": "2026-02-06T09:30:13.579846",
+    "account": "SHORGAN-LIVE",
+    "order_id": "486ef01a-9217-4732-aef1-f64bd300daa2"
+  },
+  {
+    "symbol": "SOFI",
+    "action": "SELL",
+    "qty": 300,
+    "price": 19.5,
+    "timestamp": "2026-02-06T09:30:14.804439",
+    "account": "SHORGAN-LIVE",
+    "order_id": "5e96194f-4c4e-43ae-b1bc-63d32c705d80"
+  },
+  {
+    "symbol": "PLUG",
+    "action": "SELL",
+    "qty": 2000,
+    "price": 1.9,
+    "timestamp": "2026-02-06T09:30:21.581538",
+    "account": "SHORGAN-LIVE",
+    "order_id": "ab3f70d0-8f96-472a-a591-f6654dca524a"
+  },
+  {
+    "symbol": "NFLX",
+    "action": "SELL",
+    "qty": 110,
+    "price": 81.55,
+    "timestamp": "2026-02-06T09:30:22.778257",
+    "account": "SHORGAN-LIVE",
+    "order_id": "83854f54-6137-49a3-976e-04e40d130f80"
+  },
+  {
+    "symbol": "ABNB",
+    "action": "SELL",
+    "qty": 40,
+    "price": 121.0,
+    "timestamp": "2026-02-06T09:30:24.024899",
+    "account": "SHORGAN-LIVE",
+    "order_id": "20a234a6-34da-4927-bb15-a8d205c22315"
+  },
+  {
+    "symbol": "AMZN",
+    "action": "SELL",
+    "qty": 40,
+    "price": 222.55,
+    "timestamp": "2026-02-06T09:30:29.561327",
+    "account": "SHORGAN-LIVE",
+    "order_id": "4c6c7b79-d3b5-47a2-8baf-37f38b73c431"
+  },
+  {
+    "symbol": "STLA",
+    "action": "SELL",
+    "qty": 400,
+    "price": 9.63,
+    "timestamp": "2026-02-06T09:30:30.799765",
+    "account": "SHORGAN-LIVE",
+    "order_id": "3aea01d1-7024-47fe-b758-a9b812dc6c5c"
+  },
+  {
+    "symbol": "DIS",
+    "action": "SELL",
+    "qty": 35,
+    "price": 105.5,
+    "timestamp": "2026-02-06T09:30:32.056377",
+    "account": "SHORGAN-LIVE",
+    "order_id": "e13177a7-c67d-46be-ac6d-0fdb7264db93"
+  },
+  {
+    "symbol": "NVDA",
+    "action": "SELL",
+    "qty": 10,
+    "price": 172.45,
+    "timestamp": "2026-02-06T09:30:40.047328",
+    "account": "SHORGAN-LIVE",
+    "order_id": "8d4945d6-4050-413f-9a40-9d1bc616aa25"
+  },
+  {
+    "symbol": "ENPH",
+    "action": "SELL",
+    "qty": 50,
+    "price": 47.85,
+    "timestamp": "2026-02-06T09:30:41.222989",
+    "account": "SHORGAN-LIVE",
+    "order_id": "4d055e9e-e80e-4a37-9b11-ebc11d7c9382"
+  },
+  {
+    "symbol": "MRK",
+    "action": "SELL",
+    "qty": 30,
+    "price": 121.7,
+    "timestamp": "2026-02-06T09:30:42.404927",
+    "account": "SHORGAN-LIVE",
+    "order_id": "a71616de-03db-4355-bded-fada46779ce6"
+  },
+  {
+    "symbol": "MARA",
+    "action": "BUY",
+    "qty": 200,
+    "price": 23.5,
+    "timestamp": "2026-02-06T09:30:44.718992",
+    "account": "SHORGAN-LIVE",
+    "order_id": "912a6ae9-30a3-4f80-9fbb-a149a1e9450b"
+  },
+  {
+    "symbol": "ARM",
+    "action": "BUY",
+    "qty": 30,
+    "price": 142.5,
+    "timestamp": "2026-02-06T09:30:45.870592",
+    "account": "SHORGAN-LIVE",
+    "order_id": "bb41d061-8836-4d4e-80be-befbcda13b52"
+  },
+  {
+    "symbol": "PANW",
+    "action": "BUY",
+    "qty": 20,
+    "price": 199.0,
+    "timestamp": "2026-02-06T09:30:47.100339",
+    "account": "SHORGAN-LIVE",
+    "order_id": "3c1479df-252f-4bec-a39b-00c0ef317d54"
+  },
+  {
+    "symbol": "XLE",
+    "action": "BUY",
+    "qty": 40,
+    "price": 94.5,
+    "timestamp": "2026-02-06T09:30:48.364568",
+    "account": "SHORGAN-LIVE",
+    "order_id": "ea7d15a7-1568-4d6e-a6e1-ff801aec19ac"
+  },
+  {
+    "symbol": "RIVN",
+    "action": "BUY",
+    "qty": 21,
+    "price": 13.5,
+    "timestamp": "2026-02-06T09:31:00.385328",
+    "account": "SHORGAN-LIVE",
+    "order_id": "c9e3be71-32d4-44d9-9701-4def9b7a8009"
+  },
+  {
+    "symbol": "PLUG",
+    "action": "BUY",
+    "qty": 151,
+    "price": 1.92,
+    "timestamp": "2026-02-06T09:31:05.948739",
+    "account": "SHORGAN-LIVE",
+    "order_id": "8339cd21-b52a-44c7-a787-268080112399"
+  },
+  {
+    "symbol": "CVX",
+    "action": "SELL",
+    "qty": 20,
+    "price": 175.0,
+    "timestamp": "2026-02-07T09:30:16.434691",
+    "account": "DEE-BOT",
+    "order_id": "8f97ca2b-ff34-4063-908e-7d8cc0ce2d15"
+  },
+  {
+    "symbol": "BRK.B",
+    "action": "BUY",
+    "qty": 10,
+    "price": 490.0,
+    "timestamp": "2026-02-07T09:30:17.648341",
+    "account": "DEE-BOT",
+    "order_id": "bcfcbdab-37ed-4074-beaf-38d594647908"
+  },
+  {
+    "symbol": "MA",
+    "action": "BUY",
+    "qty": 10,
+    "price": 540.0,
+    "timestamp": "2026-02-07T09:30:18.985433",
+    "account": "DEE-BOT",
+    "order_id": "a5dcebd3-2cf8-4197-936b-a4e98b145a8e"
+  },
+  {
+    "symbol": "UNP",
+    "action": "BUY",
+    "qty": 10,
+    "price": 245.0,
+    "timestamp": "2026-02-07T09:30:20.300601",
+    "account": "DEE-BOT",
+    "order_id": "b02d3988-5cb0-48cb-b700-c38b02a1c7d8"
+  },
+  {
+    "symbol": "AMZN",
+    "action": "SELL",
+    "qty": 40,
+    "price": 222.55,
+    "timestamp": "2026-02-07T09:30:36.451436",
+    "account": "SHORGAN-LIVE",
+    "order_id": "816e2545-b9a4-4703-99f8-a271f3068b42"
+  },
+  {
+    "symbol": "STLA",
+    "action": "SELL",
+    "qty": 400,
+    "price": 9.63,
+    "timestamp": "2026-02-07T09:30:37.633649",
+    "account": "SHORGAN-LIVE",
+    "order_id": "225b27b3-d70e-4ad4-9725-8fc7df7dcb59"
+  },
+  {
+    "symbol": "TSLA",
+    "action": "SELL",
+    "qty": 20,
+    "price": 391.65,
+    "timestamp": "2026-02-07T09:30:43.934897",
+    "account": "SHORGAN-LIVE",
+    "order_id": "71aa6071-6d93-4051-8ea9-1f93204b8c14"
+  },
+  {
+    "symbol": "MU",
+    "action": "SELL",
+    "qty": 20,
+    "price": 372.5,
+    "timestamp": "2026-02-07T09:30:45.105437",
+    "account": "SHORGAN-LIVE",
+    "order_id": "9261ffba-898d-41c6-9ef7-3a9af7a43200"
+  },
+  {
+    "symbol": "ENPH",
+    "action": "SELL",
+    "qty": 50,
+    "price": 47.85,
+    "timestamp": "2026-02-07T09:30:47.320223",
+    "account": "SHORGAN-LIVE",
+    "order_id": "69b06e1f-9b10-4c04-ab04-6391f04cedd2"
+  },
+  {
+    "symbol": "MRK",
+    "action": "SELL",
+    "qty": 30,
+    "price": 121.7,
+    "timestamp": "2026-02-07T09:30:48.470150",
+    "account": "SHORGAN-LIVE",
+    "order_id": "3f94435f-4bf9-4299-b3d7-3901d5325a37"
+  },
+  {
+    "symbol": "MARA",
+    "action": "BUY",
+    "qty": 200,
+    "price": 23.5,
+    "timestamp": "2026-02-07T09:30:50.766698",
+    "account": "SHORGAN-LIVE",
+    "order_id": "72c1848f-9719-4036-aaf5-e55b73bfc278"
+  },
+  {
+    "symbol": "ARM",
+    "action": "BUY",
+    "qty": 30,
+    "price": 142.5,
+    "timestamp": "2026-02-07T09:30:51.910678",
+    "account": "SHORGAN-LIVE",
+    "order_id": "8c05efc7-2223-4e08-8bcd-c7add5e25db4"
+  },
+  {
+    "symbol": "PANW",
+    "action": "BUY",
+    "qty": 20,
+    "price": 199.0,
+    "timestamp": "2026-02-07T09:30:53.078140",
+    "account": "SHORGAN-LIVE",
+    "order_id": "405c4d9f-4328-48d7-9cdf-305be15c2afe"
+  },
+  {
+    "symbol": "XLE",
+    "action": "BUY",
+    "qty": 40,
+    "price": 94.5,
+    "timestamp": "2026-02-07T09:30:54.254695",
+    "account": "SHORGAN-LIVE",
+    "order_id": "9c78570d-1b97-4e58-8e0f-90891a0a0af1"
+  },
+  {
+    "symbol": "BRK.B",
+    "action": "BUY",
+    "qty": 10,
+    "price": 490.0,
+    "timestamp": "2026-02-08T09:30:21.837331",
+    "account": "DEE-BOT",
+    "order_id": "f8765ae8-606f-4f5b-92b0-e063a636330d"
+  },
+  {
+    "symbol": "MA",
+    "action": "BUY",
+    "qty": 10,
+    "price": 540.0,
+    "timestamp": "2026-02-08T09:30:23.001528",
+    "account": "DEE-BOT",
+    "order_id": "eab55d97-068b-4e1c-96de-fd294d29434d"
+  },
+  {
+    "symbol": "UNP",
+    "action": "BUY",
+    "qty": 10,
+    "price": 245.0,
+    "timestamp": "2026-02-08T09:30:24.177308",
+    "account": "DEE-BOT",
+    "order_id": "9479a48c-5684-4b9f-bc3f-b1be44dd3b08"
+  },
+  {
+    "symbol": "PFE",
+    "action": "SELL",
+    "qty": 100,
+    "price": 26.9,
+    "timestamp": "2026-02-09T09:30:14.022060",
+    "account": "DEE-BOT",
+    "order_id": "9530c366-79cf-4cd5-9298-8e97db4332d9"
+  },
+  {
+    "symbol": "T",
+    "action": "SELL",
+    "qty": 128,
+    "price": 26.85,
+    "timestamp": "2026-02-09T09:30:15.288553",
+    "account": "DEE-BOT",
+    "order_id": "da20daed-7883-44d2-90b4-f39f544205fe"
+  },
+  {
+    "symbol": "XOM",
+    "action": "BUY",
+    "qty": 50,
+    "price": 148.0,
+    "timestamp": "2026-02-09T09:30:31.762186",
+    "account": "DEE-BOT",
+    "order_id": "e19f3ade-026c-4d46-ba13-696968f29015"
+  },
+  {
+    "symbol": "ABBV",
+    "action": "BUY",
+    "qty": 20,
+    "price": 223.0,
+    "timestamp": "2026-02-09T09:30:32.961482",
+    "account": "DEE-BOT",
+    "order_id": "789a1c2b-e5e9-4864-ad7f-70e4883808a0"
+  },
+  {
+    "symbol": "SMCI",
+    "action": "SELL",
+    "qty": 100,
+    "price": 34.2,
+    "timestamp": "2026-02-09T09:30:42.726978",
+    "account": "SHORGAN-LIVE",
+    "order_id": "fbf0a96e-f751-473a-823f-69ba188b7476"
+  },
+  {
+    "symbol": "NVDA",
+    "action": "BUY",
+    "qty": 30,
+    "price": 185.0,
+    "timestamp": "2026-02-09T09:30:45.028181",
+    "account": "SHORGAN-LIVE",
+    "order_id": "9ec2f01d-2e47-4898-b2c6-9bb9a1ee71a1"
+  },
+  {
+    "symbol": "COIN",
+    "action": "BUY",
+    "qty": 30,
+    "price": 165.0,
+    "timestamp": "2026-02-09T09:30:46.216412",
+    "account": "SHORGAN-LIVE",
+    "order_id": "6f80bbf8-63d8-43e2-91d9-3665dbc70a22"
+  },
+  {
+    "symbol": "PLTR",
+    "action": "BUY",
+    "qty": 35,
+    "price": 135.0,
+    "timestamp": "2026-02-09T09:30:47.472531",
+    "account": "SHORGAN-LIVE",
+    "order_id": "424d788a-a199-4d9d-a221-4dffd455fcd0"
+  },
+  {
+    "symbol": "RIOT",
+    "action": "BUY",
+    "qty": 300,
+    "price": 14.25,
+    "timestamp": "2026-02-09T09:30:49.724310",
+    "account": "SHORGAN-LIVE",
+    "order_id": "6c759cc6-8273-4ae0-aa3c-0ddeb39e969d"
+  },
+  {
+    "symbol": "APP",
+    "action": "BUY",
+    "qty": 10,
+    "price": 410.0,
+    "timestamp": "2026-02-09T09:30:50.929459",
+    "account": "SHORGAN-LIVE",
+    "order_id": "516692bc-4cc8-4950-bad7-c041152a340f"
+  },
+  {
+    "symbol": "RIVN",
+    "action": "BUY",
+    "qty": 20,
+    "price": 14.5,
+    "timestamp": "2026-02-09T09:30:57.707001",
+    "account": "SHORGAN-LIVE",
+    "order_id": "b49998b9-db1f-479b-adac-d3ddcf8c378d"
+  },
+  {
+    "symbol": "PLUG",
+    "action": "BUY",
+    "qty": 140,
+    "price": 2.0,
+    "timestamp": "2026-02-09T09:30:58.969023",
+    "account": "SHORGAN-LIVE",
+    "order_id": "4526050a-1d04-4f68-8193-a8e284709e99"
+  },
+  {
+    "symbol": "MRNA",
+    "action": "BUY",
+    "qty": 7,
+    "price": 40.0,
+    "timestamp": "2026-02-09T09:31:00.595428",
+    "account": "SHORGAN-LIVE",
+    "order_id": "d50ddf9b-f023-4561-aeaa-de1d4c5001f4"
+  },
+  {
+    "symbol": "PLUG",
+    "action": "BUY",
+    "qty": 138,
+    "price": 2.09,
+    "timestamp": "2026-02-09T09:31:03.041354",
+    "account": "SHORGAN-LIVE",
+    "order_id": "ec498dc0-f11e-4121-ae19-3fdc66b2350c"
+  },
+  {
+    "symbol": "MSFT",
+    "action": "BUY",
+    "qty": 20,
+    "price": 400.0,
+    "timestamp": "2026-02-10T09:30:07.351046",
+    "account": "DEE-BOT",
+    "order_id": "96558660-86ee-4d79-aa2a-dadcdc1c29a6"
+  },
+  {
+    "symbol": "BRK.B",
+    "action": "BUY",
+    "qty": 10,
+    "price": 490.0,
+    "timestamp": "2026-02-10T09:30:08.512679",
+    "account": "DEE-BOT",
+    "order_id": "dc49685a-e9d0-4b92-b721-70dc9fad8516"
+  },
+  {
+    "symbol": "XOM",
+    "action": "BUY",
+    "qty": 20,
+    "price": 148.0,
+    "timestamp": "2026-02-10T09:30:09.733448",
+    "account": "DEE-BOT",
+    "order_id": "59ca9d6e-2874-406f-b921-40830bf86584"
+  },
+  {
+    "symbol": "STLA",
+    "action": "SELL",
+    "qty": 400,
+    "price": 7.35,
+    "timestamp": "2026-02-10T09:30:11.031075",
+    "account": "SHORGAN-LIVE",
+    "order_id": "3ae54d69-bef5-416b-8ccb-75dabd8450e5"
+  },
+  {
+    "symbol": "SMCI",
+    "action": "SELL",
+    "qty": 100,
+    "price": 33.5,
+    "timestamp": "2026-02-10T09:30:12.180169",
+    "account": "SHORGAN-LIVE",
+    "order_id": "80522e5c-e710-4664-b564-59f6905f802a"
+  },
+  {
+    "symbol": "HIMS",
+    "action": "BUY",
+    "qty": 5,
+    "price": 19.4,
+    "timestamp": "2026-02-10T09:30:15.046050",
+    "account": "SHORGAN-LIVE",
+    "order_id": "62b83964-20a0-444f-9abd-c41cad629111"
+  },
+  {
+    "symbol": "NVDA",
+    "action": "BUY",
+    "qty": 25,
+    "price": 190.0,
+    "timestamp": "2026-02-10T09:30:16.320666",
+    "account": "SHORGAN-LIVE",
+    "order_id": "6c7ded7e-87d9-4773-94e0-6ef79859974a"
+  },
+  {
+    "symbol": "DKNG",
+    "action": "BUY",
+    "qty": 150,
+    "price": 27.0,
+    "timestamp": "2026-02-10T09:30:17.560132",
+    "account": "SHORGAN-LIVE",
+    "order_id": "c98b5fce-95ee-445c-902c-12404eaaac81"
+  },
+  {
+    "symbol": "DIS",
+    "action": "BUY",
+    "qty": 40,
+    "price": 107.0,
+    "timestamp": "2026-02-10T09:30:18.800861",
+    "account": "SHORGAN-LIVE",
+    "order_id": "8f10e097-2266-4cbc-87f9-a5c4f8a8defb"
+  },
+  {
+    "symbol": "MA",
+    "action": "SELL",
+    "qty": 3,
+    "price": 535.0,
+    "timestamp": "2026-02-10T09:30:27.851843",
+    "account": "DEE-BOT",
+    "order_id": "c3276929-525b-4284-a57e-81cd3b73e5dd"
+  },
+  {
+    "symbol": "MA",
+    "action": "SELL",
+    "qty": 5,
+    "price": 540.5,
+    "timestamp": "2026-02-11T09:30:15.464414",
+    "account": "DEE-BOT",
+    "order_id": "353cde38-168c-4009-938c-7e5388236e34"
+  },
+  {
+    "symbol": "MSFT",
+    "action": "BUY",
+    "qty": 10,
+    "price": 415.0,
+    "timestamp": "2026-02-11T09:30:16.683104",
+    "account": "DEE-BOT",
+    "order_id": "4f440b59-8498-43e8-86a0-9ad2288ed136"
+  },
+  {
+    "symbol": "BRK.B",
+    "action": "BUY",
+    "qty": 8,
+    "price": 500.0,
+    "timestamp": "2026-02-11T09:30:17.835538",
+    "account": "DEE-BOT",
+    "order_id": "46ce3d89-9c81-41fa-8b22-1ec84c0fbc4c"
+  },
+  {
+    "symbol": "UNH",
+    "action": "BUY",
+    "qty": 10,
+    "price": 275.0,
+    "timestamp": "2026-02-11T09:30:18.975708",
+    "account": "DEE-BOT",
+    "order_id": "75826fdb-701e-40a0-b13e-dae45791b03b"
+  },
+  {
+    "symbol": "AMZN",
+    "action": "SELL",
+    "qty": 20,
+    "price": 206.5,
+    "timestamp": "2026-02-11T09:30:20.252098",
+    "account": "SHORGAN-LIVE",
+    "order_id": "1893bd7a-d534-4f42-b019-feb59bffee73"
+  },
+  {
+    "symbol": "SCHW",
+    "action": "SELL",
+    "qty": 80,
+    "price": 99.25,
+    "timestamp": "2026-02-11T09:30:26.799565",
+    "account": "SHORGAN-LIVE",
+    "order_id": "131aa6b2-56ab-45f1-9bea-429a6c5d5f0d"
+  },
+  {
+    "symbol": "MA",
+    "action": "SELL",
+    "qty": 16,
+    "price": 539.0,
+    "timestamp": "2026-02-11T09:30:27.959544",
+    "account": "SHORGAN-LIVE",
+    "order_id": "c3d3ce0a-f2dc-429d-9f6e-29dd204ff36c"
+  },
+  {
+    "symbol": "AAPL",
+    "action": "SELL",
+    "qty": 15,
+    "price": 273.5,
+    "timestamp": "2026-02-11T09:30:33.403236",
+    "account": "SHORGAN-LIVE",
+    "order_id": "9ae749f5-a2ed-41d1-9e29-7456a63f34cd"
+  },
+  {
+    "symbol": "GOOGL",
+    "action": "SELL",
+    "qty": 25,
+    "price": 317.5,
+    "timestamp": "2026-02-11T09:30:34.566869",
+    "account": "SHORGAN-LIVE",
+    "order_id": "21997e86-cb46-4bee-b616-cdf1ce100c05"
+  },
+  {
+    "symbol": "ARM",
+    "action": "SELL",
+    "qty": 30,
+    "price": 123.0,
+    "timestamp": "2026-02-11T09:30:35.759554",
+    "account": "SHORGAN-LIVE",
+    "order_id": "7ee412c8-0e68-447d-82c8-86e10b4145a6"
+  },
+  {
+    "symbol": "XLE",
+    "action": "SELL",
+    "qty": 80,
+    "price": 53.5,
+    "timestamp": "2026-02-11T09:30:36.906784",
+    "account": "SHORGAN-LIVE",
+    "order_id": "fa31bd21-e893-444c-b7d6-e1f564fd3f7f"
+  },
+  {
+    "symbol": "NU",
+    "action": "SELL",
+    "qty": 200,
+    "price": 17.45,
+    "timestamp": "2026-02-11T09:30:38.072100",
+    "account": "SHORGAN-LIVE",
+    "order_id": "b1ef5920-c13a-4afa-bc09-51634b0ca453"
+  },
+  {
+    "symbol": "ZM",
+    "action": "SELL",
+    "qty": 50,
+    "price": 94.5,
+    "timestamp": "2026-02-11T09:30:39.252590",
+    "account": "SHORGAN-LIVE",
+    "order_id": "81d14b4d-5237-44f7-8ea4-8d1ed80bb432"
+  },
+  {
+    "symbol": "UBER",
+    "action": "BUY",
+    "qty": 100,
+    "price": 73.75,
+    "timestamp": "2026-02-11T09:30:45.717083",
+    "account": "SHORGAN-LIVE",
+    "order_id": "4b66897a-ac23-473a-989d-252f25d3f308"
+  },
+  {
+    "symbol": "SMCI",
+    "action": "BUY",
+    "qty": 8,
+    "price": 33.0,
+    "timestamp": "2026-02-11T09:30:54.616897",
+    "account": "SHORGAN-LIVE",
+    "order_id": "65454982-b3ef-478f-b83a-cb35e438d856"
+  },
+  {
+    "symbol": "MARA",
+    "action": "BUY",
+    "qty": 38,
+    "price": 7.6,
+    "timestamp": "2026-02-11T09:30:55.838382",
+    "account": "SHORGAN-LIVE",
+    "order_id": "27f12c04-62c8-4cc4-924c-896b834568e3"
+  },
+  {
+    "symbol": "MA",
+    "action": "SELL",
+    "qty": 2,
+    "price": 537.36,
+    "timestamp": "2026-02-12T10:48:44.502329",
+    "account": "DEE-BOT",
+    "order_id": "a8404109-3d5a-4c79-97e5-28177e5d1b5c"
+  },
+  {
+    "symbol": "PFE",
+    "action": "BUY",
+    "qty": 40,
+    "price": 27.71,
+    "timestamp": "2026-02-12T10:48:46.017178",
+    "account": "DEE-BOT",
+    "order_id": "832438a1-6169-4711-8ca9-0734d89fdf08"
+  },
+  {
+    "symbol": "AMZN",
+    "action": "SELL",
+    "qty": 20,
+    "price": 204.0,
+    "timestamp": "2026-02-12T10:48:47.475080",
+    "account": "SHORGAN-LIVE",
+    "order_id": "70c8ab63-09ca-48e4-809c-00e3678585b2"
+  },
+  {
+    "symbol": "CRM",
+    "action": "BUY",
+    "qty": 25,
+    "price": 315.0,
+    "timestamp": "2026-02-12T10:49:01.617578",
+    "account": "SHORGAN-LIVE",
+    "order_id": "e342a1cc-e207-4dba-bd16-d2172349bacd"
+  },
+  {
+    "symbol": "MA",
+    "action": "SELL",
+    "qty": 2,
+    "price": 537.36,
+    "timestamp": "2026-02-12T12:43:30.246128",
+    "account": "DEE-BOT",
+    "order_id": "9cd81849-aff8-4a8a-b0df-ab95bb2a9c31"
+  },
+  {
+    "symbol": "MA",
+    "action": "SELL",
+    "qty": 2,
+    "price": 537.36,
+    "timestamp": "2026-02-13T09:30:17.538687",
+    "account": "DEE-BOT",
+    "order_id": "c8ef563f-34ec-4aa3-be43-6c2f0d7d44b5"
+  },
+  {
+    "symbol": "AMZN",
+    "action": "SELL",
+    "qty": 20,
+    "price": 204.0,
+    "timestamp": "2026-02-13T09:30:19.893327",
+    "account": "SHORGAN-LIVE",
+    "order_id": "1de9912c-34ec-4cfa-ba11-18a65628ba8a"
+  },
+  {
+    "symbol": "CRM",
+    "action": "BUY",
+    "qty": 25,
+    "price": 315.0,
+    "timestamp": "2026-02-13T09:30:33.719845",
+    "account": "SHORGAN-LIVE",
+    "order_id": "86b53905-a0af-4dee-ac48-3815467335a6"
+  },
+  {
+    "symbol": "MA",
+    "action": "SELL",
+    "qty": 2,
+    "price": 537.36,
+    "timestamp": "2026-02-14T09:30:04.025789",
+    "account": "DEE-BOT",
+    "order_id": "1e69216d-98b4-4cf7-9ce3-30b9d14b344c"
+  },
+  {
+    "symbol": "AMZN",
+    "action": "SELL",
+    "qty": 20,
+    "price": 204.0,
+    "timestamp": "2026-02-14T09:30:17.419396",
+    "account": "SHORGAN-LIVE",
+    "order_id": "71d20af7-9ae5-47ab-9af0-a9892d750ec9"
+  },
+  {
+    "symbol": "CRM",
+    "action": "BUY",
+    "qty": 25,
+    "price": 315.0,
+    "timestamp": "2026-02-14T09:30:33.219207",
+    "account": "SHORGAN-LIVE",
+    "order_id": "7bb1bfa3-5ea3-4a81-8c24-ceef12dbfbac"
+  },
+  {
+    "symbol": "MA",
+    "action": "SELL",
+    "qty": 2,
+    "price": 537.36,
+    "timestamp": "2026-02-15T09:30:05.146022",
+    "account": "DEE-BOT",
+    "order_id": "79009931-a34a-4fce-8472-fc497f2ec719"
+  },
+  {
+    "symbol": "CRM",
+    "action": "BUY",
+    "qty": 25,
+    "price": 315.0,
+    "timestamp": "2026-02-15T09:30:26.210571",
+    "account": "SHORGAN-LIVE",
+    "order_id": "2db8cab3-5a8f-404c-8fe8-434904af111d"
+  },
+  {
+    "symbol": "BAC",
+    "action": "SELL",
+    "qty": 134,
+    "price": 52.5,
+    "timestamp": "2026-02-16T09:30:05.005525",
+    "account": "DEE-BOT",
+    "order_id": "5a5fd4fc-a44e-4959-b07c-cc6bf1d004cc"
+  },
+  {
+    "symbol": "V",
+    "action": "SELL",
+    "qty": 14,
+    "price": 314.0,
+    "timestamp": "2026-02-16T09:30:06.222948",
+    "account": "DEE-BOT",
+    "order_id": "3d699355-45f6-469c-8416-30e5d3d8fee1"
+  },
+  {
+    "symbol": "PFE",
+    "action": "SELL",
+    "qty": 40,
+    "price": 27.55,
+    "timestamp": "2026-02-16T09:30:07.426094",
+    "account": "DEE-BOT",
+    "order_id": "227bc948-f07b-4a1c-b70c-648a49f1311d"
+  },
+  {
+    "symbol": "JNJ",
+    "action": "SELL",
+    "qty": 9,
+    "price": 243.35,
+    "timestamp": "2026-02-16T09:30:08.633679",
+    "account": "DEE-BOT",
+    "order_id": "93a598d8-8461-4f18-ab0e-4c55055c269c"
+  },
+  {
+    "symbol": "NEE",
+    "action": "SELL",
+    "qty": 24,
+    "price": 93.75,
+    "timestamp": "2026-02-16T09:30:09.805651",
+    "account": "DEE-BOT",
+    "order_id": "2efd85c3-050e-4ef3-ae94-c53a3a133b8c"
+  },
+  {
+    "symbol": "WMT",
+    "action": "SELL",
+    "qty": 12,
+    "price": 133.85,
+    "timestamp": "2026-02-16T09:30:10.992843",
+    "account": "DEE-BOT",
+    "order_id": "2a3b4f57-ab43-4062-afae-52f7d2f9bb3b"
+  },
+  {
+    "symbol": "DKNG",
+    "action": "SELL",
+    "qty": 150,
+    "price": 21.65,
+    "timestamp": "2026-02-16T09:30:29.706158",
+    "account": "SHORGAN-LIVE",
+    "order_id": "86d51453-6b6d-4e57-b9ca-309b6caafecc"
+  },
+  {
+    "symbol": "W",
+    "action": "BUY",
+    "qty": 100,
+    "price": 82.5,
+    "timestamp": "2026-02-16T09:30:37.318973",
+    "account": "SHORGAN-LIVE",
+    "order_id": "aeb35363-e2cd-478e-b246-03e115966ec4"
   }
 ]

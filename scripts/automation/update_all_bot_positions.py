@@ -7,22 +7,29 @@ import os
 import sys
 import csv
 from datetime import datetime
+from pathlib import Path
 from alpaca.trading.client import TradingClient
+from dotenv import load_dotenv
+
+# Change to project root and load .env
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+os.chdir(PROJECT_ROOT)
+load_dotenv(PROJECT_ROOT / ".env")
 
 # Add parent directory to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.append(str(PROJECT_ROOT))
 
-# Bot configurations
+# Bot configurations - using environment variables
 BOTS = {
     'DEE': {
-        'api_key': 'PK6FZK4DAQVTD7DYVH78',
-        'secret_key': 'JKHXnsi4GeZV5GiA06kGyMhRrvrfEjOzw5X7bHBt',
+        'api_key': os.getenv('ALPACA_API_KEY_DEE'),
+        'secret_key': os.getenv('ALPACA_SECRET_KEY_DEE'),
         'csv_file': 'scripts-and-data/daily-csv/dee-bot-positions.csv',
         'name': 'DEE-BOT'
     },
     'SHORGAN': {
-        'api_key': 'PKJRLSB2MFEJUSK6UK2E',
-        'secret_key': 'QBpREJmZ7HgHS1tHptvHgwjH4MtjFSoEcQ0wmGic',
+        'api_key': os.getenv('ALPACA_API_KEY_SHORGAN'),
+        'secret_key': os.getenv('ALPACA_SECRET_KEY_SHORGAN'),
         'csv_file': 'scripts-and-data/daily-csv/shorgan-bot-positions.csv',
         'name': 'SHORGAN-BOT'
     }

@@ -220,10 +220,30 @@ class CircuitBreakerOpenError(Exception):
 
 
 # Pre-configured circuit breakers for different services
+# Legacy single circuit breaker (kept for backward compatibility)
 alpaca_circuit = CircuitBreaker(
     failure_threshold=3,
     timeout_seconds=300,
     name="alpaca"
+)
+
+# Per-account circuit breakers to prevent cross-account cascading failures
+alpaca_dee_circuit = CircuitBreaker(
+    failure_threshold=3,
+    timeout_seconds=300,
+    name="alpaca_dee"
+)
+
+alpaca_shorgan_paper_circuit = CircuitBreaker(
+    failure_threshold=3,
+    timeout_seconds=300,
+    name="alpaca_shorgan_paper"
+)
+
+alpaca_shorgan_live_circuit = CircuitBreaker(
+    failure_threshold=3,
+    timeout_seconds=300,
+    name="alpaca_shorgan_live"
 )
 
 anthropic_circuit = CircuitBreaker(

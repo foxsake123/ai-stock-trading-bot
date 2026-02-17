@@ -1,3 +1,11 @@
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
 #!/usr/bin/env python3
 """
 Daily Portfolio Performance Tracker
@@ -14,8 +22,8 @@ import alpaca_trade_api as tradeapi
 from pathlib import Path
 
 # Configuration
-API_KEY = 'PKJRLSB2MFEJUSK6UK2E'
-API_SECRET = 'QBpREJmZ7HgHS1tHptvHgwjH4MtjFSoEcQ0wmGic'
+API_KEY = os.getenv('ALPACA_API_KEY_SHORGAN')
+API_SECRET = os.getenv('ALPACA_SECRET_KEY_SHORGAN')
 BASE_URL = 'https://paper-api.alpaca.markets'
 
 # Initialize Alpaca API
@@ -67,7 +75,7 @@ def save_performance_to_csv(performance_data):
     date_str = performance_data['date']
 
     # Create performance CSV path
-    perf_dir = Path('../../docs/index/portfolio-performance')
+    perf_dir = PROJECT_ROOT / 'docs' / 'index' / 'portfolio-performance'
     perf_dir.mkdir(parents=True, exist_ok=True)
 
     csv_file = perf_dir / f'performance_{date_str}.csv'

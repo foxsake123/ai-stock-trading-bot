@@ -41,6 +41,7 @@ sys.path.append(str(Path(__file__).parent))  # For mcp_financial_tools
 from anthropic import Anthropic
 from alpaca.trading.client import TradingClient
 from mcp_financial_tools import FinancialDataToolsProvider
+from intelligence_hub_client import get_hub_client
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import (
     StockLatestQuoteRequest,
@@ -1172,6 +1173,9 @@ class ClaudeResearchGenerator:
 
         # MCP Financial Data Tools (for real-time price access during research)
         self.financial_tools = FinancialDataToolsProvider()
+        
+        # Intelligence Hub Client (for aggregated signals, sentiment, events)
+        self.hub_client = get_hub_client("http://localhost:8000")
 
         # Alpaca Trading API (for portfolio data)
         self.dee_trading = TradingClient(
@@ -1459,7 +1463,12 @@ class ClaudeResearchGenerator:
   Avg Daily Volume: {data['30d_avg_volume']:,.0f} shares
 """
 
-        # 4. Build Claude prompt
+        # 4. Fetch Intelligence Hub data
+        print("[*] Fetching Intelligence Hub data...")
+        hub_summary = self.hub_client.get_market_summary()
+        hub_data_text = self.hub_client.format_for_prompt(hub_summary)
+        
+        # 5. Build Claude prompt
         week_text = f"Week {week_number}, " if week_number else ""
 
         user_prompt = f"""
@@ -1483,6 +1492,24 @@ Position Count: {portfolio['position_count']}
 [30-Day Historical Data]
 {history_text if history_text else "No historical data available"}
 
+{hub_data_text}
+
+ADVANCED POSITION SIZING GUIDANCE:
+Use Kelly Criterion principles for position sizing:
+- Kelly % = (Win Rate × Avg Win / Avg Loss - Loss Rate) / (Avg Win / Avg Loss)
+- Apply HALF-KELLY for safety (divide result by 2)
+- Never exceed 10% per position regardless of Kelly calculation
+- Reduce size in high-volatility environments (VIX > 20)
+- Consider correlation - reduce size if adding to correlated positions
+
+DYNAMIC STOP LOSS GUIDANCE:
+Use ATR-based stops instead of fixed percentages:
+- Calculate 14-day ATR for each position
+- Stop loss = Entry - (2 × ATR) for swing trades
+- Tighter stops (1.5 × ATR) for momentum plays
+- Wider stops (2.5 × ATR) for volatile small caps
+- Never risk more than 2% of portfolio per trade
+
 TASK:
 Generate a comprehensive DAILY Deep Research Report following your system prompt structure.
 
@@ -1498,8 +1525,8 @@ Focus on:
 Be thorough, data-driven, and actionable. Include specific limit prices based on market data.
 """
 
-        # 5. Call Claude API with Extended Thinking (Deep Research Mode)
-        print(f"[*] Calling Claude API (Opus 4.1 with Extended Thinking)...")
+        # 6. Call Claude API with Extended Thinking (Deep Research Mode)
+        print(f"[*] Calling Claude API (Opus 4.6 with Extended Thinking)...")
         print(f"[*] Deep research mode enabled - this may take 3-5 minutes...")
 
         # Select system prompt based on bot name
@@ -1534,10 +1561,10 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             for turn in range(max_turns):
                 print(f"[*] API Call #{turn + 1}...")
 
-                # Use streaming for Opus 4.1
+                # Use streaming for Opus 4.6 (latest model)
                 stream = self.claude.messages.stream(
-                    model="claude-opus-4-20250514",  # Claude Opus 4.1 for deep research
-                    max_tokens=32000,  # Maximum for Opus 4.1
+                    model="claude-opus-4-6-20250219",  # Claude Opus 4.6 for deep research
+                    max_tokens=32000,  # Maximum for Opus
                     temperature=1.0,  # Required for extended thinking
                     thinking={
                         "type": "enabled",
@@ -1597,11 +1624,13 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             if turn >= max_turns - 1:
                 print(f"[!] Warning: Reached maximum tool use turns ({max_turns})")
 
-            # 6. Add header and metadata
+            # 7. Add header and metadata
+            hub_status = "Connected" if hub_summary.get("hub_status") == "connected" else "Offline"
             report_header = f"""# CLAUDE DEEP RESEARCH REPORT - {bot_name}
 ## {datetime.now().strftime("%A, %B %d, %Y")}
 ### Generated: {current_date} at {current_time}
-### Model: Claude Opus 4.1 with Extended Thinking (Anthropic)
+### Model: Claude Opus 4.6 with Extended Thinking (Anthropic)
+### Intelligence Hub: {hub_status}
 ### Portfolio Value: ${portfolio['portfolio_value']:,.2f}
 
 ---

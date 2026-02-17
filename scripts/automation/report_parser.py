@@ -79,8 +79,8 @@ class ExternalReportParser:
         # Try parsing ORDER BLOCK section first (various formats)
         # Find ORDER BLOCK heading/marker, then extract content until next section
 
-        # Match: "## 9. EXACT ORDER BLOCK", "# ORDER BLOCK", "### ORDER BLOCKS", "ORDER BLOCKS:" etc
-        order_heading_pattern = r'(?:#{1,3}\s*\*{0,2}\s*(?:\d+\.\s*)?(?:EXACT\s+)?ORDER\s+BLOCK[^\n]*|^ORDER\s+BLOCKS?:?\s*$)'
+        # Match: "## 9. EXACT ORDER BLOCK", "# ORDER BLOCK", "### ORDER BLOCKS", "ORDER BLOCKS:", "**ORDER BLOCKS:**" etc
+        order_heading_pattern = r'(?:#{1,3}\s*\*{0,2}\s*(?:\d+\.\s*)?(?:EXACT\s+)?ORDER\s+BLOCK[^\n]*|^\*{0,2}\s*(?:EXACT\s+)?ORDER\s+BLOCKS?:?\s*\*{0,2}\s*$)'
         heading_match = re.search(order_heading_pattern, content, re.IGNORECASE | re.MULTILINE)
 
         order_block = ""
