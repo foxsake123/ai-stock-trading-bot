@@ -8,8 +8,19 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 import json
 import requests
-import yfinance as yf
+import pandas as pd
+import numpy as np
 import logging
+import sys
+import os
+
+# Import Financial Datasets API (primary data source)
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'scripts', 'automation'))
+try:
+    from financial_datasets_integration import FinancialDatasetsAPI
+    FD_API_AVAILABLE = True
+except ImportError:
+    FD_API_AVAILABLE = False
 
 class ShorganCatalystAgent(BaseAgent):
     """
@@ -27,6 +38,13 @@ class ShorganCatalystAgent(BaseAgent):
             agent_id="shorgan_catalyst_001",
             agent_type="catalyst_trader"
         )
+        
+        # Initialize Financial Datasets API
+        if FD_API_AVAILABLE:
+            self.fd_api = FinancialDatasetsAPI()
+        else:
+            self.fd_api = None
+            self.logger.warning("Financial Datasets API not available")
         
         # Strategy parameters
         self.max_market_cap = 20_000_000_000  # $20B max market cap
@@ -169,12 +187,20 @@ class ShorganCatalystAgent(BaseAgent):
             Technical analysis scores and indicators
         """
         try:
-            # Get recent price data
-            stock = yf.Ticker(ticker)
-            hist = stock.history(period="30d")
+            # Get recent price data from Financial Datasets API
+            if self.fd_api:
+                start_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+                end_date = datetime.now().strftime('%Y-%m-%d')
+                hist = self.fd_api.get_historical_prices(ticker, interval='day', start_date=start_date, end_date=end_date)
+                
+                # Normalize column names (capitalize for consistency)
+                if not hist.empty:
+                    hist.columns = [col.capitalize() for col in hist.columns]
+            else:
+                hist = pd.DataFrame()
             
             if hist.empty:
-                return {"score": 0.0, "indicators": {}, "error": "No price data"}
+                return {"score": 0.0, "indicators": {}, "error": "No price data from Financial Datasets API"}
             
             current_price = market_data.get('price', hist['Close'].iloc[-1])
             

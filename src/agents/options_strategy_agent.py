@@ -1,15 +1,24 @@
 """
 Options Strategy Agent for Shorgan-Bot
 Implements options strategies including debit spreads for catalyst plays
+
+Note: Uses yfinance for options chain data as Financial Datasets API
+does not provide options chains. yfinance may have intermittent issues.
 """
 
 from .base_agent import BaseAgent
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Tuple
-import yfinance as yf
 import numpy as np
 from scipy.stats import norm
 import logging
+
+# yfinance for options chains only (no alternative available)
+try:
+    import yfinance as yf
+    YFINANCE_AVAILABLE = True
+except ImportError:
+    YFINANCE_AVAILABLE = False
 
 class OptionsStrategyAgent(BaseAgent):
     """
@@ -104,9 +113,16 @@ class OptionsStrategyAgent(BaseAgent):
         """
         Get options chain data for the ticker
         
+        Note: Uses yfinance as Financial Datasets API doesn't support options chains.
+        yfinance may have intermittent connectivity issues.
+        
         Returns:
             Options chain data or None if unavailable
         """
+        if not YFINANCE_AVAILABLE:
+            self.logger.warning("yfinance not available for options data")
+            return None
+            
         try:
             stock = yf.Ticker(ticker)
             

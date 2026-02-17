@@ -6,10 +6,19 @@ Performs technical analysis using indicators and chart patterns
 from .base_agent import BaseAgent
 from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional, Tuple
-import yfinance as yf
 import pandas as pd
 import numpy as np
 import logging
+import sys
+import os
+
+# Import Financial Datasets API (primary data source)
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'scripts', 'automation'))
+try:
+    from financial_datasets_integration import FinancialDatasetsAPI
+    FD_API_AVAILABLE = True
+except ImportError:
+    FD_API_AVAILABLE = False
 
 class TechnicalAnalystAgent(BaseAgent):
     """
@@ -21,6 +30,13 @@ class TechnicalAnalystAgent(BaseAgent):
             agent_id="technical_analyst_001",
             agent_type="technical_analyst"
         )
+        
+        # Initialize Financial Datasets API
+        if FD_API_AVAILABLE:
+            self.fd_api = FinancialDatasetsAPI()
+        else:
+            self.fd_api = None
+            self.logger.warning("Financial Datasets API not available")
         
         # Indicator thresholds
         self.rsi_oversold = 30
@@ -39,12 +55,20 @@ class TechnicalAnalystAgent(BaseAgent):
             Technical analysis and recommendation
         """
         try:
-            # Get historical data
-            stock = yf.Ticker(ticker)
-            hist = stock.history(period="3mo", interval="1d")
+            # Get historical data from Financial Datasets API
+            if self.fd_api:
+                start_date = (datetime.now() - timedelta(days=90)).strftime('%Y-%m-%d')
+                end_date = datetime.now().strftime('%Y-%m-%d')
+                hist = self.fd_api.get_historical_prices(ticker, interval='day', start_date=start_date, end_date=end_date)
+                
+                # Normalize column names to match expected format (capitalize for consistency)
+                if not hist.empty:
+                    hist.columns = [col.capitalize() for col in hist.columns]
+            else:
+                hist = pd.DataFrame()
             
             if hist.empty:
-                return self._generate_error_result("No historical data available")
+                return self._generate_error_result("No historical data available from Financial Datasets API")
             
             # Calculate technical indicators
             indicators = self._calculate_indicators(hist)
