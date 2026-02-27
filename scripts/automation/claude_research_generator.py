@@ -1704,7 +1704,7 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
         return content
 
-    def save_report(self, report: str, bot_name: str, portfolio_data: Dict = None, export_pdf: bool = True) -> tuple[Path, Optional[Path]]:
+    def save_report(self, report: str, bot_name: str, portfolio_data: Dict = None, export_pdf: bool = True, target_date: str = None) -> tuple[Path, Optional[Path]]:
         """
         Save report to file system in both Markdown and PDF formats
 
@@ -1713,6 +1713,7 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
             bot_name: "DEE-BOT" or "SHORGAN-BOT"
             portfolio_data: Portfolio snapshot data for PDF enhancements
             export_pdf: Whether to generate PDF version
+            target_date: Optional date string (YYYY-MM-DD) to save under. Defaults to tomorrow.
 
         Returns:
             Tuple of (markdown_path, pdf_path)
@@ -1720,10 +1721,13 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
         # Fix markdown formatting issues (headers running into text)
         report = self._fix_markdown_formatting(report)
 
-        # Create directory structure for tomorrow's trading date
-        today = datetime.now()
-        tomorrow = today + timedelta(days=1)
-        date_str = tomorrow.strftime("%Y-%m-%d")
+        # Create directory structure for the target trading date
+        if target_date:
+            date_str = target_date
+        else:
+            today = datetime.now()
+            tomorrow = today + timedelta(days=1)
+            date_str = tomorrow.strftime("%Y-%m-%d")
 
         # FIX: Use absolute path to avoid CWD dependency
         # Get project root directory (2 levels up from this file)

@@ -170,6 +170,8 @@ def main():
     parser = argparse.ArgumentParser(description='Generate daily Claude research for tomorrow\'s trading')
     parser.add_argument('--force', action='store_true',
                        help='Force generation regardless of time/date (bypass all checks)')
+    parser.add_argument('--today', action='store_true',
+                       help='Save research for today\'s date instead of tomorrow (use when generating during market hours)')
     args = parser.parse_args()
 
     print("="*70)
@@ -226,11 +228,13 @@ def main():
                 include_market_data=True
             )
 
+            target_date = datetime.now().strftime('%Y-%m-%d') if args.today else None
             md_path, pdf_path = generator.save_report(
                 report=report,
                 bot_name=bot_name,
                 portfolio_data=portfolio_data,
-                export_pdf=True
+                export_pdf=True,
+                target_date=target_date
             )
             report_paths.append(md_path)
 
