@@ -1563,7 +1563,7 @@ Be thorough, data-driven, and actionable. Include specific limit prices based on
 
                 # Use streaming for Opus 4.6 (latest model)
                 stream = self.claude.messages.stream(
-                    model="claude-opus-4-6-20250219",  # Claude Opus 4.6 for deep research
+                    model="claude-sonnet-4-20250514",  # Claude Sonnet 4 for deep research
                     max_tokens=32000,  # Maximum for Opus
                     temperature=1.0,  # Required for extended thinking
                     thinking={

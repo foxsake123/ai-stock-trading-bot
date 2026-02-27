@@ -1,10 +1,18 @@
 """
 Fix DEE-BOT position tracking with current prices
+Uses Financial Datasets API (replaces unreliable yfinance)
 """
 
-import yfinance as yf
 import csv
 from datetime import datetime
+import sys
+from pathlib import Path
+
+# Add scripts/automation to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "scripts" / "automation"))
+from financial_datasets_integration import FinancialDatasetsAPI
+
+fd_api = FinancialDatasetsAPI()
 
 print("="*60)
 print("FIXING DEE-BOT POSITION TRACKING")
@@ -28,9 +36,14 @@ for pos in positions:
     avg_price = pos['avg_price']
 
     try:
-        # Get current price
-        ticker = yf.Ticker(symbol)
-        current_price = ticker.history(period="1d")['Close'].iloc[-1]
+        # Get current price from Financial Datasets API
+        snapshot = fd_api.get_snapshot_price(symbol)
+        if snapshot and snapshot.get('price'):
+            current_price = float(snapshot['price'])
+        else:
+            # Fallback to historical
+            df = fd_api.get_historical_prices(symbol, interval='day', limit=1)
+            current_price = float(df['close'].iloc[-1]) if not df.empty else avg_price
 
         # Calculate P&L
         pnl = (current_price - avg_price) * quantity

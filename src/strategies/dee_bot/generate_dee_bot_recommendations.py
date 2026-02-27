@@ -9,9 +9,16 @@ import random
 from datetime import datetime, date
 import os
 from pathlib import Path
-import yfinance as yf
 import numpy as np
 from datetime import timedelta
+import sys
+
+# Add scripts/automation to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "scripts" / "automation"))
+from financial_datasets_integration import FinancialDatasetsAPI
+
+# Initialize API
+fd_api = FinancialDatasetsAPI()
 
 # S&P 100 Components for DEE-BOT analysis
 SP100_STOCKS = [
@@ -131,22 +138,42 @@ class MultiAgentSystem:
         }
     
     def calculate_beta(self, ticker: str, period: int = 252) -> float:
-        """Calculate stock beta relative to SPY"""
+        """Calculate stock beta relative to SPY using Financial Datasets API"""
         if ticker in self.beta_cache:
             return self.beta_cache[ticker]
             
         try:
-            stock = yf.Ticker(ticker)
-            spy = yf.Ticker("SPY")
-            
             end_date = datetime.now()
             start_date = end_date - timedelta(days=period)
             
-            stock_data = stock.history(start=start_date, end=end_date)['Close']
-            spy_data = spy.history(start=start_date, end=end_date)['Close']
+            # Get historical prices from Financial Datasets API
+            stock_df = fd_api.get_historical_prices(
+                ticker, 
+                interval='day',
+                start_date=start_date.strftime('%Y-%m-%d'),
+                end_date=end_date.strftime('%Y-%m-%d')
+            )
+            spy_df = fd_api.get_historical_prices(
+                'SPY',
+                interval='day', 
+                start_date=start_date.strftime('%Y-%m-%d'),
+                end_date=end_date.strftime('%Y-%m-%d')
+            )
             
-            stock_returns = stock_data.pct_change().dropna()
-            spy_returns = spy_data.pct_change().dropna()
+            if stock_df.empty or spy_df.empty:
+                print(f"[WARNING] No data for {ticker} or SPY")
+                return 1.0
+            
+            stock_returns = stock_df['close'].pct_change().dropna()
+            spy_returns = spy_df['close'].pct_change().dropna()
+            
+            # Align returns by date
+            common_dates = stock_returns.index.intersection(spy_returns.index)
+            stock_returns = stock_returns.loc[common_dates]
+            spy_returns = spy_returns.loc[common_dates]
+            
+            if len(stock_returns) < 20:  # Need minimum data points
+                return 1.0
             
             covariance = np.cov(stock_returns, spy_returns)[0][1]
             variance = np.var(spy_returns)

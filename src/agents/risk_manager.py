@@ -147,9 +147,9 @@ class RiskManagerAgent(BaseAgent):
         liquidity_risk = 1.0 - liquidity_score
         
         # Price risk (distance from support)
-        current_price = market_data.get('price', 0)
+        current_price = market_data.get('price', 0) or 100  # Default to $100 if missing
         support_level = market_data.get('support_level', current_price * 0.95)
-        price_risk = (current_price - support_level) / current_price
+        price_risk = (current_price - support_level) / current_price if current_price > 0 else 0.0
         
         # Beta risk (market correlation)
         beta = market_data.get('beta', 1.0)
@@ -199,13 +199,13 @@ class RiskManagerAgent(BaseAgent):
         sector_concentration = (sector_exposure + proposed_size) / portfolio_value
         
         # Portfolio volatility impact
-        current_volatility = portfolio_data.get('portfolio_volatility', 0.15)
+        current_volatility = portfolio_data.get('portfolio_volatility', 0.15) or 0.15
         new_volatility = self._calculate_new_portfolio_volatility(
             current_volatility, 
             market_data.get('volatility', 0.3),
             concentration
         )
-        volatility_increase = (new_volatility - current_volatility) / current_volatility
+        volatility_increase = (new_volatility - current_volatility) / current_volatility if current_volatility > 0 else 0.0
         
         # Max drawdown risk
         historical_drawdown = portfolio_data.get('max_drawdown', 0.1)

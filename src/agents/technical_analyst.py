@@ -12,8 +12,17 @@ import logging
 import sys
 import os
 
-# Import Financial Datasets API (primary data source)
+# Import data sources
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'scripts', 'automation'))
+
+# Tiingo API (primary price data source)
+try:
+    from tiingo_integration import TiingoAPI
+    TIINGO_AVAILABLE = True
+except ImportError:
+    TIINGO_AVAILABLE = False
+
+# Financial Datasets API (fundamentals, not prices)
 try:
     from financial_datasets_integration import FinancialDatasetsAPI
     FD_API_AVAILABLE = True
@@ -31,12 +40,18 @@ class TechnicalAnalystAgent(BaseAgent):
             agent_type="technical_analyst"
         )
         
-        # Initialize Financial Datasets API
+        # Initialize Tiingo API (primary for prices)
+        if TIINGO_AVAILABLE:
+            self.tiingo_api = TiingoAPI()
+        else:
+            self.tiingo_api = None
+            self.logger.warning("Tiingo API not available")
+        
+        # Initialize Financial Datasets API (for fundamentals)
         if FD_API_AVAILABLE:
             self.fd_api = FinancialDatasetsAPI()
         else:
             self.fd_api = None
-            self.logger.warning("Financial Datasets API not available")
         
         # Indicator thresholds
         self.rsi_oversold = 30
@@ -55,20 +70,17 @@ class TechnicalAnalystAgent(BaseAgent):
             Technical analysis and recommendation
         """
         try:
-            # Get historical data from Financial Datasets API
-            if self.fd_api:
-                start_date = (datetime.now() - timedelta(days=90)).strftime('%Y-%m-%d')
-                end_date = datetime.now().strftime('%Y-%m-%d')
-                hist = self.fd_api.get_historical_prices(ticker, interval='day', start_date=start_date, end_date=end_date)
-                
-                # Normalize column names to match expected format (capitalize for consistency)
-                if not hist.empty:
-                    hist.columns = [col.capitalize() for col in hist.columns]
-            else:
-                hist = pd.DataFrame()
+            # Get historical data from Tiingo API (primary source)
+            start_date = (datetime.now() - timedelta(days=90)).strftime('%Y-%m-%d')
+            end_date = datetime.now().strftime('%Y-%m-%d')
+            hist = pd.DataFrame()
+            
+            if self.tiingo_api:
+                hist = self.tiingo_api.get_historical_prices(ticker, interval='day', start_date=start_date, end_date=end_date)
+                # Tiingo integration already returns capitalized columns (Open, High, Low, Close, Volume)
             
             if hist.empty:
-                return self._generate_error_result("No historical data available from Financial Datasets API")
+                return self._generate_error_result("No historical data available from Tiingo API")
             
             # Calculate technical indicators
             indicators = self._calculate_indicators(hist)

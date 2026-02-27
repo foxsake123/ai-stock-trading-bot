@@ -121,7 +121,8 @@ scripts-and-data/
 
 # Legacy agent directory (consolidated to src/agents/ on 2025-10-23)
 # Archived to docs/archive/legacy-agents-2025-10-23/
-agents/
+# Only ignore top-level agents/ dir, not src/agents/
+/agents/
  
 # Additional cleanup patterns (added by cleanup_immediate.bat) 
 *.backup 
